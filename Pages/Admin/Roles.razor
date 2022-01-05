@@ -1,0 +1,123 @@
+﻿@page "/Admin/Roles"
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+<div class="divGridToolBar">
+	<div>
+		<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+		<SfButton Content="Add Role" CssClass="topToolButton" IconCss="newButton" @onclick='() => EditRole("")'></SfButton>
+		<AutoCompleteButton ID="autoRole" PlaceholderText="Select a Role" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminRoleDropDownAdaptor)" 
+							ValueChange="FilterGrid"></AutoCompleteButton>
+	</div>
+</div>
+<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="Role" Width="99.75%">
+	<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminRoleAdaptor)" Key="ID"></SfDataManager>
+	<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="Role"></GridEvents>
+	<GridColumns>
+		<GridColumn Field="@nameof(Role.ID)" HeaderText="Code" IsPrimaryKey="true" Visible="false" Width="10%"></GridColumn>
+		<GridColumn Field="ID" HeaderText="Role" Width="40%">
+			<Template Context="aCon">
+				@{
+					if (aCon is Role _con)
+					{
+						<span class="point" @onclick="() => EditRole(_con.ID)">@($"[{_con.ID}] - {_con.RoleName}")</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(Role.Description)" HeaderText="Description" Width="50%"></GridColumn>
+		<GridColumn Width="10%">
+			<Template Context="bCon">
+				@{
+					if (bCon is Role _con)
+					{
+						<SfButton Content="" IconCss="editIcon" @onclick="() => EditRole(_con.ID)"></SfButton>
+					}
+				}
+			</Template>
+		</GridColumn>
+	</GridColumns>
+</SfGrid>
+<SfDialog @bind-Visible="@VisibleRoleInfo" Header="@(Title + " Title")" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="480px">
+	<ChildContent>
+		<DialogPositionData X="right" Y="center"></DialogPositionData>
+		<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+		<EditForm Model="RoleRecord" OnValidSubmit="SaveRole">
+			<DataAnnotationsValidator></DataAnnotationsValidator>
+			<div class="divContainerTable">
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textID">ID</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textID" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(RoleRecord.ID)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "2" }, {"minlength", "1"}, {"rows", "1"} })" ID="textID" Multiline="false" Placeholder="ID" Readonly="@(!IsAdd)"></SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => RoleRecord.ID)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textRole">Role</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textRole" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(RoleRecord.RoleName)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textRole" Multiline="false" Placeholder="Role" Readonly="@(!IsAdd)"></SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => RoleRecord.RoleName)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textDescription">Description</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textDescription" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(RoleRecord.Description)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "200" }, {"rows", "1"} })" ID="textDescription" Multiline="false" Placeholder="Description"></SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => RoleRecord.Description)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewCandidate)" ID="checkedViewCandidate" OffLabel="NO" OnLabel="YES" Placeholder="View Candidate?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.EditCandidate)" ID="checkedEditCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Edit Candidate?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewRequisition)" ID="checkedViewRequisition" OffLabel="NO" OnLabel="YES" Placeholder="View Requisition?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.EditRequisition)" ID="checkedEditRequisition" OffLabel="NO" OnLabel="YES" Placeholder="Edit Requisition?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewClients)" ID="checkedViewClients" OffLabel="NO" OnLabel="YES" Placeholder="View Clients?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.EditClients)" ID="checkedEditClient" OffLabel="NO" OnLabel="YES" Placeholder="Edit Clients?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ChangeCandidateStatus)" ID="checkedChangeCandidateStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Candidate Status?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ChangeRequisitionStatus)" ID="checkedChangeRequisitionStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Requisition Status?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.SendEmailCandidate)" ID="checkedSendEmail" OffLabel="NO" OnLabel="YES" Placeholder="Send Email?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.ForwardResume)" ID="checkedForwardResume" OffLabel="NO" OnLabel="YES" Placeholder="Forward Resume?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.DownloadResume)" ID="checkedDownloadResume" OffLabel="NO" OnLabel="YES" Placeholder="Download Resume?"></LabelSwitch>
+				<LabelSwitch @bind-BindValue="@(RoleRecord.SubmitCandidate)" ID="checkedSubmitCandidates" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
+			</div>
+			<div class="e-footer-content">
+				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+				<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+			</div>
+		</EditForm>
+	</ChildContent>
+</SfDialog>
+<div class="divGridFooter">
+	<div>
+		Items
+		<b>1</b> to
+		<b>@Count</b> of
+		<b>@Count</b> rows
+	</div>
+</div>
+</div>

@@ -1,0 +1,180 @@
+@page "/Admin/JobOptions"
+@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+<div class="divGridToolBar">
+	<div>
+		<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+		<SfButton Content="Add Job Option" CssClass="topToolButton" IconCss="newButton" @onclick='() => EditJobOption("")'></SfButton>
+		<AutoCompleteButton ID="autoJobOption" PlaceholderText="Select a Job Option" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminJobOptionDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+	</div>
+</div>
+<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="JobOption" Width="99.75%">
+	<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminJobOptionAdaptor)" Key="Code"></SfDataManager>
+	<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="JobOption"></GridEvents>
+	<GridColumns>
+		<GridColumn HeaderText="Job Option" Width="30%">
+			<Template Context="aCon">
+				@{
+					if (aCon is JobOption _con)
+					{
+						<span class="point" @onclick="() => EditJobOption(_con.Code)">@_con.Option</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(JobOption.Code)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="40%"></GridColumn>
+		<GridColumn Field="@nameof(JobOption.Description)" HeaderText="Description" Width="45%"></GridColumn>
+		<GridColumn Field="@nameof(JobOption.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
+		<GridColumn Width="10%">
+			<Template Context="bCon">
+				@{
+					if (bCon is JobOption _con)
+					{
+						<SfButton Content="" IconCss="editIcon" OnClick="() => EditJobOption(_con.Code)"></SfButton>
+					}
+				}
+			</Template>
+		</GridColumn>
+	</GridColumns>
+</SfGrid>
+<SfDialog @bind-Visible="@VisibleJobOptionsInfo" Header="@(Title + "  Job Option")" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="480px">
+<ChildContent>
+<DialogPositionData X="right" Y="center"></DialogPositionData>
+<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+<EditForm Model="JobOptionsRecord" OnValidSubmit="SaveJobOption">
+<DataAnnotationsValidator></DataAnnotationsValidator>
+<div class="divContainerTable">
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="textCode">Job Option Code</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textCode" Width="100%" WindowCollision="true">
+			<SfTextBox @bind-Value="@(JobOptionsRecord.Code)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textCode" Multiline="false" Placeholder="Job Option Code" Readonly="false"></SfTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.Code)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="textOption">Job Option</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textOption" Width="100%" WindowCollision="true">
+			<SfTextBox @bind-Value="@(JobOptionsRecord.Option)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textOption" Multiline="false" Placeholder="Job Option" Readonly="false"></SfTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.Option)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="textDescription">Description</label>
+	</div>
+	<div class="divFlexBig">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textCode" Width="100%" WindowCollision="true">
+			<SfTextBox @bind-Value="@(JobOptionsRecord.Description)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "500" }, {"minlength", "1"}, {"rows", "3"} })" ID="textDescription" Multiline="true" Placeholder="Description" Readonly="false"></SfTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.Description)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="textRateText">Rate Text</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textRateText" Width="100%" WindowCollision="true">
+			<SfTextBox @bind-Value="@(JobOptionsRecord.RateText)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "255" }, {"minlength", "1"}, {"rows", "1"} })" ID="textRateText" Multiline="false" Placeholder="Rate Text" Readonly="false"></SfTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.RateText)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="textPercentText">Percent Text</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textPercentText" Width="100%" WindowCollision="true">
+			<SfTextBox @bind-Value="@(JobOptionsRecord.PercentText)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "255" }, {"minlength", "1"}, {"rows", "1"} })" ID="textPercentText" Multiline="false" Placeholder="Percent Text" Readonly="false"></SfTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.PercentText)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="multiTaxTerms">Select Tax Terms(s)</label>
+	</div>
+	<div class="divFlexBig">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#multiTaxTerms" Width="100%" WindowCollision="true">
+			<SfMultiSelect AllowFiltering="true" @bind-Value="@(JobOptionsRecord.Tax)" DataSource="TaxTermKeyValues" FilterBarPlaceholder="Search Filter&hellip;" FilterType="FilterType.Contains" ID="multiTaxTerms" Mode="VisualMode.Box" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string">
+				<MultiSelectFieldSettings Text="Value" Value="Key"></MultiSelectFieldSettings>
+			</SfMultiSelect>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.Tax)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="numericCostPercent">Cost Percent</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#numericCostPercent" Width="100%" WindowCollision="true">
+			<SfNumericTextBox @bind-Value="@(JobOptionsRecord.CostPercent)" Decimals="2" Format="p2" ID="numericCostPercent" Min="0" Step="0.01M" TValue="decimal" ValidateDecimalOnType="true"></SfNumericTextBox>
+			<TooltipTemplates>
+				<Content>
+					<ValidationMessage For="@(() => JobOptionsRecord.CostPercent)"></ValidationMessage>
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Rate)" ID="checkedRate" OffLabel="NO" OnLabel="YES" Placeholder="Rate Required?"></LabelSwitch>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Exp)" ID="checkedExp" OffLabel="NO" OnLabel="YES" Placeholder="Expenses Required?"></LabelSwitch>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.PlaceFee)" ID="checkedPlaceFee" OffLabel="NO" OnLabel="YES" Placeholder="Placement Fee Required?"></LabelSwitch>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Benefits)" ID="checkedBenefits" OffLabel="NO" OnLabel="YES" Placeholder="Benefits Required?"></LabelSwitch>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.ShowHours)" ID="checkedShowHours" OffLabel="NO" OnLabel="YES" Placeholder="Show Hours?"></LabelSwitch>
+<LabelSwitch @bind-BindValue="@(JobOptionsRecord.ShowPercent)" ID="checkedShowPercent" OffLabel="NO" OnLabel="YES" Placeholder="Show Percent?"></LabelSwitch>
+</div>
+<div class="e-footer-content">
+	<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+	<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+</div>
+</EditForm>
+</ChildContent>
+</SfDialog>
+<div class="divGridFooter">
+	<div>
+		Items
+		<b>1</b> to
+		<b>@Count</b> of
+		<b>@Count</b> rows
+	</div>
+</div>
+</div>

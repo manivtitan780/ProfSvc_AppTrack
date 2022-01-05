@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfSvc_AppTrack", "ProfSvc_AppTrack.csproj", "{D0F61322-15BD-4DFD-9BD0-DCFCF8E3C776}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfSvc_WebAPI", "..\ProfSvc_WebAPI\ProfSvc_WebAPI.csproj", "{B90B9DD2-2B3F-49FD-A151-80A8CA6863A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0F61322-15BD-4DFD-9BD0-DCFCF8E3C776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F61322-15BD-4DFD-9BD0-DCFCF8E3C776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F61322-15BD-4DFD-9BD0-DCFCF8E3C776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F61322-15BD-4DFD-9BD0-DCFCF8E3C776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B90B9DD2-2B3F-49FD-A151-80A8CA6863A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B90B9DD2-2B3F-49FD-A151-80A8CA6863A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B90B9DD2-2B3F-49FD-A151-80A8CA6863A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B90B9DD2-2B3F-49FD-A151-80A8CA6863A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86A9BE7D-764B-42A2-B5A1-419E33B2F45E}
+	EndGlobalSection
+EndGlobal

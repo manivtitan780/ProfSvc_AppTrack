@@ -1,0 +1,8 @@
+<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+	<SfTextBox @bind-Value="@BindValue" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@Attributes" ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly"></SfTextBox>
+	<TooltipTemplates>
+		<Content>
+			@ValidationTemplate
+		</Content>
+	</TooltipTemplates>
+</SfTooltip>

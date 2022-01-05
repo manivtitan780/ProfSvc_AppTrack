@@ -1,0 +1,6 @@
+<SfAutoComplete AllowCustom="true" CssClass="leftMargin" EnablePersistence="true" Highlight="true" ID="@ID" MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true" TItem="KeyValues" TValue="string" Width="200px">
+	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
+	<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
+	<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>
+</SfAutoComplete>
+@*<SfButton CssClass="buttonSearch" IconCss="searchIcon" IconPosition="IconPosition.Left" IsPrimary="true" @onclick="ButtonClick"></SfButton>*@

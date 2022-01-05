@@ -1,0 +1,289 @@
+﻿@page "/Admin/StatusCodes"
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+<div class="divGridToolBar">
+	<div>
+		<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+		<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditStatusCode(0)">Add Status Code</SfButton>
+		<AutoCompleteButton ID="autoStatusCode" PlaceholderText="Select a StatusCode" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminStatusCodeDropDownAdaptor)" 
+							ValueChange="FilterGrid"></AutoCompleteButton>
+	</div>
+</div>
+<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="StatusCode" Width="99.75%">
+<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminStatusCodeAdaptor)" Key="ID"></SfDataManager>
+<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="StatusCode"></GridEvents>
+<GridColumns>
+	<GridColumn Field="@nameof(StatusCodeRecord.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+	<GridColumn HeaderText="Status" Width="20%">
+		<Template Context="aCon">
+			@{
+				if (aCon is StatusCode _con)
+				{
+					<span class="point" @onclick="() => EditStatusCode(_con.ID)">@($"[{_con.Code}] - {_con.Status}")</span>
+				}
+			}
+		</Template>
+	</GridColumn>
+	<GridColumn Field="@nameof(StatusCodeRecord.Description)" HeaderText="Description" Width="35%"></GridColumn>
+	<GridColumn Field="@nameof(StatusCodeRecord.AppliesTo)" HeaderText="Applies To" Width="20%">
+	</GridColumn>
+	<GridColumn Field="@nameof(StatusCodeRecord.Icon)" HeaderText="Icon" Width="20%">
+		<Template Context="aCon">
+			@{
+				if (aCon is StatusCode _con)
+				{
+					<span class="column-icon-@_con.ID">@((MarkupString)(_con.Icon == "" ? "" : $"&#x{_con.Icon};"))</span>
+				}
+			}
+		</Template>
+	</GridColumn>
+	<GridColumn Field="@nameof(StatusCodeRecord.Color)" HeaderText="Color" Width="20%">
+		<Template Context="aCon">
+			@{
+				if (aCon is StatusCode _con)
+				{
+					<span class="column-icon-@_con.ID" style="display:block;height:100%; width:20px;background-color: @_con.Color">&nbsp;</span>
+				}
+			}
+		</Template>
+	</GridColumn>
+	<GridColumn Field="@nameof(StatusCodeRecord.UpdatedDate)" Format="d" HeaderText="Last Update" Width="15%">
+	</GridColumn>
+	<GridColumn Width="10%">
+		<Template Context="bCon">
+			@{
+				if (bCon is StatusCode _con)
+				{
+					<SfButton Content="" IconCss="editIcon" @onclick="() => EditStatusCode(_con.ID)"></SfButton>
+				}
+			}
+		</Template>
+	</GridColumn>
+</GridColumns>
+@*<GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowEditOnDblClick="true" Context="editContext" Dialog="_dialogParams" Mode="@EditMode.Dialog">
+            <Validator>
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+            </Validator>
+            <HeaderTemplate>
+                <div class="divDialogHeader">@Title Status Code</div>
+            </HeaderTemplate>
+            <Template>
+                @{
+                    StatusCode = editContext as StatusCode ?? new StatusCode();
+                }
+                <div class="form-row divContainer">
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textStatusCode">Status Code</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatusCode" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(StatusCodeRecord.Code)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "3" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatusCode" Multiline="false" Placeholder="Status Code" Readonly="@(!IsAdd)"></SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => StatusCodeRecord.Code)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textStatus">Status</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatus" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(StatusCodeRecord.Status)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatus" Multiline="false" Placeholder="Status" Readonly="false">
+                                </SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => StatusCodeRecord.Status)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textStatusDescription">Description</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatusDescription" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(StatusCodeRecord.Description)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "100" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatusDescription" Multiline="false" Placeholder="Description" Readonly="false">
+                                </SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => StatusCodeRecord.Description)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="dropAppliesTo">Applies To</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfDropDownList TValue="string" TItem="KeyValues" @bind-Value="@StatusCodeRecord.AppliesToCode" DataSource="_statusDropItems" ID="dropAppliesTo">
+                                <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </div>
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textIcon">Icon</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textIcon" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(StatusCodeRecord.Icon)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "255" }, {"minlength", "1"}, {"rows", "1"} })" ID="textIcon" Multiline="false" Placeholder="Icon" Readonly="false" Style="font-family:icofont !important; font-size:30px !important;">
+                                </SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => StatusCodeRecord.Icon)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textIcon">Color</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textIcon" Width="100%" WindowCollision="true">
+                                <SfColorPicker Mode="ColorPickerMode.Picker" ModeSwitcher="false" ShowButtons="false" @bind-Value="@StatusCodeRecord.Color"></SfColorPicker>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => StatusCodeRecord.Icon)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <LabelSwitch @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
+                    <LabelSwitch @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?"></LabelSwitch>
+                </div>
+            </Template>
+            <FooterTemplate>
+                <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" OnClick="SaveStatusCode">Save</SfButton>
+                <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel">Cancel</SfButton>
+            </FooterTemplate>
+        </GridEditSettings>*@
+</SfGrid>
+<SfDialog @bind-Visible="@VisibleStatusCodeInfo" Header="@(Title + " Status Code")" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="480px">
+<ChildContent>
+<DialogPositionData X="right" Y="center"></DialogPositionData>
+<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+<EditForm Model="StatusCodeRecord" OnValidSubmit="SaveStatusCode">
+	<DataAnnotationsValidator></DataAnnotationsValidator>
+	<div class="divContainerTable">
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="textStatusCode">Status Code</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatusCode" Width="100%" WindowCollision="true">
+					<SfTextBox @bind-Value="@(StatusCodeRecord.Code)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "3" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatusCode" Multiline="false" Placeholder="Status Code" Readonly="@(!IsAdd)"></SfTextBox>
+					<TooltipTemplates>
+						<Content>
+							<ValidationMessage For="@(() => StatusCodeRecord.Code)"></ValidationMessage>
+						</Content>
+					</TooltipTemplates>
+				</SfTooltip>
+			</div>
+		</div>
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="textStatus">Status</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatus" Width="100%" WindowCollision="true">
+					<SfTextBox @bind-Value="@(StatusCodeRecord.Status)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatus" Multiline="false" Placeholder="Status" Readonly="false">
+					</SfTextBox>
+					<TooltipTemplates>
+						<Content>
+							<ValidationMessage For="@(() => StatusCodeRecord.Status)"></ValidationMessage>
+						</Content>
+					</TooltipTemplates>
+				</SfTooltip>
+			</div>
+		</div>
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="textStatusDescription">Description</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textStatusDescription" Width="100%" WindowCollision="true">
+					<SfTextBox @bind-Value="@(StatusCodeRecord.Description)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "100" }, {"minlength", "1"}, {"rows", "1"} })" ID="textStatusDescription" Multiline="false" Placeholder="Description" Readonly="false">
+					</SfTextBox>
+					<TooltipTemplates>
+						<Content>
+							<ValidationMessage For="@(() => StatusCodeRecord.Description)"></ValidationMessage>
+						</Content>
+					</TooltipTemplates>
+				</SfTooltip>
+			</div>
+		</div>
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="dropAppliesTo">Applies To</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfDropDownList @bind-Value="@StatusCodeRecord.AppliesToCode" DataSource="_statusDropItems" ID="dropAppliesTo" TItem="KeyValues" TValue="string">
+					<DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
+				</SfDropDownList>
+			</div>
+		</div>
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="textIcon">Icon</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textIcon" Width="100%" WindowCollision="true">
+					<SfTextBox @bind-Value="@(StatusCodeRecord.Icon)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "255" }, {"minlength", "1"}, {"rows", "1"} })" ID="textIcon" Multiline="false" Placeholder="Icon" Readonly="false" Style="font-family:icofont !important; font-size:30px !important;">
+					</SfTextBox>
+					<TooltipTemplates>
+						<Content>
+							<ValidationMessage For="@(() => StatusCodeRecord.Icon)"></ValidationMessage>
+						</Content>
+					</TooltipTemplates>
+				</SfTooltip>
+			</div>
+		</div>
+		<div class="divFlex">
+			<div class="divFlexLabel">
+				<label class="labelStatus" for="textIcon">Color</label>
+			</div>
+			<div class="divFlexSmall">
+				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textIcon" Width="100%" WindowCollision="true">
+					<SfColorPicker @bind-Value="@StatusCodeRecord.Color" Mode="ColorPickerMode.Picker" ModeSwitcher="false" ShowButtons="false"></SfColorPicker>
+					<TooltipTemplates>
+						<Content>
+							<ValidationMessage For="@(() => StatusCodeRecord.Icon)"></ValidationMessage>
+						</Content>
+					</TooltipTemplates>
+				</SfTooltip>
+			</div>
+		</div>
+		<LabelSwitch @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
+		<LabelSwitch @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?"></LabelSwitch>
+	</div>
+	<div class="e-footer-content">
+		<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+		<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+	</div>
+</EditForm>
+</ChildContent>
+</SfDialog>
+<div class="divGridFooter">
+	<div>
+		Items
+		<b>1</b> to
+		<b>@Count</b> of
+		<b>@Count</b> rows
+	</div>
+</div>
+</div>

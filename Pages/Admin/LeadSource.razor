@@ -1,0 +1,130 @@
+﻿@page "/Admin/Source"
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+<div class="divGridToolBar">
+	<div>
+		<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+		<SfButton Content="Add Source" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditSource(0)"></SfButton>
+		<AutoCompleteButton ID="autoSource" PlaceholderText="Select a Title" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminSourceDropDownAdaptor)"
+							ValueChange="FilterGrid"></AutoCompleteButton>
+	</div>
+</div>
+<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+	<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminSourceAdaptor)" Key="ID"></SfDataManager>
+	<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
+	<GridColumns>
+		<GridColumn Field="Text" HeaderText="Source" Width="50%">
+			<Template Context="aCon">
+				@{
+					if (aCon is AdminList _con)
+					{
+						<span class="point" @onclick="() => EditSource(_con.ID)">@_con.Text</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+		<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
+			<Template Context="aCon">
+				@{
+					if (aCon is AdminList _con)
+					{
+						<span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
+		<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
+		<GridColumn Width="10%">
+			<Template Context="bCon">
+				@{
+					if (bCon is AdminList _con)
+					{
+						<SfButton Content="" IconCss="editIcon" @onclick="() => EditSource(_con.ID)"></SfButton>
+						<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatusAsync(_con.ID)"></SfButton>
+					}
+				}
+			</Template>
+		</GridColumn>
+	</GridColumns>
+	@*<GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" AllowEditOnDblClick="true" Dialog="_dialogParams" Mode="@EditMode.Dialog">
+            <Validator>
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+            </Validator>
+            <HeaderTemplate>
+                <div class="divDialogHeader">@Title Source</div>
+            </HeaderTemplate>
+            <Template Context="sourceContext">
+                @{
+                    _context = sourceContext as AdminList ?? new AdminList(0, "", "", "");
+                }
+                <div class="form-row divContainer">
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textTitle">Title</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(_context.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "100" }, {"minlength", "1"}, {"rows", "1"} })" ID="textTitle" Multiline="false" Placeholder="Title"></SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => _context.Text)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <LabelSwitch @bind-BindValue="@(_context.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+                </div>
+            </Template>
+            <FooterTemplate>
+                <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" OnClick="SaveSource">Save</SfButton>
+                <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel">Cancel</SfButton>
+            </FooterTemplate>
+        </GridEditSettings>*@
+</SfGrid>
+<SfDialog @bind-Visible="@VisibleCandidateInfo" Header="@(Title + " Source")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px">
+	<ChildContent>
+		<DialogPositionData X="right" Y="center"></DialogPositionData>
+		<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+		<EditForm Model="SourceRecord" OnValidSubmit="SaveSource">
+			<DataAnnotationsValidator></DataAnnotationsValidator>
+			<div class="divContainerTable">
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textTitle">Title:</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(SourceRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@HtmlAttributes" ID="textTitle" Multiline="false" Placeholder="Title">
+							</SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => SourceRecord.Text)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<LabelSwitch @bind-BindValue="@(SourceRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+			</div>
+			<div class="e-footer-content">
+				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+				<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+			</div>
+		</EditForm>
+	</ChildContent>
+</SfDialog>
+<div class="divGridFooter">
+	<div>
+		Items
+		<b>1</b> to
+		<b>@Count</b> of
+		<b>@Count</b> rows
+	</div>
+</div>
+</div>

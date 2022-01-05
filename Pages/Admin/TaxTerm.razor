@@ -1,0 +1,107 @@
+@page "/Admin/TaxTerms"
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+<div class="divGridToolBar">
+	<div>
+		<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+		<SfButton CssClass="topToolButton" IconCss="newButton" @onclick='() => EditTaxTerm("")'>Add Tax Term</SfButton>
+		<AutoCompleteButton ID="autoTaxTerm" PlaceholderText="Select a TaxTerm" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminTaxTermDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+	</div>
+</div>
+<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+	<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminTaxTermAdaptor)" Key="ID"></SfDataManager>
+	<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
+	<GridColumns>
+		<GridColumn HeaderText="TaxTerm" Width="50%">
+			<Template Context="aCon">
+				@{
+					if (aCon is AdminList _con)
+					{
+						<span class="point" @onclick="() => EditTaxTerm(_con.Code)">@_con.Text</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(AdminList.Code)" HeaderText="Code" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+		<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
+			<Template Context="aCon">
+				@{
+					if (aCon is AdminList _con)
+					{
+						<span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
+					}
+				}
+			</Template>
+		</GridColumn>
+		<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
+		<GridColumn Width="10%">
+			<Template Context="bCon">
+				@{
+					if (bCon is AdminList _con)
+					{
+						<SfButton Content="" IconCss="editIcon" @onclick="() => EditTaxTerm(_con.Code)"></SfButton>
+						<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatusTaxTerm(_con.Code)"></SfButton>
+					}
+				}
+			</Template>
+		</GridColumn>
+	</GridColumns>
+</SfGrid>
+<SfDialog @bind-Visible="@VisibleTaxTermInfo" Header="@(Title + " Tax Term")" Height="370px" IsModal="true" MinHeight="370px" Target="#divTarget" Width="400px">
+	<ChildContent>
+		<DialogPositionData X="right" Y="center"></DialogPositionData>
+		<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+		<EditForm Model="TaxTermRecord" OnValidSubmit="SaveTaxTerm">
+			<DataAnnotationsValidator></DataAnnotationsValidator>
+			<div class="divContainerTable">
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textTaxCode">Tax Term Code</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTaxCode" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(TaxTermRecord.Code)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "1" }, {"minlength", "1"}, {"rows", "1"} })" ID="textTaxCode" Multiline="false" Placeholder="Tax Term Code" Readonly="@(!IsAdd)"></SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => TaxTermRecord.Code)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="textTaxTerm">Tax Term</label>
+					</div>
+					<div class="divFlexSmall">
+						<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTaxTerm" Width="100%" WindowCollision="true">
+							<SfTextBox @bind-Value="@(TaxTermRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textTaxTerm" Multiline="false" Placeholder="Tax Term" Readonly="false"></SfTextBox>
+							<TooltipTemplates>
+								<Content>
+									<ValidationMessage For="@(() => TaxTermRecord.Text)"></ValidationMessage>
+								</Content>
+							</TooltipTemplates>
+						</SfTooltip>
+					</div>
+				</div>
+				<LabelSwitch @bind-BindValue="@(TaxTermRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Tax Term Status?"></LabelSwitch>
+			</div>
+			<div class="e-footer-content">
+				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+				<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+			</div>
+		</EditForm>
+	</ChildContent>
+</SfDialog>
+<div class="divGridFooter">
+	<div>
+		Items
+		<b>1</b> to
+		<b>@Count</b> of
+		<b>@Count</b> rows
+	</div>
+</div>
+</div>

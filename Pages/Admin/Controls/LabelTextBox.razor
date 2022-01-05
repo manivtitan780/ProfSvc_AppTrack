@@ -1,0 +1,5 @@
+﻿<SfTextBox @bind-Value="@Value" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })" ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true">
+	@*CssClass='@(IsTextBoxInvalid() ? "e-error invalid" : "e-success")' *@
+	<ValidationMessage For="@ValidationMessage">
+	</ValidationMessage>
+</SfTextBox>

@@ -1,0 +1,18 @@
+@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="@ID">@Placeholder</label>
+	</div>
+	<div class="divFlexBig">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+			<SfMultiSelect AllowFiltering="true" @bind-Value="@BindValue" DataSource="@DataSourceKeyValues" FilterBarPlaceholder="SearchFilter&hellip;" FilterType="FilterType.Contains" ID="@ID" Mode="VisualMode.Box" Placeholder="@Placeholder" TItem="KeyValues" TValue="string">
+				<MultiSelectFieldSettings Text="Value" Value="Key"></MultiSelectFieldSettings>
+			</SfMultiSelect>
+			<TooltipTemplates>
+				<Content>
+					@ValidationTemplate
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>

@@ -1,0 +1,24 @@
+﻿<SfDialog @bind-Visible="VisibleCandidate" Header="Parse New Candidate" Height="355px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="480px">
+	<ChildContent>
+		<DialogPositionData X="right" Y="center"></DialogPositionData>
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+		<DialogEvents Closed="CancelCandidate"></DialogEvents>
+		<div style="height: 100%">
+			<div class="divContainerTable">
+				<div class="divFlex">
+					<div class="divFlexLabel">
+						<label class="labelStatus" for="uploadResume">Resume to Parse:</label>
+					</div>
+					<div class="divFlexSmall" style="display: flex;">
+						<div class="uploadParseResume" style="width: 100%">
+							<SfUploader AllowMultiple="false" AutoUpload="false" ID="uploadResume" SequentialUpload="true">
+								<UploaderEvents ValueChange="OnFileUpload"></UploaderEvents>
+								@*<UploaderAsyncSettings SaveUrl="http://localhost/ProfSvc_API/api/Candidates/ParseResume" RemoveUrl="http://localhost/ProfSvc_API/api/Candidates/CancelParseResume" ChunkSize="5000000"></UploaderAsyncSettings>*@
+							</SfUploader>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ChildContent>
+</SfDialog>

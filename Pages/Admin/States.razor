@@ -1,0 +1,94 @@
+﻿@page "/Admin/States"
+@layout ProfSvcLayout
+
+<header></header>
+<div class="gridHolder">
+	<div class="divGridToolBar">
+		<div>
+			<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+			<SfButton Content="Add State" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditState(0)"></SfButton>
+			<AutoCompleteButton ID="autoState" PlaceholderText="Select a Title" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminStateDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+		</div>
+	</div>
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="State" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminStateAdaptor)" Key="ID"></SfDataManager>
+		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="State"></GridEvents>
+		<GridColumns>
+			<GridColumn Field="ID" HeaderText="State" Width="90%">
+				<Template Context="aCon">
+					@{
+						if (aCon is State _con)
+						{
+							<span class="point" @onclick="() => EditState(_con.ID)">@($"[{_con.Code}] - {_con.StateName}")</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(State.ID)" HeaderText="Code" IsPrimaryKey="true" Visible="false" Width="10%"></GridColumn>
+			<GridColumn Width="10%">
+				<Template Context="bCon">
+					@{
+						if (bCon is State _con)
+						{
+							<SfButton Content="" IconCss="editIcon" @onclick="() => EditState(_con.ID)"></SfButton>
+						}
+					}
+				</Template>
+			</GridColumn>
+		</GridColumns>
+	</SfGrid>
+	<SfDialog @bind-Visible="@VisibleStateInfo" Header="@(Title + " State")" Height="320px" IsModal="true" MinHeight="320px" Target="#divTarget" Width="400px">
+		<ChildContent>
+			<DialogPositionData X="right" Y="center"></DialogPositionData>
+			<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+			<EditForm Model="StateRecord" OnValidSubmit="SaveState">
+				<DataAnnotationsValidator></DataAnnotationsValidator>
+				<div class="divContainerTable">
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textTitle">Title:</label>
+						</div>
+						<div class="divFlexSmall">
+							<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textCode" Width="100%" WindowCollision="true">
+								<SfTextBox @bind-Value="@(StateRecord.Code)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "2" }, {"minlength", "1"}, {"rows", "1"} })" ID="textCode" Multiline="false" Placeholder="Code" Readonly="@(!IsAdd)"></SfTextBox>
+								<TooltipTemplates>
+									<Content>
+										<ValidationMessage For="@(() => StateRecord.Code)"></ValidationMessage>
+									</Content>
+								</TooltipTemplates>
+							</SfTooltip>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textTitle">Title:</label>
+						</div>
+						<div class="divFlexSmall">
+							<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textState" Width="100%" WindowCollision="true">
+								<SfTextBox @bind-Value="@(StateRecord.StateName)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", "50" }, {"minlength", "1"}, {"rows", "1"} })" ID="textState" Multiline="false" Placeholder="State"></SfTextBox>
+								<TooltipTemplates>
+									<Content>
+										<ValidationMessage For="@(() => StateRecord.StateName)"></ValidationMessage>
+									</Content>
+								</TooltipTemplates>
+							</SfTooltip>
+						</div>
+					</div>
+				</div>
+				<div class="e-footer-content">
+					<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+					<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+				</div>
+			</EditForm>
+		</ChildContent>
+	</SfDialog>
+	<div class="divGridFooter">
+		<div>
+			Items
+			<b>1</b> to
+			<b>@Count</b> of
+			<b>@Count</b> rows
+		</div>
+	</div>
+</div>

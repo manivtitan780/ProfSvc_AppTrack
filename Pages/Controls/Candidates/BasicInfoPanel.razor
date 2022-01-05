@@ -1,0 +1,99 @@
+﻿<div class="containerBox">
+	<div>
+		<div>
+			<div>Address:</div>
+			<div>@SetupAddress</div>
+		</div>
+		<div>
+			<div>Email Address:</div>
+			<div>@ModelObject.Email</div>
+		</div>
+		<div>
+			<div>Cell Phone #:</div>
+			<div>@($"{ModelObject.Phone1.ToInt64():(###) ###-####}")</div>
+		</div>
+		<div>
+			<div>Alternate Phone #:</div>
+			<div>@(ModelObject.Phone2 == "" ? "-" : $"{ModelObject.Phone2.ToInt64():(###) ###-####}")</div>
+		</div>
+		<div>
+			<div>Title:</div>
+			<div>@(ModelObject.Title)</div>
+		</div>
+		<div>
+			<div>Hourly Pay Rate:</div>
+			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.HourlyRate, ModelObject.HourlyRateHigh)</div>
+		</div>
+		<div>
+			<div>Salary Expected:</div>
+			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.SalaryLow, ModelObject.SalaryHigh)</div>
+		</div>
+	</div>
+	<div>
+		<div>
+			<div>Authorization:</div>
+			<div>@SetEligibility</div>
+		</div>
+		<div>
+			<div>Experience:</div>
+			<div>@SetExperience</div>
+		</div>
+		<div>
+			<div>Tax Terms:</div>
+			<div>@SetTaxTerm</div>
+		</div>
+		<div>
+			<div>Job Options:</div>
+			<div>@SetJobOption</div>
+		</div>
+		<div>
+			<div>Communication:</div>
+			<div>@SetCommunication</div>
+		</div>
+		<div>
+			<div>Security Clearance:</div>
+			<div>@(ModelObject.Background ? "Yes" : "No")</div>
+		</div>
+		<div>
+			<div>Willing to Relocate?:</div>
+			<div>@(ModelObject.Relocate ? "Yes" : "No")</div>
+		</div>
+		<div>
+			<SfButton Content="Edit Candidate Information" CssClass="editSectionButton" @onclick="EditCandidate"></SfButton>
+		</div>
+	</div>
+	<div>
+		<div>
+			<div>Rating:</div>
+			<div>
+				<RadzenRating ReadOnly="true" Stars="5" Value="@ModelObject.RateCandidate" />
+			</div>
+		</div>
+		<div>
+			<div>Last Rating Date:</div>
+			<div>@GetRatingDate</div>
+		</div>
+		<div>
+			<div>Rating Notes:</div>
+			<div>@GetRatingNote</div>
+		</div>
+		<div>
+			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" @onclick="EditRating" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+		</div>
+		<div>
+			<div>M.P.C?:</div>
+			<div>@(ModelObject.Mpc ? "Yes" : "No")</div>
+		</div>
+		<div>
+			<div>M.P.C. Date:</div>
+			<div>@GetMPCDate</div>
+		</div>
+		<div>
+			<div>M.P.C. Notes:</div>
+			<div>@GetMPCNote</div>
+		</div>
+		<div>
+			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" @onclick="EditMPC" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+		</div>
+	</div>
+</div>
