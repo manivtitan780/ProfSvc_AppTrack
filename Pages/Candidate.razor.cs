@@ -254,7 +254,7 @@ public partial class Candidate
 		set;
 	} = true;
 
-	/*private int IDentifier
+	/*private int Identifier
 	{
 		get;
 		set;
@@ -267,6 +267,18 @@ public partial class Candidate
 	}
 
 	private bool VisibleCandidateInfo
+	{
+		get;
+		set;
+	}
+
+	private bool VisibleSkillDialog
+	{
+		get;
+		set;
+	}
+
+	private bool VisibleEducationDialog
 	{
 		get;
 		set;
@@ -357,7 +369,7 @@ public partial class Candidate
 		set;
 	}
 
-	//private int NumberofLines
+	//private int NumberOfLines
 	//{
 	//	get;
 	//	set;
@@ -493,14 +505,9 @@ public partial class Candidate
 			_statusEditContext = new(_candidateContext);
 		}
 
-		CandidateGridPersistValues = await LocalStorageBlazored.GetItemAsync<CandidateGrid>("CandidateGrid");
+		CandidateGridPersistValues = await LocalStorageBlazored.GetItemAsync<CandidateGrid>("CandidateGrid") ?? new(1, 25, "");
 
-		if (CandidateGridPersistValues == null)
-		{
-			CandidateGridPersistValues = new(1, 25, "");
-		}
-
-		_currentPage = CandidateGridPersistValues.Page;
+        _currentPage = CandidateGridPersistValues.Page;
 		PageCount = _currentPage + 1;
 
 		StorageCompression _compression = new(SessionStorage);
@@ -590,7 +597,7 @@ public partial class Candidate
 
 	private MarkupString SetupAddress()
 	{
-		//NumberofLines = 1;
+		//NumberOfLines = 1;
 		string _generateAddress = _candidateDetailsObject.Address1;
 
 		if (_generateAddress == "")
@@ -637,7 +644,7 @@ public partial class Candidate
 			}
 		}
 
-		//NumberofLines = _generateAddress.Split("<br/>").Length;
+		//NumberOfLines = _generateAddress.Split("<br/>").Length;
 
 		return _generateAddress.ToMarkupString();
 	}
@@ -818,12 +825,12 @@ public partial class Candidate
 
 	private void EditSkill(int id)
     {
-
+		VisibleSkillDialog = true;
     }
 
 	private void EditEducation(int id)
     {
-
+		VisibleEducationDialog = true;
     }
 
 	private void EditExperience(int id)
@@ -1081,6 +1088,7 @@ public partial class Candidate
 		}
 		catch
 		{
+			//
 		}
 	}
 

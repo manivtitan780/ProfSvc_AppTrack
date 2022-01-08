@@ -13,139 +13,141 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
+
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
 /// <summary>
 /// </summary>
 public partial class BasicInfoPanel
 {
-	#region Properties
+    #region Properties
 
     /// <summary>
     /// </summary>
     [Parameter]
-	public CandidateDetails ModelObject
-	{
-		get;
-		set;
-	}
+    public CandidateDetails ModelObject
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
-	public EventCallback EditCandidate
-	{
-		get;
-		set;
-	}
+    public EventCallback EditCandidate
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
-	public EventCallback EditRating
-	{
-		get;
-		set;
-	}
+    public EventCallback EditRating
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
-	public EventCallback EditMPC
-	{
-		get;
-		set;
-	}
+    public EventCallback EditMPC
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
-	public MarkupString SetupAddress
-	{
-		get;
-		set;
-	}
+    public MarkupString SetupAddress
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString SetEligibility
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString SetExperience
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString SetTaxTerm
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString SetJobOption
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString SetCommunication
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString GetRatingDate
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString GetRatingNote
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString GetMPCNote
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
 	[Parameter]
     public MarkupString GetMPCDate
-	{
-		get;
-		set;
-	}
+    {
+        get;
+        set;
+    }
 
-	#endregion
+    #endregion
 }

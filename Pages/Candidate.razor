@@ -5,466 +5,415 @@
 <Header></Header>
 
 <div class="gridHolder">
-    <div class="divGridToolBar">
-        <div style="display: flex">
-            <div style="flex: 1; text-align: left">
-                <div style="display: flex; height: 25px; margin-top: 12px">
-                    <div style="display: flex; width: 350px;">
-                        <SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
-                        <SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
-                        <SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount" Min="1"
-                                          @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
-                            @*<NumericTextBoxEvents TValue="decimal" OnChange="PageNumberChanged"></NumericTextBoxEvents>"*@
-                        </SfNumericTextBox>
-                        <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
-                        <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
-                        <SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
-                        <SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
-                    </div>
-                    <div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
-                    <SfDropDownList @bind-Value="@ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
-                        <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                        <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount"></DropDownListEvents>
-                    </SfDropDownList>
-                </div>
-            </div>
-            <div class="divRightControls" style="width: 520px">
-                <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-                <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => AddNewCandidate()">Add Candidate</SfButton>
-                <AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminCandidateDropDownAdaptor)"
-                                    ValueChange="FilterGrid">
-                </AutoCompleteButton>
-            </div>
-        </div>
-    </div>
-    <SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
-        <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
-        <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
-        <GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" TValue="Candidates" />@*OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" *@
-        <GridColumns>
-            <GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-            <GridColumn HeaderText="Name" Width="25%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is Candidates _con)
-                        {
-                            <span class="@(_con.Mpc ? "mpcicon" : "")">@_con.Name</span>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn HeaderText="Phone" Width="15%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is Candidates _con)
-                        {
-                            @_con.Phone
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn HeaderText="Email" Width="20%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is Candidates _con)
-                        {
-                            <a href="mailto:@(_con.Email)">@_con.Email</a>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn HeaderText="Location" Width="20%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is Candidates _con)
-                        {
-                            @_con.Location
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="15%">
-            </GridColumn>
-            <GridColumn Field="@nameof(Candidates.Status)" HeaderText="Status" Width="15%"></GridColumn>
-            <GridColumn Width="10%">
-                <Template Context="bCon">
-                    @{
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				<div style="display: flex; height: 25px; margin-top: 12px">
+					<div style="display: flex; width: 350px;">
+						<SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
+						<SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
+						<SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount" Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
+							@*<NumericTextBoxEvents TValue="decimal" OnChange="PageNumberChanged"></NumericTextBoxEvents>"*@
+						</SfNumericTextBox>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
+						<SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
+						<SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
+					</div>
+					<div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
+					<SfDropDownList @bind-Value="@ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
+						<DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
+						<DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount"></DropDownListEvents>
+					</SfDropDownList>
+				</div>
+			</div>--
+			<div class="divRightControls" style="width: 520px">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => AddNewCandidate()">Add Candidate</SfButton>
+				<AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid">
+				</AutoCompleteButton>
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" TValue="Candidates" />@*OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" *@
+		<GridColumns>
+			<GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridColumn HeaderText="Name" Width="25%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<span class="@(_con.Mpc ? "mpcicon" : "")">@_con.Name</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn HeaderText="Phone" Width="15%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							@_con.Phone
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn HeaderText="Email" Width="20%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<a href="mailto:@(_con.Email)">@_con.Email</a>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn HeaderText="Location" Width="20%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							@_con.Location
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="15%">
+			</GridColumn>
+			<GridColumn Field="@nameof(Candidates.Status)" HeaderText="Status" Width="15%"></GridColumn>
+			<GridColumn Width="10%">
+				<Template Context="bCon">
+					@{
                         @*if (bCon is Candidates _con)
                             {
                             <SfButton Content="" IconCss="editIcon" @onclick="() => EditCandidate(_con.ID)"></SfButton>
                             }*@
-                    }
-                </Template>
-            </GridColumn>
-        </GridColumns>
-        <GridTemplates Context="context">
-            <DetailTemplate>
-                @{
-                    Candidates _candidates = context! as Candidates;
-                }
-                <SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%">
-                    <tabAnimationsettings>
-                        <tabAnimationprevious Effect="AnimationEffect.None"></tabAnimationprevious>
-                        <tabAnimationnext Effect="AnimationEffect.None"></tabAnimationnext>
-                    </tabAnimationsettings>
-                    <TabItems>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Basic Info"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <BasicInfoPanel ModelObject="_candidateDetailsObject" EditCandidate="()=> { EditCandidate(_candidateDetailsObject.CandidateID); }"
-                                                EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" EditMPC="() => { EditMPC(_candidateDetailsObject.CandidateID); }" SetupAddress="SetupAddress()"
-                                                SetEligibility="SetEligibility()" SetExperience="SetExperience()" SetTaxTerm="SetTaxTerm()" SetJobOption="SetJobOption()" SetCommunication="SetCommunication()" GetRatingDate="GetRatingDate()" GetRatingNote="GetRatingNote()"
-                                                GetMPCDate="GetMPCDate()" GetMPCNote="GetMPCNote()"></BasicInfoPanel>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Skills">
-                                </TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <SkillPanel ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight" EditSkill="EditSkill"></SkillPanel>
-                                @*<div class="skillContainerBox">
-                                    <div>
-                                        <div>Primary Skills:</div>
-                                        <div style="height: 105px; overflow-y: auto;">
-                                            @_candidateDetailsObject.Keywords
-                                        </div>
-                                        <div style="font-weight: bold; height: 35px; margin-top: 15px;">Summary:</div>
-                                        <div style="height: 105px; overflow-y: auto;">
-                                            @_candidateDetailsObject.Summary
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div>Skills:</div>
-                                        <div>
-                                            <SfGrid AllowPaging="false" DataSource="@_candidateSkillsObject" EnableHeaderFocus="true" EnableHover="true" Height="215px" ID="gridSkill" @ref="GridSkill"
-                                                    RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateSkills" Width="99%">
-                                                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                                                <GridColumns>
-                                                    <GridColumn Field="@nameof(CandidateSkills.Skill)" HeaderText="Skill" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateSkills.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateSkills.LastUsed)" HeaderText="Last Used" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateSkills.ExpMonth)" HeaderText="Exp. (month)" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateSkills.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
-                                                    <GridColumn Width="10%">
-                                                        <Template Context="bCon">
-                                                            @{
-                                                                if (bCon is CandidateSkills _con)
-                                                                {
-                                                                    <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkill(_con.ID)"></SfButton>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                </GridColumns>
-                                            </SfGrid>
-                                        </div>
-                                    </div>
-                                </div>*@
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Education"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="educationContainerBox">
-                                    <div>
-                                        <div>
-                                            <SfGrid AllowPaging="false" DataSource="@_candidateEducationObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridEducation" @ref="GridEducation"
-                                                    RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateEducation" Width="99%">
-                                                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                                                <GridColumns>
-                                                    <GridColumn Field="@nameof(CandidateEducation.Degree)" HeaderText="Degree" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateEducation.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateEducation.College)" HeaderText="College" Width="20%"></GridColumn>
-                                                    <GridColumn HeaderText="Exp. (month)" Width="20%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateEducation _con)
-                                                                {
-                                                                    <span>@(_con.State + ", " + _con.Country)</span>
-                                                                }
-                                                            }
-                                                        </Template>
+					}
+				</Template>
+			</GridColumn>
+		</GridColumns>
+		<GridTemplates Context="context">
+			<DetailTemplate>
+				@{
+					Candidates _candidates = context! as Candidates;
+				}
+				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%">
+					<tabAnimationsettings>
+						<tabAnimationprevious Effect="AnimationEffect.None"></tabAnimationprevious>
+						<tabAnimationnext Effect="AnimationEffect.None"></tabAnimationnext>
+					</tabAnimationsettings>
+					<TabItems>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Basic Info"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<BasicInfoPanel EditCandidate="() => { EditCandidate(_candidateDetailsObject.CandidateID); }" EditMPC="() => { EditMPC(_candidateDetailsObject.CandidateID); }" EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" GetMPCDate="GetMPCDate()" GetMPCNote="GetMPCNote()" GetRatingDate="GetRatingDate()" GetRatingNote="GetRatingNote()" ModelObject="_candidateDetailsObject" SetCommunication="SetCommunication()" SetEligibility="SetEligibility()" SetExperience="SetExperience()" SetJobOption="SetJobOption()" SetTaxTerm="SetTaxTerm()" SetupAddress="SetupAddress()"></BasicInfoPanel>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Skills">
+								</TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight"></SkillPanel>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Education"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div class="educationContainerBox">
+									<div>
+										<div>
+											<SfGrid AllowPaging="false" DataSource="@_candidateEducationObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridEducation" @ref="GridEducation" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateEducation" Width="99%">
+												<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+												<GridColumns>
+													<GridColumn Field="@nameof(CandidateEducation.Degree)" HeaderText="Degree" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateEducation.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+													<GridColumn Field="@nameof(CandidateEducation.College)" HeaderText="College" Width="20%"></GridColumn>
+													<GridColumn HeaderText="Exp. (month)" Width="20%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateEducation _con)
+																{
+																	<span>@(_con.State + ", " + _con.Country)</span>
+																}
+															}
+														</Template>
 
-                                                    </GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateEducation.Year)" HeaderText="Year" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateEducation.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
-                                                    <GridColumn Width="10%">
-                                                        <Template Context="bCon">
-                                                            @{
-                                                                if (bCon is CandidateEducation _con)
-                                                                {
-                                                                    <SfButton Content="" IconCss="editIcon" @onclick="() => EditEducation(_con.ID)"></SfButton>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                </GridColumns>
-                                            </SfGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Experience"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="experienceContainerBox">
-                                    <div>
-                                        <div>
-                                            <SfGrid AllowPaging="false" DataSource="@_candidateExperienceObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridExperience" @ref="GridExperience"
-                                                    RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateExperience" Width="99%">
-                                                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                                                <GridColumns>
-                                                    <GridColumn Field="@nameof(CandidateExperience.Employer)" HeaderText="Degree" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateExperience.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                                    <GridColumn HeaderText="Duration" Width="20%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateExperience _con)
-                                                                {
-                                                                    <span>@(_con.Start + " - " + (_con.End == "" ? "Present" : _con.End))</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateExperience.Location)" HeaderText="Location" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateExperience.Title)" HeaderText="Title" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateExperience.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
-                                                    <GridColumn Width="10%">
-                                                        <Template Context="bCon">
-                                                            @{
-                                                                if (bCon is CandidateExperience _con)
-                                                                {
-                                                                    <SfButton Content="" IconCss="editIcon" @onclick="() => EditExperience(_con.ID)"></SfButton>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                </GridColumns>
-                                            </SfGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Notes"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="notesContainerBox">
-                                    <div>
-                                        <div>
-                                            <SfGrid AllowPaging="false" DataSource="@_candidateNotesObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridNotes" @ref="GridNotes"
-                                                    RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateNotes" Width="99%">
-                                                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                                                <GridColumns>
-                                                    <GridColumn Field="@nameof(CandidateNotes.Notes)" HeaderText="Notes" Width="75%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateNotes _con)
-                                                                {
-                                                                    <span title="@_con.Notes.Replace("<br>", Environment.NewLine).Replace("<br/>", Environment.NewLine)">@(_con.Notes)</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateNotes.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                                    <GridColumn HeaderText="Updated" Width="15%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateNotes _con)
-                                                                {
-                                                                    <span>@($"{_con.UpdatedDate.ToString("d", new CultureInfo("en-us"))} [{_con.UpdatedBy}]")</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn Width="10%">
-                                                        <Template Context="bCon">
-                                                            @{
+													</GridColumn>
+													<GridColumn Field="@nameof(CandidateEducation.Year)" HeaderText="Year" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateEducation.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
+													<GridColumn Width="10%">
+														<Template Context="bCon">
+															@{
+																if (bCon is CandidateEducation _con)
+																{
+																	<SfButton Content="" IconCss="editIcon" @onclick="() => EditEducation(_con.ID)"></SfButton>
+																}
+															}
+														</Template>
+													</GridColumn>
+												</GridColumns>
+											</SfGrid>
+										</div>
+									</div>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Experience"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div class="experienceContainerBox">
+									<div>
+										<div>
+											<SfGrid AllowPaging="false" DataSource="@_candidateExperienceObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridExperience" @ref="GridExperience" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateExperience" Width="99%">
+												<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+												<GridColumns>
+													<GridColumn Field="@nameof(CandidateExperience.Employer)" HeaderText="Degree" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateExperience.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+													<GridColumn HeaderText="Duration" Width="20%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateExperience _con)
+																{
+																	<span>@(_con.Start + " - " + (_con.End == "" ? "Present" : _con.End))</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn Field="@nameof(CandidateExperience.Location)" HeaderText="Location" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateExperience.Title)" HeaderText="Title" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateExperience.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
+													<GridColumn Width="10%">
+														<Template Context="bCon">
+															@{
+																if (bCon is CandidateExperience _con)
+																{
+																	<SfButton Content="" IconCss="editIcon" @onclick="() => EditExperience(_con.ID)"></SfButton>
+																}
+															}
+														</Template>
+													</GridColumn>
+												</GridColumns>
+											</SfGrid>
+										</div>
+									</div>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Notes"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div class="notesContainerBox">
+									<div>
+										<div>
+											<SfGrid AllowPaging="false" DataSource="@_candidateNotesObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridNotes" @ref="GridNotes" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateNotes" Width="99%">
+												<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+												<GridColumns>
+													<GridColumn Field="@nameof(CandidateNotes.Notes)" HeaderText="Notes" Width="75%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateNotes _con)
+																{
+																	<span title="@_con.Notes.Replace("<br>", Environment.NewLine).Replace("<br/>", Environment.NewLine)">@(_con.Notes)</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn Field="@nameof(CandidateNotes.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+													<GridColumn HeaderText="Updated" Width="15%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateNotes _con)
+																{
+																	<span>@($"{_con.UpdatedDate.ToString("d", new CultureInfo("en-us"))} [{_con.UpdatedBy}]")</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn Width="10%">
+														<Template Context="bCon">
+															@{
                                                                 @*if (bCon is CandidateNotes _con)
-                                                                {
+                                                                        {
                                                                     <SfButton Content="" IconCss="editIcon" @onclick="() => EditNotes(0)"></SfButton>
-                                                                }*@
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                </GridColumns>
-                                            </SfGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Resume"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="resumeContainerBox">
-                                    <sfrichtexteditor Height="300px" Readonly="true" Value="@_candidateDetailsObject.TextResume">
-                                        <richtexteditortoolbarsettings Items="@_tools1" />
-                                    </sfrichtexteditor>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Downloads"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div style="height: 100%">
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Candidate Activity"></TabHeader>
-                            </ChildContent>
-                            <ContentTemplate>
-                                <div class="activityContainerBox">
-                                    <div>
-                                        <div>
-                                            <SfGrid AllowPaging="false" DataSource="@_candidateActivityObject" EnableHeaderFocus="true" EnableHover="true" Height="245px" ID="gridActivity" @ref="GridActivity"
-                                                    RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateActivity" Width="99%">
-                                                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                                                <GridColumns>
-                                                    <GridColumn Field="@nameof(CandidateActivity.Requisition)" HeaderText="Requsition" Width="20%"></GridColumn>
-                                                    <GridColumn Field="@nameof(CandidateActivity.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                                    <GridColumn HeaderText="Status" Width="20%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateActivity _con)
-                                                                {
-                                                                    <span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn HeaderText="Date Updated" Width="20%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateActivity _con)
-                                                                {
-                                                                    <span>@_con.UpdatedDate.ToString("MM/dd/yyyy")</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn HeaderText="Positions" Width="20%">
-                                                        <Template Context="aCon">
-                                                            @{
-                                                                if (aCon is CandidateActivity _con)
-                                                                {
-                                                                    <span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridColumn Width="10%">
-                                                        <Template Context="bCon">
-                                                            @{
-                                                                //if (bCon is CandidateActivity _con)
-                                                                {
-                                                                    <SfButton Content="" IconCss="editIconInner" @onclick="() => EditCandidate(0)"></SfButton>
-                                                                }
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                </GridColumns>
-                                            </SfGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ContentTemplate>
-                        </TabItem>
-                    </TabItems>
-                    <SfSpinner @bind-Visible="@VisibleProperty" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
-                </SfTab>
-            </DetailTemplate>
-        </GridTemplates>
-    </SfGrid>
+                                                                        }*@
+															}
+														</Template>
+													</GridColumn>
+												</GridColumns>
+											</SfGrid>
+										</div>
+									</div>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Resume"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div class="resumeContainerBox">
+									<sfrichtexteditor Height="300px" Readonly="true" Value="@_candidateDetailsObject.TextResume">
+										<richtexteditortoolbarsettings Items="@_tools1" />
+									</sfrichtexteditor>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Downloads"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div style="height: 100%">
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Candidate Activity"></TabHeader>
+							</ChildContent>
+							<ContentTemplate>
+								<div class="activityContainerBox">
+									<div>
+										<div>
+											<SfGrid AllowPaging="false" DataSource="@_candidateActivityObject" EnableHeaderFocus="true" EnableHover="true" Height="245px" ID="gridActivity" @ref="GridActivity" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateActivity" Width="99%">
+												<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+												<GridColumns>
+													<GridColumn Field="@nameof(CandidateActivity.Requisition)" HeaderText="Requsition" Width="20%"></GridColumn>
+													<GridColumn Field="@nameof(CandidateActivity.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+													<GridColumn HeaderText="Status" Width="20%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateActivity _con)
+																{
+																	<span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn HeaderText="Date Updated" Width="20%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateActivity _con)
+																{
+																	<span>@_con.UpdatedDate.ToString("MM/dd/yyyy")</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn HeaderText="Positions" Width="20%">
+														<Template Context="aCon">
+															@{
+																if (aCon is CandidateActivity _con)
+																{
+																	<span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
+																}
+															}
+														</Template>
+													</GridColumn>
+													<GridColumn Width="10%">
+														<Template Context="bCon">
+															@{
+																//if (bCon is CandidateActivity _con)
+														{
+															<SfButton Content="" IconCss="editIconInner" @onclick="() => EditCandidate(0)"></SfButton>
+														}
+															}
+														</Template>
+													</GridColumn>
+												</GridColumns>
+											</SfGrid>
+										</div>
+									</div>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+					</TabItems>
+					<SfSpinner @bind-Visible="@VisibleProperty" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+				</SfTab>
+			</DetailTemplate>
+		</GridTemplates>
+	</SfGrid>
 
-    <EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication"
-                         Eligibility="Eligibility" Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone"
-                         SaveCandidate="SaveCandidate" StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1" ToolTipOpen="ToolTipOpen"></EditCandidateDialog>
+	<EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication" Eligibility="Eligibility" Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone" SaveCandidate="SaveCandidate" StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1" ToolTipOpen="ToolTipOpen"></EditCandidateDialog>
 
-    <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload"></ParseCandidateDialog>
+	<ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload"></ParseCandidateDialog>
 
-    <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating"
-                           GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen"></RatingCandidateDialog>
+	<RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen"></RatingCandidateDialog>
 
-    <SfDialog @bind-Visible="@VisibleMPCCandidate" Header="Edit M.P.C." Height="590px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
-        <ChildContent>
-            <DialogPositionData X="right" Y="center"></DialogPositionData>
-            <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-            <DialogEvents Closed="CancelMPC"></DialogEvents>
-            <div style="height: 100%">
-                <div class="divContainerTable">
-                    <div style="width: 100%">
-                        <SfGrid AllowPaging="false" DataSource="@_candidateMPCObject" EnableHeaderFocus="true" EnableHover="true" Height="215px" ID="gridMPC" @ref="GridMPC" RowHeight="@RowHeight"
-                                SelectedRowIndex="0" TValue="CandidateMPC" Width="99%">
-                            <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                            <GridColumns>
-                                <GridColumn Field="@nameof(CandidateMPC.Date)" HeaderText="Date" Width="20%"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.MPC)" HeaderText="MPC" Width="20%"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.Comments)" HeaderText="Comments" Width="20%"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
-                    </div>
-                </div>
-            </div>
-        </ChildContent>
-    </SfDialog>
+	<SfDialog @bind-Visible="@VisibleMPCCandidate" Header="Edit M.P.C." Height="590px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
+		<ChildContent>
+			<DialogPositionData X="right" Y="center"></DialogPositionData>
+			<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+			<DialogEvents Closed="CancelMPC"></DialogEvents>
+			<div style="height: 100%">
+				<div class="divContainerTable">
+					<div style="width: 100%">
+						<SfGrid AllowPaging="false" DataSource="@_candidateMPCObject" EnableHeaderFocus="true" EnableHover="true" Height="215px" ID="gridMPC" @ref="GridMPC" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateMPC" Width="99%">
+							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+							<GridColumns>
+								<GridColumn Field="@nameof(CandidateMPC.Date)" HeaderText="Date" Width="20%"></GridColumn>
+								<GridColumn Field="@nameof(CandidateMPC.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+								<GridColumn Field="@nameof(CandidateMPC.MPC)" HeaderText="MPC" Width="20%"></GridColumn>
+								<GridColumn Field="@nameof(CandidateMPC.Comments)" HeaderText="Comments" Width="20%"></GridColumn>
+							</GridColumns>
+						</SfGrid>
+					</div>
+				</div>
+			</div>
+		</ChildContent>
+	</SfDialog>
 
-    <div class="divGridFooter">
-        <div style="display: flex">
-            <div style="flex: 1; padding-left: 15px; text-align: left;">
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
-                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
-                <SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
-                <SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
-            </div>
-            <div style="width: 520px">
-                Items
-                <b>@StartRecord</b> to
-                <b>@EndRecord</b> of
-                <b>@Count</b> rows
-            </div>
-        </div>
-    </div>
+	<div class="divGridFooter">
+		<div style="display: flex">
+			<div style="flex: 1; padding-left: 15px; text-align: left;">
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
+			</div>
+			<div style="width: 520px">
+				Items
+				<b>@StartRecord</b> to
+				<b>@EndRecord</b> of
+				<b>@Count</b> rows
+			</div>
+		</div>
+	</div>
 </div>
