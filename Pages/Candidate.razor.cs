@@ -752,7 +752,7 @@ public partial class Candidate
 	private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
 	{
 		//CandidateDetailsObject.ClearData();
-		VisibleProperty = true;
+		//VisibleProperty = true;
 		if (_target != null)
 		{
 			if (_target != candidate.Data) // return when target is equal to args.data
@@ -793,12 +793,13 @@ public partial class Candidate
 				_candidateNotesObject = DeserializeObject<List<CandidateNotes>>(_candidateItems["Notes"]);
 				_candidateRatingObject = DeserializeObject<List<CandidateRating>>(_candidateItems["Rating"]);
 				_candidateMPCObject = DeserializeObject<List<CandidateMPC>>(_candidateItems["MPC"]);
-				RatingMPC = DeserializeObject<CandidateRatingMPC>(_candidateItems["RatingMPC"]);
+				RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_candidateItems["RatingMPC"]?.ToString() ?? string.Empty);
 			}
 		}
-
 		await Task.Yield();
-		VisibleProperty = false;
+
+		//VisibleProperty = false;
+		StateHasChanged();
 	}
 
 	private void AddNewCandidate()
@@ -1096,6 +1097,31 @@ public partial class Candidate
 			//string _url = ;
 
 			RestClient _client = new($"{Start.ApiHost}Candidates/SaveRating");
+			RestRequest _request = new("", Method.Post)
+								   {
+									   AlwaysMultipartFormData = true
+								   };
+			_request.AddFile("file", FileData.ToArray(), FileName, MimeType);
+			//request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+			_request.AddParameter("filename", FileName, ParameterType.RequestBody);
+			_request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
+			_request.AddParameter("mime", MimeType, ParameterType.RequestBody);
+
+			Task<Dictionary<string, object>> response = _client.PostAsync<Dictionary<string, object>>(_request);
+		}
+		catch
+		{
+			//
+		}
+	}
+
+	private void SaveMPC(EditContext obj)
+	{
+		try
+		{
+			//string _url = ;
+
+			RestClient _client = new($"{Start.ApiHost}Candidates/SaveMPC");
 			RestRequest _request = new("", Method.Post)
 								   {
 									   AlwaysMultipartFormData = true

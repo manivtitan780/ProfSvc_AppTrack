@@ -12,8 +12,8 @@
                     <div style="display: flex; width: 350px;">
                         <SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
                         <SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
-                        <SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount" Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
-                            @*<NumericTextBoxEvents TValue="decimal" OnChange="PageNumberChanged"></NumericTextBoxEvents>"*@
+                        <SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount"
+                                          Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
                         </SfNumericTextBox>
                         <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
                         <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
@@ -26,11 +26,12 @@
                         <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount"></DropDownListEvents>
                     </SfDropDownList>
                 </div>
-            </div>--
+            </div>
             <div class="divRightControls" style="width: 520px">
                 <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
                 <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => AddNewCandidate()">Add Candidate</SfButton>
-                <AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid">
+                <AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+                                    TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid">
                 </AutoCompleteButton>
             </div>
         </div>
@@ -84,16 +85,6 @@
             <GridColumn Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%">
             </GridColumn>
             <GridColumn Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%"></GridColumn>
-            @*<GridColumn Width="10%">
-                <Template Context="bCon">
-                    @{
-                        if (bCon is Candidates _con)
-                            {
-                            <SfButton Content="" IconCss="editIcon" @onclick="() => EditCandidate(_con.ID)"></SfButton>
-                            }
-                    }
-                </Template>
-            </GridColumn>*@
         </GridColumns>
         <GridTemplates Context="context">
             <DetailTemplate>
@@ -101,17 +92,20 @@
                     Candidates _candidates = context! as Candidates;
                 }
                 <SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%">
-                    <tabAnimationsettings>
-                        <tabAnimationprevious Effect="AnimationEffect.None"></tabAnimationprevious>
-                        <tabAnimationnext Effect="AnimationEffect.None"></tabAnimationnext>
-                    </tabAnimationsettings>
+                    <TabAnimationSettings>
+                        <TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+                        <TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+                    </TabAnimationSettings>
                     <TabItems>
                         <TabItem>
                             <ChildContent>
                                 <TabHeader Text="Basic Info"></TabHeader>
                             </ChildContent>
                             <ContentTemplate>
-                                <BasicInfoPanel EditCandidate="() => { EditCandidate(_candidateDetailsObject.CandidateID); }" EditMPC="() => { EditMPC(_candidateDetailsObject.CandidateID); }" EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" GetMPCDate="GetMPCDate()" GetMPCNote="GetMPCNote()" GetRatingDate="GetRatingDate()" GetRatingNote="GetRatingNote()" ModelObject="_candidateDetailsObject" SetCommunication="SetCommunication()" SetEligibility="SetEligibility()" SetExperience="SetExperience()" SetJobOption="SetJobOption()" SetTaxTerm="SetTaxTerm()" SetupAddress="SetupAddress()"></BasicInfoPanel>
+                                <BasicInfoPanel EditCandidate="() => { EditCandidate(_candidateDetailsObject.CandidateID); }" EditMPC="() => { EditMPC(_candidateDetailsObject.CandidateID); }"
+                                                EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" GetMPCDate="GetMPCDate()" GetMPCNote="GetMPCNote()" GetRatingDate="GetRatingDate()"
+                                                GetRatingNote="GetRatingNote()" ModelObject="_candidateDetailsObject" SetCommunication="SetCommunication()" SetEligibility="SetEligibility()" SetExperience="SetExperience()"
+                                                SetJobOption="SetJobOption()" SetTaxTerm="SetTaxTerm()" SetupAddress="SetupAddress()"></BasicInfoPanel>
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
@@ -183,34 +177,17 @@
         </GridTemplates>
     </SfGrid>
 
-    <EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication" Eligibility="Eligibility" Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone" SaveCandidate="SaveCandidate" StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1" ToolTipOpen="ToolTipOpen"></EditCandidateDialog>
+    <EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication" Eligibility="Eligibility"
+                         Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone" SaveCandidate="SaveCandidate"
+                         StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1" ToolTipOpen="ToolTipOpen"></EditCandidateDialog>
 
     <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload"></ParseCandidateDialog>
 
-    <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen"></RatingCandidateDialog>
+    <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" GridObject="_candidateRatingObject"
+                           HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen"></RatingCandidateDialog>
 
-    <SfDialog @bind-Visible="@VisibleMPCCandidate" Header="Edit M.P.C." Height="590px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
-        <ChildContent>
-            <DialogPositionData X="right" Y="center"></DialogPositionData>
-            <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-            <DialogEvents Closed="CancelMPC"></DialogEvents>
-            <div style="height: 100%">
-                <div class="divContainerTable">
-                    <div style="width: 100%">
-                        <SfGrid AllowPaging="false" DataSource="@_candidateMPCObject" EnableHeaderFocus="true" EnableHover="true" Height="215px" ID="gridMPC" @ref="GridMPC" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateMPC" Width="99%">
-                            <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                            <GridColumns>
-                                <GridColumn Field="@nameof(CandidateMPC.Date)" HeaderText="Date" Width="20%"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.MPC)" HeaderText="MPC" Width="20%"></GridColumn>
-                                <GridColumn Field="@nameof(CandidateMPC.Comments)" HeaderText="Comments" Width="20%"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
-                    </div>
-                </div>
-            </div>
-        </ChildContent>
-    </SfDialog>
+    <MPCCandidateDialog @bind-VisibleMPCCandidate="@VisibleMPCCandidate" @bind-VisibleMPCCandidate:event="VisibleMPCCandidateChanged" CancelMPC="CancelMPC" GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1"
+                        ModelObject="RatingMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" ToolTipOpen="ToolTipOpen"></MPCCandidateDialog>
 
     <div class="divGridFooter">
         <div style="display: flex">

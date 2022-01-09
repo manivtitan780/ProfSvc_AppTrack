@@ -1,4 +1,4 @@
-﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="590px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
+﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
 	<ChildContent>
 		<DialogPositionData X="right" Y="center"></DialogPositionData>
 		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
@@ -8,7 +8,7 @@
 			<div style="height: 100%">
 				<div class="divContainerTable">
 					<div style="width: 100%">
-						<SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="215px" ID="gridRating" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateRating" Width="99%">
+						<SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="145px" ID="gridRating" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateRating" Width="99%">
 							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
 							<GridColumns>
 								<GridColumn Field="@nameof(CandidateRating.Date)" HeaderText="Date" Width="20%"></GridColumn>
@@ -18,7 +18,7 @@
 							</GridColumns>
 						</SfGrid>
 					</div>
-					<div class="divFlex">
+					<div class="divFlex" style="margin-top: 25px">
 						<div class="divFlexLabel">
 							<label class="labelStatus" for="radzenRating">Rating:</label>
 						</div>
