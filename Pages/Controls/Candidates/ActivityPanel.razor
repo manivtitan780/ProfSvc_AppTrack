@@ -1,0 +1,53 @@
+﻿<div class="activityContainerBox">
+    <div>
+        <div>
+            <SfGrid AllowPaging="false" DataSource="ModelObject" EnableHeaderFocus="true" EnableHover="true" Height="245px" ID="gridActivity" @ref="GridActivity" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateActivity" Width="99%">
+                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+                <GridColumns>
+                    <GridColumn Field="@nameof(CandidateActivity.Requisition)" HeaderText="Requsition" Width="20%"></GridColumn>
+                    <GridColumn Field="@nameof(CandidateActivity.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+                    <GridColumn HeaderText="Status" Width="20%">
+                        <Template Context="aCon">
+                            @{
+                                if (aCon is CandidateActivity _con)
+                                {
+                                    <span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn HeaderText="Date Updated" Width="20%">
+                        <Template Context="aCon">
+                            @{
+                                if (aCon is CandidateActivity _con)
+                                {
+                                    <span>@_con.UpdatedDate.ToString("MM/dd/yyyy")</span>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn HeaderText="Positions" Width="20%">
+                        <Template Context="aCon">
+                            @{
+                                if (aCon is CandidateActivity _con)
+                                {
+                                    <span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Width="10%">
+                        <Template Context="bCon">
+                            @{
+                                if (bCon is CandidateActivity _con)
+                                {
+                                    <SfButton Content="" IconCss="editIconInner" @onclick="() => EditActivity.InvokeAsync(_con.ID)"></SfButton>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>

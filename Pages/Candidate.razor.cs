@@ -284,6 +284,24 @@ public partial class Candidate
 		set;
 	}
 
+	private bool VisibleExperienceDialog
+	{
+		get;
+		set;
+	}
+
+	private bool VisibleNotesDialog
+	{
+		get;
+		set;
+	}
+
+	private bool VisibleActivityDialog
+	{
+		get;
+		set;
+	}
+
 	private bool VisibleMPCCandidate
 	{
 		get;
@@ -835,7 +853,17 @@ public partial class Candidate
 
 	private void EditExperience(int id)
     {
+		VisibleExperienceDialog = true;
+    }
 
+	private void EditNotes(int id)
+    {
+		VisibleNotesDialog = true;
+    }
+
+	private void EditActivity(int id)
+    {
+		VisibleActivityDialog = true;
     }
 
 	private async void FilterGrid(ChangeEventArgs<string, KeyValues> candidate)
@@ -1012,21 +1040,18 @@ public partial class Candidate
 			{
 				//string _url = ;
 
-				RestClient _client = new($"{Start.ApiHost}Candidates/ParseResume")
-									 {
-										 Timeout = -1
-									 };
-				RestRequest _request = new(Method.POST)
+				RestClient _client = new($"{Start.ApiHost}Candidates/ParseResume");
+				RestRequest _request = new("", Method.Post)
 									   {
 										   AlwaysMultipartFormData = true
 									   };
-				_request.AddFileBytes("file", FileData.ToArray(), FileName, MimeType);
+				_request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 				//request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
 				_request.AddParameter("filename", FileName, ParameterType.RequestBody);
 				_request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
 				_request.AddParameter("mime", MimeType, ParameterType.RequestBody);
 
-				IRestResponse response = _client.Post(_request);
+				Task<RestResponse> response = _client.PostAsync(_request);
 			}
 			catch
 			{
@@ -1070,21 +1095,18 @@ public partial class Candidate
 		{
 			//string _url = ;
 
-			RestClient _client = new($"{Start.ApiHost}Candidates/SaveRating")
-								 {
-									 Timeout = -1
-								 };
-			RestRequest _request = new(Method.POST)
+			RestClient _client = new($"{Start.ApiHost}Candidates/SaveRating");
+			RestRequest _request = new("", Method.Post)
 								   {
 									   AlwaysMultipartFormData = true
 								   };
-			_request.AddFileBytes("file", FileData.ToArray(), FileName, MimeType);
+			_request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 			//request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
 			_request.AddParameter("filename", FileName, ParameterType.RequestBody);
 			_request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
 			_request.AddParameter("mime", MimeType, ParameterType.RequestBody);
 
-			IRestResponse<Dictionary<string, object>> response = _client.Post<Dictionary<string, object>>(_request);
+			Task<Dictionary<string, object>> response = _client.PostAsync<Dictionary<string, object>>(_request);
 		}
 		catch
 		{

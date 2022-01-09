@@ -175,11 +175,8 @@ public static class General
 
         try
         {
-            RestClient _restClient = new($"{Start.ApiHost}candidates/GetGridCandidates")
-                                     {
-                                         Timeout = -1
-                                     };
-            RestRequest request = new(Method.GET);
+            RestClient _restClient = new($"{Start.ApiHost}candidates/GetGridCandidates");
+            RestRequest request = new("", Method.Get);
             request.AddQueryParameter("page", page.ToString());
             request.AddQueryParameter("count", count.ToString());
             request.AddQueryParameter("name", name);
