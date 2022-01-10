@@ -14,12 +14,8 @@
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.0" />
         <PackageReference Include="RestSharp" Version="107.0.1" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.41" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.38" />
     </ItemGroup>
-
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-      <Exec Command="taskkill /F /IM w3wp.exe" />
-    </Target>
 
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="net start w3svc" />
