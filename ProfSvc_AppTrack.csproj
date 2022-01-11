@@ -17,6 +17,10 @@
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.38" />
     </ItemGroup>
 
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="taskkill.exe /F /IM &quot;w3wp.exe&quot;" />
+    </Target>
+
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="net start w3svc" />
     </Target>-->

@@ -718,5 +718,8 @@ public static class General
         }
     }
 
+    public static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array)?.ToString() ?? string.Empty);
+
+
     #endregion
 }

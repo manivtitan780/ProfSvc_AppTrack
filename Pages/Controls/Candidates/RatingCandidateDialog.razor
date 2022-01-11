@@ -23,7 +23,7 @@
 							<label class="labelStatus" for="radzenRating">Rating:</label>
 						</div>
 						<div class="divFlexSmall">
-							<RadzenRating ID="radzenRating" Stars="5" Value="@ModelObject.Rating" />
+							<RadzenRating ID="radzenRating" Stars="5" @bind-Value="@ModelObject.Rating" />
 						</div>
 					</div>
 					<div class="divFlex">

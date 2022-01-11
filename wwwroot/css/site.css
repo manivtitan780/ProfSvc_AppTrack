@@ -111,6 +111,10 @@ label {
     outline: 1px solid red;
 }
 
+.rz-rating.valid {
+    outline: none !important;
+}
+
 .validation-message {
     color: var(--c-red);
     /*margin-top: -45px;*/

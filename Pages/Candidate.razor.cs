@@ -476,7 +476,7 @@ public partial class Candidate
         set;
     }
 
-    private static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array as JArray)?.ToString() ?? string.Empty);
+    //private static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array)?.ToString() ?? string.Empty);
 
     private static void FilterSet(string value)
     {
@@ -754,8 +754,8 @@ public partial class Candidate
     private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
     {
         //CandidateDetailsObject.ClearData();
-        /*VisibleProperty = true;
-		StateHasChanged();*/
+        VisibleProperty = true;
+        /*StateHasChanged();*/
         if (_target != null)
         {
             if (_target != candidate.Data) // return when target is equal to args.data
@@ -767,37 +767,59 @@ public partial class Candidate
         _target = candidate.Data;
 
         //Candidates _candidate = candidate.Data;
-        string _url = $"{Start.ApiHost}candidates/GetCandidateDetails?candidateID={_target.ID}";
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest request = new("Candidates/GetCandidateDetails", Method.Get);
+        request.AddQueryParameter("candidateID", _target.ID);
 
-        if (_clientFactory == null)
+        Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
+
+        if (_restResponse != null)
         {
-            return;
+            _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
+            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
+            _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
+            _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+            RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
         }
 
-        HttpClient _client = _clientFactory.CreateClient("app");
-        HttpResponseMessage _response = await _client.GetAsync(_url);
 
-        if (_response.IsSuccessStatusCode)
-        {
-            string _responseStream = await _response.Content.ReadAsStringAsync();
-            Dictionary<string, object> _candidateItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
-            if (_candidateItems != null)
-            {
-                _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_candidateItems["Candidate"]?.ToString() ?? string.Empty);
-                _candidateSkillsObject = DeserializeObject<List<CandidateSkills>>(_candidateItems["Skills"]);
-                _candidateEducationObject = DeserializeObject<List<CandidateEducation>>(_candidateItems["Education"]);
-                _candidateExperienceObject = DeserializeObject<List<CandidateExperience>>(_candidateItems["Experience"]);
-                _candidateActivityObject = DeserializeObject<List<CandidateActivity>>(_candidateItems["Activity"]);
-                _candidateNotesObject = DeserializeObject<List<CandidateNotes>>(_candidateItems["Notes"]);
-                _candidateRatingObject = DeserializeObject<List<CandidateRating>>(_candidateItems["Rating"]);
-                _candidateMPCObject = DeserializeObject<List<CandidateMPC>>(_candidateItems["MPC"]);
-                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_candidateItems["RatingMPC"]?.ToString() ?? string.Empty);
-            }
-        }
-        /*await Task.Yield();
 
-		VisibleProperty = false;
-		StateHasChanged();*/
+        //string _url = $"{Start.ApiHost}candidates/GetCandidateDetails?candidateID={_target.ID}";
+
+        //if (_clientFactory == null)
+        //{
+        //    return;
+        //}
+
+        //HttpClient _client = _clientFactory.CreateClient("app");
+        //HttpResponseMessage _response = await _client.GetAsync(_url);
+
+        //if (_response.IsSuccessStatusCode)
+        //{
+        //    string _responseStream = await _response.Content.ReadAsStringAsync();
+        //    Dictionary<string, object> _candidateItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
+        //    if (_candidateItems != null)
+        //    {
+        //        _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_candidateItems["Candidate"]?.ToString() ?? string.Empty);
+        //        _candidateSkillsObject = DeserializeObject<List<CandidateSkills>>(_candidateItems["Skills"]);
+        //        _candidateEducationObject = DeserializeObject<List<CandidateEducation>>(_candidateItems["Education"]);
+        //        _candidateExperienceObject = DeserializeObject<List<CandidateExperience>>(_candidateItems["Experience"]);
+        //        _candidateActivityObject = DeserializeObject<List<CandidateActivity>>(_candidateItems["Activity"]);
+        //        _candidateNotesObject = DeserializeObject<List<CandidateNotes>>(_candidateItems["Notes"]);
+        //        _candidateRatingObject = DeserializeObject<List<CandidateRating>>(_candidateItems["Rating"]);
+        //        _candidateMPCObject = DeserializeObject<List<CandidateMPC>>(_candidateItems["MPC"]);
+        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_candidateItems["RatingMPC"]?.ToString() ?? string.Empty);
+        //    }
+        //}
+        StateHasChanged();
+        await Task.Yield();
+
+        await Task.Delay(600);
+        VisibleProperty = false;
     }
 
     private void AddNewCandidate()
@@ -1039,8 +1061,8 @@ public partial class Candidate
             {
                 //string _url = ;
 
-                RestClient _client = new($"{Start.ApiHost}Candidates/ParseResume");
-                RestRequest _request = new("", Method.Post)
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Candidates/ParseResume", Method.Post)
                 {
                     AlwaysMultipartFormData = true
                 };
@@ -1088,55 +1110,53 @@ public partial class Candidate
         VisibleMPCCandidate = true;
     }
 
-    private void SaveRating(EditContext obj)
+    private async void SaveRating(EditContext obj)
     {
         try
         {
-            //string _url = ;
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveRating", Method.Post);
+            _request.RequestFormat = DataFormat.Json;
+            _request.AddJsonBody(obj.Model, "application/json");
+            _request.AddQueryParameter("user", "JOLLY");
 
-            RestClient _client = new($"{Start.ApiHost}Candidates/SaveRating");
-            RestRequest _request = new("", Method.Post)
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response != null)
             {
-                AlwaysMultipartFormData = true
-            };
-            _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
-            //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-            _request.AddParameter("filename", FileName, ParameterType.RequestBody);
-            _request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
-            _request.AddParameter("mime", MimeType, ParameterType.RequestBody);
-
-            Task<Dictionary<string, object>> response = _client.PostAsync<Dictionary<string, object>>(_request);
-        }
-        catch
-        {
-            //
-        }
-    }
-
-    private void SaveMPC(EditContext obj)
-    {
-        try
-        {
-            //string _url = ;
-
-            RestClient _client = new($"{Start.ApiHost}Candidates/SaveMPC");
-            RestRequest _request = new("", Method.Post)
-            {
-                AlwaysMultipartFormData = true
-            };
-            _request.AddParameter("mpc", (CandidateRatingMPC)obj.Model, ParameterType.RequestBody);
-            _request.AddParameter("user", "JOLLY", ParameterType.RequestBody);
-
-            Task<Dictionary<string, object>> _response = _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response.IsCompletedSuccessfully)
-            {
-                Dictionary<string, object> _returnResponse = _response.Result;
+                _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_response["RatingList"]);
+                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstRating"]?.ToString() ?? string.Empty);
             }
         }
         catch
         {
             //
         }
+        VisibleRatingCandidate = false;
+
+    }
+
+    private async void SaveMPC(EditContext obj)
+    {
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveMPC", Method.Post);
+            _request.RequestFormat = DataFormat.Json;
+            _request.AddJsonBody(obj.Model, "application/json");
+            _request.AddQueryParameter("user", "JOLLY");
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response != null)
+            {
+                _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
+                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
+            }
+        }
+        catch
+        {
+            //
+        }
+        VisibleMPCCandidate = false;
     }
 
     #endregion
