@@ -45,6 +45,13 @@ public partial class MPCCandidateDialog
         }
     }
 
+    [Parameter]
+    public bool SpinnerVisible
+    {
+        get;
+        set;
+    }
+
     /// <summary>
     /// </summary>
     [Parameter]

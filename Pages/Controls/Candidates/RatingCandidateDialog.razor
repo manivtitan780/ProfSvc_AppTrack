@@ -1,5 +1,6 @@
 ﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
 	<ChildContent>
+        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
 		<DialogPositionData X="right" Y="center"></DialogPositionData>
 		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
 		<DialogEvents Closed="CancelRating"></DialogEvents>

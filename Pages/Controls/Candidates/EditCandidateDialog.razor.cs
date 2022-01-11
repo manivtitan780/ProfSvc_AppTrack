@@ -49,6 +49,13 @@ public partial class EditCandidateDialog
     }
 
     [Parameter]
+    public bool SpinnerVisible
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
     public Dictionary<string, object> HtmlAttributes
     {
         get;

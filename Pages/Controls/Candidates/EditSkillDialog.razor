@@ -1,0 +1,14 @@
+﻿@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
+<SfDialog Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="832px">
+    <ChildContent>
+        <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+        <DialogPositionData X="right" Y="center"></DialogPositionData>
+        <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+        <DialogEvents></DialogEvents>
+        <EditForm>
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <div style="height: 100%">
+            </div>
+        </EditForm>
+    </ChildContent>
+</SfDialog>

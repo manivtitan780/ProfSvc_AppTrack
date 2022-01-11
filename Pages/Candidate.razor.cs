@@ -545,12 +545,36 @@ public partial class Candidate
         FilterSet(_result);
     }
 
-    private MarkupString GetMPCDate()
+    private MarkupString MPCDate
+    {
+        get;
+        set;
+    }
+
+    private MarkupString MPCNote
+    {
+        get;
+        set;
+    }
+
+    private MarkupString RatingDate
+    {
+        get;
+        set;
+    }
+
+    private MarkupString RatingNote
+    {
+        get;
+        set;
+    }
+
+    private void GetMPCDate()
     {
         string _mpcDate = "";
         if (_candidateDetailsObject.MpcNotes == "")
         {
-            return _mpcDate.ToMarkupString();
+            MPCDate = _mpcDate.ToMarkupString();
         }
 
         CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -560,15 +584,15 @@ public partial class Candidate
                        _candidateMPCObjectFirst.User.Replace("[", "").Replace("]", "") + "]";
         }
 
-        return _mpcDate.ToMarkupString();
+        MPCDate = _mpcDate.ToMarkupString();
     }
 
-    private MarkupString GetMPCNote()
+    private void GetMPCNote()
     {
         string _mpcNote = "";
         if (_candidateDetailsObject.MpcNotes == "")
         {
-            return _mpcNote.ToMarkupString();
+            MPCNote = _mpcNote.ToMarkupString();
         }
 
         CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -577,15 +601,15 @@ public partial class Candidate
             _mpcNote = _candidateMPCObjectFirst.Comments;
         }
 
-        return _mpcNote.ToMarkupString();
+        MPCNote = _mpcNote.ToMarkupString();
     }
 
-    private MarkupString GetRatingDate()
+    private void GetRatingDate()
     {
         string _ratingDate = "";
         if (_candidateDetailsObject.RateNotes == "")
         {
-            return _ratingDate.ToMarkupString();
+            RatingDate = _ratingDate.ToMarkupString();
         }
 
         CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -595,15 +619,15 @@ public partial class Candidate
                           _candidateRatingObjectFirst.User.Replace("[", "").Replace("]", "") + "]";
         }
 
-        return _ratingDate.ToMarkupString();
+        RatingDate = _ratingDate.ToMarkupString();
     }
 
-    private MarkupString GetRatingNote()
+    private void GetRatingNote()
     {
         string _ratingNote = "";
         if (_candidateDetailsObject.RateNotes == "")
         {
-            return _ratingNote.ToMarkupString();
+            RatingNote = _ratingNote.ToMarkupString();
         }
 
         CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
@@ -612,10 +636,46 @@ public partial class Candidate
             _ratingNote = _candidateRatingObjectFirst.Comments;
         }
 
-        return _ratingNote.ToMarkupString();
+        RatingNote = _ratingNote.ToMarkupString();
     }
 
-    private MarkupString SetupAddress()
+    private MarkupString Address
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateCommunication
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateEligibility
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateJobOptions
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateTaxTerms
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateExperience
+    {
+        get;
+        set;
+    }
+
+    private void SetupAddress()
     {
         //NumberOfLines = 1;
         string _generateAddress = _candidateDetailsObject.Address1;
@@ -666,10 +726,10 @@ public partial class Candidate
 
         //NumberOfLines = _generateAddress.Split("<br/>").Length;
 
-        return _generateAddress.ToMarkupString();
+        Address = _generateAddress.ToMarkupString();
     }
 
-    private MarkupString SetCommunication()
+    private void SetCommunication()
     {
         string _returnValue = _candidateDetailsObject.Communication switch
         {
@@ -679,21 +739,21 @@ public partial class Candidate
             _ => "Fair"
         };
 
-        return _returnValue.ToMarkupString();
+        CandidateCommunication = _returnValue.ToMarkupString();
     }
 
-    private MarkupString SetEligibility()
+    private void SetEligibility()
     {
-        return _candidateDetailsObject.EligibilityID > 0
+        CandidateEligibility = _candidateDetailsObject.EligibilityID > 0
                    ? Eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID).Value.ToMarkupString() : "".ToMarkupString();
     }
 
-    private MarkupString SetExperience()
+    private void SetExperience()
     {
-        return _candidateDetailsObject.ExperienceID > 0 ? Experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString() : "".ToMarkupString();
+        CandidateExperience = _candidateDetailsObject.ExperienceID > 0 ? Experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString() : "".ToMarkupString();
     }
 
-    private MarkupString SetJobOption()
+    private void SetJobOption()
     {
         string[] _splitJobOptions = _candidateDetailsObject.JobOptions.Split(',');
         string _returnValue = "";
@@ -714,10 +774,10 @@ public partial class Candidate
             }
         }
 
-        return _returnValue.ToMarkupString();
+        CandidateJobOptions = _returnValue.ToMarkupString();
     }
 
-    private MarkupString SetTaxTerm()
+    private void SetTaxTerm()
     {
         string[] _splitTaxTerm = _candidateDetailsObject.TaxTerm.Split(',');
         string _returnValue = "";
@@ -738,7 +798,7 @@ public partial class Candidate
             }
         }
 
-        return _returnValue.ToMarkupString();
+        CandidateTaxTerms = _returnValue.ToMarkupString();
     }
 
     private async Task DataHandler(object obj)
@@ -753,9 +813,8 @@ public partial class Candidate
 
     private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
     {
-        //CandidateDetailsObject.ClearData();
         VisibleProperty = true;
-        /*StateHasChanged();*/
+
         if (_target != null)
         {
             if (_target != candidate.Data) // return when target is equal to args.data
@@ -766,7 +825,6 @@ public partial class Candidate
 
         _target = candidate.Data;
 
-        //Candidates _candidate = candidate.Data;
         RestClient _restClient = new($"{Start.ApiHost}");
         RestRequest request = new("Candidates/GetCandidateDetails", Method.Get);
         request.AddQueryParameter("candidateID", _target.ID);
@@ -784,38 +842,18 @@ public partial class Candidate
             _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
             _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
             RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
+            GetMPCDate();
+            GetMPCNote();
+            GetRatingDate();
+            GetRatingNote();
+            SetupAddress();
+            SetCommunication();
+            SetEligibility();
+            SetJobOption();
+            SetTaxTerm();
+            SetExperience();
         }
 
-
-
-        //string _url = $"{Start.ApiHost}candidates/GetCandidateDetails?candidateID={_target.ID}";
-
-        //if (_clientFactory == null)
-        //{
-        //    return;
-        //}
-
-        //HttpClient _client = _clientFactory.CreateClient("app");
-        //HttpResponseMessage _response = await _client.GetAsync(_url);
-
-        //if (_response.IsSuccessStatusCode)
-        //{
-        //    string _responseStream = await _response.Content.ReadAsStringAsync();
-        //    Dictionary<string, object> _candidateItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
-        //    if (_candidateItems != null)
-        //    {
-        //        _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_candidateItems["Candidate"]?.ToString() ?? string.Empty);
-        //        _candidateSkillsObject = DeserializeObject<List<CandidateSkills>>(_candidateItems["Skills"]);
-        //        _candidateEducationObject = DeserializeObject<List<CandidateEducation>>(_candidateItems["Education"]);
-        //        _candidateExperienceObject = DeserializeObject<List<CandidateExperience>>(_candidateItems["Experience"]);
-        //        _candidateActivityObject = DeserializeObject<List<CandidateActivity>>(_candidateItems["Activity"]);
-        //        _candidateNotesObject = DeserializeObject<List<CandidateNotes>>(_candidateItems["Notes"]);
-        //        _candidateRatingObject = DeserializeObject<List<CandidateRating>>(_candidateItems["Rating"]);
-        //        _candidateMPCObject = DeserializeObject<List<CandidateMPC>>(_candidateItems["MPC"]);
-        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_candidateItems["RatingMPC"]?.ToString() ?? string.Empty);
-        //    }
-        //}
-        StateHasChanged();
         await Task.Yield();
 
         await Task.Delay(600);
@@ -903,21 +941,24 @@ public partial class Candidate
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private void SaveCandidate()
+    private bool SpinnerVisible
     {
+        get;
+        set;
+    }
+
+    private async void SaveCandidate()
+    {
+        SpinnerVisible = true;
+        await Task.Delay(1);
         _candidateDetailsObject = _candidateDetailsObjectClone.Copy();
-        string _url = $"{Start.ApiHost}Candidates/SaveCandidate";
-        if (_clientFactory == null)
-        {
-            return;
-        }
 
-        HttpClient _client = _clientFactory.CreateClient("app");
+        RestClient _client = new($"{Start.ApiHost}");
+        RestRequest _request = new("Candidates/SaveCandidate", Method.Post);
+        _request.RequestFormat = DataFormat.Json;
+        _request.AddJsonBody(_candidateDetailsObject, "application/json");
 
-        StringContent _candidateContent = new(JsonConvert.SerializeObject(_candidateDetailsObject), Encoding.UTF8, "application/json");
-        using Task<HttpResponseMessage> _response = _client.PostAsync(_url, _candidateContent);
-
-        using Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
+        int _response = await _client.PostAsync<int>(_request);
 
         _target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
         _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
@@ -925,10 +966,16 @@ public partial class Candidate
         _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
         _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
         _target.Status = "Available";
-        //StateHasChanged();
+        SetupAddress();
+        SetCommunication();
+        SetEligibility();
+        SetJobOption();
+        SetTaxTerm();
+        SetExperience();
+        SpinnerVisible = false;
+        await Task.Delay(1);
         VisibleCandidateInfo = false;
-
-        //return _responseStream.Result;
+        StateHasChanged();
     }
 
     private void StateIDChanged(ChangeEventArgs<int, IntValues> args)
@@ -1112,6 +1159,8 @@ public partial class Candidate
 
     private async void SaveRating(EditContext obj)
     {
+        SpinnerVisible = true;
+        await Task.Delay(1);
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
@@ -1125,18 +1174,25 @@ public partial class Candidate
             {
                 _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_response["RatingList"]);
                 RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstRating"]?.ToString() ?? string.Empty);
+                _candidateDetailsObject.RateCandidate = RatingMPC.Rating;
+                GetRatingDate();
+                GetRatingNote();
             }
         }
         catch
         {
             //
         }
+        SpinnerVisible = false;
+        await Task.Delay(1);
         VisibleRatingCandidate = false;
 
     }
 
     private async void SaveMPC(EditContext obj)
     {
+        SpinnerVisible = true;
+        await Task.Delay(1);
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
@@ -1150,12 +1206,16 @@ public partial class Candidate
             {
                 _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
                 RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
+                GetMPCDate();
+                GetMPCNote();
             }
         }
         catch
         {
             //
         }
+        SpinnerVisible = false;
+        await Task.Delay(1);
         VisibleMPCCandidate = false;
     }
 
@@ -1188,8 +1248,7 @@ public partial class Candidate
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("SearchCandidate", "@Candidate", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptor("SearchCandidate", "@Candidate", dm, _clientFactory);
 
         #endregion
     }

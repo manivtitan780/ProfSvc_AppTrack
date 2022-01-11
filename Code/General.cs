@@ -250,8 +250,7 @@ public static class General
         }
     }
 
-    public static async Task<object> GetReadAutocompleteAdaptor(string methodName, string parameterName, DataManagerRequest dm,
-                                                                IHttpClientFactory factory = null)
+    public static async Task<object> GetReadAutocompleteAdaptor(string methodName, string parameterName, DataManagerRequest dm, IHttpClientFactory factory = null)
     {
         List<KeyValues> _dataSource = new();
         if (dm.Where is not {Count: > 0} || dm.Where[0].value.NullOrWhiteSpace())

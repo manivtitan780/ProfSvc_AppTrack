@@ -22,8 +22,8 @@
                     </div>
                     <div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
                     <SfDropDownList @bind-Value="@ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
-                        <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                        <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount"></DropDownListEvents>
+                        <DropDownListFieldSettings Text="Value" Value="Key" />
+                        <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
                     </SfDropDownList>
                 </div>
             </div>
@@ -31,8 +31,7 @@
                 <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
                 <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => AddNewCandidate()">Add Candidate</SfButton>
                 <AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
-                                    TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid">
-                </AutoCompleteButton>
+                                    TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
             </div>
         </div>
     </div>
@@ -99,51 +98,50 @@
                     <TabItems>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Basic Info"></TabHeader>
+                                <TabHeader Text="Basic Info" />
                             </ChildContent>
                             <ContentTemplate>
                                 <BasicInfoPanel EditCandidate="() => { EditCandidate(_candidateDetailsObject.CandidateID); }" EditMPC="() => { EditMPC(_candidateDetailsObject.CandidateID); }"
-                                                EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" GetMPCDate="GetMPCDate()" GetMPCNote="GetMPCNote()" GetRatingDate="GetRatingDate()"
-                                                GetRatingNote="GetRatingNote()" ModelObject="_candidateDetailsObject" SetCommunication="SetCommunication()" SetEligibility="SetEligibility()" SetExperience="SetExperience()"
-                                                SetJobOption="SetJobOption()" SetTaxTerm="SetTaxTerm()" SetupAddress="SetupAddress()"></BasicInfoPanel>
+                                                EditRating="() => { EditRating(_candidateDetailsObject.CandidateID); }" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
+                                                GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
+                                                SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Skills">
-                                </TabHeader>
+                                <TabHeader Text="Skills" />
                             </ChildContent>
                             <ContentTemplate>
-                                <SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight"></SkillPanel>
+                                <SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Education"></TabHeader>
+                                <TabHeader Text="Education" />
                             </ChildContent>
                             <ContentTemplate>
-                                <EducationPanel ModelObject="@_candidateEducationObject" RowHeight="@RowHeight" EditEducation="EditEducation"></EducationPanel>
+                                <EducationPanel ModelObject="@_candidateEducationObject" RowHeight="@RowHeight" EditEducation="EditEducation" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Experience"></TabHeader>
+                                <TabHeader Text="Experience" />
                             </ChildContent>
                             <ContentTemplate>
-                                <ExperiencePanel ModelObject="@_candidateExperienceObject" RowHeight="@RowHeight" EditExperience="EditExperience"></ExperiencePanel>
+                                <ExperiencePanel ModelObject="@_candidateExperienceObject" RowHeight="@RowHeight" EditExperience="EditExperience" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Notes"></TabHeader>
+                                <TabHeader Text="Notes" />
                             </ChildContent>
                             <ContentTemplate>
-                                <NotesPanel ModelObject="@_candidateNotesObject" RowHeight="@RowHeight" EditNotes="EditNotes"></NotesPanel>
+                                <NotesPanel ModelObject="@_candidateNotesObject" RowHeight="@RowHeight" EditNotes="EditNotes" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Resume"></TabHeader>
+                                <TabHeader Text="Resume" />
                             </ChildContent>
                             <ContentTemplate>
                                 <div class="resumeContainerBox">
@@ -155,7 +153,7 @@
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Downloads"></TabHeader>
+                                <TabHeader Text="Downloads" />
                             </ChildContent>
                             <ContentTemplate>
                                 <div style="height: 100%">
@@ -164,10 +162,10 @@
                         </TabItem>
                         <TabItem>
                             <ChildContent>
-                                <TabHeader Text="Candidate Activity"></TabHeader>
+                                <TabHeader Text="Candidate Activity" />
                             </ChildContent>
                             <ContentTemplate>
-                                <ActivityPanel ModelObject="@_candidateActivityObject" RowHeight="@RowHeight" EditActivity="EditActivity"></ActivityPanel>
+                                <ActivityPanel ModelObject="@_candidateActivityObject" RowHeight="@RowHeight" EditActivity="EditActivity" />
                             </ContentTemplate>
                         </TabItem>
                     </TabItems>
@@ -177,17 +175,18 @@
         </GridTemplates>
     </SfGrid>
 
-    <EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication" Eligibility="Eligibility"
-                         Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone" SaveCandidate="SaveCandidate"
-                         StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1" ToolTipOpen="ToolTipOpen"></EditCandidateDialog>
+    <EditCandidateDialog @bind-VisibleCandidate="@VisibleCandidateInfo" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" Communication="Communication"
+                         Eligibility="Eligibility" Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1" JobOptions="JobOptions"
+                         ModelObject="_candidateDetailsObjectClone" SaveCandidate="SaveCandidate" StateIDChanged="StateIDChanged" States="States" TaxTerms="TaxTerms" Tools="_tools1"
+                         ToolTipOpen="ToolTipOpen" SpinnerVisible="SpinnerVisible"></EditCandidateDialog>
 
-    <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload"></ParseCandidateDialog>
+    <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
 
-    <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" GridObject="_candidateRatingObject"
-                           HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen"></RatingCandidateDialog>
+    <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" SpinnerVisible="SpinnerVisible"
+                           GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen" />
 
-    <MPCCandidateDialog @bind-VisibleMPCCandidate="@VisibleMPCCandidate" @bind-VisibleMPCCandidate:event="VisibleMPCCandidateChanged" CancelMPC="CancelMPC" GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1"
-                        ModelObject="RatingMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" ToolTipOpen="ToolTipOpen"></MPCCandidateDialog>
+    <MPCCandidateDialog @bind-VisibleMPCCandidate="@VisibleMPCCandidate" @bind-VisibleMPCCandidate:event="VisibleMPCCandidateChanged" CancelMPC="CancelMPC" GridObject="_candidateMPCObject"
+                        HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" ToolTipOpen="ToolTipOpen" />
 
     <div class="divGridFooter">
         <div style="display: flex">
