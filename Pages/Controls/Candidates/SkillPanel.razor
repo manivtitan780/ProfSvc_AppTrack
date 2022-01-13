@@ -15,6 +15,7 @@
             <SfGrid AllowPaging="false" DataSource="@ModelSkillObject" EnableHeaderFocus="true" EnableHover="true" Height="210px" ID="gridSkill" @ref="GridSkill"
                     RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateSkills" Width="99%">
                 <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+                @*<GridEvents RowSelected="RowSelected"/>*@
                 <GridColumns>
                     <GridColumn Field="@nameof(CandidateSkills.Skill)" HeaderText="Skill" Width="20%"></GridColumn>
                     <GridColumn Field="@nameof(CandidateSkills.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>

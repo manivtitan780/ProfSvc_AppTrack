@@ -38,7 +38,7 @@
     <SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
         <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
         <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
-        <GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" TValue="Candidates" />@*OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" *@
+        <GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" TValue="Candidates" RowDataBound="RowDataBound" />@*OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" *@
         <GridColumns>
             <GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
             <GridColumn HeaderText="Name" Width="20%">
@@ -169,7 +169,7 @@
                             </ContentTemplate>
                         </TabItem>
                     </TabItems>
-                    <SfSpinner @bind-Visible="@VisibleProperty" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+                    <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="@Spinner" @bind-Visible="@VisibleProperty" />@**@
                 </SfTab>
             </DetailTemplate>
         </GridTemplates>

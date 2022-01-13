@@ -10,6 +10,13 @@
         }
 
         [Parameter]
+        public CandidateSkills SelectedRow
+        {
+            get;
+            set;
+        }
+
+        [Parameter]
         public List<CandidateSkills> ModelSkillObject
         {
             get;
@@ -34,6 +41,14 @@
         {
             get;
             set;
+        }
+
+        public void RowSelected(RowSelectEventArgs<CandidateSkills> skill)
+        {
+            if (skill != null)
+            {
+                SelectedRow = skill.Data;
+            }
         }
     }
 }

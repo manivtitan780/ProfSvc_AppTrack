@@ -17,6 +17,8 @@
 
 using RestSharp;
 
+using Syncfusion.Blazor.Spinner;
+
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 
@@ -505,6 +507,12 @@ public partial class Candidate
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
+    SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
     //public async Task RecordClickHandler(RecordClickEventArgs<Candidates> args)
     //{
     //    await Grid.ExpandCollapseDetailRowAsync(args.RowData);
@@ -811,9 +819,54 @@ public partial class Candidate
         await Grid.SelectRowAsync(0);
     }
 
+    private async Task RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
+    {
+        //if (_target != null)
+        //{
+        //    if (_target != candidate.Data) // return when target is equal to args.data
+        //    {
+        //        await Grid.ExpandCollapseDetailRowAsync(_target);
+        //    }
+        //}
+
+        //_target = candidate.Data;
+
+        //RestClient _restClient = new($"{Start.ApiHost}");
+        //RestRequest request = new("Candidates/GetCandidateDetails", Method.Get);
+        //request.AddQueryParameter("candidateID", _target.ID);
+
+        //Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
+
+        //if (_restResponse != null)
+        //{
+        //    _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+        //    _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+        //    _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
+        //    _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
+        //    _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+        //    _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
+        //    _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
+        //    _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+        //    RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
+        //    GetMPCDate();
+        //    GetMPCNote();
+        //    GetRatingDate();
+        //    GetRatingNote();
+        //    SetupAddress();
+        //    SetCommunication();
+        //    SetEligibility();
+        //    SetJobOption();
+        //    SetTaxTerm();
+        //    SetExperience();
+        //}
+        VisibleProperty = false;
+    }
+
     private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
     {
         VisibleProperty = true;
+        //await Task.Delay(1);
+        //await Spinner.ShowAsync();
 
         if (_target != null)
         {
@@ -854,10 +907,12 @@ public partial class Candidate
             SetExperience();
         }
 
-        await Task.Yield();
+        //await Spinner.HideAsync();
 
-        await Task.Delay(600);
-        VisibleProperty = false;
+        //await Task.Yield();
+
+        //await Task.Delay(400);
+        //VisibleProperty = false;
     }
 
     private void AddNewCandidate()
