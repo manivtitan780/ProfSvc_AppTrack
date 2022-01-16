@@ -7,15 +7,13 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 18:58
+// Created On:          01-06-2022 15:41
+// Last Updated On:     01-16-2022 19:32
 // *****************************************/
 
 #endregion
 
 #region Using
-
-using RestSharp;
 
 using Syncfusion.Blazor.Spinner;
 
@@ -33,67 +31,67 @@ public partial class Candidate
     public CandidateRatingMPC RatingMPC = new();
 
     private readonly Candidates _candidateContext = new();
-    private readonly Dictionary<string, object> _htmlAttributes = new() { { "maxlength", "50" }, { "minlength", "1" }, { "rows", "1" } };
-    private readonly Dictionary<string, object> _htmlAttributes1 = new() { { "maxlength", "500" }, { "minlength", "1" }, { "rows", "4" } };
+    private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
+    private readonly Dictionary<string, object> _htmlAttributes1 = new() {{"maxlength", "500"}, {"minlength", "1"}, {"rows", "4"}};
 
     private readonly List<IntValues> _showRecords =
-        new() { new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows") };
+        new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
     private readonly List<ToolbarItemModel> _tools1 = new()
-    {
-        new()
-        {
-            Command = ToolbarCommand.Bold
-        },
-        new()
-        {
-            Command = ToolbarCommand.Italic
-        },
-        new()
-        {
-            Command = ToolbarCommand.Underline
-        },
-        new()
-        {
-            Command = ToolbarCommand.StrikeThrough
-        },
-        new()
-        {
-            Command = ToolbarCommand.LowerCase
-        },
-        new()
-        {
-            Command = ToolbarCommand.UpperCase
-        },
-        new()
-        {
-            Command = ToolbarCommand.SuperScript
-        },
-        new()
-        {
-            Command = ToolbarCommand.SubScript
-        },
-        new()
-        {
-            Command = ToolbarCommand.Separator
-        },
-        new()
-        {
-            Command = ToolbarCommand.ClearFormat
-        },
-        new()
-        {
-            Command = ToolbarCommand.Separator
-        },
-        new()
-        {
-            Command = ToolbarCommand.Undo
-        },
-        new()
-        {
-            Command = ToolbarCommand.Redo
-        }
-    };
+                                                      {
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Bold
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Italic
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Underline
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.StrikeThrough
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.LowerCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.UpperCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SuperScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SubScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.ClearFormat
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Undo
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Redo
+                                                          }
+                                                      };
 
     private bool _dontChangePageDetails = true;
 
@@ -132,27 +130,27 @@ public partial class Candidate
     private List<CandidateSkills> _candidateSkillsObject = new();
 
     private List<ToolbarItemModel> _tools = new()
-    {
-        /*new ToolbarItemModel() { Command = ToolbarCommand.Bold },
-        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
-        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
-        new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
-        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
-        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
-        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
-        new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
-        new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
-        new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
-        new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
-        new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
-        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
-        new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
-        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
-        new ToolbarItemModel() { Command = ToolbarCommand.Redo }*/
-    };
+                                            {
+                                                /*new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+                                                new ToolbarItemModel() { Command = ToolbarCommand.Redo }*/
+                                            };
 
     #endregion
 
@@ -330,6 +328,12 @@ public partial class Candidate
         set;
     }
 
+    private bool SpinnerVisible
+    {
+        get;
+        set;
+    }
+
     private const byte RowHeight = 38;
 
     private static decimal CurrentPage
@@ -373,6 +377,66 @@ public partial class Candidate
     }
 
     private int Code
+    {
+        get;
+        set;
+    }
+
+    private MarkupString MPCDate
+    {
+        get;
+        set;
+    }
+
+    private MarkupString MPCNote
+    {
+        get;
+        set;
+    }
+
+    private MarkupString RatingDate
+    {
+        get;
+        set;
+    }
+
+    private MarkupString RatingNote
+    {
+        get;
+        set;
+    }
+
+    private MarkupString Address
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateCommunication
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateEligibility
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateJobOptions
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateTaxTerms
+    {
+        get;
+        set;
+    }
+
+    private MarkupString CandidateExperience
     {
         get;
         set;
@@ -452,6 +516,12 @@ public partial class Candidate
         set;
     }
 
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    } = new();
+
     private static string Filter
     {
         get;
@@ -477,8 +547,6 @@ public partial class Candidate
         get;
         set;
     }
-
-    //private static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array)?.ToString() ?? string.Empty);
 
     private static void FilterSet(string value)
     {
@@ -506,12 +574,6 @@ public partial class Candidate
 
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
-
-    SfSpinner Spinner
-    {
-        get;
-        set;
-    }
 
     //public async Task RecordClickHandler(RecordClickEventArgs<Candidates> args)
     //{
@@ -553,28 +615,64 @@ public partial class Candidate
         FilterSet(_result);
     }
 
-    private MarkupString MPCDate
+    private async Task DataHandler(object obj)
     {
-        get;
-        set;
+        DotNetObjectReference<Candidate> _dotNetReference = DotNetObjectReference.Create(this); // create dotnet ref
+        await _runtime.InvokeAsync<string>("detail", _dotNetReference);
+        //  send the dotnet ref to JS side
+        FirstRender = false;
+        //Count = Count;
+        await Grid.SelectRowAsync(0);
     }
 
-    private MarkupString MPCNote
+    private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
     {
-        get;
-        set;
-    }
+        //VisibleProperty = true;
 
-    private MarkupString RatingDate
-    {
-        get;
-        set;
-    }
+        if (_target != null)
+        {
+            if (_target != candidate.Data) // return when target is equal to args.data
+            {
+                await Grid.ExpandCollapseDetailRowAsync(_target);
+            }
+        }
 
-    private MarkupString RatingNote
-    {
-        get;
-        set;
+        _target = candidate.Data;
+
+        //_candidateDetailsObject.ClearData();
+        await Task.Delay(5);
+        await Spinner.ShowAsync();
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest request = new("Candidates/GetCandidateDetails");
+        request.AddQueryParameter("candidateID", _target.ID);
+
+        Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
+
+        if (_restResponse != null)
+        {
+            _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
+            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
+            _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
+            _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+            RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
+            GetMPCDate();
+            GetMPCNote();
+            GetRatingDate();
+            GetRatingNote();
+            SetupAddress();
+            SetCommunication();
+            SetEligibility();
+            SetJobOption();
+            SetTaxTerm();
+            SetExperience();
+        }
+
+        await Task.Delay(5);
+        await Spinner.HideAsync();
     }
 
     private void GetMPCDate()
@@ -588,8 +686,8 @@ public partial class Candidate
         CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
         if (_candidateMPCObjectFirst != null)
         {
-            _mpcDate = _candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us")) + " [" +
-                       _candidateMPCObjectFirst.User.Replace("[", "").Replace("]", "") + "]";
+            _mpcDate =
+                $"{_candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
         }
 
         MPCDate = _mpcDate.ToMarkupString();
@@ -623,8 +721,8 @@ public partial class Candidate
         CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
         if (_candidateRatingObjectFirst != null)
         {
-            _ratingDate = _candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us")) + " [" +
-                          _candidateRatingObjectFirst.User.Replace("[", "").Replace("]", "") + "]";
+            _ratingDate =
+                $"{_candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
         }
 
         RatingDate = _ratingDate.ToMarkupString();
@@ -645,42 +743,6 @@ public partial class Candidate
         }
 
         RatingNote = _ratingNote.ToMarkupString();
-    }
-
-    private MarkupString Address
-    {
-        get;
-        set;
-    }
-
-    private MarkupString CandidateCommunication
-    {
-        get;
-        set;
-    }
-
-    private MarkupString CandidateEligibility
-    {
-        get;
-        set;
-    }
-
-    private MarkupString CandidateJobOptions
-    {
-        get;
-        set;
-    }
-
-    private MarkupString CandidateTaxTerms
-    {
-        get;
-        set;
-    }
-
-    private MarkupString CandidateExperience
-    {
-        get;
-        set;
     }
 
     private void SetupAddress()
@@ -740,12 +802,12 @@ public partial class Candidate
     private void SetCommunication()
     {
         string _returnValue = _candidateDetailsObject.Communication switch
-        {
-            "G" => "Good",
-            "A" => "Average",
-            "X" => "Excellent",
-            _ => "Fair"
-        };
+                              {
+                                  "G" => "Good",
+                                  "A" => "Average",
+                                  "X" => "Excellent",
+                                  _ => "Fair"
+                              };
 
         CandidateCommunication = _returnValue.ToMarkupString();
     }
@@ -753,12 +815,15 @@ public partial class Candidate
     private void SetEligibility()
     {
         CandidateEligibility = _candidateDetailsObject.EligibilityID > 0
-                   ? Eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID).Value.ToMarkupString() : "".ToMarkupString();
+                                   ? Eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID).Value.ToMarkupString()
+                                   : "".ToMarkupString();
     }
 
     private void SetExperience()
     {
-        CandidateExperience = _candidateDetailsObject.ExperienceID > 0 ? Experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString() : "".ToMarkupString();
+        CandidateExperience = _candidateDetailsObject.ExperienceID > 0
+                                  ? Experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString()
+                                  : "".ToMarkupString();
     }
 
     private void SetJobOption()
@@ -809,109 +874,8 @@ public partial class Candidate
         CandidateTaxTerms = _returnValue.ToMarkupString();
     }
 
-    private async Task DataHandler(object obj)
+    private void RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
     {
-        DotNetObjectReference<Candidate> _dotNetReference = DotNetObjectReference.Create(this); // create dotnet ref
-        await _runtime.InvokeAsync<string>("detail", _dotNetReference);
-        //  send the dotnet ref to JS side
-        FirstRender = false;
-        //Count = Count;
-        await Grid.SelectRowAsync(0);
-    }
-
-    private async Task RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
-    {
-        //if (_target != null)
-        //{
-        //    if (_target != candidate.Data) // return when target is equal to args.data
-        //    {
-        //        await Grid.ExpandCollapseDetailRowAsync(_target);
-        //    }
-        //}
-
-        //_target = candidate.Data;
-
-        //RestClient _restClient = new($"{Start.ApiHost}");
-        //RestRequest request = new("Candidates/GetCandidateDetails", Method.Get);
-        //request.AddQueryParameter("candidateID", _target.ID);
-
-        //Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
-
-        //if (_restResponse != null)
-        //{
-        //    _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
-        //    _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
-        //    _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
-        //    _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
-        //    _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
-        //    _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
-        //    _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
-        //    _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
-        //    RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
-        //    GetMPCDate();
-        //    GetMPCNote();
-        //    GetRatingDate();
-        //    GetRatingNote();
-        //    SetupAddress();
-        //    SetCommunication();
-        //    SetEligibility();
-        //    SetJobOption();
-        //    SetTaxTerm();
-        //    SetExperience();
-        //}
-        VisibleProperty = false;
-    }
-
-    private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
-    {
-        VisibleProperty = true;
-        //await Task.Delay(1);
-        //await Spinner.ShowAsync();
-
-        if (_target != null)
-        {
-            if (_target != candidate.Data) // return when target is equal to args.data
-            {
-                await Grid.ExpandCollapseDetailRowAsync(_target);
-            }
-        }
-
-        _target = candidate.Data;
-
-        RestClient _restClient = new($"{Start.ApiHost}");
-        RestRequest request = new("Candidates/GetCandidateDetails", Method.Get);
-        request.AddQueryParameter("candidateID", _target.ID);
-
-        Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
-
-        if (_restResponse != null)
-        {
-            _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
-            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
-            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
-            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
-            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
-            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
-            _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
-            _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
-            RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
-            GetMPCDate();
-            GetMPCNote();
-            GetRatingDate();
-            GetRatingNote();
-            SetupAddress();
-            SetCommunication();
-            SetEligibility();
-            SetJobOption();
-            SetTaxTerm();
-            SetExperience();
-        }
-
-        //await Spinner.HideAsync();
-
-        //await Task.Yield();
-
-        //await Task.Delay(400);
         //VisibleProperty = false;
     }
 
@@ -996,12 +960,6 @@ public partial class Candidate
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private bool SpinnerVisible
-    {
-        get;
-        set;
-    }
-
     private async void SaveCandidate()
     {
         SpinnerVisible = true;
@@ -1009,11 +967,13 @@ public partial class Candidate
         _candidateDetailsObject = _candidateDetailsObjectClone.Copy();
 
         RestClient _client = new($"{Start.ApiHost}");
-        RestRequest _request = new("Candidates/SaveCandidate", Method.Post);
-        _request.RequestFormat = DataFormat.Json;
-        _request.AddJsonBody(_candidateDetailsObject, "application/json");
+        RestRequest _request = new("Candidates/SaveCandidate", Method.Post)
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
+        _request.AddJsonBody(_candidateDetailsObject);
 
-        int _response = await _client.PostAsync<int>(_request);
+        await _client.PostAsync<int>(_request);
 
         _target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
         _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
@@ -1158,23 +1118,23 @@ public partial class Candidate
             FileSize = _file.FileInfo.Size;
             FileData = _file.Stream;
 
-            List<AdminList> _dataSource = new();
+            //List<AdminList> _dataSource = new();
             try
             {
                 //string _url = ;
 
                 RestClient _client = new($"{Start.ApiHost}");
                 RestRequest _request = new("Candidates/ParseResume", Method.Post)
-                {
-                    AlwaysMultipartFormData = true
-                };
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
                 _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
                 //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
                 _request.AddParameter("filename", FileName, ParameterType.RequestBody);
                 _request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
                 _request.AddParameter("mime", MimeType, ParameterType.RequestBody);
 
-                Task<RestResponse> response = _client.PostAsync(_request);
+                _client.PostAsync(_request);
             }
             catch
             {
@@ -1219,9 +1179,11 @@ public partial class Candidate
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveRating", Method.Post);
-            _request.RequestFormat = DataFormat.Json;
-            _request.AddJsonBody(obj.Model, "application/json");
+            RestRequest _request = new("Candidates/SaveRating", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(obj.Model);
             _request.AddQueryParameter("user", "JOLLY");
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1238,10 +1200,10 @@ public partial class Candidate
         {
             //
         }
+
         SpinnerVisible = false;
         await Task.Delay(1);
         VisibleRatingCandidate = false;
-
     }
 
     private async void SaveMPC(EditContext obj)
@@ -1251,9 +1213,11 @@ public partial class Candidate
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveMPC", Method.Post);
-            _request.RequestFormat = DataFormat.Json;
-            _request.AddJsonBody(obj.Model, "application/json");
+            RestRequest _request = new("Candidates/SaveMPC", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(obj.Model);
             _request.AddQueryParameter("user", "JOLLY");
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1269,6 +1233,7 @@ public partial class Candidate
         {
             //
         }
+
         SpinnerVisible = false;
         await Task.Delay(1);
         VisibleMPCCandidate = false;
@@ -1303,7 +1268,8 @@ public partial class Candidate
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptor("SearchCandidate", "@Candidate", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
+            General.GetReadAutocompleteAdaptor("SearchCandidate", "@Candidate", dm, _clientFactory);
 
         #endregion
     }

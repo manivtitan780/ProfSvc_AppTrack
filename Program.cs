@@ -22,7 +22,6 @@ using Radzen;
 WebApplicationBuilder _builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//_builder.Services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 _builder.Services.AddSyncfusionBlazor();
 _builder.Services.AddScoped<DialogService>();
 _builder.Services.AddScoped<NotificationService>();
@@ -36,6 +35,11 @@ _builder.Services.AddHttpClient();
 _builder.Services.AddBlazoredLocalStorage();                                                            // local storage
 _builder.Services.AddBlazoredLocalStorage(config => config.JsonSerializerOptions.WriteIndented = true); // local storage
 _builder.Services.AddMemoryCache();
+_builder.Services.AddSignalR(e =>
+                                {
+                                    e.MaximumReceiveMessageSize = 10485760;
+                                    e.EnableDetailedErrors = true;
+                                });
 
 WebApplication _app = _builder.Build();
 
@@ -48,19 +52,12 @@ if (!_app.Environment.IsDevelopment())
 }
 
 _app.UseStaticFiles();
-//_app.UseMvcWithDefaultRoute();
 _app.UseRouting();
 
 _app.MapBlazorHub();
 _app.MapFallbackToPage("/_Host");
-//app.UsePathBase("/ProfSvc_AppTrack");
 
 Start.ApiHost = _app.Configuration.GetValue(typeof(string), "APIHost").ToString();
 Start.ConnectionString = _app.Configuration.GetConnectionString("DBConnect");
-
-//_builder.Services.AddScoped<DialogService>();
-//_builder.Services.AddScoped<NotificationService>();
-//_builder.Services.AddScoped<TooltipService>();
-//_builder.Services.AddScoped<ContextMenuService>();
 
 _app.Run();
