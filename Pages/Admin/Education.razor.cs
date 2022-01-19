@@ -49,12 +49,6 @@ public partial class Education
 
     private static bool _valueChanged = true;
 
-    private bool VisibleCandidateInfo
-    {
-        get;
-        set;
-    }
-
     private static IHttpClientFactory _clientFactory;
 
     [Inject]
@@ -141,6 +135,18 @@ public partial class Education
         }
     }
 
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     #region Methods
@@ -192,19 +198,20 @@ public partial class Education
         EducationRecord = education.Data;
     }
 
-    private void Cancel()
+    private async void Cancel()
     {
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
     }
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
-    private void EditEducation(int id)
+    private async void EditEducation(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
+        await Task.Delay(1);
         if (id == 0)
         {
             Title = "Add";
@@ -215,7 +222,7 @@ public partial class Education
             Title = "Edit";
         }
 
-        VisibleCandidateInfo = true;
+        await Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> education)
@@ -231,11 +238,14 @@ public partial class Education
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private void SaveEducation(EditContext context)
+    private async void SaveEducation(EditContext context)
     {
-        Task.Yield();
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
         ID = General.SaveAdminList("Admin_SaveEducation", "Education", false, false, EducationRecord, Grid, _clientFactory).ToInt32();
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private void ToggleStatus(int educationID) => General.PostToggle("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid, _clientFactory);

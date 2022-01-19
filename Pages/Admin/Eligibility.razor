@@ -39,9 +39,9 @@
 			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
 			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
 			<GridColumn Width="10%">
-				<Template Context="bCon">
+				<Template Context="aCon">
 					@{
-						if (bCon is AdminList _con)
+						if (aCon is AdminList _con)
 						{
 							<SfButton Content="" IconCss="editIcon" @onclick="() => EditEligibility(_con.ID)"></SfButton>
 							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)"></SfButton>
@@ -51,9 +51,10 @@
 			</GridColumn>
 		</GridColumns>
 	</SfGrid>
-	<SfDialog @bind-Visible="@VisibleCandidateInfo" Header="@(Title + " Title")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px">
+	<SfDialog @ref="Dialog" Header="@(Title + " Title")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px">
 		<ChildContent>
-			<DialogPositionData X="right" Y="center"></DialogPositionData>
+						<SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
+<DialogPositionData X="right" Y="center"></DialogPositionData>
 			<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
 			<EditForm Model="EligibilityRecord" OnValidSubmit="SaveEligibility">
 				<DataAnnotationsValidator></DataAnnotationsValidator>

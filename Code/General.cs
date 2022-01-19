@@ -189,10 +189,10 @@ public static class General
             if (_restResponse == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<Candidates>>(_restResponse["Candidates"].ToString() ?? string.Empty);
@@ -205,10 +205,10 @@ public static class General
             if (!getStates)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = _count /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = _count /*_count*/
+                } : _dataSource;
             }
 
             Candidate.States = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["States"].ToString() ?? string.Empty);
@@ -224,42 +224,42 @@ public static class General
             Candidate.StatusCodes = JsonConvert.DeserializeObject<List<KeyValues>>(_restResponse["StatusCodes"].ToString() ?? string.Empty);
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = null,
-                                               Count = 1
-                                           } : null;
+                {
+                    Result = null,
+                    Count = 1
+                } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 1
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource;
         }
     }
 
     public static async Task<object> GetReadAutocompleteAdaptor(string methodName, string parameterName, DataManagerRequest dm, IHttpClientFactory factory = null)
     {
         List<KeyValues> _dataSource = new();
-        if (dm.Where is not {Count: > 0} || dm.Where[0].value.NullOrWhiteSpace())
+        if (dm.Where is not { Count: > 0 } || dm.Where[0].value.NullOrWhiteSpace())
         {
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 0
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 0
+            } : _dataSource;
         }
 
         try
@@ -277,10 +277,10 @@ public static class General
                 if (!_response.IsSuccessStatusCode)
                 {
                     return dm.RequiresCounts ? new DataResult
-                                               {
-                                                   Result = _dataSource,
-                                                   Count = 9 /*_count*/
-                                               } : _dataSource;
+                    {
+                        Result = _dataSource,
+                        Count = 9 /*_count*/
+                    } : _dataSource;
                 }
 
                 string _responseStream = _response.Content.ReadAsStringAsync().Result;
@@ -289,36 +289,36 @@ public static class General
                 if (_jobOptionsItems == null)
                 {
                     return dm.RequiresCounts ? new DataResult
-                                               {
-                                                   Result = _dataSource,
-                                                   Count = _count
-                                               } : _dataSource;
+                    {
+                        Result = _dataSource,
+                        Count = _count
+                    } : _dataSource;
                 }
 
                 _count = _jobOptionsItems.Count;
                 _dataSource.AddRange(_jobOptionsItems.Select(item => new KeyValues(item, item)));
 
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = _count
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = _count
+                } : _dataSource;
             }
         }
         catch
         {
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 0
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 0
+            } : _dataSource;
         }
 
         return dm.RequiresCounts ? new DataResult
-                                   {
-                                       Result = _dataSource,
-                                       Count = 0
-                                   } : _dataSource;
+        {
+            Result = _dataSource,
+            Count = 0
+        } : _dataSource;
     }
 
     public static async Task<object> GetReadDataAdaptor(string methodName, string filter, IHttpClientFactory clientFactory, DataManagerRequest dm,
@@ -344,10 +344,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -356,39 +356,39 @@ public static class General
             if (_taxTermItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_taxTermItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
             int _count = _taxTermItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = null,
-                                               Count = 1
-                                           } : null;
+                {
+                    Result = null,
+                    Count = 1
+                } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 1
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource;
         }
     }
 
@@ -412,10 +412,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -424,39 +424,39 @@ public static class General
             if (_roleItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<Role>>((_roleItems["Roles"] as JArray)?.ToString() ?? string.Empty);
             int _count = _roleItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = null,
-                                               Count = 1
-                                           } : null;
+                {
+                    Result = null,
+                    Count = 1
+                } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 1
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource;
         }
     }
 
@@ -480,10 +480,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -492,39 +492,39 @@ public static class General
             if (_statusCodeItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<StatusCode>>((_statusCodeItems["StatusCodes"] as JArray)?.ToString() ?? string.Empty);
             int _count = _statusCodeItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = null,
-                                               Count = 1
-                                           } : null;
+                {
+                    Result = null,
+                    Count = 1
+                } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 1
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource;
         }
     }
 
@@ -548,10 +548,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -560,39 +560,39 @@ public static class General
             if (_roleItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<State>>((_roleItems["States"] as JArray)?.ToString() ?? string.Empty);
             int _count = _roleItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = null,
-                                               Count = 1
-                                           } : null;
+                {
+                    Result = null,
+                    Count = 1
+                } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 1
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource;
         }
     }
 
@@ -611,10 +611,10 @@ public static class General
             if (factory == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             HttpRequestMessage _request = new(HttpMethod.Get, _url);
@@ -628,10 +628,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0 /*_count*/
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -639,28 +639,28 @@ public static class General
             if (_generalItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = 0
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_generalItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
             int _count = _generalItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = _count
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
             return dm.RequiresCounts ? new DataResult
-                                       {
-                                           Result = _dataSource,
-                                           Count = 0
-                                       } : _dataSource;
+            {
+                Result = _dataSource,
+                Count = 0
+            } : _dataSource;
         }
     }
 

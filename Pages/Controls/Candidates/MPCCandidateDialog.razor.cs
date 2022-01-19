@@ -13,6 +13,7 @@
 
 #endregion
 
+
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
 /// <summary>
@@ -122,6 +123,22 @@ public partial class MPCCandidateDialog
     {
         get;
         set;
+    }
+
+    public SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
+    private async void SaveMPCDialog(EditContext obj)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveMPC.InvokeAsync(obj);
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        VisibleMPCCandidate = false;
     }
 
     #endregion

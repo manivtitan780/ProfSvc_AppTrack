@@ -20,20 +20,20 @@ public partial class Eligibility
     #region Fields
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
-                                                                 {
-                                                                     {
-                                                                         "maxlength",
-                                                                         "100"
-                                                                     },
-                                                                     {
-                                                                         "minlength",
-                                                                         "1"
-                                                                     },
-                                                                     {
-                                                                         "rows",
-                                                                         "1"
-                                                                     }
-                                                                 };
+    {
+        {
+            "maxlength",
+            "100"
+        },
+        {
+            "minlength",
+            "1"
+        },
+        {
+            "rows",
+            "1"
+        }
+    };
 
     private AdminList EligibilityRecord = new();
 
@@ -48,12 +48,6 @@ public partial class Eligibility
     }
 
     private static bool _valueChanged = true;
-
-    private bool VisibleCandidateInfo
-    {
-        get;
-        set;
-    }
 
     private static IHttpClientFactory _clientFactory;
 
@@ -120,6 +114,18 @@ public partial class Eligibility
         get;
         set;
     } = "Edit";
+
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
 
     private static void FilterSet(string value)
     {
@@ -191,19 +197,20 @@ public partial class Eligibility
         EligibilityRecord = designation.Data;
     }
 
-    private void Cancel()
+    private async void Cancel()
     {
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
     }
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private void EditEligibility(int id)
+    private async void EditEligibility(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
+        await Task.Delay(1);
         if (id == 0)
         {
             Title = "Add";
@@ -213,8 +220,7 @@ public partial class Eligibility
         {
             Title = "Edit";
         }
-
-        VisibleCandidateInfo = true;
+        await Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> eligibility)
@@ -230,11 +236,14 @@ public partial class Eligibility
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private void SaveEligibility(EditContext context)
+    private async void SaveEligibility(EditContext context)
     {
-        Task.Yield();
+        await Task.Delay(0);
+        await Spinner.ShowAsync();
         ID = General.SaveAdminList("Admin_SaveEligibility", "Eligibility", false, false, EligibilityRecord, Grid, _clientFactory).ToInt32();
-        VisibleCandidateInfo = false;
+        await Task.Delay(0);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private void ToggleStatus(int eligibilityID) => General.PostToggle("Admin_ToggleEligibilityStatus", eligibilityID, "ADMIN", false, Grid, _clientFactory);

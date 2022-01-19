@@ -47,12 +47,6 @@ public partial class Designation
 
     private static bool _valueChanged = true;
 
-    private bool VisibleDesignationInfo
-    {
-        get;
-        set;
-    }
-
     private static IHttpClientFactory _clientFactory;
 
     [Inject]
@@ -144,6 +138,18 @@ public partial class Designation
         args.Cancel = !args.HasText;
     }
 
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
     #endregion
 
     #region Methods
@@ -184,9 +190,10 @@ public partial class Designation
         ID = -1;
     }
 
-    private void Cancel()
+    private async Task CancelAsync()
     {
-        VisibleDesignationInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
     }
 
     private void DataHandler()
@@ -194,12 +201,12 @@ public partial class Designation
         Count = Grid.CurrentViewData.Count();
     }
 
-    private void EditDesignation(int id)
+    private async Task EditDesignationAsync(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
+        await Task.Delay(1);
         if (id == 0)
         {
             Title = "Add";
@@ -210,8 +217,7 @@ public partial class Designation
             Title = "Edit";
         }
 
-        VisibleDesignationInfo = true;
-        StateHasChanged();
+        await Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> designation)
@@ -235,11 +241,14 @@ public partial class Designation
         _designationRecord = designation.Data;
     }
 
-    private void SaveDesignation(EditContext context)
+    private async Task SaveDesignationAsync(EditContext context)
     {
-        Task.Yield();
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
         ID = General.SaveAdminList("Admin_SaveDesignation", "Designation", false, false, _designationRecord, Grid, _clientFactory).ToInt32();
-        VisibleDesignationInfo = false;
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private void ToggleStatusAsync(int designationID)

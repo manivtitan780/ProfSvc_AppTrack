@@ -112,7 +112,7 @@
                                 <TabHeader Text="Skills" />
                             </ChildContent>
                             <ContentTemplate>
-                                <SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight" />
+                                <SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" RowHeight="@RowHeight" @ref="SkillPanel" />
                             </ContentTemplate>
                         </TabItem>
                         <TabItem>
@@ -183,10 +183,14 @@
     <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
 
     <RatingCandidateDialog @bind-VisibleRatingCandidate="@VisibleRatingCandidate" @bind-VisibleRatingCandidate:event="VisibleRatingCandidateChanged" CancelRating="CancelRating" SpinnerVisible="SpinnerVisible"
-                           GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen" />
+                           GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveRating="SaveRating" ToolTipOpen="ToolTipOpen" @ref="RatingDialog" />
 
     <MPCCandidateDialog @bind-VisibleMPCCandidate="@VisibleMPCCandidate" @bind-VisibleMPCCandidate:event="VisibleMPCCandidateChanged" CancelMPC="CancelMPC" GridObject="_candidateMPCObject"
                         HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" ToolTipOpen="ToolTipOpen" />
+
+    <EditSkillDialog @ref="EditSkillDialog" Cancel="CancelSkill" ModelObject="SelectedSkill" ToolTipOpen="ToolTipOpen" SaveSkill="SaveSkill" @bind-VisibleSkillCandidate="@VisibleSkillDialog"
+                     @bind-VisibleSkillCandidate:event="VisibleSkillCandidateChanged"></EditSkillDialog>
+
 
     <div class="divGridFooter">
         <div style="display: flex">

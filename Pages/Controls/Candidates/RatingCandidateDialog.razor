@@ -1,10 +1,10 @@
-﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
+﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px" @ref="RatingDialog">
 	<ChildContent>
-        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
 		<DialogPositionData X="right" Y="center"></DialogPositionData>
 		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
 		<DialogEvents Closed="CancelRating"></DialogEvents>
-		<EditForm Model="ModelObject" OnValidSubmit="SaveRating">
+		<EditForm Model="ModelObject" OnValidSubmit="SaveRatingDialog">
 			<DataAnnotationsValidator></DataAnnotationsValidator>
 			<div style="height: 100%">
 				<div class="divContainerTable">

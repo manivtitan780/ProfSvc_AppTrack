@@ -9,7 +9,6 @@
             set;
         }
 
-        [Parameter]
         public CandidateSkills SelectedRow
         {
             get;
@@ -41,14 +40,21 @@
         {
             get;
             set;
-        }
+        }   
 
-        public void RowSelected(RowSelectEventArgs<CandidateSkills> skill)
+        private void RowSelected(RowSelectEventArgs<CandidateSkills> skill)
         {
             if (skill != null)
             {
                 SelectedRow = skill.Data;
             }
+        }
+
+        private async void EditSkillDialog(int id)
+        {
+            double _index = await GridSkill.GetRowIndexByPrimaryKey(id);
+            await GridSkill.SelectRowAsync(_index);
+            await EditSkill.InvokeAsync(id);
         }
     }
 }

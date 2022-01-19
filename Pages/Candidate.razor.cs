@@ -278,7 +278,7 @@ public partial class Candidate
     {
         get;
         set;
-    }
+    } = false;
 
     private bool VisibleEducationDialog
     {
@@ -894,9 +894,15 @@ public partial class Candidate
         VisibleMPCCandidate = false;
     }
 
-    private void CancelRating()
+    private async void CancelRating()
     {
-        VisibleRatingCandidate = false;
+        await Task.Delay(1);
+        await RatingDialog.RatingDialog.HideAsync();
+    }
+
+    private void CancelSkill()
+    {
+        VisibleSkillDialog = false;
     }
 
     private void EditCandidate(int id)
@@ -919,9 +925,28 @@ public partial class Candidate
         }
     }
 
+    public SkillPanel SkillPanel
+    {
+        get;
+        set;
+    }
+
     private void EditSkill(int id)
     {
+        SelectedSkill = SkillPanel.SelectedRow;
         VisibleSkillDialog = true;
+    }
+
+    public CandidateSkills SelectedSkill
+    {
+        get;
+        set;
+    } = new();
+
+    public EditSkillDialog EditSkillDialog
+    {
+        get;
+        set;
     }
 
     private void EditEducation(int id)
@@ -1162,9 +1187,16 @@ public partial class Candidate
         }
     }
 
-    private void EditRating(int candidateID)
+    RatingCandidateDialog RatingDialog
     {
-        VisibleRatingCandidate = true;
+        get;
+        set;
+    }
+
+    private async void EditRating(int candidateID)
+    {
+        await Task.Delay(1);
+        await RatingDialog.RatingDialog.ShowAsync();
     }
 
     private void EditMPC(int candidateID)
@@ -1174,8 +1206,6 @@ public partial class Candidate
 
     private async void SaveRating(EditContext obj)
     {
-        SpinnerVisible = true;
-        await Task.Delay(1);
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
@@ -1200,16 +1230,18 @@ public partial class Candidate
         {
             //
         }
+    }
 
-        SpinnerVisible = false;
+    private async void SaveSkill(EditContext skill)
+    {
         await Task.Delay(1);
-        VisibleRatingCandidate = false;
+        await EditSkillDialog.SpinnerSkill.ShowAsync();
+        await Task.Delay(1);
+        await EditSkillDialog.SpinnerSkill.HideAsync();
     }
 
     private async void SaveMPC(EditContext obj)
     {
-        SpinnerVisible = true;
-        await Task.Delay(1);
         try
         {
             RestClient _client = new($"{Start.ApiHost}");
@@ -1233,10 +1265,6 @@ public partial class Candidate
         {
             //
         }
-
-        SpinnerVisible = false;
-        await Task.Delay(1);
-        VisibleMPCCandidate = false;
     }
 
     #endregion

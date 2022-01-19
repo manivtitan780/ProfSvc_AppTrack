@@ -10,27 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="Pages\Controls\Candidates\EditSkillDialog.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.1" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.2" />
-        <PackageReference Include="RestSharp" Version="107.0.3" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.42" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <UpToDateCheckInput Remove="Pages\Controls\Candidates\EditSkillDialog.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Pages\Controls\Candidates\EditSkillDialog.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Pages\Controls\Candidates\EditSkillDialog.razor" />
+        <PackageReference Include="RestSharp" Version="107.1.1" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.43" />
     </ItemGroup>
 
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">

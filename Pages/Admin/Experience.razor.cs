@@ -20,20 +20,20 @@ public partial class Experience
     #region Fields
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
-                                                                 {
-                                                                     {
-                                                                         "maxlength",
-                                                                         "100"
-                                                                     },
-                                                                     {
-                                                                         "minlength",
-                                                                         "1"
-                                                                     },
-                                                                     {
-                                                                         "rows",
-                                                                         "1"
-                                                                     }
-                                                                 };
+    {
+        {
+            "maxlength",
+            "100"
+        },
+        {
+            "minlength",
+            "1"
+        },
+        {
+            "rows",
+            "1"
+        }
+    };
 
     private AdminList ExperienceRecord = new();
 
@@ -48,12 +48,6 @@ public partial class Experience
     }
 
     private static bool _valueChanged = true;
-
-    private bool VisibleCandidateInfo
-    {
-        get;
-        set;
-    }
 
     private static IHttpClientFactory _clientFactory;
 
@@ -120,6 +114,18 @@ public partial class Experience
         get;
         set;
     } = "Edit";
+
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
 
     private static void FilterSet(string value)
     {
@@ -191,19 +197,20 @@ public partial class Experience
         ExperienceRecord = experience.Data;
     }
 
-    private void Cancel()
+    private async void Cancel()
     {
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
     }
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
-    private void EditExperience(int id)
+    private async void EditExperience(int id)
     {
+        await Task.Delay(1);
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
         if (id == 0)
         {
             Title = "Add";
@@ -213,8 +220,7 @@ public partial class Experience
         {
             Title = "Edit";
         }
-
-        VisibleCandidateInfo = true;
+        await Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> experience)
@@ -230,11 +236,14 @@ public partial class Experience
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private void SaveExperience(EditContext context)
+    private async void SaveExperience(EditContext context)
     {
-        Task.Yield();
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
         ID = General.SaveAdminList("Admin_SaveExperience", "Experience", false, false, ExperienceRecord, Grid, _clientFactory).ToInt32();
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private void ToggleStatus(int experienceID) => General.PostToggle("Admin_ToggleExperienceStatus", experienceID, "ADMIN", false, Grid, _clientFactory);

@@ -1,15 +1,13 @@
-﻿@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
-<SfDialog Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="832px">
+﻿<SfDialog @bind-Visible="@VisibleSkillCandidate" Header="Edit Skill" Height="400px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="400px">
     <ChildContent>
-        <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="SpinnerSkill" />
         <DialogPositionData X="right" Y="center"></DialogPositionData>
         <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
         <DialogEvents></DialogEvents>
-        <EditForm>
+        <EditForm Model="ModelObject">
             <DataAnnotationsValidator />
             <div class="divContainerTable">
                 <div class="divFlex">
-                    @*<LabelBox ID="textTitle" MaxLength="50" MinLength="1" Multiline="false" Placeholder="Title" Readonly="false" ValidationMessage="@(() => _designationRecord.Text)"></LabelBox>*@
                     <div class="divFlexLabel">
                         <label class="labelStatus" for="textTitle">Title:</label>
                     </div>
@@ -17,17 +15,16 @@
                         <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
                             @*<LabelTextBox @bind-Value="@(_designationRecord.Text)" ID="textTitle" MaxLength="50" MinLength="1" Multiline="false" Placeholder="Title" Readonly="false"
                                 ValidationMessage="@(() => _designationRecord.Text)" @bind-Value:event="ValueChanged"></LabelTextBox>*@
-                            <SfTextBox @bind-Value="@(_designationRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@_htmlAttributes" ID="textTitle" Multiline="false" Placeholder="Title">
+                            <SfTextBox @bind-Value="@(ModelObject.Skill)" FloatLabelType="FloatLabelType.Never" ID="textTitle" Multiline="false" Placeholder="Title">
                             </SfTextBox>
                             <TooltipTemplates>
                                 <Content>
-                                    <ValidationMessage For="@(() => _designationRecord.Text)"></ValidationMessage>
+                                    <ValidationMessage For="@(() => ModelObject.Skill)"></ValidationMessage>
                                 </Content>
                             </TooltipTemplates>
                         </SfTooltip>
                     </div>
                 </div>
-                <LabelSwitch @bind-BindValue="@(_designationRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
             </div>
             <div class="e-footer-content">
                 <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

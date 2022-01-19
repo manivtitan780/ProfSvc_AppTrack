@@ -124,5 +124,27 @@ public partial class RatingCandidateDialog
         set;
     }
 
+    public SfSpinner Spinner
+    {
+        get; 
+        set;
+    }
+
+    public SfDialog RatingDialog
+    {
+        get; 
+        set;
+    }
+
+    public async void SaveRatingDialog(EditContext obj)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveRating.InvokeAsync(obj);
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await RatingDialog.HideAsync();
+    }
+
     #endregion
 }
