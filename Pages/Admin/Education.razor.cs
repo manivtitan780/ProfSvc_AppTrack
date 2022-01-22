@@ -242,7 +242,8 @@ public partial class Education
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        ID = General.SaveAdminList("Admin_SaveEducation", "Education", false, false, EducationRecord, Grid, _clientFactory).ToInt32();
+        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecord, Grid);
+        ID = _return.ToInt32();
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
