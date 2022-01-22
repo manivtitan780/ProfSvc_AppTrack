@@ -248,7 +248,7 @@ public partial class Education
         await Dialog.HideAsync();
     }
 
-    private void ToggleStatus(int educationID) => General.PostToggle("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid, _clientFactory);
+    private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
 
     #endregion
 

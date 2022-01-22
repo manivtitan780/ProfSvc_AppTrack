@@ -109,6 +109,24 @@ public static class General
         return _responseStream.Result;
     }
 
+    public async static Task<string> PostToggleAsync<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid)
+    {
+        await Task.Yield();
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("Admin/ToggleAdminList", Method.Post);
+        _request.AddQueryParameter("methodName", methodName);
+        _request.AddQueryParameter("id", id.ToString());
+        _request.AddQueryParameter("username", userName);
+        _request.AddQueryParameter("idIsString", isString.ToString());
+        string _response = await _restClient.PostAsync<string>(_request);
+
+        grid.Refresh();
+        double _index = await grid.GetRowIndexByPrimaryKey(id);
+        await grid.SelectRowAsync(_index);
+
+        return await Task.FromResult(_response);
+    }
+
     public static string SaveAdminList<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid,
                                           IHttpClientFactory clientFactory = null)
     {
@@ -133,6 +151,29 @@ public static class General
 
         return _responseStream.Result;
     }
+
+
+    public async static Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid)
+    {
+        await Task.Yield();
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("Admin/SaveAdminList", Method.Post)
+        {
+            RequestFormat = DataFormat.Json
+        };
+        _request.AddQueryParameter("methodName", methodName);
+        _request.AddQueryParameter("parameterName", parameterName);
+        _request.AddQueryParameter("containsDescription", containDescription);
+        //_request.AddQueryParameter("username", userName);
+        _request.AddQueryParameter("isString", isString.ToString());
+        _request.AddJsonBody(adminList);
+        string _response = await _restClient.PostAsync<string>(_request);
+
+        grid.Refresh();
+
+        return await Task.FromResult(_response);
+    }
+
 
     /*public static async Task<int> Save<T>(AdminList adminList, string connectionString, string methodName, string parameterName, string userName,
                                           SfGrid<T> grid)
@@ -175,17 +216,17 @@ public static class General
 
         try
         {
-            RestClient _restClient = new($"{Start.ApiHost}candidates/GetGridCandidates");
-            RestRequest request = new("", Method.Get);
-            request.AddQueryParameter("page", page.ToString());
-            request.AddQueryParameter("count", count.ToString());
-            request.AddQueryParameter("name", name);
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/GetGridCandidates", Method.Get);
+            _request.AddQueryParameter("page", page.ToString());
+            _request.AddQueryParameter("count", count.ToString());
+            _request.AddQueryParameter("name", name);
             if (getStates)
             {
-                request.AddQueryParameter("getStates", getStates.ToString());
+                _request.AddQueryParameter("getStates", getStates.ToString());
             }
 
-            Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
+            Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
             if (_restResponse == null)
             {
                 return dm.RequiresCounts ? new DataResult
@@ -389,6 +430,61 @@ public static class General
                 Result = _dataSource,
                 Count = 1
             } : _dataSource;
+        }
+    }
+
+    public static async Task<object> GetReadDataAdaptorAsync(string methodName, string filter, DataManagerRequest dm, bool isString = true)
+    {
+        List<AdminList> _dataSource = new();
+
+        try
+        {
+            await Task.Yield();
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Admin/GetAdminList", Method.Get)
+            {
+                RequestFormat = DataFormat.Json
+            };
+            _request.AddQueryParameter("methodName", methodName);
+            _request.AddQueryParameter("filter", HttpUtility.UrlEncode(filter));
+            _request.AddQueryParameter("isString", isString.ToString());
+            Dictionary<string, object> _response = await _restClient.GetAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource);
+            }
+
+            _dataSource = DeserializeObject<List<AdminList>>(_response["GeneralItems"]);
+            int _count = _response["Count"] as int? ?? 0;
+
+            return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource);
+        }
+        catch
+        {
+            if (_dataSource == null)
+            {
+                return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
+                {
+                    Result = null,
+                    Count = 1
+                } : null);
+            }
+
+            _dataSource.Add(new());
+
+            return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
+            {
+                Result = _dataSource,
+                Count = 1
+            } : _dataSource);
         }
     }
 

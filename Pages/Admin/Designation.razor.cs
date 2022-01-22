@@ -21,17 +21,20 @@ public partial class Designation
     #region Fields
 
     private readonly Dictionary<string, object> _htmlAttributes = new()
-                                                                  {
-                                                                      {
-                                                                          "maxlength", "100"
-                                                                      },
-                                                                      {
-                                                                          "minlength", "1"
-                                                                      },
-                                                                      {
-                                                                          "rows", "1"
-                                                                      }
-                                                                  };
+    {
+        {
+            "maxlength",
+            "100"
+        },
+        {
+            "minlength",
+            "1"
+        },
+        {
+            "rows",
+            "1"
+        }
+    };
 
     private AdminList _designationRecord = new();
 
@@ -245,16 +248,14 @@ public partial class Designation
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        ID = General.SaveAdminList("Admin_SaveDesignation", "Designation", false, false, _designationRecord, Grid, _clientFactory).ToInt32();
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, _designationRecord, Grid);
+        ID = _returnValue.ToInt32();
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }
 
-    private void ToggleStatusAsync(int designationID)
-    {
-        General.PostToggle("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid, _clientFactory);
-    }
+    private async Task<string> ToggleStatusAsync(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
 
     #endregion
 
@@ -264,8 +265,7 @@ public partial class Designation
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetDesignations", Filter, _clientFactory, dm, false);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadDataAdaptorAsync("Admin_GetDesignations", Filter, dm, false);
 
         #endregion
     }

@@ -56,7 +56,7 @@
             </GridColumn>
         </GridColumns>
     </SfGrid>
-    <SfDialog Visible="false" Header="@(Title + " Experience")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px" @ref="Dialog">
+    <SfDialog Header="@(Title + " Experience")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px" @ref="Dialog" Visible="false">
         <ChildContent>
             <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
             <DialogPositionData X="right" Y="center"></DialogPositionData>

@@ -49,11 +49,11 @@ public partial class JobOptions
 
     private static bool _valueChanged = true;
 
-    private bool VisibleJobOptionsInfo
-    {
-        get;
-        set;
-    }
+    //private bool VisibleJobOptionsInfo
+    //{
+    //    get;
+    //    set;
+    //}
 
     private static IHttpClientFactory _clientFactory;
 
@@ -120,6 +120,18 @@ public partial class JobOptions
         get;
         set;
     } = "Edit";
+
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
 
     private static void FilterSet(string value)
     {
@@ -188,18 +200,19 @@ public partial class JobOptions
         JobOptionsRecord = jobOption.Data;
     }
 
-    private void Cancel()
+    private async void Cancel()
     {
-        VisibleJobOptionsInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
     }
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
     private async void EditJobOption(string code)
     {
+        await Task.Delay(1);
         double _index = await Grid.GetRowIndexByPrimaryKey(code);
         await Grid.SelectRowAsync(_index);
-        await Task.Yield();
         if (code.NullOrWhiteSpace())
         {
             Title = "Add";
@@ -210,8 +223,7 @@ public partial class JobOptions
             Title = "Edit";
         }
 
-        VisibleJobOptionsInfo = true;
-        StateHasChanged();
+        await Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> jobOption)
@@ -229,9 +241,9 @@ public partial class JobOptions
 
     private async void SaveJobOption(EditContext context)
     {
-        await Task.Yield();
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
         string _url = Start.ApiHost + "admin/SaveJobOptions";
-        //JobOption _job = jobOptionAction.Data;
 
         HttpClient _client = _clientFactory.CreateClient("app");
 
@@ -242,7 +254,10 @@ public partial class JobOptions
         Code = _responseStream;
 
         Grid.Refresh();
-        VisibleJobOptionsInfo = false;
+
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private void SearchClicked()

@@ -49,7 +49,19 @@ public partial class LeadIndustry
 
     private static bool _valueChanged = true;
 
-    private bool VisibleLeadIndustryInfo
+    //private bool VisibleLeadIndustryInfo
+    //{
+    //    get;
+    //    set;
+    //}
+
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private SfSpinner Spinner
     {
         get;
         set;
@@ -192,19 +204,21 @@ public partial class LeadIndustry
         LeadIndustryRecord = leadIndustry.Data;
     }
 
-    private void Cancel()
+    private async void Cancel()
     {
-        VisibleLeadIndustryInfo = false;
+        await Task.Delay(1);
+        await Dialog.HideAsync();
+        //VisibleLeadIndustryInfo = false;
     }
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private void EditIndustry(int id)
+    private async void EditIndustry(int id)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Task.Delay(1);
+        double _index = await Grid.GetRowIndexByPrimaryKey(id);
+        await Grid.SelectRowAsync(_index);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
         if (id == 0)
         {
             Title = "Add";
@@ -215,8 +229,9 @@ public partial class LeadIndustry
             Title = "Edit";
         }
 
-        VisibleLeadIndustryInfo = true;
-        StateHasChanged();
+        await Dialog.ShowAsync();
+        //VisibleLeadIndustryInfo = true;
+        //StateHasChanged();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> industry)
@@ -232,14 +247,18 @@ public partial class LeadIndustry
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private void SaveIndustry(EditContext context)
+    private async void SaveIndustry(EditContext context)
     {
-        Task.Yield();
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
         ID = General.SaveAdminList("Admin_SaveIndustry", "Industry", false, false, LeadIndustryRecord, Grid, _clientFactory).ToInt32();
-        VisibleLeadIndustryInfo = false;
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+        //VisibleLeadIndustryInfo = false;
     }
 
-    private void ToggleStatusAsync(int industryID) => General.PostToggle("Admin_ToggleIndustryStatus", industryID, "ADMIN", false, Grid, _clientFactory);
+    private async Task ToggleStatusAsync(int industryID) => await General.PostToggleAsync("Admin_ToggleIndustryStatus", industryID, "ADMIN", false, Grid);
 
     #endregion
 

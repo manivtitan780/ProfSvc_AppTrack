@@ -246,7 +246,7 @@ public partial class Eligibility
         await Dialog.HideAsync();
     }
 
-    private void ToggleStatus(int eligibilityID) => General.PostToggle("Admin_ToggleEligibilityStatus", eligibilityID, "ADMIN", false, Grid, _clientFactory);
+    private async Task<string> ToggleStatus(int eligibilityID) => await General.PostToggleAsync("Admin_ToggleEligibilityStatus", eligibilityID, "ADMIN", false, Grid);
 
     #endregion
 

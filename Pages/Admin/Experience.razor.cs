@@ -246,7 +246,7 @@ public partial class Experience
         await Dialog.HideAsync();
     }
 
-    private void ToggleStatus(int experienceID) => General.PostToggle("Admin_ToggleExperienceStatus", experienceID, "ADMIN", false, Grid, _clientFactory);
+    private async Task<string> ToggleStatus(int experienceID) => await General.PostToggleAsync("Admin_ToggleExperienceStatus", experienceID, "ADMIN", false, Grid);
 
     #endregion
 

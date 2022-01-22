@@ -5,10 +5,15 @@
 <Header></Header>
 <div class="gridHolder">
     <div class="divGridToolBar">
-        <div>
-            <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-            <SfButton Content="Add Job Option" CssClass="topToolButton" IconCss="newButton" @onclick='() => EditJobOption("")'></SfButton>
-            <AutoCompleteButton ID="autoJobOption" PlaceholderText="Select a Job Option" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminJobOptionDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+        <div style="display: flex">
+            <div style="flex: 1; text-align: left">
+                &nbsp;
+            </div>
+            <div class="divRightControls">
+                <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+                <SfButton Content="Add Job Option" CssClass="topToolButton" IconCss="newButton" @onclick='() => EditJobOption("")'></SfButton>
+                <AutoCompleteButton ID="autoJobOption" PlaceholderText="Select a Job Option" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminJobOptionDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+            </div>
         </div>
     </div>
     <SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="JobOption" Width="99.75%">
@@ -41,8 +46,9 @@
             </GridColumn>
         </GridColumns>
     </SfGrid>
-    <SfDialog @bind-Visible="@VisibleJobOptionsInfo" Header="@(Title + "  Job Option")" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="480px">
+    <SfDialog Header="@(Title + "  Job Option")" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="480px" Visible="false" @ref="Dialog">
         <ChildContent>
+            <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
             <DialogPositionData X="right" Y="center"></DialogPositionData>
             <DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
             <EditForm Model="JobOptionsRecord" OnValidSubmit="SaveJobOption">
