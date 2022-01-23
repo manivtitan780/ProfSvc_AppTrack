@@ -269,7 +269,7 @@ public partial class Roles
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchRole", "@Role", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchRole", "@Role", dm);
 
         #endregion
     }

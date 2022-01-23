@@ -250,7 +250,7 @@ public partial class Skills
 
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetSkills", Filter, _clientFactory, dm, false);
+            General.GetRead("Admin_GetSkills", Filter, _clientFactory, dm, false);
 
         #endregion
     }
@@ -259,7 +259,7 @@ public partial class Skills
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchSkill", "@Skill", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchSkill", "@Skill", dm);
 
         #endregion
     }

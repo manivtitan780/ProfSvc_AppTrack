@@ -265,7 +265,7 @@ public partial class Designation
     {
         #region Methods
 
-        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadDataAdaptorAsync("Admin_GetDesignations", Filter, dm, false);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetDesignations", Filter, dm, false);
 
         #endregion
     }
@@ -274,7 +274,7 @@ public partial class Designation
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchDesignation", "@Designation", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchDesignation", "@Designation", dm);
 
         #endregion
     }

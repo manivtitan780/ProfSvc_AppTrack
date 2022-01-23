@@ -251,7 +251,7 @@ public partial class Education
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadDataAdaptorAsync("Admin_GetEducation", Filter, dm, false);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAsync("Admin_GetEducation", Filter, dm, false);
 
         #endregion
     }
@@ -260,7 +260,7 @@ public partial class Education
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchEducation", "@Education", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchEducation", "@Education", dm);
 
         #endregion
     }

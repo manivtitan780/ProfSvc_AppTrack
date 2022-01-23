@@ -234,7 +234,7 @@ public partial class TaxTerm
 
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetTaxTerms", Filter, _clientFactory, dm);
+            General.GetRead("Admin_GetTaxTerms", Filter, _clientFactory, dm);
 
         #endregion
     }
@@ -243,7 +243,7 @@ public partial class TaxTerm
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchTaxTerm", "@TaxTerm", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchTaxTerm", "@TaxTerm", dm);
 
         #endregion
     }

@@ -269,7 +269,7 @@ public partial class LeadIndustry
         #region Methods
 
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetIndustries", Filter, _clientFactory, dm, false);
+            General.GetRead("Admin_GetIndustries", Filter, _clientFactory, dm, false);
 
         #endregion
     }
@@ -278,7 +278,7 @@ public partial class LeadIndustry
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchIndustry", "@Industry", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchIndustry", "@Industry", dm);
 
         #endregion
     }

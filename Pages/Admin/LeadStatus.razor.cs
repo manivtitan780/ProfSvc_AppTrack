@@ -249,7 +249,7 @@ public partial class LeadStatus
         #region Methods
 
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetLeadStatuses", Filter, _clientFactory, dm, false);
+            General.GetRead("Admin_GetLeadStatuses", Filter, _clientFactory, dm, false);
 
         #endregion
     }
@@ -258,7 +258,7 @@ public partial class LeadStatus
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchLeadStatus", "@LeadStatus", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchLeadStatus", "@LeadStatus", dm);
 
         #endregion
     }

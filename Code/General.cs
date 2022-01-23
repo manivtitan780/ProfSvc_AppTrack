@@ -291,7 +291,7 @@ public static class General
         }
     }
 
-    public static async Task<object> GetReadAutocompleteAdaptorAsync(string methodName, string parameterName, DataManagerRequest dm)
+    public static async Task<object> GetAutocompleteAsync(string methodName, string parameterName, DataManagerRequest dm)
     {
         List<KeyValues> _dataSource = new();
 
@@ -345,7 +345,7 @@ public static class General
         }
     }
 
-    public static async Task<object> GetReadDataAdaptor(string methodName, string filter, IHttpClientFactory clientFactory, DataManagerRequest dm,
+    public static async Task<object> GetRead(string methodName, string filter, IHttpClientFactory clientFactory, DataManagerRequest dm,
                                                         bool isString = true)
     {
         List<AdminList> _dataSource = new();
@@ -416,7 +416,7 @@ public static class General
         }
     }
 
-    public static async Task<object> GetReadDataAdaptorAsync(string methodName, string filter, DataManagerRequest dm, bool isString = true)
+    public static async Task<object> GetReadAsync(string methodName, string filter, DataManagerRequest dm, bool isString = true)
     {
         List<AdminList> _dataSource = new();
 

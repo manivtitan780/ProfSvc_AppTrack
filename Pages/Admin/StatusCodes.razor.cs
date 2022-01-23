@@ -261,7 +261,7 @@ public partial class StatusCodes
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchStatusCode", "@StatusCode", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchStatusCode", "@StatusCode", dm);
 
         #endregion
     }

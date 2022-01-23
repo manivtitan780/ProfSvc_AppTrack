@@ -49,13 +49,13 @@ public partial class Experience
 
     private static bool _valueChanged = true;
 
-    private static IHttpClientFactory _clientFactory;
+    //private static IHttpClientFactory _clientFactory;
 
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
+    //[Inject]
+    //private IHttpClientFactory Client
+    //{
+    //    set => _clientFactory = value;
+    //}
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -240,7 +240,8 @@ public partial class Experience
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        ID = General.SaveAdminList("Admin_SaveExperience", "Experience", false, false, ExperienceRecord, Grid, _clientFactory).ToInt32();
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveExperience", "Experience", false, false, ExperienceRecord, Grid);
+        ID = _returnValue.ToInt32();
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
@@ -256,8 +257,7 @@ public partial class Experience
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetExperience", Filter, _clientFactory, dm, false);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAsync("Admin_GetExperience", Filter, dm, false);
 
         #endregion
     }
@@ -266,7 +266,7 @@ public partial class Experience
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchExperience", "@Experience", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchExperience", "@Experience", dm);
 
         #endregion
     }

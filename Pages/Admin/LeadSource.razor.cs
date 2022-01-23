@@ -260,7 +260,7 @@ public partial class LeadSource
         #region Methods
 
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetSources", Filter, _clientFactory, dm, false);
+            General.GetRead("Admin_GetSources", Filter, _clientFactory, dm, false);
 
         #endregion
     }
@@ -269,7 +269,7 @@ public partial class LeadSource
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchSource", "@Source", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchSource", "@Source", dm);
 
         #endregion
     }

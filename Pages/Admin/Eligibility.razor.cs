@@ -49,14 +49,6 @@ public partial class Eligibility
 
     private static bool _valueChanged = true;
 
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
-
     [Inject]
     private IJSRuntime JsRuntime
     {
@@ -238,10 +230,11 @@ public partial class Eligibility
 
     private async void SaveEligibility(EditContext context)
     {
-        await Task.Delay(0);
+        await Task.Delay(1);
         await Spinner.ShowAsync();
-        ID = General.SaveAdminList("Admin_SaveEligibility", "Eligibility", false, false, EligibilityRecord, Grid, _clientFactory).ToInt32();
-        await Task.Delay(0);
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveEligibility", "Eligibility", false, false, EligibilityRecord, Grid);
+        ID = _returnValue.ToInt32();
+        await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }
@@ -256,8 +249,7 @@ public partial class Eligibility
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetEligibility", Filter, _clientFactory, dm, false);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAsync("Admin_GetEligibility", Filter, dm, false);
 
         #endregion
     }
@@ -266,7 +258,7 @@ public partial class Eligibility
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchEligibility", "@Eligibility", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchEligibility", "@Eligibility", dm);
 
         #endregion
     }
