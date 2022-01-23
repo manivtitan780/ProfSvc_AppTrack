@@ -266,8 +266,7 @@ public partial class Eligibility
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("Admin_SearchEligibility", "@Eligibility", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchEligibility", "@Eligibility", dm);
 
         #endregion
     }

@@ -243,8 +243,7 @@ public partial class TaxTerm
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("Admin_SearchTaxTerm", "@TaxTerm", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchTaxTerm", "@TaxTerm", dm);
 
         #endregion
     }

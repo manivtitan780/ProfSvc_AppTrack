@@ -259,8 +259,7 @@ public partial class Skills
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("Admin_SearchSkill", "@Skill", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchSkill", "@Skill", dm);
 
         #endregion
     }

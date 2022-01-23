@@ -52,6 +52,7 @@ public class StorageCompression
     {
         try
         {
+            await Task.Yield();
             //ProtectedBrowserStorageResult<CandidateGrid> _resultValue = await LocalStorage.GetAsync<CandidateGrid>("CandidateGrid");
 
             //CandidateGrid _candidateGrid;
@@ -122,6 +123,7 @@ public class StorageCompression
     {
         try
         {
+            await Task.Yield();
             //await LocalStorage.SetAsync("CandidateGrid", Candidate.CandidateGridPersistValues);
         }
         catch (Exception)

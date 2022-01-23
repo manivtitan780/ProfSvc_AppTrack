@@ -291,9 +291,10 @@ public static class General
         }
     }
 
-    public static async Task<object> GetReadAutocompleteAdaptor(string methodName, string parameterName, DataManagerRequest dm, IHttpClientFactory factory = null)
+    public static async Task<object> GetReadAutocompleteAdaptorAsync(string methodName, string parameterName, DataManagerRequest dm)
     {
         List<KeyValues> _dataSource = new();
+
         if (dm.Where is not { Count: > 0 } || dm.Where[0].value.NullOrWhiteSpace())
         {
             return dm.RequiresCounts ? new DataResult
@@ -305,46 +306,34 @@ public static class General
 
         try
         {
-            string _url = Start.ApiHost + "admin/SearchDropDown";
-
-            _url += $"?methodName={methodName}&paramName={parameterName}&filter={dm.Where[0].value}";
-
-            if (factory != null)
+            await Task.Delay(1);
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Admin/SearchDropDown", Method.Get)
             {
-                HttpClient _client = factory.CreateClient("app");
+                RequestFormat = DataFormat.Json
+            };
+            _request.AddQueryParameter("methodName", methodName);
+            _request.AddQueryParameter("paramName", parameterName);
+            _request.AddQueryParameter("filter", dm.Where[0].value.ToString());
+            List<string> _jobOptionsItems = await _restClient.GetAsync<List<string>>(_request); //JsonConvert.DeserializeObject<List<string>>(_responseStream);
 
-                HttpResponseMessage _response = await _client.GetAsync(_url);
-
-                if (!_response.IsSuccessStatusCode)
-                {
-                    return dm.RequiresCounts ? new DataResult
-                    {
-                        Result = _dataSource,
-                        Count = 9 /*_count*/
-                    } : _dataSource;
-                }
-
-                string _responseStream = _response.Content.ReadAsStringAsync().Result;
-                List<string> _jobOptionsItems = JsonConvert.DeserializeObject<List<string>>(_responseStream);
-                int _count = 0;
-                if (_jobOptionsItems == null)
-                {
-                    return dm.RequiresCounts ? new DataResult
-                    {
-                        Result = _dataSource,
-                        Count = _count
-                    } : _dataSource;
-                }
-
-                _count = _jobOptionsItems.Count;
-                _dataSource.AddRange(_jobOptionsItems.Select(item => new KeyValues(item, item)));
-
+            int _count = 0;
+            if (_jobOptionsItems == null)
+            {
                 return dm.RequiresCounts ? new DataResult
                 {
                     Result = _dataSource,
                     Count = _count
                 } : _dataSource;
             }
+            _count = _jobOptionsItems.Count;
+            _dataSource.AddRange(_jobOptionsItems.Select(item => new KeyValues(item, item)));
+
+            return dm.RequiresCounts ? new DataResult
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
         }
         catch
         {
@@ -354,12 +343,6 @@ public static class General
                 Count = 0
             } : _dataSource;
         }
-
-        return dm.RequiresCounts ? new DataResult
-        {
-            Result = _dataSource,
-            Count = 0
-        } : _dataSource;
     }
 
     public static async Task<object> GetReadDataAdaptor(string methodName, string filter, IHttpClientFactory clientFactory, DataManagerRequest dm,
@@ -439,7 +422,7 @@ public static class General
 
         try
         {
-            await Task.Yield();
+            await Task.Delay(1);
             RestClient _restClient = new($"{Start.ApiHost}");
             RestRequest _request = new("Admin/GetAdminList", Method.Get)
             {

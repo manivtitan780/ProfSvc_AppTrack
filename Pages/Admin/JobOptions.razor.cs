@@ -361,8 +361,7 @@ public partial class JobOptions
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("SearchJobOptions", "", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("SearchJobOptions", "", dm);
 
         #endregion
     }

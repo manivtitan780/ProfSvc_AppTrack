@@ -49,14 +49,6 @@ public partial class Education
 
     private static bool _valueChanged = true;
 
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
-
     [Inject]
     private IJSRuntime JsRuntime
     {
@@ -259,8 +251,7 @@ public partial class Education
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadDataAdaptor("Admin_GetEducation", Filter, _clientFactory, dm, false);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadDataAdaptorAsync("Admin_GetEducation", Filter, dm, false);
 
         #endregion
     }
@@ -269,8 +260,7 @@ public partial class Education
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("Admin_SearchEducation", "@Education", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchEducation", "@Education", dm);
 
         #endregion
     }

@@ -1296,8 +1296,7 @@ public partial class Candidate
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("SearchCandidate", "@Candidate", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("SearchCandidate", "@Candidate", dm);
 
         #endregion
     }

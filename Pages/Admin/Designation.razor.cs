@@ -50,13 +50,13 @@ public partial class Designation
 
     private static bool _valueChanged = true;
 
-    private static IHttpClientFactory _clientFactory;
+    //private static IHttpClientFactory _clientFactory;
 
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
+    //[Inject]
+    //private IHttpClientFactory Client
+    //{
+    //    set => _clientFactory = value;
+    //}
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -274,8 +274,7 @@ public partial class Designation
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetReadAutocompleteAdaptor("Admin_SearchDesignation", "@Designation", dm, _clientFactory);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetReadAutocompleteAdaptorAsync("Admin_SearchDesignation", "@Designation", dm);
 
         #endregion
     }
