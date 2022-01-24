@@ -36,7 +36,9 @@ public partial class Designation
         }
     };
 
-    private AdminList _designationRecord = new();
+    private AdminList DesignationRecord = new();
+
+    private AdminList DesignationRecordClone = new();
 
     #endregion
 
@@ -141,13 +143,19 @@ public partial class Designation
         args.Cancel = !args.HasText;
     }
 
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
+    //private SfDialog Dialog
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfSpinner Spinner
+    //private SfSpinner Spinner
+    //{
+    //    get;
+    //    set;
+    //}
+
+    private AdminListDialog AdminDialog
     {
         get;
         set;
@@ -196,7 +204,7 @@ public partial class Designation
     private async Task CancelAsync()
     {
         await Task.Delay(1);
-        await Dialog.HideAsync();
+        //await Dialog.HideAsync();
     }
 
     private void DataHandler()
@@ -213,14 +221,15 @@ public partial class Designation
         if (id == 0)
         {
             Title = "Add";
-            _designationRecord = new();
+            DesignationRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            DesignationRecordClone = DesignationRecord.Copy();
         }
-
-        await Dialog.ShowAsync();
+        StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> designation)
@@ -241,18 +250,18 @@ public partial class Designation
 
     private void RowSelected(RowSelectEventArgs<AdminList> designation)
     {
-        _designationRecord = designation.Data;
+        DesignationRecord = designation.Data;
     }
 
     private async Task SaveDesignationAsync(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, _designationRecord, Grid);
+        //await Spinner.ShowAsync();
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, DesignationRecordClone, Grid, DesignationRecord);
         ID = _returnValue.ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
+        //await Task.Delay(1);
+        //await Spinner.HideAsync();
+        //await Dialog.HideAsync();
     }
 
     private async Task<string> ToggleStatusAsync(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);

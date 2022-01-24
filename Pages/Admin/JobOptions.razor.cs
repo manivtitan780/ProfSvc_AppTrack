@@ -13,6 +13,10 @@
 
 #endregion
 
+using Syncfusion.Blazor.PivotView;
+using System.Reflection;
+using System;
+
 namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class JobOptions
@@ -20,20 +24,20 @@ public partial class JobOptions
     #region Fields
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
-                                                                 {
-                                                                     {
-                                                                         "maxlength",
-                                                                         "100"
-                                                                     },
-                                                                     {
-                                                                         "minlength",
-                                                                         "1"
-                                                                     },
-                                                                     {
-                                                                         "rows",
-                                                                         "1"
-                                                                     }
-                                                                 };
+    {
+        {
+            "maxlength",
+            "100"
+        },
+        {
+            "minlength",
+            "1"
+        },
+        {
+            "rows",
+            "1"
+        }
+    };
 
     private JobOption JobOptionsRecord = new();
 
@@ -54,15 +58,6 @@ public partial class JobOptions
     //    get;
     //    set;
     //}
-
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        get => _clientFactory;
-        set => _clientFactory = value;
-    }
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -239,19 +234,18 @@ public partial class JobOptions
 
     private void RefreshGrid() => Grid.Refresh();
 
-    private async void SaveJobOption(EditContext context)
+    private async Task SaveJobOption(EditContext context)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        string _url = Start.ApiHost + "admin/SaveJobOptions";
-
-        HttpClient _client = _clientFactory.CreateClient("app");
-
-        StringContent _jobOptionContent = new(JsonConvert.SerializeObject(JobOptionsRecord), Encoding.UTF8, "application/json");
-        using HttpResponseMessage _response = await _client.PostAsync(_url, _jobOptionContent);
-
-        string _responseStream = await _response.Content.ReadAsStringAsync();
-        Code = _responseStream;
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("Admin/SaveJobOptions", Method.Post)
+        {
+            RequestFormat = DataFormat.Json
+        };
+        _request.AddJsonBody(JobOptionsRecord);
+        string _response = await _restClient.PostAsync<string>(_request);
+        Code = _response;
 
         Grid.Refresh();
 
@@ -293,54 +287,44 @@ public partial class JobOptions
 
             try
             {
-                string _url = Start.ApiHost + "admin/GetJobOptions";
-
-                if (!Filter.NullOrWhiteSpace())
+                await Task.Delay(1);
+                RestClient _restClient = new($"{Start.ApiHost}");
+                RestRequest _request = new("Admin/GetJobOptions", Method.Get)
                 {
-                    _url += "?filter=" + Filter;
-                }
-
-                HttpClient _client = _clientFactory.CreateClient("app");
-
-                HttpResponseMessage _response = await _client.GetAsync(_url);
-
-                if (!_response.IsSuccessStatusCode)
-                {
-                    return dm.RequiresCounts ? new DataResult
-                                               {
-                                                   Result = _dataSource, Count = 0 /*_count*/
-                                               } : _dataSource;
-                }
-
-                string _responseStream = await _response.Content.ReadAsStringAsync();
-                Dictionary<string, object> _jobOptionsItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
+                    RequestFormat = DataFormat.Json
+                };
+                _request.AddQueryParameter("filter", Filter, true);
+                Dictionary<string, object> _jobOptionsItems = await _restClient.GetAsync<Dictionary<string, object>>(_request);
                 int _count = 0;
                 TaxTermKeyValues = new();
                 if (_jobOptionsItems == null)
                 {
                     return dm.RequiresCounts ? new DataResult
-                                               {
-                                                   Result = _dataSource, Count = 0
-                                               } : _dataSource;
+                    {
+                        Result = _dataSource,
+                        Count = 0
+                    } : _dataSource;
                 }
-
-                _dataSource = JsonConvert.DeserializeObject<List<JobOption>>((_jobOptionsItems["JobOptions"] as JArray)?.ToString() ?? string.Empty);
+                _dataSource = General.DeserializeObject<List<JobOption>>(_jobOptionsItems["JobOptions"]);
                 _count = _jobOptionsItems["Count"] as int? ?? 0;
-                TaxTermKeyValues = JsonConvert.DeserializeObject<List<KeyValues>>((_jobOptionsItems["TaxTerms"] as JArray)?.ToString() ?? string.Empty);
+                TaxTermKeyValues = General.DeserializeObject<List<KeyValues>>(_jobOptionsItems["TaxTerms"]);
 
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource, Count = _count
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = _count
+                } : _dataSource;
+
             }
             catch
             {
                 if (_dataSource == null)
                 {
                     return dm.RequiresCounts ? new DataResult
-                                               {
-                                                   Result = null, Count = 1
-                                               } : null;
+                    {
+                        Result = null,
+                        Count = 1
+                    } : null;
                 }
 
                 _dataSource.Add(new("", ""));
@@ -348,9 +332,10 @@ public partial class JobOptions
                 _valueChanged = false;
 
                 return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource, Count = 1
-                                           } : _dataSource;
+                {
+                    Result = _dataSource,
+                    Count = 1
+                } : _dataSource;
             }
         }
 
@@ -361,7 +346,7 @@ public partial class JobOptions
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchJobOptions", "", dm);
+        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchJobOption", "@JobOption", dm);
 
         #endregion
     }

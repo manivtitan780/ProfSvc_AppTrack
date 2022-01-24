@@ -57,42 +57,7 @@
 			</GridColumn>
 		</GridColumns>
 	</SfGrid>
-	<SfDialog Visible="false" Header="@(Title + " Title")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px" @ref="Dialog">
-		<ChildContent>
-			<SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
-			<DialogPositionData X="right" Y="center"></DialogPositionData>
-			<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-			<EditForm Model="_designationRecord" OnValidSubmit="SaveDesignationAsync">
-				<DataAnnotationsValidator></DataAnnotationsValidator>
-				<div class="divContainerTable">
-					<div class="divFlex">
-						@*<LabelBox ID="textTitle" MaxLength="50" MinLength="1" Multiline="false" Placeholder="Title" Readonly="false" ValidationMessage="@(() => _designationRecord.Text)"></LabelBox>*@
-						<div class="divFlexLabel">
-							<label class="labelStatus" for="textTitle">Title:</label>
-						</div>
-						<div class="divFlexSmall">
-							<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
-								@*<LabelTextBox @bind-Value="@(_designationRecord.Text)" ID="textTitle" MaxLength="50" MinLength="1" Multiline="false" Placeholder="Title" Readonly="false"
-                                    ValidationMessage="@(() => _designationRecord.Text)" @bind-Value:event="ValueChanged"></LabelTextBox>*@
-								<SfTextBox @bind-Value="@(_designationRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@_htmlAttributes" ID="textTitle" Multiline="false" Placeholder="Title">
-								</SfTextBox>
-								<TooltipTemplates>
-									<Content>
-										<ValidationMessage For="@(() => _designationRecord.Text)"></ValidationMessage>
-									</Content>
-								</TooltipTemplates>
-							</SfTooltip>
-						</div>
-					</div>
-					<LabelSwitch @bind-BindValue="@(_designationRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
-				</div>
-				<div class="e-footer-content">
-					<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-					<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="CancelAsync" type="button">Cancel</SfButton>
-				</div>
-			</EditForm>
-		</ChildContent>
-	</SfDialog>
+    <AdminListDialog @ref="AdminDialog" HeaderString="@(Title + " Title")" Model="DesignationRecordClone" Save="SaveDesignationAsync" HtmlAttributes="@_htmlAttributes" Placeholder="Title"></AdminListDialog>
 	<div class="divGridFooter">
 		<div>
 			Items

@@ -37,6 +37,8 @@ public partial class LeadIndustry
 
     private AdminList LeadIndustryRecord = new();
 
+    private AdminList LeadIndustryRecordClone = new();
+
     #endregion
 
     #region Properties
@@ -55,25 +57,17 @@ public partial class LeadIndustry
     //    set;
     //}
 
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
+    //private SfDialog Dialog
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
+    //private SfSpinner Spinner
+    //{
+    //    get;
+    //    set;
+    //}
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -204,11 +198,15 @@ public partial class LeadIndustry
         LeadIndustryRecord = leadIndustry.Data;
     }
 
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
+
     private async void Cancel()
     {
         await Task.Delay(1);
-        await Dialog.HideAsync();
-        //VisibleLeadIndustryInfo = false;
     }
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
@@ -222,16 +220,15 @@ public partial class LeadIndustry
         if (id == 0)
         {
             Title = "Add";
-            LeadIndustryRecord = new();
+            LeadIndustryRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            LeadIndustryRecordClone = LeadIndustryRecord.Copy();
         }
-
-        await Dialog.ShowAsync();
-        //VisibleLeadIndustryInfo = true;
-        //StateHasChanged();
+        StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> industry)
@@ -250,12 +247,8 @@ public partial class LeadIndustry
     private async void SaveIndustry(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        ID = General.SaveAdminList("Admin_SaveIndustry", "Industry", false, false, LeadIndustryRecord, Grid, _clientFactory).ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
-        //VisibleLeadIndustryInfo = false;
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveIndustry", "Industry", false, false, LeadIndustryRecordClone, Grid, LeadIndustryRecord);
+        ID = _returnValue.ToInt32();
     }
 
     private async Task ToggleStatusAsync(int industryID) => await General.PostToggleAsync("Admin_ToggleIndustryStatus", industryID, "ADMIN", false, Grid);
@@ -268,8 +261,7 @@ public partial class LeadIndustry
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetRead("Admin_GetIndustries", Filter, _clientFactory, dm, false);
+        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetIndustries", Filter, dm, false);
 
         #endregion
     }
@@ -278,7 +270,7 @@ public partial class LeadIndustry
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchIndustry", "@Industry", dm);
+        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchIndustry", "@Industry", dm);
 
         #endregion
     }

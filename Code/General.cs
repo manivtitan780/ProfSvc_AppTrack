@@ -153,7 +153,7 @@ public static class General
     }
 
 
-    public async static Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid)
+    public async static Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid, AdminList mainAdminList = null)
     {
         await Task.Yield();
         RestClient _restClient = new($"{Start.ApiHost}");
@@ -168,6 +168,11 @@ public static class General
         _request.AddQueryParameter("isString", isString.ToString());
         _request.AddJsonBody(adminList);
         string _response = await _restClient.PostAsync<string>(_request);
+
+        if (mainAdminList != null)
+        {
+            mainAdminList = adminList.Copy();
+        }
 
         grid.Refresh();
 

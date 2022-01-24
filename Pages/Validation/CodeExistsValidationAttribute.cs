@@ -13,10 +13,6 @@
 
 #endregion
 
-#region Using
-
-#endregion
-
 namespace ProfSvc_AppTrack.Pages.Validation;
 
 public class CodeExistsValidationAttribute : ValidationAttribute
@@ -49,10 +45,23 @@ public class CodeExistsValidationAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
 
-        string _url =
-            $"{Start.ApiHost}admin/CheckCode?methodName={AdminListDefault.MethodName}&code={_currentContext.Code}&isString={(AdminListDefault.IsString ? "true" : "false")}";
+        //string _url =
+        //    $"{Start.ApiHost}admin/CheckCode?methodName={AdminListDefault.MethodName}&code={_currentContext.Code}&isString={(AdminListDefault.IsString ? "true" : "false")}";
 
-        if (AdminListDefault.ClientFactory == null)
+        Thread.Sleep(1);
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("admin/CheckCode", Method.Get)
+        {
+            RequestFormat = DataFormat.Json
+        };
+        _request.AddQueryParameter("methodName", AdminListDefault.MethodName);
+        _request.AddQueryParameter("code", _currentContext.Code);
+        _request.AddQueryParameter("isString", AdminListDefault.IsString.ToString());
+        Task<string> _response = _restClient.GetAsync<string>(_request);
+
+        return _response.Result == "false" ? ValidationResult.Success : new($"{AdminListDefault.Type} already exists. Try again.", _memberNames);
+
+        /*if (AdminListDefault.ClientFactory == null)
         {
             return new("Could not verify. Try again.", _memberNames);
         }
@@ -63,7 +72,7 @@ public class CodeExistsValidationAttribute : ValidationAttribute
 
         Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
 
-        return _responseStream.Result == "false" ? ValidationResult.Success : new($"{AdminListDefault.Type} already exists. Try again.", _memberNames);
+        return _responseStream.Result == "false" ? ValidationResult.Success : new($"{AdminListDefault.Type} already exists. Try again.", _memberNames);*/
     }
 
     #endregion
