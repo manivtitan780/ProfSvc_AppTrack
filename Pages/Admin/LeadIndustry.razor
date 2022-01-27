@@ -3,66 +3,68 @@
 
 <Header></Header>
 <div class="gridHolder">
-    <div class="divGridToolBar">
-        <div style="display: flex">
-            <div style="flex: 1; text-align: left">
-                &nbsp;
-            </div>
-            <div class="divRightControls">
-                <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-                <SfButton Content="Add Industry" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditIndustry(0)"></SfButton>
-                <AutoCompleteButton ID="autoIndustry" PlaceholderText="Select a Title" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminIndustryDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
-            </div>
-        </div>
-    </div>
-    <SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
-        <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-        <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminIndustryAdaptor)" Key="ID"></SfDataManager>
-        <GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
-        <GridColumns>
-            <GridColumn Field="Text" HeaderText="Industry" Width="50%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <span class="point" @onclick="() => EditIndustry(_con.ID)">@_con.Text</span>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-            <GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
-            <GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
-            <GridColumn Width="10%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <SfButton Content="" IconCss="editIcon" @onclick="() => EditIndustry(_con.ID)"></SfButton>
-                            <SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatusAsync(_con.ID)"></SfButton>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-        </GridColumns>
-    </SfGrid>
-    <AdminListDialog @ref="AdminDialog" HeaderString="@(Title + " Industry")" Model="LeadIndustryRecordClone" Save="SaveIndustry" HtmlAttributes="@HtmlAttributes" Placeholder="Lead Industry"></AdminListDialog>
-    <div class="divGridFooter">
-        <div>
-            Items
-            <b>1</b> to
-            <b>@Count</b> of
-            <b>@Count</b> rows
-        </div>
-    </div>
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				&nbsp;
+			</div>
+			<div class="divRightControls">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid" />
+				<SfButton Content="Add Industry" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditIndustry(0)" />
+				<AutoCompleteButton ID="autoIndustry" PlaceholderText="Select a Title" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(AdminIndustryDropDownAdaptor)" ValueChange="FilterGrid" />
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminIndustryAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList" />
+		<GridColumns>
+			<GridColumn Field="Text" HeaderText="Industry" Width="50%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span class="point" @onclick="() => EditIndustry(_con.ID)">@_con.Text</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0" />
+			<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%" />
+			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%" />
+			<GridColumn Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<SfButton Content="" IconCss="editIcon" @onclick="() => EditIndustry(_con.ID)" />
+							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatusAsync(_con.ID)" />
+						}
+					}
+				</Template>
+			</GridColumn>
+		</GridColumns>
+	</SfGrid>
+	<AdminListDialog HeaderString="@(Title + " Industry")" HtmlAttributes="@HtmlAttributes" Model="LeadIndustryRecordClone" Placeholder="Lead Industry" 
+					 @ref="AdminDialog" Save="SaveIndustry" />
+	<div class="divGridFooter">
+		<div>
+			Items
+			<b>1</b> to
+			<b>@Count</b> of
+			<b>@Count</b> rows
+		</div>
+	</div>
 </div>

@@ -154,12 +154,6 @@ public partial class Designation
         ID = -1;
     }
 
-    //private async Task CancelAsync()
-    //{
-    //    await Task.Delay(1);
-    //    //await Dialog.HideAsync();
-    //}
-
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
     private async Task EditDesignationAsync(int id)
@@ -221,12 +215,8 @@ public partial class Designation
     private async Task SaveDesignation(EditContext context)
     {
         await Task.Delay(1);
-        //await Spinner.ShowAsync();
         string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, DesignationRecordClone, Grid, DesignationRecord);
         ID = _returnValue.ToInt32();
-        //await Task.Delay(1);
-        //await Spinner.HideAsync();
-        //await Dialog.HideAsync();
     }
 
     private async Task<string> ToggleStatus(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
@@ -250,7 +240,7 @@ public partial class Designation
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchDesignation", "@Designation", dm);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchDesignation", "@Designation", dm);
 
         #endregion
     }

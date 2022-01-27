@@ -9,16 +9,17 @@
 				&nbsp;
 			</div>
 			<div class="divRightControls">
-				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton Content="Add Eligibility" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditEligibility(0)"></SfButton>
-				<AutoCompleteButton ID="autoEligibility" PlaceholderText="Select a Eligibility" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminEligibilityDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid" />
+				<SfButton Content="Add Eligibility" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditEligibility(0)" />
+				<AutoCompleteButton ID="autoEligibility" PlaceholderText="Select a Eligibility" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(AdminEligibilityDropDownAdaptor)" ValueChange="FilterGrid" />
 			</div>
 		</div>
 	</div>
 	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
-		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminEligibilityAdaptor)" Key="ID"></SfDataManager>
-		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminEligibilityAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList" />
 		<GridColumns>
 			<GridColumn Field="@nameof(AdminList.Text)" HeaderText="Eligibility" Width="50%">
 				<Template Context="aCon">
@@ -30,7 +31,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0" />
 			<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
 				<Template Context="aCon">
 					@{
@@ -41,55 +42,22 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
-			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
+			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%" />
+			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%" />
 			<GridColumn Width="10%">
 				<Template Context="aCon">
 					@{
 						if (aCon is AdminList _con)
 						{
-							<SfButton Content="" IconCss="editIcon" @onclick="() => EditEligibility(_con.ID)"></SfButton>
-							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)"></SfButton>
+							<SfButton Content="" IconCss="editIcon" @onclick="() => EditEligibility(_con.ID)" />
+							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)" />
 						}
 					}
 				</Template>
 			</GridColumn>
 		</GridColumns>
 	</SfGrid>
-	@*<SfDialog Header="@(Title + " Title")" Height="300px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Visible="false" Width="400px">
-		<ChildContent>
-			<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
-			<DialogPositionData X="right" Y="center"></DialogPositionData>
-			<DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-			<EditForm Model="EligibilityRecord" OnValidSubmit="SaveEligibility">
-				<DataAnnotationsValidator></DataAnnotationsValidator>
-				<div class="divContainerTable">
-					<div class="divFlex">
-						<div class="divFlexLabel">
-							<label class="labelStatus" for="textTitle">Title:</label>
-						</div>
-						<div class="divFlexSmall">
-							<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
-								<SfTextBox @bind-Value="@(EligibilityRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@HtmlAttributes" ID="textTitle" Multiline="false" Placeholder="Title">
-								</SfTextBox>
-								<TooltipTemplates>
-									<Content>
-										<ValidationMessage For="@(() => EligibilityRecord.Text)"></ValidationMessage>
-									</Content>
-								</TooltipTemplates>
-							</SfTooltip>
-						</div>
-					</div>
-					<LabelSwitch @bind-BindValue="@(EligibilityRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
-				</div>
-				<div class="e-footer-content">
-					<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-					<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
-				</div>
-			</EditForm>
-		</ChildContent>
-	</SfDialog>*@
-	<AdminListDialog HeaderString="@(Title + " Eligibility")" HtmlAttributes="@HtmlAttributes" Model="EligibilityRecordClone" Placeholder="Title" @ref="AdminDialog" Save="SaveEligibility"></AdminListDialog>
+	<AdminListDialog HeaderString="@(Title + " Eligibility")" HtmlAttributes="@HtmlAttributes" Model="EligibilityRecordClone" Placeholder="Title" @ref="AdminDialog" Save="SaveEligibility" />
 	<div class="divGridFooter">
 		<div>
 			Items

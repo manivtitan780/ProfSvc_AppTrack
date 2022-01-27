@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LeadSource.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:06
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 20:54
 // *****************************************/
 
 #endregion
@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class LeadSource
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
                                                                  {
@@ -35,11 +35,11 @@ public partial class LeadSource
                                                                      }
                                                                  };
 
-    private AdminList SourceRecord = new();
-
-    #endregion
-
-    #region Properties
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -47,21 +47,29 @@ public partial class LeadSource
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
 
-    private bool VisibleCandidateInfo
+    private static string Filter
     {
         get;
         set;
     }
 
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
+    private SfGrid<AdminList> Grid
     {
-        set => _clientFactory = value;
+        get;
+        set;
     }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -77,18 +85,6 @@ public partial class LeadSource
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -103,52 +99,23 @@ public partial class LeadSource
         set;
     }
 
-    private SfGrid<AdminList> Grid
+    private AdminList SourceRecord
     {
         get;
         set;
-    }
+    } = new();
 
-    private static string Filter
+    private AdminList SourceRecordClone
     {
         get;
         set;
-    }
+    } = new();
 
     private string Title
     {
         get;
         set;
     } = "Edit";
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -173,16 +140,6 @@ public partial class LeadSource
         }
     }
 
-    //private void ActionBegin(ActionEventArgs<AdminList> sourceAction)
-    //{
-    //	if (sourceAction.RequestType != Action.Save)
-    //	{
-    //		return;
-    //	}
-
-    //	ID = General.SaveAdminList("Admin_SaveSource", "Source", false, false, sourceAction.Data, Grid, _clientFactory).ToInt32();
-    //}
-
     private async void ActionComplete(ActionEventArgs<AdminList> sourceAction)
     {
         if (sourceAction.RequestType != Action.Refresh || ID <= 0)
@@ -196,37 +153,27 @@ public partial class LeadSource
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        SourceRecord = designation.Data;
-    }
-
-    private void Cancel()
-    {
-        VisibleCandidateInfo = false;
-    }
-
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private void EditSource(int id)
+    private async void EditSource(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
+        await Task.Delay(1);
         if (id == 0)
         {
             Title = "Add";
-            SourceRecord = new();
+            SourceRecord.ClearData();
         }
         else
         {
             Title = "Edit";
-            Grid.StartEditAsync();
+            SourceRecordClone = SourceRecord.Copy();
         }
 
-        VisibleCandidateInfo = true;
         StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> source)
@@ -240,27 +187,44 @@ public partial class LeadSource
         Grid.Refresh();
     }
 
-    private void RefreshGrid() => Grid.Refresh();
-
-    private void SaveSource()
+    private static void FilterSet(string value)
     {
-        Task.Yield();
-        ID = General.SaveAdminList("Admin_SaveSource", "Source", false, false, SourceRecord, Grid, _clientFactory).ToInt32();
-        VisibleCandidateInfo = false;
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
     }
 
-    private void ToggleStatusAsync(int sourceID) => General.PostToggle("Admin_ToggleSourceStatus", sourceID, "ADMIN", false, Grid, _clientFactory);
+    private void RefreshGrid() => Grid.Refresh();
 
-    #endregion
+    private void RowSelected(RowSelectEventArgs<AdminList> designation) => SourceRecord = designation.Data;
 
-    #region Nested
+    private async Task SaveSource()
+    {
+        await Task.Delay(1);
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveSource", "Source", false, false, SourceRecordClone, Grid, SourceRecord);
+        ID = _returnValue.ToInt32();
+    }
+
+    private async Task<string> ToggleStatus(int sourceID) => await General.PostToggleAsync("Admin_ToggleSourceStatus", sourceID, "ADMIN", false, Grid);
 
     public class AdminSourceAdaptor : DataAdaptor
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetRead("Admin_GetSources", Filter, _clientFactory, dm, false);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetSources", Filter, dm, false);
 
         #endregion
     }
@@ -269,10 +233,8 @@ public partial class LeadSource
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchSource", "@Source", dm);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchSource", "@Source", dm);
 
         #endregion
     }
-
-    #endregion
 }

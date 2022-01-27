@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LeadIndustry.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:05
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:13
 // *****************************************/
 
 #endregion
@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class LeadIndustry
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
                                                                  {
@@ -39,9 +39,11 @@ public partial class LeadIndustry
 
     private AdminList LeadIndustryRecordClone = new();
 
-    #endregion
-
-    #region Properties
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -49,25 +51,29 @@ public partial class LeadIndustry
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
 
-    //private bool VisibleLeadIndustryInfo
-    //{
-    //    get;
-    //    set;
-    //}
+    private static string Filter
+    {
+        get;
+        set;
+    }
 
-    //private SfDialog Dialog
-    //{
-    //    get;
-    //    set;
-    //}
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
 
-    //private SfSpinner Spinner
-    //{
-    //    get;
-    //    set;
-    //}
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -83,18 +89,6 @@ public partial class LeadIndustry
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -109,53 +103,11 @@ public partial class LeadIndustry
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        //_adminContext?.Validate();
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -193,22 +145,6 @@ public partial class LeadIndustry
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> leadIndustry)
-    {
-        LeadIndustryRecord = leadIndustry.Data;
-    }
-
-    private AdminListDialog AdminDialog
-    {
-        get;
-        set;
-    }
-
-    private async void Cancel()
-    {
-        await Task.Delay(1);
-    }
-
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
     private async void EditIndustry(int id)
@@ -227,6 +163,7 @@ public partial class LeadIndustry
             Title = "Edit";
             LeadIndustryRecordClone = LeadIndustryRecord.Copy();
         }
+
         StateHasChanged();
         await AdminDialog.Dialog.ShowAsync();
     }
@@ -242,7 +179,29 @@ public partial class LeadIndustry
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> leadIndustry) => LeadIndustryRecord = leadIndustry.Data;
 
     private async void SaveIndustry(EditContext context)
     {
@@ -253,15 +212,11 @@ public partial class LeadIndustry
 
     private async Task ToggleStatusAsync(int industryID) => await General.PostToggleAsync("Admin_ToggleIndustryStatus", industryID, "ADMIN", false, Grid);
 
-    #endregion
-
-    #region Nested
-
     public class AdminIndustryAdaptor : DataAdaptor
     {
         #region Methods
 
-        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetIndustries", Filter, dm, false);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetIndustries", Filter, dm, false);
 
         #endregion
     }
@@ -270,10 +225,8 @@ public partial class LeadIndustry
     {
         #region Methods
 
-        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchIndustry", "@Industry", dm);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchIndustry", "@Industry", dm);
 
         #endregion
     }
-
-    #endregion
 }

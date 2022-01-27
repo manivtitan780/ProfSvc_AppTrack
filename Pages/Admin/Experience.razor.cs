@@ -47,25 +47,11 @@ public partial class Experience
         set;
     }
 
-    //private static IHttpClientFactory _clientFactory;
-
-    //[Inject]
-    //private IHttpClientFactory Client
-    //{
-    //    set => _clientFactory = value;
-    //}
-
     private static int Count
     {
         get;
         set;
     } = 24;
-
-    //private SfDialog Dialog
-    //{
-    //    get;
-    //    set;
-    //}
 
     private AdminList ExperienceRecord
     {
@@ -125,22 +111,11 @@ public partial class Experience
         set;
     }
 
-    //private SfSpinner Spinner
-    //{
-    //    get;
-    //    set;
-    //}
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
-
-    //public void ToolTipOpen(TooltipEventArgs args)
-    //{
-    //    args.Cancel = !args.HasText;
-    //}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
