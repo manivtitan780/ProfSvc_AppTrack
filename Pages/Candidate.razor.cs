@@ -15,8 +15,6 @@
 
 #region Using
 
-using Syncfusion.Blazor.Spinner;
-
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 
@@ -28,7 +26,11 @@ public partial class Candidate
 {
     #region Fields
 
-    public CandidateRatingMPC RatingMPC = new();
+    private CandidateRatingMPC RatingMPC
+    {
+        get;
+        set;
+    } = new();
 
     private readonly Candidates _candidateContext = new();
     private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
@@ -129,34 +131,34 @@ public partial class Candidate
     private List<CandidateRating> _candidateRatingObject = new();
     private List<CandidateSkills> _candidateSkillsObject = new();
 
-    private List<ToolbarItemModel> _tools = new()
-                                            {
-                                                /*new ToolbarItemModel() { Command = ToolbarCommand.Bold },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Italic },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Underline },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.FontName },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Formats },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Undo },
-                                                new ToolbarItemModel() { Command = ToolbarCommand.Redo }*/
-                                            };
+//    private List<ToolbarItemModel> _tools = new()
+//                                            {
+//                                                /*new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+//                                                new ToolbarItemModel() { Command = ToolbarCommand.Redo }*/
+//                                            };
 
     #endregion
 
     #region Properties
 
-    public static CandidateGrid CandidateGridPersistValues
+    private static CandidateGrid CandidateGridPersistValues
     {
         get;
         set;
@@ -174,7 +176,7 @@ public partial class Candidate
         set;
     }
 
-    public static int ItemCount
+    private static int ItemCount
     {
         get;
         set;
@@ -184,13 +186,13 @@ public partial class Candidate
     {
         get;
         set;
-    } = 0;
+    }
 
     public static int EndRecord
     {
         get;
         set;
-    } = 0;
+    }
 
     public static List<IntValues> Eligibility
     {
@@ -213,7 +215,6 @@ public partial class Candidate
     public static List<KeyValues> Communication
     {
         get;
-        set;
     } = new();
 
     public static List<KeyValues> JobOptions
@@ -234,7 +235,7 @@ public partial class Candidate
         set;
     } = new();
 
-    public static string Name
+    private static string Name
     {
         get;
         set;
@@ -278,7 +279,7 @@ public partial class Candidate
     {
         get;
         set;
-    } = false;
+    }
 
     private bool VisibleEducationDialog
     {
@@ -925,7 +926,7 @@ public partial class Candidate
         }
     }
 
-    public SkillPanel SkillPanel
+    private SkillPanel SkillPanel
     {
         get;
         set;
@@ -937,13 +938,13 @@ public partial class Candidate
         VisibleSkillDialog = true;
     }
 
-    public CandidateSkills SelectedSkill
+    private CandidateSkills SelectedSkill
     {
         get;
         set;
     } = new();
 
-    public EditSkillDialog EditSkillDialog
+    private EditSkillDialog EditSkillDialog
     {
         get;
         set;

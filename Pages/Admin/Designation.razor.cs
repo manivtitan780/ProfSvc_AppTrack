@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Designation.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:04
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:00
 // *****************************************/
 
 #endregion
@@ -18,31 +18,29 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 /// <inheritdoc />
 public partial class Designation
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
-    private readonly Dictionary<string, object> _htmlAttributes = new()
+    private readonly Dictionary<string, object> HtmlAttributes = new()
+                                                                 {
+                                                                     {
+                                                                         "maxlength",
+                                                                         "100"
+                                                                     },
+                                                                     {
+                                                                         "minlength",
+                                                                         "1"
+                                                                     },
+                                                                     {
+                                                                         "rows",
+                                                                         "1"
+                                                                     }
+                                                                 };
+
+    private AdminListDialog AdminDialog
     {
-        {
-            "maxlength",
-            "100"
-        },
-        {
-            "minlength",
-            "1"
-        },
-        {
-            "rows",
-            "1"
-        }
-    };
-
-    private AdminList DesignationRecord = new();
-
-    private AdminList DesignationRecordClone = new();
-
-    #endregion
-
-    #region Properties
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -50,15 +48,41 @@ public partial class Designation
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
 
-    //private static IHttpClientFactory _clientFactory;
+    private AdminList DesignationRecord
+    {
+        get;
+        set;
+    } = new();
 
-    //[Inject]
-    //private IHttpClientFactory Client
-    //{
-    //    set => _clientFactory = value;
-    //}
+    private AdminList DesignationRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -74,18 +98,6 @@ public partial class Designation
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -100,70 +112,11 @@ public partial class Designation
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    private static void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
-
-    //private SfDialog Dialog
-    //{
-    //    get;
-    //    set;
-    //}
-
-    //private SfSpinner Spinner
-    //{
-    //    get;
-    //    set;
-    //}
-
-    private AdminListDialog AdminDialog
-    {
-        get;
-        set;
-    }
-
-    #endregion
-
-    #region Methods
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -201,16 +154,13 @@ public partial class Designation
         ID = -1;
     }
 
-    private async Task CancelAsync()
-    {
-        await Task.Delay(1);
-        //await Dialog.HideAsync();
-    }
+    //private async Task CancelAsync()
+    //{
+    //    await Task.Delay(1);
+    //    //await Dialog.HideAsync();
+    //}
 
-    private void DataHandler()
-    {
-        Count = Grid.CurrentViewData.Count();
-    }
+    private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
     private async Task EditDesignationAsync(int id)
     {
@@ -228,6 +178,7 @@ public partial class Designation
             Title = "Edit";
             DesignationRecordClone = DesignationRecord.Copy();
         }
+
         StateHasChanged();
         await AdminDialog.Dialog.ShowAsync();
     }
@@ -243,17 +194,31 @@ public partial class Designation
         Grid.Refresh();
     }
 
-    private void RefreshGrid()
+    private static void FilterSet(string value)
     {
-        Grid.Refresh();
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        DesignationRecord = designation.Data;
-    }
+    private void RefreshGrid() => Grid.Refresh();
 
-    private async Task SaveDesignationAsync(EditContext context)
+    private void RowSelected(RowSelectEventArgs<AdminList> designation) => DesignationRecord = designation.Data;
+
+    private async Task SaveDesignation(EditContext context)
     {
         await Task.Delay(1);
         //await Spinner.ShowAsync();
@@ -264,11 +229,9 @@ public partial class Designation
         //await Dialog.HideAsync();
     }
 
-    private async Task<string> ToggleStatusAsync(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
+    private async Task<string> ToggleStatus(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
 
-    #endregion
-
-    #region Nested
+    #region Nested type: AdminDesignationAdaptor
 
     public class AdminDesignationAdaptor : DataAdaptor
     {
@@ -278,6 +241,10 @@ public partial class Designation
 
         #endregion
     }
+
+    #endregion
+
+    #region Nested type: AdminDesignationDropDownAdaptor
 
     public class AdminDesignationDropDownAdaptor : DataAdaptor
     {

@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Education.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:04
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:00
 // *****************************************/
 
 #endregion
@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Education
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
                                                                  {
@@ -35,11 +35,11 @@ public partial class Education
                                                                      }
                                                                  };
 
-    private AdminList EducationRecord = new();
-
-    #endregion
-
-    #region Properties
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -47,7 +47,40 @@ public partial class Education
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
+
+    private AdminList EducationRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList EducationRecordClone
+    {
+        get;
+    } = new();
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -63,18 +96,6 @@ public partial class Education
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -89,65 +110,11 @@ public partial class Education
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        //_adminContext?.Validate();
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -185,16 +152,13 @@ public partial class Education
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> education)
-    {
-        EducationRecord = education.Data;
-    }
-
-    private async void Cancel()
-    {
-        await Task.Delay(1);
-        await Dialog.HideAsync();
-    }
+    /*
+        private async void Cancel()
+        {
+            await Task.Delay(1);
+            await Dialog.HideAsync();
+        }
+    */
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
@@ -214,7 +178,7 @@ public partial class Education
             Title = "Edit";
         }
 
-        await Dialog.ShowAsync();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> education)
@@ -228,24 +192,44 @@ public partial class Education
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
 
     private async void SaveEducation(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecord, Grid);
+        //await Spinner.ShowAsync();
+        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
         ID = _return.ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
+        //await Task.Delay(1);
+        //await Spinner.HideAsync();
+        //await Dialog.HideAsync();
     }
 
     private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
 
-    #endregion
-
-    #region Nested
+    #region Nested type: AdminEducationAdaptor
 
     public class AdminEducationAdaptor : DataAdaptor
     {
@@ -255,6 +239,10 @@ public partial class Education
 
         #endregion
     }
+
+    #endregion
+
+    #region Nested type: AdminEducationDropDownAdaptor
 
     public class AdminEducationDropDownAdaptor : DataAdaptor
     {

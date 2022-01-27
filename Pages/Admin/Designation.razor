@@ -50,14 +50,14 @@
 						if (aCon is AdminList _con)
 						{
 							<SfButton Content="" IconCss="editIcon" @onclick="() => EditDesignationAsync(_con.ID)"></SfButton>
-							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatusAsync(_con.ID)"></SfButton>
+							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)"></SfButton>
 						}
 					}
 				</Template>
 			</GridColumn>
 		</GridColumns>
 	</SfGrid>
-    <AdminListDialog @ref="AdminDialog" HeaderString="@(Title + " Title")" Model="DesignationRecordClone" Save="SaveDesignationAsync" HtmlAttributes="@_htmlAttributes" Placeholder="Title"></AdminListDialog>
+	<AdminListDialog HeaderString="@(Title + " Title")" HtmlAttributes="@HtmlAttributes" Model="DesignationRecordClone" Placeholder="Title" @ref="AdminDialog" Save="SaveDesignation"></AdminListDialog>
 	<div class="divGridFooter">
 		<div>
 			Items

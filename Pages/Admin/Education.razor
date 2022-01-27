@@ -3,60 +3,61 @@
 
 <Header></Header>
 <div class="gridHolder">
-    <div class="divGridToolBar">
-        <div style="display: flex">
-            <div style="flex: 1; text-align: left">
-                &nbsp;
-            </div>
-            <div class="divRightControls">
-                <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-                <SfButton Content="Add Education" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditEducation(0)"></SfButton>
-                <AutoCompleteButton ID="autoEducation" PlaceholderText="Select a Education" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminEducationDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
-            </div>
-        </div>
-    </div>
-    <SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
-        <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-        <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminEducationAdaptor)" Key="ID"></SfDataManager>
-        <GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
-        <GridColumns>
-            <GridColumn HeaderText="Education" Width="50%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <span class="point" @onclick="() => EditEducation(_con.ID)">@_con.Text</span>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-            <GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
-            <GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
-            <GridColumn Width="10%">
-                <Template Context="aCon">
-                    @{
-                        if (aCon is AdminList _con)
-                        {
-                            <SfButton Content="" IconCss="editIcon" @onclick="() => EditEducation(_con.ID)"></SfButton>
-                            <SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)"></SfButton>
-                        }
-                    }
-                </Template>
-            </GridColumn>
-        </GridColumns>
-    </SfGrid>
-    <SfDialog Header="@(Title + " Education")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px" @ref="Dialog" Visible="false">
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				&nbsp;
+			</div>
+			<div class="divRightControls">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+				<SfButton Content="Add Education" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditEducation(0)"></SfButton>
+				<AutoCompleteButton ID="autoEducation" PlaceholderText="Select a Education" @ref="AutoCompleteControl" Ref="AutoCompleteControl" TypeInstance="@typeof(AdminEducationDropDownAdaptor)" ValueChange="FilterGrid"></AutoCompleteButton>
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminEducationAdaptor)" Key="ID"></SfDataManager>
+		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList"></GridEvents>
+		<GridColumns>
+			<GridColumn HeaderText="Education" Width="50%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span class="point" @onclick="() => EditEducation(_con.ID)">@_con.Text</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%"></GridColumn>
+			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%"></GridColumn>
+			<GridColumn Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<SfButton Content="" IconCss="editIcon" @onclick="() => EditEducation(_con.ID)"></SfButton>
+							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)"></SfButton>
+						}
+					}
+				</Template>
+			</GridColumn>
+		</GridColumns>
+	</SfGrid>
+	<AdminListDialog HeaderString="@(Title + " Education")" HtmlAttributes="HtmlAttributes" Model="EducationRecordClone" Placeholder="Education" @ref="AdminDialog" Save="SaveEducation"></AdminListDialog>
+	@*<SfDialog Header="@(Title + " Education")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px" @ref="Dialog" Visible="false">
         <ChildContent>
             <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
             <DialogPositionData X="right" Y="center"></DialogPositionData>
@@ -88,13 +89,13 @@
                 </div>
             </EditForm>
         </ChildContent>
-    </SfDialog>
-    <div class="divGridFooter">
-        <div>
-            Items
-            <b>1</b> to
-            <b>@Count</b> of
-            <b>@Count</b> rows
-        </div>
-    </div>
+    </SfDialog>*@
+	<div class="divGridFooter">
+		<div>
+			Items
+			<b>1</b> to
+			<b>@Count</b> of
+			<b>@Count</b> rows
+		</div>
+	</div>
 </div>
