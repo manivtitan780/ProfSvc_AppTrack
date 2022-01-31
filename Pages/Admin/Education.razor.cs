@@ -7,8 +7,13 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Education.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
+<<<<<<< HEAD
+// Created On:          01-06-2022 15:41
+// Last Updated On:     01-25-2022 20:49
+=======
 // Created On:          01-26-2022 19:30
 // Last Updated On:     01-27-2022 19:00
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 // *****************************************/
 
 #endregion
@@ -17,6 +22,9 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Education
 {
+<<<<<<< HEAD
+    #region Properties
+=======
     private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
@@ -34,6 +42,25 @@ public partial class Education
                                                                          "1"
                                                                      }
                                                                  };
+
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
+
+    private AdminList EducationRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList EducationRecordClone
+    {
+        get;
+        set;
+    } = new();
 
     private AdminListDialog AdminDialog
     {
@@ -83,6 +110,25 @@ public partial class Education
         set;
     } = -1;
 
+    private Dictionary<string, object> HtmlAttributes
+    {
+        get;
+    } = new()
+        {
+            {
+                "maxlength",
+                "100"
+            },
+            {
+                "minlength",
+                "1"
+            },
+            {
+                "rows",
+                "1"
+            }
+        };
+
     [Inject]
     private IJSRuntime JsRuntime
     {
@@ -117,6 +163,33 @@ public partial class Education
         set;
     } = "Edit";
 
+<<<<<<< HEAD
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
+    #endregion
+
+    #region Methods
+
+=======
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -140,6 +213,8 @@ public partial class Education
         }
     }
 
+    private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
+
     private async void ActionComplete(ActionEventArgs<AdminList> skillAction)
     {
         if (skillAction.RequestType != Action.Refresh || ID <= 0)
@@ -153,6 +228,28 @@ public partial class Education
         ID = -1;
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
+
+    /*
+    private async void Cancel()
+    {
+        await Task.Delay(1);
+    }
+*/
+=======
+    /*
+        private async void Cancel()
+        {
+            await Task.Delay(1);
+            await Dialog.HideAsync();
+        }
+    */
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
+
+>>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
     private async void EditEducation(int id)
@@ -171,7 +268,15 @@ public partial class Education
             Title = "Edit";
             EducationRecordClone = EducationRecord.Copy();
         }
+<<<<<<< HEAD
         StateHasChanged();
+=======
+
+<<<<<<< HEAD
+        StateHasChanged();
+=======
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
+>>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
         await AdminDialog.Dialog.ShowAsync();
     }
 
@@ -213,6 +318,15 @@ public partial class Education
     private async void SaveEducation(EditContext context)
     {
         await Task.Delay(1);
+<<<<<<< HEAD
+        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
+        ID = _return.ToInt32();
+    }
+
+    #endregion
+
+    #region Nested
+=======
         //await Spinner.ShowAsync();
         string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
         ID = _return.ToInt32();
@@ -224,6 +338,7 @@ public partial class Education
     private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
 
     #region Nested type: AdminEducationAdaptor
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 
     public class AdminEducationAdaptor : DataAdaptor
     {
