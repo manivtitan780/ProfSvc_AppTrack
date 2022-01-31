@@ -47,19 +47,13 @@
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.1" />
-<<<<<<< HEAD
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
-=======
         <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
-<<<<<<< HEAD
         <PackageReference Include="RestSharp" Version="107.1.1" />
-=======
         <PackageReference Include="RestSharp" Version="107.1.2" />
->>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.47" />
->>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
