@@ -87,7 +87,7 @@ public partial class LabelBox
     }
 
     [Parameter]
-    public string Value
+    public string BindValue
     {
         get => _value;
         set

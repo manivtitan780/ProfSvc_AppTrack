@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Roles.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-27-2022 21:26
+// Created On:          11-18-2021 19:59
+// Last Updated On:     01-04-2022 16:06
 // *****************************************/
 
 #endregion
@@ -17,10 +17,13 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Roles
 {
-    private static bool _valueChanged = true;
+    #region Fields
 
-    private static IHttpClientFactory _clientFactory;
     private Role RoleRecord = new();
+
+    #endregion
+
+    #region Properties
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -28,40 +31,26 @@ public partial class Roles
         set;
     }
 
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
-
-    private string Code
-    {
-        get;
-        set;
-    } = "";
-
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
-    private SfGrid<Role> Grid
-    {
-        get;
-        set;
-    }
+    private static bool _valueChanged = true;
 
     private bool IsAdd
     {
         get;
         set;
+    }
+
+    private bool VisibleRoleInfo
+    {
+        get;
+        set;
+    }
+
+    private static IHttpClientFactory _clientFactory;
+
+    [Inject]
+    private IHttpClientFactory Client
+    {
+        set => _clientFactory = value;
     }
 
     [Inject]
@@ -78,6 +67,12 @@ public partial class Roles
         set;
     }
 
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
+
     [Inject]
     private NavigationManager NavManager
     {
@@ -92,17 +87,53 @@ public partial class Roles
         set;
     }
 
+    private SfGrid<Role> Grid
+    {
+        get;
+        set;
+    }
+
+    private string Code
+    {
+        get;
+        set;
+    } = "";
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
     private string Title
     {
         get;
         set;
     } = "Edit";
 
-    private bool VisibleRoleInfo
+    private static void FilterSet(string value)
     {
-        get;
-        set;
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
     }
+
+    #endregion
+
+    #region Methods
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -142,6 +173,11 @@ public partial class Roles
         await Grid.SelectRowAsync(_index);
         await JsRuntime.InvokeVoidAsync("scroll", _index);
         Code = "";
+    }
+
+    private void RowSelected(RowSelectEventArgs<Role> role)
+    {
+        RoleRecord = role.Data;
     }
 
     private void Cancel()
@@ -185,32 +221,7 @@ public partial class Roles
         Grid.Refresh();
     }
 
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
     private void RefreshGrid() => Grid.Refresh();
-
-    private void RowSelected(RowSelectEventArgs<Role> role)
-    {
-        RoleRecord = role.Data;
-    }
 
     private void SaveRole()
     {
@@ -240,6 +251,10 @@ public partial class Roles
         args.Cancel = !args.HasText;
     }
 
+    #endregion
+
+    #region Nested
+
     public class AdminRoleAdaptor : DataAdaptor
     {
         #region Methods
@@ -258,4 +273,6 @@ public partial class Roles
 
         #endregion
     }
+
+    #endregion
 }

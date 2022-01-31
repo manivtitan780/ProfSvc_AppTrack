@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           CandidateDetails.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-31-2022 16:07
+// Created On:          12-16-2021 19:27
+// Last Updated On:     01-04-2022 16:03
 // *****************************************/
 
 #endregion
@@ -74,13 +74,22 @@ public class CandidateDetails
     /// <param name="googlePlus"></param>
     /// <param name="created"></param>
     /// <param name="updated"></param>
+    ///// <param name="eligibility"></param>
+    ///// <param name="state"></param>
+    ///// <param name="experience"></param>
+    ///// <param name="taxTermDescription"></param>
+    ///// <param name="jobOptionDescription"></param>
     /// <param name="candidateID"></param>
     /// <param name="status"></param>
     public CandidateDetails(string firstName, string middleName, string lastName, string address1, string address2, string city, int stateID, string zipCode,
-                            string email, string phone1, string phone2, string phone3, string phoneExt, string linkedIn, string facebook, string twitter,
-                            string title, int eligibilityID, bool relocate, bool background, string jobOptions, string taxTerm, string originalResume, string formattedResume,
-                            string textResume, string keywords, string communication, byte rateCandidate, string rateNotes, bool mpc, string mpcNotes, int experienceID,
-                            decimal hourlyRate, decimal hourlyRateHigh, decimal salaryHigh, decimal salaryLow, string relocationNotes, string securityNotes, bool refer, string referAccountManager,
+                            string email,
+                            string phone1, string phone2, string phone3, string phoneExt, string linkedIn, string facebook, string twitter, string title,
+                            int eligibilityID,
+                            bool relocate, bool background, string jobOptions, string taxTerm, string originalResume, string formattedResume, string textResume,
+                            string keywords, string communication, byte rateCandidate, string rateNotes, bool mpc, string mpcNotes, int experienceID,
+                            decimal hourlyRate,
+                            decimal hourlyRateHigh, decimal salaryHigh, decimal salaryLow, string relocationNotes, string securityNotes, bool refer,
+                            string referAccountManager,
                             bool eeo, string eeoFile, string summary, string googlePlus, string created, string updated, int candidateID, string status)
         /*, string eligibility, string state, string experience, string taxTermDescription, string jobOptionDescription*/
     {
@@ -185,7 +194,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Range(0.0, 2000.0, ErrorMessage = "Hourly Rate should be between $0 and $2,000")]
     public decimal HourlyRate
     {
         get;
@@ -280,7 +288,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Address is required."), StringLength(255, MinimumLength = 1, ErrorMessage = "Address should be between 1 and 255 characters.")]
     public string Address1
     {
         get;
@@ -290,7 +297,6 @@ public class CandidateDetails
     /// <summary>
     /// </summary>
 
-    [MaxLength(255, ErrorMessage = "Address 2 field cannot be greater than 255 characters.")]
     public string Address2
     {
         get;
@@ -299,7 +305,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "City is required."), StringLength(50, MinimumLength = 1, ErrorMessage = "City should be between 1 and 50 characters.")]
     public string City
     {
         get;
@@ -332,8 +337,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Email Address is required."), StringLength(255, MinimumLength = 5, ErrorMessage = "Email Address should be between 5 and 255 characters."),
-     EmailAddress(ErrorMessage = "Email Address should be in proper format.")]
     public string Email
     {
         get;
@@ -350,7 +353,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "First Name is required."), StringLength(50, MinimumLength = 1, ErrorMessage = "First Name should be between 1 and 50 characters.")]
     public string FirstName
     {
         get;
@@ -389,7 +391,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Keywords is required."), StringLength(500, MinimumLength = 3, ErrorMessage = "Keywords should be between 3 and 500 characters.")]
     public string Keywords
     {
         get;
@@ -398,7 +399,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Last Name is required."), StringLength(50, MinimumLength = 1, ErrorMessage = "Last Name should be between 1 and 50 characters.")]
     public string LastName
     {
         get;
@@ -439,8 +439,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Phone is required."), Phone(ErrorMessage = "Phone Number should be in proper format."),
-     StringLength(10, MinimumLength = 10, ErrorMessage = "Phone number should be 10 digits including area code.")]
     public string Phone1
     {
         get;
@@ -535,7 +533,6 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Title is required."), StringLength(200, MinimumLength = 1, ErrorMessage = "Title should be between 1 and 255 characters.")]
     public string Title
     {
         get;
@@ -566,7 +563,7 @@ public class CandidateDetails
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "Zip Code is required."), StringLength(10, MinimumLength = 5, ErrorMessage = "Phone number should be minimum 5 digits.")]
+
     public string ZipCode
     {
         get;

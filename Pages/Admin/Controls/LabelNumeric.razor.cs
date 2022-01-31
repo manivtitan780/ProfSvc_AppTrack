@@ -7,34 +7,61 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelNumeric.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-30-2022 20:50
+// Created On:          11-18-2021 19:59
+// Last Updated On:     01-04-2022 16:04
 // *****************************************/
+
+#endregion
+
+#region Using
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public partial class LabelNumeric<TValue>
+public partial class LabelNumeric
 {
-    private TValue _value;
+    #region Fields
+
+    private decimal _value;
+    private EditContext _context;
+
+    #endregion
+
+    #region Properties
 
     [Parameter]
-    public bool CreateTooltip
+    public decimal BindValue
+    {
+        get => _value;
+        set
+        {
+            if (_value == value)
+            {
+                return;
+            }
+
+            _value = value;
+            BindValueChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter]
+    public decimal Min
     {
         get;
         set;
     }
 
     [Parameter]
-    public string CssClass
+    public decimal Step
     {
         get;
         set;
-    }
+    } = 1;
 
     [Parameter]
-    public string Currency
+    public EventCallback<decimal> BindValueChanged
     {
         get;
         set;
@@ -45,10 +72,24 @@ public partial class LabelNumeric<TValue>
     {
         get;
         set;
+    } = 0;
+
+    [Parameter]
+    public object Context
+    {
+        get;
+        set;
     }
 
     [Parameter]
-    public string Format
+    public RenderFragment ValidationTemplate
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public string FormatNumericBox
     {
         get;
         set;
@@ -62,76 +103,49 @@ public partial class LabelNumeric<TValue>
     }
 
     [Parameter]
-    public TValue Max
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public TValue Min
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
     public string Placeholder
     {
         get;
         set;
     }
 
-    [Parameter]
-    public bool Readonly
-    {
-        get;
-        set;
-    }
+    #endregion
 
-    [Parameter]
-    public Expression<Func<TValue>> ValidationMessage
-    {
-        get;
-        set;
-    }
+    #region Methods
 
-    [Parameter]
-    public TValue Value
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        get => _value;
-        set
+        if (Context != null)
         {
-            if (EqualityComparer<TValue>.Default.Equals(value, _value))
-            {
-                return;
-            }
-
-            _value = value;
-            ValueChanged.InvokeAsync(value);
+            _context = new(Context);
         }
+
+        return base.SetParametersAsync(parameters);
     }
 
-    [Parameter]
-    public EventCallback<TValue> ValueChanged
+    public void ToolTipOpen(TooltipEventArgs args)
     {
-        get;
-        set;
+        _context?.Validate();
+        args.Cancel = !args.HasText;
     }
 
-    [Parameter]
-    public Expression<Func<TValue>> ValueExpression
+    protected override void OnAfterRender(bool firstRender)
     {
-        get;
-        set;
+        base.OnAfterRender(firstRender);
+        _context.Validate();
+        _context.NotifyValidationStateChanged();
+        //StateHasChanged();
     }
 
-    [Parameter]
-    public string Width
+    protected override async void OnInitialized()
     {
-        get;
-        set;
-    } = "100%";
+        if (Context != null)
+        {
+            _context = new(Context);
+        }
 
-    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
+        await base.OnInitializedAsync();
+    }
+
+    #endregion
 }

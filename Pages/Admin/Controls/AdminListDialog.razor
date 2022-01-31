@@ -1,13 +1,27 @@
-﻿<SfDialog Header="@HeaderString" Height="300px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Visible="false" Width="400px">
+﻿<SfDialog @ref="Dialog" Visible="false" Header="@HeaderString" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px">
     <ChildContent>
-        <SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+        <SfSpinner CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
         <DialogPositionData X="right" Y="center"></DialogPositionData>
         <DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
         <EditForm Model="@Model" OnValidSubmit="SaveAdminList">
             <DataAnnotationsValidator></DataAnnotationsValidator>
             <div class="divContainerTable">
-                <LabelTextBox @bind-Value="@(Model.Text)" @bind-Value:event="ValueChanged" FieldName="Text" ID="textTitle" MaxLength="100" MinLength="1" Multiline="false" Placeholder="@Placeholder"
-                              Readonly="false" ValidationMessage="@(() => Model.Text)" />
+                <div class="divFlex">
+                    <div class="divFlexLabel">
+                        <label class="labelStatus" for="textTitle">@Placeholder:</label>
+                    </div>
+                    <div class="divFlexSmall">
+                        <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
+                            <SfTextBox @bind-Value="@(Model.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@HtmlAttributes" ID="textTitle" Multiline="false" Placeholder="@Placeholder">
+                            </SfTextBox>
+                            <TooltipTemplates>
+                                <Content>
+                                    <ValidationMessage For="@(() => Model.Text)"></ValidationMessage>
+                                </Content>
+                            </TooltipTemplates>
+                        </SfTooltip>
+                    </div>
+                </div>
                 <LabelSwitch @bind-BindValue="@(Model.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
             </div>
             <div class="e-footer-content">

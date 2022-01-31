@@ -1,7 +1,7 @@
 ﻿@page "/Admin/Source"
 @layout ProfSvcLayout
 
-<Header></Header>
+<header></header>
 <div class="gridHolder">
     <div class="divGridToolBar">
         <div style="display: flex">
@@ -59,6 +59,38 @@
     </SfGrid>
 	<AdminListDialog HeaderString="@(Title + " Lead Source")" HtmlAttributes="@HtmlAttributes" Model="SourceRecordClone" Placeholder="Lead Source"
 					 @ref="AdminDialog" Save="SaveSource" />
+    @*<SfDialog @bind-Visible="@VisibleCandidateInfo" Header="@(Title + " Source")" Height="300px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="400px">
+        <ChildContent>
+            <DialogPositionData X="right" Y="center"></DialogPositionData>
+            <DialogAnimationSettings Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
+            <EditForm Model="SourceRecord" OnValidSubmit="SaveSource">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+                <div class="divContainerTable">
+                    <div class="divFlex">
+                        <div class="divFlexLabel">
+                            <label class="labelStatus" for="textTitle">Title:</label>
+                        </div>
+                        <div class="divFlexSmall">
+                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
+                                <SfTextBox @bind-Value="@(SourceRecord.Text)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@HtmlAttributes" ID="textTitle" Multiline="false" Placeholder="Title">
+                                </SfTextBox>
+                                <TooltipTemplates>
+                                    <Content>
+                                        <ValidationMessage For="@(() => SourceRecord.Text)"></ValidationMessage>
+                                    </Content>
+                                </TooltipTemplates>
+                            </SfTooltip>
+                        </div>
+                    </div>
+                    <LabelSwitch @bind-BindValue="@(SourceRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+                </div>
+                <div class="e-footer-content">
+                    <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+                    <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
+                </div>
+            </EditForm>
+        </ChildContent>
+    </SfDialog>*@
     <div class="divGridFooter">
         <div>
             Items

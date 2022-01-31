@@ -21,7 +21,6 @@ public static class General
 
     public static byte[] Md5PasswordHash(string inputText) => MD5.Create().ComputeHash(new UTF8Encoding().GetBytes(inputText));
 
-/*
     public static Color FromHex(string hex)
     {
         if (hex.StartsWith("#"))
@@ -49,9 +48,7 @@ public static class General
             return _color;
         }
     }
-*/
 
-/*
     public static string Decrypt(string str, bool query = false)
     {
         if (str.NullOrWhiteSpace())
@@ -64,9 +61,7 @@ public static class General
 
         return _enc.Decrypt(str).Trim();
     }
-*/
 
-/*
     public static string Edit<T>(int id, SfGrid<T> grid, ref bool isAdd)
     {
         Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
@@ -88,11 +83,8 @@ public static class General
 
         return _title;
     }
-*/
 
-/*
     public static string Encrypt(object str, bool query = false) => str == null ? "" : Encrypt(str.ToString(), query);
-*/
 
     public static string PostToggle<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid, IHttpClientFactory clientFactory = null)
     {
@@ -117,7 +109,7 @@ public static class General
         return _responseStream.Result;
     }
 
-    public static async Task<string> PostToggleAsync<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid)
+    public async static Task<string> PostToggleAsync<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid)
     {
         await Task.Yield();
         RestClient _restClient = new($"{Start.ApiHost}");
@@ -161,7 +153,7 @@ public static class General
     }
 
 
-    public static async Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid, AdminList mainAdminList = null)
+    public async static Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid, AdminList mainAdminList = null)
     {
         await Task.Yield();
         RestClient _restClient = new($"{Start.ApiHost}");
@@ -230,13 +222,13 @@ public static class General
         try
         {
             RestClient _restClient = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/GetGridCandidates");
+            RestRequest _request = new("Candidates/GetGridCandidates", Method.Get);
             _request.AddQueryParameter("page", page.ToString());
             _request.AddQueryParameter("count", count.ToString());
             _request.AddQueryParameter("name", name);
             if (getStates)
             {
-                _request.AddQueryParameter("getStates", true.ToString());
+                _request.AddQueryParameter("getStates", getStates.ToString());
             }
 
             Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
@@ -321,7 +313,7 @@ public static class General
         {
             await Task.Delay(1);
             RestClient _restClient = new($"{Start.ApiHost}");
-            RestRequest _request = new("Admin/SearchDropDown")
+            RestRequest _request = new("Admin/SearchDropDown", Method.Get)
             {
                 RequestFormat = DataFormat.Json
             };
@@ -437,7 +429,7 @@ public static class General
         {
             await Task.Delay(1);
             RestClient _restClient = new($"{Start.ApiHost}");
-            RestRequest _request = new("Admin/GetAdminList")
+            RestRequest _request = new("Admin/GetAdminList", Method.Get)
             {
                 RequestFormat = DataFormat.Json
             };
@@ -688,73 +680,73 @@ public static class General
         }
     }
 
-//    public static async Task<object> SetDataManager(string methodName, string connectionString, DataManagerRequest dm, string filterKey = "",
-//                                                    IHttpClientFactory factory = null)
-//    {
-//        List<AdminList> _dataSource = new();
-//        try
-//        {
-//            string _url = $"{Start.ApiHost}admin/GetAdminList?methodName={methodName}&access-control-allow-origin=*";
-//            if (!filterKey.NullOrWhiteSpace())
-//            {
-//                _url += $"&filter={filterKey}";
-//            }
-//
-//            if (factory == null)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0
-//                } : _dataSource;
-//            }
-//
-//            HttpRequestMessage _request = new(HttpMethod.Get, _url);
-//            _request.Headers.Add("Accept", "application/vnd.github.v3+json");
-//            _request.Headers.Add("User-Agent", "ProfSvcTrack-API");
-//
-//            HttpClient _client = factory.CreateClient("appAdmin");
-//
-//            HttpResponseMessage _response = await _client.SendAsync(_request);
-//
-//            if (!_response.IsSuccessStatusCode)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0 /*_count*/
-//                } : _dataSource;
-//            }
-//
-//            string _responseStream = await _response.Content.ReadAsStringAsync();
-//            Dictionary<string, object> _generalItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
-//            if (_generalItems == null)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0
-//                } : _dataSource;
-//            }
-//
-//            _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_generalItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
-//            int _count = _generalItems["Count"] as int? ?? 0;
-//
-//            return dm.RequiresCounts ? new DataResult
-//            {
-//                Result = _dataSource,
-//                Count = _count
-//            } : _dataSource;
-//        }
-//        catch
-//        {
-//            return dm.RequiresCounts ? new DataResult
-//            {
-//                Result = _dataSource,
-//                Count = 0
-//            } : _dataSource;
-//        }
-//    }
+    public static async Task<object> SetDataManager(string methodName, string connectionString, DataManagerRequest dm, string filterKey = "",
+                                                    IHttpClientFactory factory = null)
+    {
+        List<AdminList> _dataSource = new();
+        try
+        {
+            string _url = $"{Start.ApiHost}admin/GetAdminList?methodName={methodName}&access-control-allow-origin=*";
+            if (!filterKey.NullOrWhiteSpace())
+            {
+                _url += $"&filter={filterKey}";
+            }
+
+            if (factory == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
+            }
+
+            HttpRequestMessage _request = new(HttpMethod.Get, _url);
+            _request.Headers.Add("Accept", "application/vnd.github.v3+json");
+            _request.Headers.Add("User-Agent", "ProfSvcTrack-API");
+
+            HttpClient _client = factory.CreateClient("appAdmin");
+
+            HttpResponseMessage _response = await _client.SendAsync(_request);
+
+            if (!_response.IsSuccessStatusCode)
+            {
+                return dm.RequiresCounts ? new DataResult
+                {
+                    Result = _dataSource,
+                    Count = 0 /*_count*/
+                } : _dataSource;
+            }
+
+            string _responseStream = await _response.Content.ReadAsStringAsync();
+            Dictionary<string, object> _generalItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
+            if (_generalItems == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                {
+                    Result = _dataSource,
+                    Count = 0
+                } : _dataSource;
+            }
+
+            _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_generalItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
+            int _count = _generalItems["Count"] as int? ?? 0;
+
+            return dm.RequiresCounts ? new DataResult
+            {
+                Result = _dataSource,
+                Count = _count
+            } : _dataSource;
+        }
+        catch
+        {
+            return dm.RequiresCounts ? new DataResult
+            {
+                Result = _dataSource,
+                Count = 0
+            } : _dataSource;
+        }
+    }
 
     public static void SetAdminListDefault(string type, string methodName, bool isAdd, bool isString, IHttpClientFactory clientFactory)
     {
@@ -765,10 +757,9 @@ public static class General
         AdminListDefault.ClientFactory = clientFactory;
     }
 
-    //internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,
-    //                                     IHttpClientFactory clientFactory) => throw new NotImplementedException();
+    internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,
+                                         IHttpClientFactory clientFactory) => throw new NotImplementedException();
 
-/*
     private static string Encrypt(string str, bool query = false)
     {
         if (str.NullOrWhiteSpace())
@@ -781,9 +772,7 @@ public static class General
 
         return _enc.Encrypt(str);
     }
-*/
 
-/*
     private static void GenerateBytes(out byte[] key, out byte[] vector, bool query = false)
     {
         if (!query)
@@ -811,7 +800,6 @@ public static class General
                      };
         }
     }
-*/
 
     public static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array)?.ToString() ?? string.Empty);
 

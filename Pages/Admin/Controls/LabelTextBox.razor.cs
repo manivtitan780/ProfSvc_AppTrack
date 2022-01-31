@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelTextBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-29-2022 19:31
+// Created On:          01-01-2022 14:53
+// Last Updated On:     01-04-2022 16:04
 // *****************************************/
 
 #endregion
@@ -17,24 +17,23 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
 public partial class LabelTextBox
 {
+    #region Fields
+
     private string _value;
 
+    #endregion
+
+    #region Properties
+
     [Parameter]
-    public bool CreateDivTag
+    public bool Multiline
     {
         get;
         set;
-    } = true;
+    }
 
     [Parameter]
-    public bool CreateTooltip
-    {
-        get;
-        set;
-    } = true;
-
-    [Parameter]
-    public string CssClass
+    public bool Readonly
     {
         get;
         set;
@@ -48,14 +47,14 @@ public partial class LabelTextBox
     } = default!;
 
     [Parameter]
-    public string FieldName
+    public EventCallback<string> ValueChanged
     {
         get;
         set;
     }
 
     [Parameter]
-    public string ID
+    public Expression<Func<string>> ValidationMessage
     {
         get;
         set;
@@ -73,35 +72,22 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = 0;
-
-    [Parameter]
-    public bool Multiline
-    {
-        get;
-        set;
-    } = false;
-
-    [Parameter]
-    public string Placeholder
-    {
-        get;
-        set;
     }
 
-    [Parameter]
-    public bool Readonly
+    /*private bool IsTextBoxInvalid()
     {
-        get;
-        set;
-    } = false;
-
-    [Parameter]
-    public Expression<Func<string>> ValidationMessage
-    {
-        get;
-        set;
-    }
+        bool _invalid = EditContext.GetValidationMessages(Field).Any();
+        Box?.UpdateParentClass("", "");
+        if (_invalid)
+        {
+            Box.CssClass = "e-error invalid";
+        }
+        else
+        {
+            Box.CssClass = "e-success";
+        }
+        return _invalid;
+    }*/
 
     [Parameter]
     public string Value
@@ -109,7 +95,12 @@ public partial class LabelTextBox
         get => _value;
         set
         {
-            if (EqualityComparer<string>.Default.Equals(value, _value))
+            if (value == null)
+            {
+                _value = "";
+            }
+
+            if (_value == value)
             {
                 return;
             }
@@ -120,27 +111,14 @@ public partial class LabelTextBox
     }
 
     [Parameter]
-    public EventCallback<string> ValueChanged
+    public string ID
     {
         get;
         set;
     }
 
     [Parameter]
-    public Expression<Func<string>> ValueExpression
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Width
-    {
-        get;
-        set;
-    } = "93%";
-
-    private SfTextBox Box
+    public string Placeholder
     {
         get;
         set;
@@ -152,30 +130,34 @@ public partial class LabelTextBox
         set;
     }
 
-    [Parameter]
-    public string Height
+    private SfTextBox Box
     {
         get;
         set;
-    } = "inherit";
+    }
 
-    /*protected override void OnInitialized()
+    #endregion
+
+    #region Methods
+
+    protected override void OnInitialized()
     {
-        if (FieldName.NullOrWhiteSpace())
-        {
-            return;
-        }
-
-        Field = EditContext.Field(FieldName);
+        Field = EditContext.Field("Text");
         EditContext.OnValidationStateChanged += HandleValidationStateChanged;
     }
 
-    private async void HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
+    private void HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
     {
-        await Task.Delay(1);
-        Box?.UpdateParentClass("", "");
         StateHasChanged();
-    }*/
+        bool _invalid = EditContext.GetValidationMessages(Field).Any();
+        Box?.UpdateParentClass("", "");
+        if (Box != null)
+        {
+            Box.CssClass = _invalid ? "e-error invalid" : "e-success";
+        }
 
-    private void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
+        StateHasChanged();
+    }
+
+    #endregion
 }

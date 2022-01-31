@@ -1,20 +1,15 @@
-@typeparam TValue
-@if (CreateTooltip)
-{
-	<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-		<SfNumericTextBox CssClass="@CssClass" Currency="@Currency" Decimals="@Decimals" Format="@Format" ID="@ID" Max="@Max" Min="@Min" Placeholder="@Placeholder" Readonly="@Readonly" ShowSpinButton="false"
-						  TValue="TValue" ValidateDecimalOnType="true" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
-		</SfNumericTextBox>
-		<TooltipTemplates>
-			<Content>
-				<ValidationMessage For="@ValidationMessage"></ValidationMessage>
-			</Content>
-		</TooltipTemplates>
-	</SfTooltip>
-}
-else
-{
-	<SfNumericTextBox CssClass="@CssClass" Currency="@Currency" Decimals="@Decimals" Format="@Format" ID="@ID" Max="@Max" Min="@Min" Placeholder="@Placeholder" Readonly="@Readonly" ShowSpinButton="false"
-					  TValue="TValue" ValidateDecimalOnType="true" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
-	</SfNumericTextBox>
-}
+<div class="divFlex">
+	<div class="divFlexLabel">
+		<label class="labelStatus" for="@ID">@Placeholder</label>
+	</div>
+	<div class="divFlexSmall">
+		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+			<SfNumericTextBox @bind-Value="@BindValue" Context="@Context" Decimals="@Decimals" Format="@FormatNumericBox" ID="@ID" Min="@Min" Step="@Step" TValue="decimal" ValidateDecimalOnType="true"></SfNumericTextBox>
+			<TooltipTemplates>
+				<Content>
+					@ValidationTemplate
+				</Content>
+			</TooltipTemplates>
+		</SfTooltip>
+	</div>
+</div>
