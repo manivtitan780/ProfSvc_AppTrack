@@ -4,7 +4,8 @@
 	</div>
 	<div class="@(Multiline ? "divFlexBig" : "divFlexSmall")">
 		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-			<SfTextBox @bind-Value="@BindValue" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })" ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly"></SfTextBox>
+			<SfTextBox Value="@Value" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })" ID="@ID" 
+					   Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly"></SfTextBox>
 			<TooltipTemplates>
 				<Content>
 					<ValidationMessage For="@ValidationMessage"></ValidationMessage>

@@ -164,7 +164,7 @@ public partial class LeadSource
         if (id == 0)
         {
             Title = "Add";
-            SourceRecord.ClearData();
+            SourceRecordClone.ClearData();
         }
         else
         {

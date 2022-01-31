@@ -5,50 +5,24 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           LabelNumeric.razor.cs
+// File Name:           LabelDropDown.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-30-2022 20:50
+// Created On:          01-31-2022 15:34
+// Last Updated On:     01-31-2022 15:43
 // *****************************************/
 
 #endregion
 
+using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
+
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public partial class LabelNumeric<TValue>
+public partial class LabelDropDown<TValue, TItem>
 {
     private TValue _value;
 
     [Parameter]
-    public bool CreateTooltip
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string CssClass
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Currency
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public int? Decimals
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Format
+    public IEnumerable<TItem> DataSource
     {
         get;
         set;
@@ -62,35 +36,7 @@ public partial class LabelNumeric<TValue>
     }
 
     [Parameter]
-    public TValue Max
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public TValue Min
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Placeholder
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public bool Readonly
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public Expression<Func<TValue>> ValidationMessage
+    public string TextField
     {
         get;
         set;
@@ -127,11 +73,16 @@ public partial class LabelNumeric<TValue>
     }
 
     [Parameter]
-    public string Width
+    public string ValueField
     {
         get;
         set;
-    } = "100%";
+    }
 
-    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
+    [Parameter]
+    public EventCallback<ChangeEventArgs<TValue, TItem>> DropDownValueChange
+    {
+        get;
+        set;
+    }
 }

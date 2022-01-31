@@ -62,6 +62,7 @@ public partial class Education
     private AdminList EducationRecordClone
     {
         get;
+        set;
     } = new();
 
     private static string Filter
@@ -152,14 +153,6 @@ public partial class Education
         ID = -1;
     }
 
-    /*
-        private async void Cancel()
-        {
-            await Task.Delay(1);
-            await Dialog.HideAsync();
-        }
-    */
-
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
     private async void EditEducation(int id)
@@ -171,13 +164,14 @@ public partial class Education
         if (id == 0)
         {
             Title = "Add";
-            EducationRecord = new();
+            EducationRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            EducationRecordClone = EducationRecord.Copy();
         }
-
+        StateHasChanged();
         await AdminDialog.Dialog.ShowAsync();
     }
 

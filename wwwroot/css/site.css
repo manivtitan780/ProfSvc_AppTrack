@@ -30,6 +30,7 @@
     --c-wh: #fff;
     --c-yellow: #fec10f;
     --c-yellowlight: #fec10f;
+    --c-yellowlight: #fec10f;
     /* ReSharper disable once RequiresFallbackColor */
     --c-yellowlight: rgba(254, 193, 15, 0.15);
     --font-family: 'Segoe UI', 'Segoe', 'Arial', 'Lucida Grande', 'Lucida Sans Unicode', Tahoma, Geneva, Verdana, sans-serif;
@@ -146,11 +147,11 @@ label {
     top: 0.5rem;
 }
 
-.e-error.invalid, span.invalid {
+.e-error.invalid, span.invalid, .e-multiselect.e-error {
     border-color: var(--c-red) !important;
 }
 
-.e-error.invalid::after, span.invalid::after {
+.e-error.invalid::after, span.invalid::after, .e-multiselect.e-error::after {
     border-color: var(--c-red) !important;
     color: var(--c-red) !important;
     content: "\ef1b" !important;

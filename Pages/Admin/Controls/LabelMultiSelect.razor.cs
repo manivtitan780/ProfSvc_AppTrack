@@ -7,75 +7,48 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelMultiSelect.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:04
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-30-2022 19:15
 // *****************************************/
-
-#endregion
-
-#region Using
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public partial class LabelMultiSelect
+public partial class LabelMultiSelect<TItem, TValue>
 {
-    #region Fields
-
-    private EditContext _context;
-    private string _value;
-
-    #endregion
-
-    #region Properties
+    private TValue _value;
 
     [Parameter]
-    public EventCallback<string> BindValueChanged
+    public bool CreateTooltip
+    {
+        get;
+        set;
+    } = true;
+
+    [Parameter]
+    public IEnumerable<TItem> DataSource
     {
         get;
         set;
     }
 
     [Parameter]
-    public List<KeyValues> DataSourceKeyValues
+    public string FilterBarPlaceholder
     {
         get;
         set;
-    }
-
-    [Parameter]
-    public object Context
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public RenderFragment ValidationTemplate
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string BindValue
-    {
-        get => _value;
-        set
-        {
-            if (_value == value)
-            {
-                return;
-            }
-
-            _value = value;
-            BindValueChanged.InvokeAsync(value);
-        }
     }
 
     [Parameter]
     public string ID
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public string KeyField
     {
         get;
         set;
@@ -88,43 +61,77 @@ public partial class LabelMultiSelect
         set;
     }
 
-    #endregion
-
-    #region Methods
-
-    public override Task SetParametersAsync(ParameterView parameters)
+    [Parameter]
+    public Type TypeItem
     {
-        if (Context != null)
+        get;
+        set;
+    }
+
+    [Parameter]
+    public Type TypeValue
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public Expression<Func<string>> ValidationMessage
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public TValue Value
+    {
+        get => _value;
+        set
         {
-            _context = new(Context);
+            if (EqualityComparer<TValue>.Default.Equals(value, _value))
+            {
+                return;
+            }
+
+            _value = value;
+            ValueChanged.InvokeAsync(value);
         }
-
-        return base.SetParametersAsync(parameters);
     }
 
-    public void ToolTipOpen(TooltipEventArgs args)
+    [Parameter]
+    public EventCallback<TValue> ValueChanged
     {
-        _context?.Validate();
-        args.Cancel = !args.HasText;
+        get;
+        set;
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    [Parameter]
+    public Expression<Func<TValue>> ValueExpression
     {
-        base.OnAfterRender(firstRender);
-        _context.Validate();
-        _context.NotifyValidationStateChanged();
-        //StateHasChanged();
+        get;
+        set;
     }
 
-    protected override async void OnInitialized()
+    [Parameter]
+    public string ValueField
     {
-        if (Context != null)
-        {
-            _context = new(Context);
-        }
-
-        await base.OnInitializedAsync();
+        get;
+        set;
     }
 
-    #endregion
+    //[Parameter]
+    //public Expression<Func<string>> ValueExpression
+    //{
+    //    get;
+    //    set;
+    //}
+
+    [Parameter]
+    public string Width
+    {
+        get;
+        set;
+    } = "100%";
+
+    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 }
