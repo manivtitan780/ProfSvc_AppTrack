@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Designation.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:04
+// Created On:          01-06-2022 15:41
+// Last Updated On:     01-25-2022 20:46
 // *****************************************/
 
 #endregion
@@ -18,31 +18,25 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 /// <inheritdoc />
 public partial class Designation
 {
-    #region Fields
-
-    private readonly Dictionary<string, object> _htmlAttributes = new()
-    {
-        {
-            "maxlength",
-            "100"
-        },
-        {
-            "minlength",
-            "1"
-        },
-        {
-            "rows",
-            "1"
-        }
-    };
-
-    private AdminList DesignationRecord = new();
-
-    private AdminList DesignationRecordClone = new();
-
-    #endregion
-
     #region Properties
+
+    private AdminList DesignationRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList DesignationRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -52,13 +46,24 @@ public partial class Designation
 
     private static bool _valueChanged = true;
 
-    //private static IHttpClientFactory _clientFactory;
-
-    //[Inject]
-    //private IHttpClientFactory Client
-    //{
-    //    set => _clientFactory = value;
-    //}
+    private Dictionary<string, object> HtmlAttributes
+    {
+        get;
+    } = new()
+        {
+            {
+                "maxlength",
+                "100"
+            },
+            {
+                "minlength",
+                "1"
+            },
+            {
+                "rows",
+                "1"
+            }
+        };
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -138,29 +143,6 @@ public partial class Designation
         }
     }
 
-    private static void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
-
-    //private SfDialog Dialog
-    //{
-    //    get;
-    //    set;
-    //}
-
-    //private SfSpinner Spinner
-    //{
-    //    get;
-    //    set;
-    //}
-
-    private AdminListDialog AdminDialog
-    {
-        get;
-        set;
-    }
-
     #endregion
 
     #region Methods
@@ -188,29 +170,12 @@ public partial class Designation
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> designationAction)
-    {
-        if (designationAction.RequestType != Action.Refresh || ID <= 0)
+    /*
+        private async Task CancelAsync()
         {
-            return;
+            await Task.Delay(1);
         }
-
-        double _index = await Grid.GetRowIndexByPrimaryKeyAsync(ID);
-        await Grid.SelectRowAsync(_index);
-        await JsRuntime.InvokeVoidAsync("scroll", _index);
-        ID = -1;
-    }
-
-    private async Task CancelAsync()
-    {
-        await Task.Delay(1);
-        //await Dialog.HideAsync();
-    }
-
-    private void DataHandler()
-    {
-        Count = Grid.CurrentViewData.Count();
-    }
+    */
 
     private async Task EditDesignationAsync(int id)
     {
@@ -228,9 +193,34 @@ public partial class Designation
             Title = "Edit";
             DesignationRecordClone = DesignationRecord.Copy();
         }
+
         StateHasChanged();
         await AdminDialog.Dialog.ShowAsync();
     }
+
+    private async Task SaveDesignation(EditContext context)
+    {
+        await Task.Delay(1);
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, DesignationRecordClone, Grid, DesignationRecord);
+        ID = _returnValue.ToInt32();
+    }
+
+    private async Task<string> ToggleStatusAsync(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
+
+    private async void ActionComplete(ActionEventArgs<AdminList> designationAction)
+    {
+        if (designationAction.RequestType != Action.Refresh || ID <= 0)
+        {
+            return;
+        }
+
+        double _index = await Grid.GetRowIndexByPrimaryKeyAsync(ID);
+        await Grid.SelectRowAsync(_index);
+        await JsRuntime.InvokeVoidAsync("scroll", _index);
+        ID = -1;
+    }
+
+    private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> designation)
     {
@@ -243,28 +233,9 @@ public partial class Designation
         Grid.Refresh();
     }
 
-    private void RefreshGrid()
-    {
-        Grid.Refresh();
-    }
+    private void RefreshGrid() => Grid.Refresh();
 
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        DesignationRecord = designation.Data;
-    }
-
-    private async Task SaveDesignationAsync(EditContext context)
-    {
-        await Task.Delay(1);
-        //await Spinner.ShowAsync();
-        string _returnValue = await General.SaveAdminListAsync("Admin_SaveDesignation", "Designation", false, false, DesignationRecordClone, Grid, DesignationRecord);
-        ID = _returnValue.ToInt32();
-        //await Task.Delay(1);
-        //await Spinner.HideAsync();
-        //await Dialog.HideAsync();
-    }
-
-    private async Task<string> ToggleStatusAsync(int designationID) => await General.PostToggleAsync("Admin_ToggleDesignationStatus", designationID, "ADMIN", false, Grid);
+    private void RowSelected(RowSelectEventArgs<AdminList> designation) => DesignationRecord = designation.Data;
 
     #endregion
 

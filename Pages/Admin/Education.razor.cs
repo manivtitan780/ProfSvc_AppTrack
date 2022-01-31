@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Education.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:04
+// Created On:          01-06-2022 15:41
+// Last Updated On:     01-25-2022 20:49
 // *****************************************/
 
 #endregion
@@ -17,29 +17,25 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Education
 {
-    #region Fields
-
-    private readonly Dictionary<string, object> HtmlAttributes = new()
-                                                                 {
-                                                                     {
-                                                                         "maxlength",
-                                                                         "100"
-                                                                     },
-                                                                     {
-                                                                         "minlength",
-                                                                         "1"
-                                                                     },
-                                                                     {
-                                                                         "rows",
-                                                                         "1"
-                                                                     }
-                                                                 };
-
-    private AdminList EducationRecord = new();
-
-    #endregion
-
     #region Properties
+
+    private AdminList EducationRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList EducationRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -48,6 +44,25 @@ public partial class Education
     }
 
     private static bool _valueChanged = true;
+
+    private Dictionary<string, object> HtmlAttributes
+    {
+        get;
+    } = new()
+        {
+            {
+                "maxlength",
+                "100"
+            },
+            {
+                "minlength",
+                "1"
+            },
+            {
+                "rows",
+                "1"
+            }
+        };
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -127,27 +142,9 @@ public partial class Education
         }
     }
 
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
     #endregion
 
     #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        //_adminContext?.Validate();
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -172,6 +169,8 @@ public partial class Education
         }
     }
 
+    private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
+
     private async void ActionComplete(ActionEventArgs<AdminList> skillAction)
     {
         if (skillAction.RequestType != Action.Refresh || ID <= 0)
@@ -185,16 +184,14 @@ public partial class Education
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> education)
-    {
-        EducationRecord = education.Data;
-    }
+    private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
 
+    /*
     private async void Cancel()
     {
         await Task.Delay(1);
-        await Dialog.HideAsync();
     }
+*/
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
@@ -207,14 +204,16 @@ public partial class Education
         if (id == 0)
         {
             Title = "Add";
-            EducationRecord = new();
+            EducationRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            EducationRecordClone = EducationRecord.Copy();
         }
 
-        await Dialog.ShowAsync();
+        StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> education)
@@ -233,15 +232,9 @@ public partial class Education
     private async void SaveEducation(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecord, Grid);
+        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
         ID = _return.ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
     }
-
-    private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
 
     #endregion
 

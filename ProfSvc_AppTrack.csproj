@@ -14,7 +14,7 @@
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.1" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.43" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.47" />
     </ItemGroup>
 
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
