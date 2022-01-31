@@ -7,43 +7,35 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           JobOptions.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:05
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:30
 // *****************************************/
 
 #endregion
-
-using Syncfusion.Blazor.PivotView;
-using System.Reflection;
-using System;
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class JobOptions
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
-    {
-        {
-            "maxlength",
-            "100"
-        },
-        {
-            "minlength",
-            "1"
-        },
-        {
-            "rows",
-            "1"
-        }
-    };
+                                                                 {
+                                                                     {
+                                                                         "maxlength",
+                                                                         "100"
+                                                                     },
+                                                                     {
+                                                                         "minlength",
+                                                                         "1"
+                                                                     },
+                                                                     {
+                                                                         "rows",
+                                                                         "1"
+                                                                     }
+                                                                 };
 
     private JobOption JobOptionsRecord = new();
-
-    #endregion
-
-    #region Properties
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -51,7 +43,35 @@ public partial class JobOptions
         set;
     }
 
-    private static bool _valueChanged = true;
+    private string Code
+    {
+        get;
+        set;
+    } = "";
+
+    private static int Count
+    {
+        get;
+        set;
+    }
+
+    private SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<JobOption> Grid
+    {
+        get;
+        set;
+    }
 
     //private bool VisibleJobOptionsInfo
     //{
@@ -73,50 +93,8 @@ public partial class JobOptions
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    }
-
-    private static List<KeyValues> TaxTermKeyValues
-    {
-        get;
-        set;
-    }
-
     [Inject]
     private ProtectedLocalStorage SessionStorage
-    {
-        get;
-        set;
-    }
-
-    private SfGrid<JobOption> Grid
-    {
-        get;
-        set;
-    }
-
-    private string Code
-    {
-        get;
-        set;
-    } = "";
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
-    private static string Title
-    {
-        get;
-        set;
-    } = "Edit";
-
-    private SfDialog Dialog
     {
         get;
         set;
@@ -128,29 +106,17 @@ public partial class JobOptions
         set;
     }
 
-    private static void FilterSet(string value)
+    private static List<KeyValues> TaxTermKeyValues
     {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
+        get;
+        set;
     }
 
-    #endregion
-
-    #region Methods
+    private static string Title
+    {
+        get;
+        set;
+    } = "Edit";
 
     protected override async void OnAfterRender(bool firstRender)
     {
@@ -190,11 +156,6 @@ public partial class JobOptions
         Code = "";
     }
 
-    private void RowSelected(RowSelectEventArgs<JobOption> jobOption)
-    {
-        JobOptionsRecord = jobOption.Data;
-    }
-
     private async void Cancel()
     {
         await Task.Delay(1);
@@ -232,7 +193,29 @@ public partial class JobOptions
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<JobOption> jobOption) => JobOptionsRecord = jobOption.Data;
 
     private async Task SaveJobOption(EditContext context)
     {
@@ -240,9 +223,9 @@ public partial class JobOptions
         await Spinner.ShowAsync();
         RestClient _restClient = new($"{Start.ApiHost}");
         RestRequest _request = new("Admin/SaveJobOptions", Method.Post)
-        {
-            RequestFormat = DataFormat.Json
-        };
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
         _request.AddJsonBody(JobOptionsRecord);
         string _response = await _restClient.PostAsync<string>(_request);
         Code = _response;
@@ -254,27 +237,25 @@ public partial class JobOptions
         await Dialog.HideAsync();
     }
 
-    private void SearchClicked()
-    {
-        if (_valueChanged)
+    /*
+        private void SearchClicked()
         {
-            _valueChanged = false;
-
-            return;
+            if (_valueChanged)
+            {
+                _valueChanged = false;
+    
+                return;
+            }
+    
+            FilterSet(AutoCompleteControl.Value);
         }
+    */
 
-        FilterSet(AutoCompleteControl.Value);
-    }
-
-    private void ToolTipOpen(TooltipEventArgs args)
+    private static void ToolTipOpen(TooltipEventArgs args)
     {
         //_context?.Validate();
         args.Cancel = !args.HasText;
     }
-
-    #endregion
-
-    #region Nested
 
     public class AdminJobOptionAdaptor : DataAdaptor
     {
@@ -289,42 +270,42 @@ public partial class JobOptions
             {
                 await Task.Delay(1);
                 RestClient _restClient = new($"{Start.ApiHost}");
-                RestRequest _request = new("Admin/GetJobOptions", Method.Get)
-                {
-                    RequestFormat = DataFormat.Json
-                };
-                _request.AddQueryParameter("filter", Filter, true);
+                RestRequest _request = new("Admin/GetJobOptions")
+                                       {
+                                           RequestFormat = DataFormat.Json
+                                       };
+                _request.AddQueryParameter("filter", Filter);
                 Dictionary<string, object> _jobOptionsItems = await _restClient.GetAsync<Dictionary<string, object>>(_request);
                 int _count = 0;
                 TaxTermKeyValues = new();
                 if (_jobOptionsItems == null)
                 {
                     return dm.RequiresCounts ? new DataResult
-                    {
-                        Result = _dataSource,
-                        Count = 0
-                    } : _dataSource;
+                                               {
+                                                   Result = _dataSource,
+                                                   Count = 0
+                                               } : _dataSource;
                 }
+
                 _dataSource = General.DeserializeObject<List<JobOption>>(_jobOptionsItems["JobOptions"]);
                 _count = _jobOptionsItems["Count"] as int? ?? 0;
                 TaxTermKeyValues = General.DeserializeObject<List<KeyValues>>(_jobOptionsItems["TaxTerms"]);
 
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = _count
-                } : _dataSource;
-
+                                           {
+                                               Result = _dataSource,
+                                               Count = _count
+                                           } : _dataSource;
             }
             catch
             {
                 if (_dataSource == null)
                 {
                     return dm.RequiresCounts ? new DataResult
-                    {
-                        Result = null,
-                        Count = 1
-                    } : null;
+                                               {
+                                                   Result = null,
+                                                   Count = 1
+                                               } : null;
                 }
 
                 _dataSource.Add(new("", ""));
@@ -332,10 +313,10 @@ public partial class JobOptions
                 _valueChanged = false;
 
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 1
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 1
+                                           } : _dataSource;
             }
         }
 
@@ -346,10 +327,8 @@ public partial class JobOptions
     {
         #region Methods
 
-        public async override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchJobOption", "@JobOption", dm);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchJobOption", "@JobOption", dm);
 
         #endregion
     }
-
-    #endregion
 }

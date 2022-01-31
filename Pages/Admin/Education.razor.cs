@@ -7,8 +7,13 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Education.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
+<<<<<<< HEAD
 // Created On:          01-06-2022 15:41
 // Last Updated On:     01-25-2022 20:49
+=======
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:00
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 // *****************************************/
 
 #endregion
@@ -17,7 +22,33 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Education
 {
+<<<<<<< HEAD
     #region Properties
+=======
+    private static bool _valueChanged = true;
+
+    private readonly Dictionary<string, object> HtmlAttributes = new()
+                                                                 {
+                                                                     {
+                                                                         "maxlength",
+                                                                         "100"
+                                                                     },
+                                                                     {
+                                                                         "minlength",
+                                                                         "1"
+                                                                     },
+                                                                     {
+                                                                         "rows",
+                                                                         "1"
+                                                                     }
+                                                                 };
+
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 
     private AdminList EducationRecord
     {
@@ -43,7 +74,40 @@ public partial class Education
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
+
+    private AdminList EducationRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList EducationRecordClone
+    {
+        get;
+    } = new();
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     private Dictionary<string, object> HtmlAttributes
     {
@@ -78,18 +142,6 @@ public partial class Education
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -104,24 +156,13 @@ public partial class Education
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
 
+<<<<<<< HEAD
     private static void FilterSet(string value)
     {
         Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
@@ -146,6 +187,8 @@ public partial class Education
 
     #region Methods
 
+=======
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -184,6 +227,7 @@ public partial class Education
         ID = -1;
     }
 
+<<<<<<< HEAD
     private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
 
     /*
@@ -192,6 +236,15 @@ public partial class Education
         await Task.Delay(1);
     }
 */
+=======
+    /*
+        private async void Cancel()
+        {
+            await Task.Delay(1);
+            await Dialog.HideAsync();
+        }
+    */
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
@@ -212,7 +265,10 @@ public partial class Education
             EducationRecordClone = EducationRecord.Copy();
         }
 
+<<<<<<< HEAD
         StateHasChanged();
+=======
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
         await AdminDialog.Dialog.ShowAsync();
     }
 
@@ -227,11 +283,34 @@ public partial class Education
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
 
     private async void SaveEducation(EditContext context)
     {
         await Task.Delay(1);
+<<<<<<< HEAD
         string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
         ID = _return.ToInt32();
     }
@@ -239,6 +318,19 @@ public partial class Education
     #endregion
 
     #region Nested
+=======
+        //await Spinner.ShowAsync();
+        string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);
+        ID = _return.ToInt32();
+        //await Task.Delay(1);
+        //await Spinner.HideAsync();
+        //await Dialog.HideAsync();
+    }
+
+    private async Task<string> ToggleStatus(int educationID) => await General.PostToggleAsync("Admin_ToggleEducationStatus", educationID, "ADMIN", false, Grid);
+
+    #region Nested type: AdminEducationAdaptor
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 
     public class AdminEducationAdaptor : DataAdaptor
     {
@@ -248,6 +340,10 @@ public partial class Education
 
         #endregion
     }
+
+    #endregion
+
+    #region Nested type: AdminEducationDropDownAdaptor
 
     public class AdminEducationDropDownAdaptor : DataAdaptor
     {

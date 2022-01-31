@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Experience.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:05
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:04
 // *****************************************/
 
 #endregion
@@ -17,29 +17,29 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Experience
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
+                                                                 {
+                                                                     {
+                                                                         "maxlength",
+                                                                         "100"
+                                                                     },
+                                                                     {
+                                                                         "minlength",
+                                                                         "1"
+                                                                     },
+                                                                     {
+                                                                         "rows",
+                                                                         "1"
+                                                                     }
+                                                                 };
+
+    private AdminListDialog AdminDialog
     {
-        {
-            "maxlength",
-            "100"
-        },
-        {
-            "minlength",
-            "1"
-        },
-        {
-            "rows",
-            "1"
-        }
-    };
-
-    private AdminList ExperienceRecord = new();
-
-    #endregion
-
-    #region Properties
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -47,15 +47,41 @@ public partial class Experience
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
 
-    //private static IHttpClientFactory _clientFactory;
+    private AdminList ExperienceRecord
+    {
+        get;
+        set;
+    } = new();
 
-    //[Inject]
-    //private IHttpClientFactory Client
-    //{
-    //    set => _clientFactory = value;
-    //}
+    private AdminList ExperienceRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -71,18 +97,6 @@ public partial class Experience
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -97,64 +111,11 @@ public partial class Experience
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
-
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -192,16 +153,11 @@ public partial class Experience
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> experience)
-    {
-        ExperienceRecord = experience.Data;
-    }
-
-    private async void Cancel()
-    {
-        await Task.Delay(1);
-        await Dialog.HideAsync();
-    }
+    //private async void Cancel()
+    //{
+    //    await Task.Delay(1);
+    //    await Dialog.HideAsync();
+    //}
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
@@ -214,13 +170,15 @@ public partial class Experience
         if (id == 0)
         {
             Title = "Add";
-            ExperienceRecord = new();
+            ExperienceRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            ExperienceRecordClone = ExperienceRecord.Copy();
         }
-        await Dialog.ShowAsync();
+        StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> experience)
@@ -234,24 +192,42 @@ public partial class Experience
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> experience) => ExperienceRecord = experience.Data;
 
     private async void SaveExperience(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
+        //await Spinner.ShowAsync();
         string _returnValue = await General.SaveAdminListAsync("Admin_SaveExperience", "Experience", false, false, ExperienceRecord, Grid);
         ID = _returnValue.ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
+        //await Task.Delay(1);
+        //await Spinner.HideAsync();
+        //await Dialog.HideAsync();
     }
 
     private async Task<string> ToggleStatus(int experienceID) => await General.PostToggleAsync("Admin_ToggleExperienceStatus", experienceID, "ADMIN", false, Grid);
-
-    #endregion
-
-    #region Nested
 
     public class AdminExperienceAdaptor : DataAdaptor
     {
@@ -270,6 +246,4 @@ public partial class Experience
 
         #endregion
     }
-
-    #endregion
 }

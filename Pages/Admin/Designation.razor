@@ -3,6 +3,7 @@
 
 <Header></Header>
 <div class="gridHolder">
+<<<<<<< HEAD
     <div class="divGridToolBar">
         <div style="display: flex">
             <div style="flex: 1; text-align: left">
@@ -67,4 +68,70 @@
             <b>@Count</b> rows
         </div>
     </div>
+=======
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				&nbsp;
+			</div>
+			<div class="divRightControls">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid" />
+				<SfButton Content="Add Title" CssClass="topToolButton" IconCss="newButton" @onclick="() => EditDesignationAsync(0)" />
+				<AutoCompleteButton ID="autoTitle" PlaceholderText="Select a Title" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(AdminDesignationDropDownAdaptor)" ValueChange="FilterGrid" />
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single "/>
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminDesignationAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList" />@*OnActionBegin="ActionBegin"*@
+		<GridColumns>
+			<GridColumn Field="Text" HeaderText="Designation" Width="50%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span class="point" @onclick="() => EditDesignationAsync(_con.ID)">@_con.Text</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.ID)" HeaderText="Last Updated" IsPrimaryKey="true" Visible="false" Width="0" />
+			<GridColumn Field="@nameof(AdminList.Enabled)" HeaderText="Status" Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<span>@(_con.IsEnabled ? "Active" : "Inactive")</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn Field="@nameof(AdminList.UpdatedDate)" Format="d" HeaderText="Last Updated" Width="15%" />
+			<GridColumn Field="@nameof(AdminList.CreatedDate)" HeaderText="Created" Width="15%" />
+			<GridColumn Width="10%">
+				<Template Context="aCon">
+					@{
+						if (aCon is AdminList _con)
+						{
+							<SfButton Content="" IconCss="editIcon" @onclick="() => EditDesignationAsync(_con.ID)" />
+							<SfButton Content="" IconCss="@(_con.IsEnabled ? "statusOnIcon" : "statusOffIcon")" @onclick="() => ToggleStatus(_con.ID)" />
+						}
+					}
+				</Template>
+			</GridColumn>
+		</GridColumns>
+	</SfGrid>
+	<AdminListDialog HeaderString="@(Title + " Title")" HtmlAttributes="@HtmlAttributes" Model="DesignationRecordClone" Placeholder="Title"
+					 @ref="AdminDialog" Save="SaveDesignation" />
+	<div class="divGridFooter">
+		<div>
+			Items
+			<b>1</b> to
+			<b>@Count</b> of
+			<b>@Count</b> rows
+		</div>
+	</div>
+>>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 </div>

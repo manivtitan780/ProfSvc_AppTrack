@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Eligibility.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:05
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 19:00
 // *****************************************/
 
 #endregion
@@ -17,29 +17,29 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Eligibility
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
+                                                                 {
+                                                                     {
+                                                                         "maxlength",
+                                                                         "100"
+                                                                     },
+                                                                     {
+                                                                         "minlength",
+                                                                         "1"
+                                                                     },
+                                                                     {
+                                                                         "rows",
+                                                                         "1"
+                                                                     }
+                                                                 };
+
+    private AdminListDialog AdminDialog
     {
-        {
-            "maxlength",
-            "100"
-        },
-        {
-            "minlength",
-            "1"
-        },
-        {
-            "rows",
-            "1"
-        }
-    };
-
-    private AdminList EligibilityRecord = new();
-
-    #endregion
-
-    #region Properties
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -47,7 +47,41 @@ public partial class Eligibility
         set;
     }
 
-    private static bool _valueChanged = true;
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
+
+    private AdminList EligibilityRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList EligibilityRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -63,18 +97,6 @@ public partial class Eligibility
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -89,64 +111,16 @@ public partial class Eligibility
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
 
-    private SfDialog Dialog
-    {
-        get;
-        set;
-    }
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
+    //public void ToolTipOpen(TooltipEventArgs args)
+    //{
+    //    args.Cancel = !args.HasText;
+    //}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -184,17 +158,6 @@ public partial class Eligibility
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        EligibilityRecord = designation.Data;
-    }
-
-    private async void Cancel()
-    {
-        await Task.Delay(1);
-        await Dialog.HideAsync();
-    }
-
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
     private async void EditEligibility(int id)
@@ -206,13 +169,16 @@ public partial class Eligibility
         if (id == 0)
         {
             Title = "Add";
-            EligibilityRecord = new();
+            EligibilityRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            EligibilityRecordClone = EligibilityRecord.Copy();
         }
-        await Dialog.ShowAsync();
+
+        StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> eligibility)
@@ -226,24 +192,62 @@ public partial class Eligibility
         Grid.Refresh();
     }
 
+    //private SfDialog Dialog
+    //{
+    //    get;
+    //    set;
+    //}
+
+    //private SfSpinner Spinner
+    //{
+    //    get;
+    //    set;
+    //}
+
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> designation) => EligibilityRecord = designation.Data;
 
     private async void SaveEligibility(EditContext context)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        string _returnValue = await General.SaveAdminListAsync("Admin_SaveEligibility", "Eligibility", false, false, EligibilityRecord, Grid);
+        //await Spinner.ShowAsync();
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveEligibility", "Eligibility", false, false, EligibilityRecordClone, Grid, EligibilityRecord);
         ID = _returnValue.ToInt32();
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
+        //await Task.Delay(1);
+        //await Spinner.HideAsync();
+        //await Dialog.HideAsync();
     }
 
     private async Task<string> ToggleStatus(int eligibilityID) => await General.PostToggleAsync("Admin_ToggleEligibilityStatus", eligibilityID, "ADMIN", false, Grid);
 
-    #endregion
+    //private async void Cancel()
+    //{
+    //    await Task.Delay(1);
+    //    await Dialog.HideAsync();
+    //}
 
-    #region Nested
+    #region Nested type: AdminEligibilityAdaptor
 
     public class AdminEligibilityAdaptor : DataAdaptor
     {
@@ -253,6 +257,10 @@ public partial class Eligibility
 
         #endregion
     }
+
+    #endregion
+
+    #region Nested type: AdminEligibilityDropDownAdaptor
 
     public class AdminEligibilityDropDownAdaptor : DataAdaptor
     {
