@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LeadStatus.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:06
+// Created On:          01-26-2022 19:30
+// Last Updated On:     01-27-2022 21:22
 // *****************************************/
 
 #endregion
@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class LeadStatus
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
                                                                  {
@@ -35,43 +35,13 @@ public partial class LeadStatus
                                                                      }
                                                                  };
 
-    private AdminList LeadStatusRecord = new();
-
-    #endregion
-
-    #region Properties
+    private AdminListDialog AdminDialog
+    {
+        get;
+        set;
+    }
 
     private AutoCompleteButton AutoCompleteControl
-    {
-        get;
-        set;
-    }
-
-    private static bool _valueChanged = true;
-
-    private bool VisibleLeadStatusInfo
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
-    }
-
-    [Inject]
-    private IJSRuntime JsRuntime
-    {
-        get;
-        set;
-    }
-
-    [Inject]
-    private ILocalStorageService LocalStorageBlazored
     {
         get;
         set;
@@ -83,11 +53,49 @@ public partial class LeadStatus
         set;
     } = 24;
 
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
     private int ID
     {
         get;
         set;
     } = -1;
+
+    [Inject]
+    private IJSRuntime JsRuntime
+    {
+        get;
+        set;
+    }
+
+    private AdminList LeadStatusRecord
+    {
+        get;
+        set;
+    } = new();
+
+    private AdminList LeadStatusRecordClone
+    {
+        get;
+        set;
+    } = new();
+
+    [Inject]
+    private ILocalStorageService LocalStorageBlazored
+    {
+        get;
+        set;
+    }
 
     [Inject]
     private NavigationManager NavManager
@@ -103,52 +111,11 @@ public partial class LeadStatus
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
-
-    private static void FilterSet(string value)
-    {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -186,36 +153,27 @@ public partial class LeadStatus
         ID = -1;
     }
 
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        LeadStatusRecord = designation.Data;
-    }
-
-    private void Cancel()
-    {
-        VisibleLeadStatusInfo = false;
-    }
-
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private void EditLeadStatus(int id)
+    private async Task EditLeadStatus(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
-        Grid.SelectRowAsync(_index.Result);
+        await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false, null);
-        Task.Yield();
+        await Task.Delay(1);
         if (id == 0)
         {
             Title = "Add";
-            LeadStatusRecord = new();
+            LeadStatusRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            LeadStatusRecordClone = LeadStatusRecord.Copy();
         }
 
-        VisibleLeadStatusInfo = true;
         StateHasChanged();
+        await AdminDialog.Dialog.ShowAsync();
     }
 
     private void FilterGrid(ChangeEventArgs<string, KeyValues> leadStatus)
@@ -229,27 +187,47 @@ public partial class LeadStatus
         Grid.Refresh();
     }
 
-    private void RefreshGrid() => Grid.Refresh();
-
-    private void SaveLeadStatus()
+    private static void FilterSet(string value)
     {
-        Task.Yield();
-        ID = General.SaveAdminList("Admin_SaveLeadStatus", "LeadStatus", false, false, LeadStatusRecord, Grid, _clientFactory).ToInt32();
-        VisibleLeadStatusInfo = false;
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
     }
 
-    private void ToggleStatusAsync(int leadStatusID) => General.PostToggle("Admin_ToggleLeadStatusStatus", leadStatusID, "ADMIN", false, Grid, _clientFactory);
+    private void RefreshGrid() => Grid.Refresh();
 
-    #endregion
+    private void RowSelected(RowSelectEventArgs<AdminList> designation)
+    {
+        LeadStatusRecord = designation.Data;
+    }
 
-    #region Nested
+    private async Task SaveLeadStatus()
+    {
+        await Task.Delay(1);
+        string _returnValue = await General.SaveAdminListAsync("Admin_SaveLeadStatus", "LeadStatus", false, false, LeadStatusRecordClone, Grid, LeadStatusRecord);
+        ID = _returnValue.ToInt32();
+    }
+
+    private async Task ToggleStatusAsync(int leadStatusID) => await General.PostToggleAsync("Admin_ToggleLeadStatusStatus", leadStatusID, "ADMIN", false, Grid);
 
     public class AdminLeadStatusAdaptor : DataAdaptor
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetRead("Admin_GetLeadStatuses", Filter, _clientFactory, dm, false);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetReadAsync("Admin_GetLeadStatuses", Filter, dm, false);
 
         #endregion
     }
@@ -258,10 +236,8 @@ public partial class LeadStatus
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("Admin_SearchLeadStatus", "@LeadStatus", dm);
+        public override async Task<object> ReadAsync(DataManagerRequest dm, string key = null) => await General.GetAutocompleteAsync("Admin_SearchLeadStatus", "@LeadStatus", dm);
 
         #endregion
     }
-
-    #endregion
 }

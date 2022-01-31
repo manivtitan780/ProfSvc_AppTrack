@@ -1,5 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+      <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+      <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+      <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+      <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    </PropertyGroup>
+
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>disable</Nullable>
@@ -7,19 +25,39 @@
         <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
         <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
         <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <AnalysisLevel>none</AnalysisLevel>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <Deterministic>True</Deterministic>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Deterministic>True</Deterministic>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <Deterministic>True</Deterministic>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <Deterministic>True</Deterministic>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.1" />
 <<<<<<< HEAD
+<<<<<<< HEAD
         <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
 =======
 <<<<<<< HEAD
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
 >>>>>>> parent of 75d4ce4 (stash)
+=======
+        <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
+>>>>>>> parent of 9840861 (Revert "commit")
         <PackageReference Include="RestSharp" Version="107.1.2" />
-<<<<<<< HEAD
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
 =======
         <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
@@ -28,14 +66,21 @@
 =======
         <PackageReference Include="RestSharp" Version="107.1.2" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 85dedff (commit)
 =======
 >>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 >>>>>>> parent of 75d4ce4 (stash)
+=======
+>>>>>>> parent of 9840861 (Revert "commit")
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.47" />
 >>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
     </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="taskkill /f /im scriptcode.exe 2&gt;nul 1&gt;nul&#xD;&#xA;exit 0" />
+    </Target>
 
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="net start w3svc" />

@@ -89,6 +89,7 @@ public partial class Education
     private AdminList EducationRecordClone
     {
         get;
+        set;
     } = new();
 
     private static string Filter
@@ -228,7 +229,6 @@ public partial class Education
     }
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
 <<<<<<< HEAD
     private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
@@ -240,8 +240,6 @@ public partial class Education
     }
 */
 =======
-=======
->>>>>>> parent of 85dedff (commit)
     /*
         private async void Cancel()
         {
@@ -249,13 +247,9 @@ public partial class Education
             await Dialog.HideAsync();
         }
     */
-<<<<<<< HEAD
 >>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 
 >>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
-=======
-
->>>>>>> parent of 85dedff (commit)
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
     private async void EditEducation(int id)
@@ -267,13 +261,13 @@ public partial class Education
         if (id == 0)
         {
             Title = "Add";
-            EducationRecord = new();
+            EducationRecordClone.ClearData();
         }
         else
         {
             Title = "Edit";
+            EducationRecordClone = EducationRecord.Copy();
         }
-<<<<<<< HEAD
 <<<<<<< HEAD
         StateHasChanged();
 =======
@@ -283,9 +277,6 @@ public partial class Education
 =======
 >>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
 >>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
-=======
-
->>>>>>> parent of 85dedff (commit)
         await AdminDialog.Dialog.ShowAsync();
     }
 

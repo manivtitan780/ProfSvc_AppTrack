@@ -5,26 +5,19 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           LabelTextBox.razor.cs
+// File Name:           LabelMaskedTextBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-29-2022 19:31
+// Created On:          01-29-2022 21:31
+// Last Updated On:     01-29-2022 21:43
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public partial class LabelTextBox
+public partial class LabelMaskedTextBox
 {
     private string _value;
-
-    [Parameter]
-    public bool CreateDivTag
-    {
-        get;
-        set;
-    } = true;
 
     [Parameter]
     public bool CreateTooltip
@@ -40,20 +33,6 @@ public partial class LabelTextBox
         set;
     }
 
-    [CascadingParameter]
-    public EditContext EditContext
-    {
-        get;
-        set;
-    } = default!;
-
-    [Parameter]
-    public string FieldName
-    {
-        get;
-        set;
-    }
-
     [Parameter]
     public string ID
     {
@@ -62,25 +41,11 @@ public partial class LabelTextBox
     }
 
     [Parameter]
-    public int MaxLength
+    public string Mask
     {
         get;
         set;
     }
-
-    [Parameter]
-    public int MinLength
-    {
-        get;
-        set;
-    } = 0;
-
-    [Parameter]
-    public bool Multiline
-    {
-        get;
-        set;
-    } = false;
 
     [Parameter]
     public string Placeholder
@@ -94,7 +59,7 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = false;
+    }
 
     [Parameter]
     public Expression<Func<string>> ValidationMessage
@@ -138,44 +103,7 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = "93%";
+    } = "100%";
 
-    private SfTextBox Box
-    {
-        get;
-        set;
-    }
-
-    private FieldIdentifier Field
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Height
-    {
-        get;
-        set;
-    } = "inherit";
-
-    /*protected override void OnInitialized()
-    {
-        if (FieldName.NullOrWhiteSpace())
-        {
-            return;
-        }
-
-        Field = EditContext.Field(FieldName);
-        EditContext.OnValidationStateChanged += HandleValidationStateChanged;
-    }
-
-    private async void HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
-    {
-        await Task.Delay(1);
-        Box?.UpdateParentClass("", "");
-        StateHasChanged();
-    }*/
-
-    private void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
+    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 }

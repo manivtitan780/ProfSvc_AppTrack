@@ -1,21 +1,21 @@
-﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px" @ref="RatingDialog">
+﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" @ref="RatingDialog" Target="#divTarget" Width="600px">
 	<ChildContent>
-        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
-		<DialogPositionData X="right" Y="center"></DialogPositionData>
-		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-		<DialogEvents Closed="CancelRating"></DialogEvents>
+		<SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center"/>
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"/>
+		<DialogEvents Closed="CancelRating"/>
 		<EditForm Model="ModelObject" OnValidSubmit="SaveRatingDialog">
-			<DataAnnotationsValidator></DataAnnotationsValidator>
+			<DataAnnotationsValidator/>
 			<div style="height: 100%">
 				<div class="divContainerTable">
 					<div style="width: 100%">
 						<SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="145px" ID="gridRating" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateRating" Width="99%">
-							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
 							<GridColumns>
-								<GridColumn Field="@nameof(CandidateRating.Date)" HeaderText="Date" Width="20%"></GridColumn>
-								<GridColumn Field="@nameof(CandidateRating.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-								<GridColumn Field="@nameof(CandidateRating.Rating)" HeaderText="Rating" Width="20%"></GridColumn>
-								<GridColumn Field="@nameof(CandidateRating.Comments)" HeaderText="Comments" Width="20%"></GridColumn>
+								<GridColumn Field="@nameof(CandidateRating.Date)" HeaderText="Date" Width="20%"/>
+								<GridColumn Field="@nameof(CandidateRating.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"/>
+								<GridColumn Field="@nameof(CandidateRating.Rating)" HeaderText="Rating" Width="20%"/>
+								<GridColumn Field="@nameof(CandidateRating.Comments)" HeaderText="Comments" Width="20%"/>
 							</GridColumns>
 						</SfGrid>
 					</div>
@@ -24,25 +24,11 @@
 							<label class="labelStatus" for="radzenRating">Rating:</label>
 						</div>
 						<div class="divFlexSmall">
-							<RadzenRating ID="radzenRating" Stars="5" @bind-Value="@ModelObject.Rating" />
+							<RadzenRating @bind-Value="@ModelObject.Rating" ID="radzenRating" Stars="5" />
 						</div>
 					</div>
-					<div class="divFlex">
-						<div class="divFlexLabel">
-							<label class="labelStatus" for="textComments">Comments:</label>
-						</div>
-						<div class="divFlexBig" style="height: 100px">
-							<SfTooltip CloseDelay="0" OnOpen="@ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textComments" Width="100%" WindowCollision="true">
-								<SfTextBox @bind-Value="@(ModelObject.RatingComments)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@HtmlAttributes1" ID="textComments" Multiline="true" Placeholder="Comments">
-								</SfTextBox>
-								<TooltipTemplates>
-									<Content>
-										<ValidationMessage For="@(() => ModelObject.RatingComments)"></ValidationMessage>
-									</Content>
-								</TooltipTemplates>
-							</SfTooltip>
-						</div>
-					</div>
+					<LabelTextBox @bind-Value="@(ModelObject.RatingComments)" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="RatingComments" Height="100px" ID="textComments"
+								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.RatingComments)" />
 				</div>
 			</div>
 			<div class="e-footer-content">

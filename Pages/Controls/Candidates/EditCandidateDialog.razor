@@ -1,421 +1,280 @@
-﻿@using FilterType = Syncfusion.Blazor.DropDowns.FilterType
-<SfDialog @bind-Visible="VisibleCandidate" Header="Edit Candidate" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="832px">
-    <ChildContent>
-        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
-        <DialogPositionData X="right" Y="center"></DialogPositionData>
-        <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-        <DialogEvents Closed="CancelCandidate"></DialogEvents>
-        <EditForm Model="ModelObject" OnValidSubmit="SaveCandidate">
-            <DataAnnotationsValidator></DataAnnotationsValidator>
-            <div style="height: 100%">
-                <div class="divContainerTable">
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textFirst">First Name</label>
-                            <label class="labelStatus" for="textMiddle"> / Middle Initial</label>
-                            <label class="labelStatus" for="textLast"> / Last Name:</label>
-                        </div>
-                        <div class="divFlexSmall" style="display: flex;">
-                            <div style="width: 38%">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textFirst" Width="100%" WindowCollision="true">
-                                    <SfTextBox @bind-Value="@(ModelObject.FirstName)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textFirst" Multiline="false" Placeholder="First Name">
-                                    </SfTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.FirstName)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div style="margin-left: 3%; width: 18%;">
-                                <SfTextBox @bind-Value="@(ModelObject.MiddleName)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textMiddle" Multiline="false" Placeholder="Middle Initial">
-                                </SfTextBox>
-                            </div>
-                            <div style="margin-left: 3%; width: 38%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textLast" Width="100%" WindowCollision="true">
-                                    <SfTextBox @bind-Value="@(ModelObject.LastName)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textLast" Multiline="false" Placeholder="Last Name">
-                                    </SfTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.LastName)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex" style="height: 100px">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textAddress1">Address:</label>
-                        </div>
-                        <div class="divFlexSmall" style="height: 68px;">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textAddress1" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.Address1)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textAddress1" Multiline="false" Placeholder="Address">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.Address1)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                            <div style="margin-top: 4px;">
-                                <SfTextBox @bind-Value="@(ModelObject.Address2)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textAddress2" Multiline="false" Placeholder="Address">
-                                </SfTextBox>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 35%">
-                                <label class="labelStatus" for="textCity">City:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
-                                <label class="labelStatus" for="dropState">State:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 3%; width: 24%;">
-                                <label class="labelStatus" for="textZip">Zip Code:</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 35%">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textCity" Width="100%" WindowCollision="true">
-                                    <SfTextBox @bind-Value="@(ModelObject.City)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes" ID="textCity" Multiline="false" Placeholder="City">
-                                    </SfTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.City)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-                                <SfDropDownList @bind-Value="@ModelObject.StateID" DataSource="States" ID="dropState" TItem="IntValues" TValue="int">
-                                    <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="StateIDChanged"></DropDownListEvents>
-                                    <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textZip" Width="100%" WindowCollision="true">
-                                    <SfMaskedTextBox @bind-Value="@ModelObject.ZipCode" FloatLabelType="FloatLabelType.Never" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"></SfMaskedTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.ZipCode)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textEmail">Email Address:</label>
-                        </div>
-                        <div class="divFlexSmall">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textEmail" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.Email)" FloatLabelType="FloatLabelType.Never" ID="textEmail" Multiline="false" Placeholder="Email Address">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.Email)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 48%">
-                                <label class="labelStatus" for="textPhone1">Cell Phone:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
-                                <label class="labelStatus" for="textPhone2">Alternate Phone:</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 48%">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textPhone1" Width="100%" WindowCollision="true">
-                                    <SfMaskedTextBox @bind-Value="@ModelObject.Phone1" FloatLabelType="FloatLabelType.Never" ID="textPhone1" Mask="(000) 000-0000" Placeholder="Cell Phone"></SfMaskedTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.Phone1)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textPhone2" Width="100%" WindowCollision="true">
-                                    <SfMaskedTextBox @bind-Value="@ModelObject.Phone2" FloatLabelType="FloatLabelType.Never" ID="textPhone2" Mask="(000) 000-0000" Placeholder="Alternate Phone"></SfMaskedTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.Phone2)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textTitle">Title:</label>
-                        </div>
-                        <div class="divFlexSmall">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.Title)" FloatLabelType="FloatLabelType.Never" ID="textTitle" Multiline="false" Placeholder="Title">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.Title)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textKeywords">Primary Skills / Keywords:</label>
-                        </div>
-                        <div class="divFlexBig" style="height: 100px">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textKeywords" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.Keywords)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes1" ID="textKeywords" Multiline="true" Placeholder="Primary Skills / Keywords">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.Keywords)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textSummary">Summary:</label>
-                        </div>
-                        <div class="divFlexBig" style="height: 100px">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textSummary" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.Summary)" FloatLabelType="FloatLabelType.Never" HtmlAttributes="HtmlAttributes1" ID="textSummary" Multiline="true" Placeholder="Summary">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.Summary)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 48%">
-                                <label class="labelStatus" for="numericHourlyLow">Hourly Rate Min. / Max. ($):</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
-                                <label class="labelStatus" for="numericSalaryLow">Salary Min. / Max. ($):</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 23%">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#numericHourlyLow" Width="100%" WindowCollision="true">
-                                    <SfNumericTextBox @bind-Value="@(ModelObject.HourlyRate)" Currency="USD" Decimals="2" Format="c2" ID="numericHourlyLow" Max="2000" Min="0" Placeholder="Hourly Rate (Min.)" ShowSpinButton="false" TValue="decimal" ValidateDecimalOnType="true">
-                                    </SfNumericTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.HourlyRate)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#numericHourlyHigh" Width="100%" WindowCollision="true">
-                                    <SfNumericTextBox @bind-Value="@(ModelObject.HourlyRateHigh)" Currency="USD" Decimals="2" Format="c2" ID="numericHourlyHigh" Max="2000" Min="0" ShowSpinButton="false" TValue="decimal" ValidateDecimalOnType="true">
-                                    </SfNumericTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.HourlyRateHigh)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 4%; width: 23%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#numericSalaryLow" Width="100%" WindowCollision="true">
-                                    <SfNumericTextBox @bind-Value="@(ModelObject.SalaryLow)" Currency="USD" Decimals="2" Format="c2" ID="numericSalaryLow" Max="1000000" Min="0" Placeholder="Salary (Min.)" ShowSpinButton="false" TValue="decimal" ValidateDecimalOnType="true">
-                                    </SfNumericTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.SalaryLow)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
-                                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#numericSalaryHigh" Width="100%" WindowCollision="true">
-                                    <SfNumericTextBox @bind-Value="@(ModelObject.SalaryHigh)" Currency="USD" Decimals="2" Format="c2" ID="numericSalaryHigh" Max="1000000" Min="0" Placeholder="Salary (Max.)" ShowSpinButton="false" TValue="decimal" ValidateDecimalOnType="true">
-                                    </SfNumericTextBox>
-                                    <TooltipTemplates>
-                                        <Content>
-                                            <ValidationMessage For="@(() => ModelObject.SalaryHigh)"></ValidationMessage>
-                                        </Content>
-                                    </TooltipTemplates>
-                                </SfTooltip>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 32%">
-                                <label class="labelStatus" for="dropEligibility">Eligibility:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 2%; width: 32%;">
-                                <label class="labelStatus" for="dropExperience">Experience:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 2%; width: 32%;">
-                                <label class="labelStatus" for="dropCommunication">Communication:</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 32%">
-                                <SfDropDownList @bind-Value="@ModelObject.EligibilityID" DataSource="@Eligibility" ID="dropEligibility" TItem="IntValues" TValue="int">
-                                    <DropDownListEvents TItem="IntValues" TValue="int"></DropDownListEvents>
-                                    <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
-                                <SfDropDownList @bind-Value="@ModelObject.ExperienceID" DataSource="@Experience" ID="dropExperience" TItem="IntValues" TValue="int">
-                                    <DropDownListEvents TItem="IntValues" TValue="int"></DropDownListEvents>
-                                    <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
-                                <SfDropDownList @bind-Value="@ModelObject.Communication" DataSource="@Communication" ID="dropCommunication" TItem="KeyValues" TValue="string">
-                                    <DropDownListEvents TItem="KeyValues" TValue="string"></DropDownListEvents>
-                                    <DropDownListFieldSettings Text="Value" Value="Key"></DropDownListFieldSettings>
-                                </SfDropDownList>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex" style="height: 108px">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="multiTaxTerms">Tax Terms:</label>
-                        </div>
-                        <div class="divFlexSmall" id="divMultiTaxTerm">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#multiTaxTerms" Width="100%" WindowCollision="true">
-                                <SfMultiSelect AllowFiltering="true" @bind-Value="@(ModelObject.TaxTerm)" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" FilterType="FilterType.Contains" ID="multiTaxTerms" Mode="VisualMode.Box" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string">
-                                    <MultiSelectFieldSettings Text="Value" Value="Key"></MultiSelectFieldSettings>
-                                    <MultiSelectEvents TItem="KeyValues" TValue="string"></MultiSelectEvents>
-                                </SfMultiSelect>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.TaxTerm)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex" style="height: 146px">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="multiJobOptions">Job Options:</label>
-                        </div>
-                        <div class="divFlexSmall" id="divMultiJobOption">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#multiJobOptions" Width="100%" WindowCollision="true">
-                                <SfMultiSelect AllowFiltering="true" @bind-Value="@(ModelObject.JobOptions)" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" FilterType="FilterType.Contains" ID="multiJobOptions" Mode="VisualMode.Box" Placeholder="Select Job Option(s)" TItem="KeyValues" TValue="string">
-                                    <MultiSelectFieldSettings Text="Value" Value="Key"></MultiSelectFieldSettings>
-                                </SfMultiSelect>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.JobOptions)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 48%">
-                                <label class="labelStatus" for="textLinkedIn">LinkedIn:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
-                                <label class="labelStatus" for="textFacebook">Facebook:</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 48%">
-                                <SfTextBox @bind-Value="@(ModelObject.LinkedIn)" FloatLabelType="FloatLabelType.Never" ID="textLinkedIn" Multiline="false" Placeholder="LinkedIn">
-                                </SfTextBox>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
-                                <SfTextBox @bind-Value="@(ModelObject.Facebook)" FloatLabelType="FloatLabelType.Never" ID="textFacebook" Multiline="false" Placeholder="Facebook">
-                                </SfTextBox>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexLabel" style="width: 48%">
-                                <label class="labelStatus" for="textTwitter">Twitter:</label>
-                            </div>
-                            <div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
-                                <label class="labelStatus" for="textGoogle">Google:</label>
-                            </div>
-                        </div>
-                        <div style="display: flex; width: 100%">
-                            <div class="divFlexSmall" style="width: 48%">
-                                <SfTextBox @bind-Value="@(ModelObject.Twitter)" FloatLabelType="FloatLabelType.Never" ID="textTwitter" Multiline="false" Placeholder="Twitter">
-                                </SfTextBox>
-                            </div>
-                            <div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
-                                <SfTextBox @bind-Value="@(ModelObject.GooglePlus)" FloatLabelType="FloatLabelType.Never" ID="textGoogle" Multiline="false" Placeholder="Google">
-                                </SfTextBox>
-                            </div>
-                        </div>
-                    </div>
-                    <LabelSwitch @bind-BindValue="@(ModelObject.Relocate)" ID="checkedRelocate" OffLabel="NO" OnLabel="YES" Placeholder="Willing to Relocate?"></LabelSwitch>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textRelocationNotes">Relocation Notes:</label>
-                        </div>
-                        <div class="divFlexSmall">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textRelocationNotes" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.RelocationNotes)" FloatLabelType="FloatLabelType.Never" ID="textRelocationNotes" Multiline="false" Placeholder="Relocation Notes">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.RelocationNotes)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <LabelSwitch @bind-BindValue="@(ModelObject.Background)" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?"></LabelSwitch>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="textSecurityNotes">Security Notes:</label>
-                        </div>
-                        <div class="divFlexSmall">
-                            <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textSecurityNotes" Width="100%" WindowCollision="true">
-                                <SfTextBox @bind-Value="@(ModelObject.SecurityNotes)" FloatLabelType="FloatLabelType.Never" ID="textSecurityNotes" Multiline="false" Placeholder="Security Notes">
-                                </SfTextBox>
-                                <TooltipTemplates>
-                                    <Content>
-                                        <ValidationMessage For="@(() => ModelObject.SecurityNotes)"></ValidationMessage>
-                                    </Content>
-                                </TooltipTemplates>
-                            </SfTooltip>
-                        </div>
-                    </div>
-                    <div class="divFlex">
-                        <div class="divFlexLabel">
-                            <label class="labelStatus" for="richTextResume">Text Resume:</label>
-                        </div>
-                        <div class="divFlexBig">
-                            <SfRichTextEditor @bind-Value="ModelObject.TextResume" Height="400px" ID="richTextResume">
-                                <RichTextEditorToolbarSettings Items="Tools" />
-                            </SfRichTextEditor>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="e-footer-content">
-                <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-                <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="CancelCandidate" type="button">Cancel</SfButton>
-            </div>
-        </EditForm>
-    </ChildContent>
+﻿<SfDialog @bind-Visible="VisibleCandidate" Header="Edit Candidate" Height="98vh" IsModal="true" MinHeight="98vh" Target="#divTarget" Width="832px">
+	<ChildContent>
+		<SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<DialogEvents Closed="CancelCandidate" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveCandidate">
+			<DataAnnotationsValidator />
+			<div style="height: 100%">
+				<div class="divContainerTable">
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textFirst">First Name</label>
+							<label class="labelStatus" for="textMiddle"> / Middle Initial</label>
+							<label class="labelStatus" for="textLast"> / Last Name:</label>
+						</div>
+						<div class="divFlexSmall" style="display: flex;">
+							<div style="width: 38%">
+								<LabelTextBox @bind-Value="@(ModelObject.FirstName)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="FirstName" ID="textFirst" MaxLength="50"
+											  MinLength="1" Placeholder="First Name" ValidationMessage="@(() => ModelObject.FirstName)" Width="100%" />
+							</div>
+							<div style="margin-left: 3%; width: 18%;">
+								<LabelTextBox @bind-Value="@(ModelObject.MiddleName)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textMiddle" MaxLength="10"
+											  Placeholder="Middle Name" Width="100%" />
+							</div>
+							<div style="margin-left: 3%; width: 38%;">
+								<LabelTextBox @bind-Value="@(ModelObject.LastName)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="LastName" ID="textLast" MaxLength="50"
+											  MinLength="1" Placeholder="Last Name" ValidationMessage="@(() => ModelObject.LastName)" Width="100%" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex" style="height: 100px">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textAddress1">Address:</label>
+						</div>
+						<div class="divFlexSmall" style="height: 68px;">
+							<LabelTextBox @bind-Value="@(ModelObject.Address1)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="Address1" ID="textAddress1" MaxLength="255"
+										  MinLength="1" Placeholder="Address" ValidationMessage="@(() => ModelObject.Address1)" Width="100%" />
+							<div style="margin-top: 4px;">
+								<LabelTextBox @bind-Value="@(ModelObject.Address2)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textAddress2" MaxLength="255"
+											  Placeholder="Address" Width="100%" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 35%">
+								<label class="labelStatus" for="textCity">City:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
+								<label class="labelStatus" for="dropState">State:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 24%;">
+								<label class="labelStatus" for="textZip">Zip Code:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 35%">
+								<LabelTextBox @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="City" ID="textCity" MaxLength="50"
+											  MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<LabelDropDown @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" ID="dropState" TItem="IntValues" TValue="int" 
+											   TextField="Value" ValueField="Key" DropDownValueChange="StateIDChanged" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
+								<LabelMaskedTextBox @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
+													ValidationMessage="@(() => ModelObject.ZipCode)" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textEmail">Email Address:</label>
+						</div>
+						<div class="divFlexSmall">
+							<LabelTextBox @bind-Value="@(ModelObject.Email)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="Email" ID="textEmail" MaxLength="255"
+										  MinLength="1" Placeholder="Email Address" ValidationMessage="@(() => ModelObject.Email)" Width="100%" />
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 48%">
+								<label class="labelStatus" for="textPhone1">Cell Phone:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
+								<label class="labelStatus" for="textPhone2">Alternate Phone:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 48%">
+								<LabelMaskedTextBox @bind-Value="@(ModelObject.Phone1)" @bind-Value:event="ValueChanged" ID="textPhone1" Mask="(000) 000-0000" Placeholder="Cell Phone"
+													ValidationMessage="@(() => ModelObject.Phone1)" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
+								<LabelMaskedTextBox @bind-Value="@(ModelObject.Phone2)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textPhone2" Mask="(000) 000-0000" Placeholder="Alternate Phone" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textTitle">Title:</label>
+						</div>
+						<div class="divFlexSmall">
+							<LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="Title" ID="textTitle" MaxLength="200"
+										  MinLength="1" Placeholder="Title" ValidationMessage="@(() => ModelObject.Title)" Width="100%" />
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textKeywords">Primary Skills / Keywords:</label>
+						</div>
+						<div class="divFlexBig" style="height: 100px">
+							<LabelTextBox @bind-Value="@(ModelObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="Keywords" ID="textKeywords" MaxLength="200"
+										  MinLength="1" Multiline="true" Placeholder="Keywords" ValidationMessage="@(() => ModelObject.Keywords)" Width="100%" />
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textSummary">Summary:</label>
+						</div>
+						<div class="divFlexBig" style="height: 100px">
+							<LabelTextBox @bind-Value="@(ModelObject.Summary)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textSummary" MaxLength="32767"
+										  Multiline="true" Placeholder="Summary" Width="100%" />
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 48%">
+								<label class="labelStatus" for="numericHourlyLow">Hourly Rate Min. / Max. ($):</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
+								<label class="labelStatus" for="numericSalaryLow">Salary Min. / Max. ($):</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 23%">
+								<LabelNumeric TValue="decimal" @bind-Value="@(ModelObject.HourlyRate)" @bind-Value:event="ValueChanged" CreateTooltip="true" Currency="USD" Decimals="2" Format="c2" 
+											  ID="numericHourlyLow" Max="2000" Min="0" Placeholder="Hourly Rate (Min.)" ValidationMessage="@(() => ModelObject.HourlyRate)"/>
+							</div>
+							<div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
+								<LabelNumeric TValue="decimal" @bind-Value="@(ModelObject.HourlyRateHigh)" @bind-Value:event="ValueChanged" CreateTooltip="true" Currency="USD" Decimals="2" Format="c2" 
+											  ID="numericHourlyHigh" Max="2000" Min="0" Placeholder="Hourly Rate (Max.)" ValidationMessage="@(() => ModelObject.HourlyRateHigh)"/>
+							</div>
+							<div class="divFlexSmall" style="margin-left: 4%; width: 23%;">
+								<LabelNumeric TValue="decimal" @bind-Value="@(ModelObject.SalaryLow)" @bind-Value:event="ValueChanged" CreateTooltip="true" Currency="USD" Decimals="2" Format="c2" 
+											  ID="numericSalaryLow" Max="1000000" Min="0" Placeholder="Salary (Min.)" ValidationMessage="@(() => ModelObject.SalaryLow)"/>
+							</div>
+							<div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
+								<LabelNumeric TValue="decimal" @bind-Value="@(ModelObject.SalaryHigh)" @bind-Value:event="ValueChanged" CreateTooltip="true" Currency="USD" Decimals="2" Format="c2" 
+											  ID="numericSalaryHigh" Max="1000000" Min="0" Placeholder="Salary (Max.)" ValidationMessage="@(() => ModelObject.SalaryHigh)"/>
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 32%">
+								<label class="labelStatus" for="dropEligibility">Eligibility:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 2%; width: 32%;">
+								<label class="labelStatus" for="dropExperience">Experience:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 2%; width: 32%;">
+								<label class="labelStatus" for="dropCommunication">Communication:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 32%">
+								<LabelDropDown @bind-Value="@ModelObject.EligibilityID" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TItem="IntValues" TValue="int"
+											   TextField="Value" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
+								<LabelDropDown @bind-Value="@ModelObject.ExperienceID" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TItem="IntValues" TValue="int"
+											   TextField="Value" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
+								<LabelDropDown @bind-Value="@ModelObject.Communication" @bind-Value:event="ValueChanged" DataSource="@Communication" ID="dropCommunication" TItem="KeyValues" TValue="string"
+											   TextField="Value" ValueField="Key" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex" style="height: 108px">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="multiTaxTerms">Tax Terms:</label>
+						</div>
+						<div class="divFlexSmall" id="divMultiTaxTerm">
+							<LabelMultiSelect @bind-Value="@(ModelObject.TaxTerm)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" ID="multiTaxTerms"
+											  KeyField="Key" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string" ValueField="Value">
+							</LabelMultiSelect>
+						</div>
+					</div>
+					<div class="divFlex" style="height: 146px">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="multiJobOptions">Job Options:</label>
+						</div>
+						<div class="divFlexSmall" id="divMultiJobOption">
+							<LabelMultiSelect @bind-Value="@(ModelObject.JobOptions)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" ID="multiJobOptions"
+											  KeyField="Key" Placeholder="Select Job Option(s)" TItem="KeyValues" TValue="string" ValueField="Value">
+							</LabelMultiSelect>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 48%">
+								<label class="labelStatus" for="textLinkedIn">LinkedIn:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
+								<label class="labelStatus" for="textFacebook">Facebook:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 48%">
+								<LabelTextBox @bind-Value="@(ModelObject.LinkedIn)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textLinkedIn" MaxLength="255"
+											  Placeholder="LinkedIn Profile" Width="100%" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
+								<LabelTextBox @bind-Value="@(ModelObject.Facebook)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textFacebook" MaxLength="255"
+											  Placeholder="Facebook Profile" Width="100%" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 48%">
+								<label class="labelStatus" for="textTwitter">Twitter:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
+								<label class="labelStatus" for="textGoogle">Google:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 48%">
+								<LabelTextBox @bind-Value="@(ModelObject.Twitter)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textTwitter" MaxLength="255"
+											  Placeholder="Twitter Profile" Width="100%" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
+								<LabelTextBox @bind-Value="@(ModelObject.GooglePlus)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textGoogle" MaxLength="255"
+											  Placeholder="Google Plus Profile" Width="100%" />
+							</div>
+						</div>
+					</div>
+					<LabelSwitch @bind-BindValue="@(ModelObject.Relocate)" ID="checkedRelocate" OffLabel="NO" OnLabel="YES" Placeholder="Willing to Relocate?"></LabelSwitch>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textRelocationNotes">Relocation Notes:</label>
+						</div>
+						<div class="divFlexSmall">
+							<LabelTextBox @bind-Value="@(ModelObject.RelocationNotes)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textRelocationNotes" MaxLength="200"
+										  Placeholder="Relocation Notes" Readonly="@ModelObject.Relocate" Width="100%" />
+						</div>
+					</div>
+					<LabelSwitch @bind-BindValue="@(ModelObject.Background)" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?"></LabelSwitch>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="textSecurityNotes">Security Notes:</label>
+						</div>
+						<div class="divFlexSmall">
+							<LabelTextBox @bind-Value="@(ModelObject.SecurityNotes)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textSecurityNotes" MaxLength="200"
+										  Placeholder="Security Clearance Notes" Readonly="@ModelObject.Background" Width="100%" />
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="richTextResume">Text Resume:</label>
+						</div>
+						<div class="divFlexBig">
+							<SfRichTextEditor @bind-Value="ModelObject.TextResume" Height="400px" ID="richTextResume">
+								<RichTextEditorToolbarSettings Items="Tools" />
+							</SfRichTextEditor>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="e-footer-content">
+				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
+				<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="CancelCandidate" type="button">Cancel</SfButton>
+			</div>
+		</EditForm>
+	</ChildContent>
 </SfDialog>

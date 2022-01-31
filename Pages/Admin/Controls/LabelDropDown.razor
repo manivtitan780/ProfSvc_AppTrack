@@ -1,0 +1,7 @@
+﻿@typeparam TValue
+@typeparam TItem
+
+<SfDropDownList Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue">
+	<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange"/>
+	<DropDownListFieldSettings Text="@TextField" Value="@ValueField"/>
+</SfDropDownList>
