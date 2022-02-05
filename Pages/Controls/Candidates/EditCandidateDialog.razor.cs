@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           EditCandidateDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-04-2022 15:31
-// Last Updated On:     01-04-2022 16:10
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-04-2022 21:13
 // *****************************************/
 
 #endregion
@@ -17,58 +17,6 @@ namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
 public partial class EditCandidateDialog
 {
-    #region Fields
-
-    private bool _value;
-
-    #endregion
-
-    #region Properties
-
-    [Parameter]
-    public bool VisibleCandidate
-    {
-        get => _value;
-        set
-        {
-            if (_value == value)
-            {
-                return;
-            }
-
-            _value = value;
-            VisibleCandidateChanged.InvokeAsync(value);
-        }
-    }
-
-    [Parameter]
-    public CandidateDetails ModelObject
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public bool SpinnerVisible
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public Dictionary<string, object> HtmlAttributes
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public Dictionary<string, object> HtmlAttributes1
-    {
-        get;
-        set;
-    }
-
     [Parameter]
     public EventCallback CancelCandidate
     {
@@ -77,28 +25,13 @@ public partial class EditCandidateDialog
     }
 
     [Parameter]
-    public EventCallback<bool> VisibleCandidateChanged
+    public IEnumerable<KeyValues> Communication
     {
         get;
         set;
     }
 
-    [Parameter]
-    public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public EventCallback<EditContext> SaveCandidate
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public EventCallback<TooltipEventArgs> ToolTipOpen
+    public SfDialog Dialog
     {
         get;
         set;
@@ -119,14 +52,14 @@ public partial class EditCandidateDialog
     }
 
     [Parameter]
-    public IEnumerable<KeyValues> Communication
+    public Dictionary<string, object> HtmlAttributes
     {
         get;
         set;
     }
 
     [Parameter]
-    public IEnumerable<KeyValues> TaxTerms
+    public Dictionary<string, object> HtmlAttributes1
     {
         get;
         set;
@@ -140,7 +73,35 @@ public partial class EditCandidateDialog
     }
 
     [Parameter]
+    public CandidateDetails ModelObject
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<EditContext> SaveCandidate
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
     public List<IntValues> States
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public IEnumerable<KeyValues> TaxTerms
     {
         get;
         set;
@@ -153,5 +114,27 @@ public partial class EditCandidateDialog
         set;
     }
 
-    #endregion
+    private SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
+    private async Task CancelDialog(MouseEventArgs args)
+    {
+        await Task.Delay(1);
+        await CancelCandidate.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+    }
+
+    private async Task SaveCandidateDialog(EditContext editContext)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveCandidate.InvokeAsync(editContext);
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+    }
 }

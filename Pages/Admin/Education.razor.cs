@@ -140,7 +140,7 @@ public partial class Education
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> skillAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> skillAction)
     {
         if (skillAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -154,13 +154,13 @@ public partial class Education
     }
 
     /*
-    private async void Cancel()
+    private async Task Cancel()
     {
         await Task.Delay(1);
     }
 */
     /*
-        private async void Cancel()
+        private async Task Cancel()
         {
             await Task.Delay(1);
             await Dialog.HideAsync();
@@ -169,11 +169,11 @@ public partial class Education
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
-    private async void EditEducation(int id)
+    private async Task EditEducation(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);
         if (id == 0)
         {
@@ -225,7 +225,7 @@ public partial class Education
 
     private void RowSelected(RowSelectEventArgs<AdminList> education) => EducationRecord = education.Data;
 
-    private async void SaveEducation(EditContext context)
+    private async Task SaveEducation(EditContext context)
     {
         await Task.Delay(1);
         string _return = await General.SaveAdminListAsync("Admin_SaveEducation", "Education", false, false, EducationRecordClone, Grid, EducationRecord);

@@ -1,21 +1,20 @@
-﻿<SfDialog @bind-Visible="@VisibleRatingCandidate" Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" @ref="RatingDialog" Target="#divTarget" Width="600px">
+﻿<SfDialog Header="Edit Rating" Height="600px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Visible="false" Width="600px">
 	<ChildContent>
-		<SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
-		<DialogPositionData X="right" Y="center"/>
-		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"/>
-		<DialogEvents Closed="CancelRating"/>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
 		<EditForm Model="ModelObject" OnValidSubmit="SaveRatingDialog">
-			<DataAnnotationsValidator/>
+			<DataAnnotationsValidator />
 			<div style="height: 100%">
 				<div class="divContainerTable">
 					<div style="width: 100%">
 						<SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="145px" ID="gridRating" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateRating" Width="99%">
-							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
+							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single" />
 							<GridColumns>
-								<GridColumn Field="@nameof(CandidateRating.Date)" HeaderText="Date" Width="20%"/>
-								<GridColumn Field="@nameof(CandidateRating.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"/>
-								<GridColumn Field="@nameof(CandidateRating.Rating)" HeaderText="Rating" Width="20%"/>
-								<GridColumn Field="@nameof(CandidateRating.Comments)" HeaderText="Comments" Width="20%"/>
+								<GridColumn Field="@nameof(CandidateRating.Date)" HeaderText="Date" Width="20%" />
+								<GridColumn Field="@nameof(CandidateRating.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0" />
+								<GridColumn Field="@nameof(CandidateRating.Rating)" HeaderText="Rating" Width="20%" />	
+								<GridColumn Field="@nameof(CandidateRating.Comments)" HeaderText="Comments" Width="20%" />
 							</GridColumns>
 						</SfGrid>
 					</div>
@@ -31,10 +30,7 @@
 								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.RatingComments)" />
 				</div>
 			</div>
-			<div class="e-footer-content">
-				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-				<SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="CancelRating" type="button">Cancel</SfButton>
-			</div>
+			<DialogFooter CancelMethod="CancelRatingDialog" />
 		</EditForm>
 	</ChildContent>
 </SfDialog>

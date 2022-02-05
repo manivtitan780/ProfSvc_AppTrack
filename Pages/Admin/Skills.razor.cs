@@ -173,7 +173,7 @@ public partial class Skills
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> skillAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> skillAction)
     {
         if (skillAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -202,7 +202,7 @@ public partial class Skills
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         Task.Yield();
         if (id == 0)
         {

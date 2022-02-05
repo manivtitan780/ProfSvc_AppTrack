@@ -47,7 +47,7 @@ global using Newtonsoft.Json.Linq;
 
 global using ProfSvc_AppTrack;
 global using ProfSvc_AppTrack.Code;
-global using ProfSvc_AppTrack.Data;
+global using ProfSvc_Classes;
 global using ProfSvc_AppTrack.Pages;
 global using ProfSvc_AppTrack.Pages.Admin.Controls;
 global using ProfSvc_AppTrack.Pages.Validation;

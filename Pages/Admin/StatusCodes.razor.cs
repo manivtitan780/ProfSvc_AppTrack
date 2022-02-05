@@ -167,7 +167,7 @@ public partial class StatusCodes
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<StatusCode> taxTermAction)
+    private async Task ActionComplete(ActionEventArgs<StatusCode> taxTermAction)
     {
         if (taxTermAction.RequestType != Action.Refresh || ID <= 0)
         {

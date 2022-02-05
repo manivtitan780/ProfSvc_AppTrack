@@ -160,7 +160,7 @@ public partial class TaxTerm
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> taxTermAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> taxTermAction)
     {
         if (taxTermAction.RequestType != Action.Refresh || Code.NullOrWhiteSpace())
         {
@@ -188,14 +188,14 @@ public partial class TaxTerm
         {
             Title = "Add";
             IsAdd = true;
-            General.SetAdminListDefault("Tax Term Code", "Admin_CheckTaxTermCode", true, true, _clientFactory);
+            General.SetAdminListDefault("Tax Term Code", "Admin_CheckTaxTermCode", true, true);
             TaxTermRecord = new();
         }
         else
         {
             Title = "Edit";
             IsAdd = false;
-            General.SetAdminListDefault("", "", false, true, null);
+            General.SetAdminListDefault("", "", false, true);
         }
 
         VisibleTaxTermInfo = true;

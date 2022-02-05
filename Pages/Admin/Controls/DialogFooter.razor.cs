@@ -1,43 +1,40 @@
-#region Header
+﻿#region Header
 
 // /*****************************************
 // Copyright:           Titan-Techs.
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           WeatherForecast.cs
+// File Name:           DialogFooter.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          12-16-2021 19:27
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-31-2022 21:25
+// Last Updated On:     01-31-2022 21:27
 // *****************************************/
 
 #endregion
 
-namespace ProfSvc_AppTrack.Data;
+namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public class WeatherForecast
+public partial class DialogFooter
 {
-    #region Properties
+    [Parameter]
+    public string Cancel
+    {
+        get;
+        set;
+    } = "Cancel";
 
-    public DateTime Date
+    [Parameter]
+    public EventCallback<MouseEventArgs> CancelMethod
     {
         get;
         set;
     }
 
-    public int TemperatureC
+    [Parameter]
+    public string Save
     {
         get;
         set;
-    }
-
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-    public string Summary
-    {
-        get;
-        set;
-    }
-
-    #endregion
+    } = "Save";
 }

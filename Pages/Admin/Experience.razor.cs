@@ -140,7 +140,7 @@ public partial class Experience
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> experienceAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> experienceAction)
     {
         if (experienceAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -153,7 +153,7 @@ public partial class Experience
         ID = -1;
     }
 
-    //private async void Cancel()
+    //private async Task Cancel()
     //{
     //    await Task.Delay(1);
     //    await Dialog.HideAsync();
@@ -161,12 +161,12 @@ public partial class Experience
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
-    private async void EditExperience(int id)
+    private async Task EditExperience(int id)
     {
         await Task.Delay(1);
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         if (id == 0)
         {
             Title = "Add";
@@ -216,7 +216,7 @@ public partial class Experience
 
     private void RowSelected(RowSelectEventArgs<AdminList> experience) => ExperienceRecord = experience.Data;
 
-    private async void SaveExperience(EditContext context)
+    private async Task SaveExperience(EditContext context)
     {
         await Task.Delay(1);
         //await Spinner.ShowAsync();

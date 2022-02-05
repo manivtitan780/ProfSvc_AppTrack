@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelNumeric.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-30-2022 20:50
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-01-2022 16:21
 // *****************************************/
 
 #endregion
@@ -20,11 +20,18 @@ public partial class LabelNumeric<TValue>
     private TValue _value;
 
     [Parameter]
+    public bool CreateDivTag
+    {
+        get;
+        set;
+    } = true;
+
+    [Parameter]
     public bool CreateTooltip
     {
         get;
         set;
-    }
+    } = true;
 
     [Parameter]
     public string CssClass
@@ -38,21 +45,21 @@ public partial class LabelNumeric<TValue>
     {
         get;
         set;
-    }
+    } = "USD";
 
     [Parameter]
     public int? Decimals
     {
         get;
         set;
-    }
+    } = 0;
 
     [Parameter]
     public string Format
     {
         get;
         set;
-    }
+    } = "n";
 
     [Parameter]
     public string ID

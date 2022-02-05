@@ -140,7 +140,7 @@ public partial class LeadStatus
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> leadStatusAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> leadStatusAction)
     {
         if (leadStatusAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -159,7 +159,7 @@ public partial class LeadStatus
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);
         if (id == 0)
         {

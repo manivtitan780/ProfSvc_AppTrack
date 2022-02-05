@@ -140,7 +140,7 @@ public partial class LeadSource
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> sourceAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> sourceAction)
     {
         if (sourceAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -155,11 +155,11 @@ public partial class LeadSource
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private async void EditSource(int id)
+    private async Task EditSource(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);
         if (id == 0)
         {

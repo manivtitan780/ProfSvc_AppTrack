@@ -141,7 +141,7 @@ public partial class Designation
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> designationAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> designationAction)
     {
         if (designationAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -160,7 +160,7 @@ public partial class Designation
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);
         if (id == 0)
         {

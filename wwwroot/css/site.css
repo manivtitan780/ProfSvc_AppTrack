@@ -385,7 +385,7 @@ span.invalid:after {
     margin-top: 20px;
 }
 
-.editIcon:before, .editIconInner:before, .statusOnIcon:before, .statusOffIcon:before, .saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before, .mpcicon:before, .editSectionButton:before {
+.editIcon:before, .editIconInner:before, .deleteIconInner:before, .statusOnIcon:before, .statusOffIcon:before, .saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before, .mpcicon:before, .editSectionButton:before {
     font-family: var(--font-icon);
     font-size: 24px;
     margin-left: -3px;
@@ -396,7 +396,7 @@ span.invalid:after {
     margin-right: 8px;
 }
 
-.editIconInner:before {
+.editIconInner:before, .deleteIconInner:before{
     font-size: 20px;
 }
 
@@ -406,6 +406,10 @@ span.invalid:after {
 
 .editIcon:before, .editSectionButton:before, .editIconInner:before {
     content: "\eded";
+}
+
+.deleteIconInner:before {
+    content: "\ec53";
 }
 
 .statusOffIcon:before {

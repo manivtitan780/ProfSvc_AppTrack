@@ -170,7 +170,7 @@ public partial class LabelTextBox
         EditContext.OnValidationStateChanged += HandleValidationStateChanged;
     }
 
-    private async void HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
+    private async Task HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
     {
         await Task.Delay(1);
         Box?.UpdateParentClass("", "");

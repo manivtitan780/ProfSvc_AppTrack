@@ -47,18 +47,20 @@ public class RoleIDExistsValidationAttribute : ValidationAttribute
         string _url =
             $"{Start.ApiHost}admin/CheckRole?id={_currentContext.ID}";
 
-        if (AdminListDefault.ClientFactory == null)
-        {
-            return new("Could not verify. Try again.", _memberNames);
-        }
+        //if (AdminListDefault.ClientFactory == null)
+        //{
+        //    return new("Could not verify. Try again.", _memberNames);
+        //}
 
-        HttpClient _client = AdminListDefault.ClientFactory.CreateClient("app");
+        //HttpClient _client = AdminListDefault.ClientFactory.CreateClient("app");
 
-        Task<HttpResponseMessage> _response = _client.GetAsync(_url);
+        //Task<HttpResponseMessage> _response = _client.GetAsync(_url);
 
-        Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
+        //Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
 
-        return _responseStream.Result == "false" ? ValidationResult.Success : new("Role ID already exists. Try again.", _memberNames);
+
+        //return _responseStream.Result == "false" ? ValidationResult.Success : new("Role ID already exists. Try again.", _memberNames);
+        return ValidationResult.Success;
     }
 
     #endregion

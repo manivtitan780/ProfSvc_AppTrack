@@ -143,7 +143,7 @@ public partial class JobOptions
         await base.OnInitializedAsync();
     }
 
-    private async void ActionComplete(ActionEventArgs<JobOption> jobOptionAction)
+    private async Task ActionComplete(ActionEventArgs<JobOption> jobOptionAction)
     {
         if (jobOptionAction.RequestType != Action.Refresh || Code.NullOrWhiteSpace())
         {
@@ -156,7 +156,7 @@ public partial class JobOptions
         Code = "";
     }
 
-    private async void Cancel()
+    private async Task Cancel()
     {
         await Task.Delay(1);
         await Dialog.HideAsync();
@@ -164,7 +164,7 @@ public partial class JobOptions
 
     private void DataHandler(object obj) => Count = Grid.CurrentViewData.Count();
 
-    private async void EditJobOption(string code)
+    private async Task EditJobOption(string code)
     {
         await Task.Delay(1);
         double _index = await Grid.GetRowIndexByPrimaryKey(code);

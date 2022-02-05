@@ -5,58 +5,56 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           MPCCandidateDialog.razor.cs
+// File Name:           EditEducationDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     02-04-2022 21:11
+// Created On:          02-04-2022 21:43
+// Last Updated On:     02-04-2022 21:44
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
-/// <summary>
-/// </summary>
-public partial class MPCCandidateDialog
+public partial class EditEducationDialog
 {
+    #region Fields
+
+    private bool _value;
+
+    #endregion
+
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<MouseEventArgs> CancelMPC
+    public EventCallback<MouseEventArgs> Cancel
     {
         get;
         set;
     }
 
-    [Parameter]
     public SfDialog Dialog
     {
         get;
         set;
     }
 
+    [Parameter]
+    public CandidateEducation ModelObject
+    {
+        get;
+        set;
+    } = new();
+
     /// <summary>
     /// </summary>
     [Parameter]
-    public List<CandidateMPC> GridObject
+    public EventCallback<EditContext> SaveEducation
     {
         get;
         set;
     }
 
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public Dictionary<string, object> HtmlAttributes1
-    {
-        get;
-        set;
-    }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public CandidateRatingMPC ModelObject
+    public SfSpinner Spinner
     {
         get;
         set;
@@ -65,57 +63,43 @@ public partial class MPCCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public int RowHeight
+    public bool VisibleEducationCandidate
     {
-        get;
-        set;
+        get => _value;
+        set
+        {
+            if (_value == value)
+            {
+                return;
+            }
+
+            _value = value;
+            VisibleEducationCandidateChanged.InvokeAsync(value);
+        }
     }
 
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveMPC
+    public EventCallback<bool> VisibleEducationCandidateChanged
     {
         get;
         set;
     }
 
-    [Parameter]
-    public bool SpinnerVisible
-    {
-        get;
-        set;
-    }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<TooltipEventArgs> ToolTipOpen
-    {
-        get;
-        set;
-    }
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    }
-
-    private async Task CancelMPCDialog(MouseEventArgs args)
+    private async Task CancelEducationDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
-        await CancelMPC.InvokeAsync(args);
+        await Cancel.InvokeAsync(args);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }
 
-    private async Task SaveMPCDialog(EditContext obj)
+    private async Task SaveEducationDialog(EditContext args)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveMPC.InvokeAsync(obj);
-        await Task.Delay(1);
+        await SaveEducation.InvokeAsync(args);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

@@ -131,7 +131,7 @@ public partial class Roles
     {
     }
 
-    private async void ActionComplete(ActionEventArgs<Role> designationAction)
+    private async Task ActionComplete(ActionEventArgs<Role> designationAction)
     {
         if (designationAction.RequestType != Action.Refresh || Code.NullOrWhiteSpace())
         {
@@ -160,14 +160,14 @@ public partial class Roles
         {
             Title = "Add";
             IsAdd = true;
-            General.SetAdminListDefault("Role ID", "Admin_CheckRoleID", true, true, _clientFactory);
+            General.SetAdminListDefault("Role ID", "Admin_CheckRoleID", true, true);
             RoleRecord = new();
         }
         else
         {
             Title = "Edit";
             IsAdd = false;
-            General.SetAdminListDefault("", "", false, true, null);
+            General.SetAdminListDefault("", "", false, true);
         }
 
         VisibleRoleInfo = true;

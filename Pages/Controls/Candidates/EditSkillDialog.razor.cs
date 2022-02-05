@@ -15,18 +15,18 @@ public partial class EditSkillDialog
     {
         get;
         set;
-    } = new CandidateSkills();
+    } = new();
 
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback Cancel
+    public EventCallback<MouseEventArgs> Cancel
     {
         get;
         set;
     }
 
-    public SfSpinner SpinnerSkill
+    public SfSpinner Spinner
     {
         get;
         set;
@@ -75,12 +75,26 @@ public partial class EditSkillDialog
         set;
     }
 
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<TooltipEventArgs> ToolTipOpen
+    public SfDialog Dialog
     {
         get;
         set;
+    }
+
+    private async Task SaveSkillDialog(EditContext args)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveSkill.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+    }
+
+    private async Task CancelSkillDialog(MouseEventArgs args)
+    {
+        await Task.Delay(1);
+        await Cancel.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 }

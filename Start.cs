@@ -13,18 +13,13 @@
 
 #endregion
 
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+
 namespace ProfSvc_AppTrack;
 
 public class Start
 {
-    #region Properties
-
-    public static IHttpClientFactory ClientFactory
-    {
-        get;
-        set;
-    }
-
     public static string ApiHost
     {
         get;
@@ -37,5 +32,9 @@ public class Start
         set;
     }
 
-    #endregion
+    public static IMemoryCache MemCache
+    {
+        get;
+        set;
+    }
 }

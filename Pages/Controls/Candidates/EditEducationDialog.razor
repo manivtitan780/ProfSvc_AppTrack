@@ -1,0 +1,23 @@
+﻿<SfDialog Header="Edit Education" Height="525px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="480px" Visible="false" @ref="Dialog">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveEducationDialog">
+			<DataAnnotationsValidator />
+			<div class="divContainerTable">
+				<LabelTextBox @bind-Value="@(ModelObject.College)" @bind-Value:event="ValueChanged" FieldName="Education" ID="textCollege" MaxLength="100" MinLength="1" Multiline="false" Placeholder="School / College"
+							  ValidationMessage="@(() => ModelObject.College)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Degree)" @bind-Value:event="ValueChanged" FieldName="Education" ID="textDegree" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Degree"
+							  ValidationMessage="@(() => ModelObject.Degree)" />
+				<LabelTextBox @bind-Value="@(ModelObject.State)" @bind-Value:event="ValueChanged" FieldName="Education" ID="textState" MaxLength="100" MinLength="1" Multiline="false" Placeholder="State"
+							  ValidationMessage="@(() => ModelObject.State)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Country)" @bind-Value:event="ValueChanged" FieldName="Education" ID="textCountry" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Country"
+							  ValidationMessage="@(() => ModelObject.Country)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Year)" @bind-Value:event="ValueChanged" FieldName="Education" ID="textYear" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Year of Passing"
+							  ValidationMessage="@(() => ModelObject.Year)" />
+			</div>
+			<DialogFooter CancelMethod="CancelEducationDialog"></DialogFooter>
+		</EditForm>
+	</ChildContent>
+</SfDialog>

@@ -1,37 +1,33 @@
-﻿<SfDialog @bind-Visible="@VisibleMPCCandidate" Header="Edit M.P.C." Height="600px" IsModal="true" MinHeight="300px" Target="#divTarget" Width="600px">
-    <ChildContent>
-        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="Spinner" />
-		<DialogPositionData X="right" Y="center"/>
-		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"/>
-		<DialogEvents Closed="CancelMPC"/>
-        <EditForm Model="ModelObject" OnValidSubmit="SaveMPCDialog">
-			<DataAnnotationsValidator/>
-            <div style="height: 100%">
-                <div class="divContainerTable">
-                    <div style="width: 100%">
-                        <SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="170px" ID="gridMPC" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateMPC" Width="99%">
-                            <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
-                            <GridColumns>
-								<GridColumn Field="@nameof(CandidateMPC.Date)" HeaderText="Date" Width="20%"/>
-								<GridColumn Field="@nameof(CandidateMPC.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0"/>
-								<GridColumn Field="@nameof(CandidateMPC.MPC)" HeaderText="M.P.C." Width="20%"/>
-								<GridColumn Field="@nameof(CandidateMPC.Comments)" HeaderText="Comments" Width="20%"/>
-                            </GridColumns>
-                        </SfGrid>
-                    </div>
-                    <div class="divFlex" style="margin-top: 30px;">
-                        <div class="divFlexSmall">
-							<LabelSwitch @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?"/>
-                        </div>
-                    </div>
+﻿<SfDialog Header="Edit M.P.C." Height="600px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Width="600px" Visible="false">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveMPCDialog">
+			<DataAnnotationsValidator />
+			<div style="height: 100%">
+				<div class="divContainerTable">
+					<div style="width: 100%">
+						<SfGrid AllowPaging="false" DataSource="@GridObject" EnableHeaderFocus="true" EnableHover="true" Height="170px" ID="gridMPC" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateMPC" Width="99%">
+							<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+							<GridColumns>
+								<GridColumn Field="@nameof(CandidateMPC.Date)" HeaderText="Date" Width="20%" />
+								<GridColumn Field="@nameof(CandidateMPC.User)" HeaderText="User" IsPrimaryKey="true" Visible="false" Width="0" />
+								<GridColumn Field="@nameof(CandidateMPC.MPC)" HeaderText="M.P.C." Width="20%" />
+								<GridColumn Field="@nameof(CandidateMPC.Comments)" HeaderText="Comments" Width="20%" />
+							</GridColumns>
+						</SfGrid>
+					</div>
+					<div class="divFlex" style="margin-top: 30px;">
+						<div class="divFlexSmall">
+							<LabelSwitch @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?" />
+						</div>
+					</div>
 					<LabelTextBox @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="MPCComments" Height="100px" ID="textComments"
 								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.MPCComments)" />
-                </div>
-            </div>
-            <div class="e-footer-content">
-                <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-                <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="CancelMPC" type="button">Cancel</SfButton>
-            </div>
-        </EditForm>
-    </ChildContent>
+				</div>
+			</div>
+			<DialogFooter CancelMethod="CancelMPCDialog" />
+		</EditForm>
+	</ChildContent>
 </SfDialog>

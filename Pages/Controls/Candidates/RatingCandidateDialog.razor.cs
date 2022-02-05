@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           RatingCandidateDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-04-2022 15:31
-// Last Updated On:     01-04-2022 16:10
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-02-2022 18:49
 // *****************************************/
 
 #endregion
@@ -19,34 +19,10 @@ namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 /// </summary>
 public partial class RatingCandidateDialog
 {
-    #region Fields
-
-    private bool _value;
-
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// </summary>
     [Parameter]
-    public bool VisibleRatingCandidate
-    {
-        get => _value;
-        set
-        {
-            if (_value == value)
-            {
-                return;
-            }
-
-            _value = value;
-            VisibleRatingCandidateChanged.InvokeAsync(value);
-        }
-    }
-
-    [Parameter]
-    public bool SpinnerVisible
+    public EventCallback CancelRating
     {
         get;
         set;
@@ -55,7 +31,7 @@ public partial class RatingCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public CandidateRatingMPC ModelObject
+    public List<CandidateRating> GridObject
     {
         get;
         set;
@@ -73,34 +49,13 @@ public partial class RatingCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback CancelRating
+    public CandidateRatingMPC ModelObject
     {
         get;
         set;
     }
 
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<bool> VisibleRatingCandidateChanged
-    {
-        get;
-        set;
-    }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<EditContext> SaveRating
-    {
-        get;
-        set;
-    }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<TooltipEventArgs> ToolTipOpen
+    public SfDialog Dialog
     {
         get;
         set;
@@ -118,7 +73,7 @@ public partial class RatingCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public List<CandidateRating> GridObject
+    public EventCallback<EditContext> SaveRating
     {
         get;
         set;
@@ -126,25 +81,26 @@ public partial class RatingCandidateDialog
 
     public SfSpinner Spinner
     {
-        get; 
+        get;
         set;
     }
 
-    public SfDialog RatingDialog
+    private async Task CancelRatingDialog(MouseEventArgs args)
     {
-        get; 
-        set;
+        await Task.Delay(1);
+        await CancelRating.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
-    public async void SaveRatingDialog(EditContext obj)
+    private async Task SaveRatingDialog(EditContext obj)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
         await SaveRating.InvokeAsync(obj);
         await Task.Delay(1);
         await Spinner.HideAsync();
-        await RatingDialog.HideAsync();
+        await Dialog.HideAsync();
     }
 
-    #endregion
 }

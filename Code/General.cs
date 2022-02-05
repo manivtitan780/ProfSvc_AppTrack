@@ -12,7 +12,7 @@
 // *****************************************/
 
 #endregion
-
+using ProfSvc_Classes;
 namespace ProfSvc_AppTrack.Code;
 
 public static class General
@@ -756,13 +756,13 @@ public static class General
 //        }
 //    }
 
-    public static void SetAdminListDefault(string type, string methodName, bool isAdd, bool isString, IHttpClientFactory clientFactory)
+    public static void SetAdminListDefault(string type, string methodName, bool isAdd, bool isString)//, IHttpClientFactory clientFactory
     {
         AdminListDefault.Type = type;
         AdminListDefault.MethodName = methodName;
         AdminListDefault.IsAdd = isAdd;
         AdminListDefault.IsString = isString;
-        AdminListDefault.ClientFactory = clientFactory;
+        //AdminListDefault.ClientFactory = clientFactory;
     }
 
     //internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,

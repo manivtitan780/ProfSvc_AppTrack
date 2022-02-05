@@ -160,7 +160,7 @@ public partial class States
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<State> designationAction)
+    private async Task ActionComplete(ActionEventArgs<State> designationAction)
     {
         if (designationAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -188,14 +188,14 @@ public partial class States
         {
             Title = "Add";
             IsAdd = true;
-            General.SetAdminListDefault("State ID", "Admin_CheckStateID", true, true, _clientFactory);
+            General.SetAdminListDefault("State ID", "Admin_CheckStateID", true, true);
             StateRecord = new();
         }
         else
         {
             Title = "Edit";
             IsAdd = false;
-            General.SetAdminListDefault("", "", false, true, null);
+            General.SetAdminListDefault("", "", false, true);
         }
 
         VisibleStateInfo = true;

@@ -17,8 +17,6 @@ namespace ProfSvc_AppTrack.Code;
 
 public static partial class Extensions
 {
-    #region Properties
-
     /// <summary>
     ///     Checks if the string is null or blank.
     /// </summary>
@@ -145,5 +143,8 @@ public static partial class Extensions
     /// <returns> string </returns>
     public static string UrlDecode(this string s) => HttpUtility.UrlDecode(s);
 
-    #endregion
+    public static async ValueTask<bool> Confirm(this IJSRuntime jsRuntime, string message)
+    {
+        return await jsRuntime.InvokeAsync<bool>("confirm", message);
+    }
 }

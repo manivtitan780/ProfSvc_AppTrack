@@ -132,7 +132,7 @@ public partial class LeadIndustry
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> industryAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> industryAction)
     {
         if (industryAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -147,12 +147,12 @@ public partial class LeadIndustry
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private async void EditIndustry(int id)
+    private async Task EditIndustry(int id)
     {
         await Task.Delay(1);
         double _index = await Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         if (id == 0)
         {
             Title = "Add";
@@ -203,7 +203,7 @@ public partial class LeadIndustry
 
     private void RowSelected(RowSelectEventArgs<AdminList> leadIndustry) => LeadIndustryRecord = leadIndustry.Data;
 
-    private async void SaveIndustry(EditContext context)
+    private async Task SaveIndustry(EditContext context)
     {
         await Task.Delay(1);
         string _returnValue = await General.SaveAdminListAsync("Admin_SaveIndustry", "Industry", false, false, LeadIndustryRecordClone, Grid, LeadIndustryRecord);

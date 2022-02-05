@@ -145,7 +145,7 @@ public partial class Eligibility
         }
     }
 
-    private async void ActionComplete(ActionEventArgs<AdminList> eligibilityAction)
+    private async Task ActionComplete(ActionEventArgs<AdminList> eligibilityAction)
     {
         if (eligibilityAction.RequestType != Action.Refresh || ID <= 0)
         {
@@ -160,11 +160,11 @@ public partial class Eligibility
 
     private void DataHandler() => Count = Grid.CurrentViewData.Count();
 
-    private async void EditEligibility(int id)
+    private async Task EditEligibility(int id)
     {
         Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
         await Grid.SelectRowAsync(_index.Result);
-        General.SetAdminListDefault("", "", false, false, null);
+        General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);
         if (id == 0)
         {
@@ -228,7 +228,7 @@ public partial class Eligibility
 
     private void RowSelected(RowSelectEventArgs<AdminList> designation) => EligibilityRecord = designation.Data;
 
-    private async void SaveEligibility(EditContext context)
+    private async Task SaveEligibility(EditContext context)
     {
         await Task.Delay(1);
         //await Spinner.ShowAsync();
@@ -241,7 +241,7 @@ public partial class Eligibility
 
     private async Task<string> ToggleStatus(int eligibilityID) => await General.PostToggleAsync("Admin_ToggleEligibilityStatus", eligibilityID, "ADMIN", false, Grid);
 
-    //private async void Cancel()
+    //private async Task Cancel()
     //{
     //    await Task.Delay(1);
     //    await Dialog.HideAsync();

@@ -14,20 +14,21 @@
         <div>
             <SfGrid AllowPaging="false" DataSource="@ModelSkillObject" EnableHeaderFocus="true" EnableHover="true" Height="210px" ID="gridSkill" @ref="GridSkill"
                     RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateSkills" Width="99%">
-                <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
                 <GridEvents RowSelected="RowSelected" TValue="CandidateSkills" />
                 <GridColumns>
-                    <GridColumn Field="@nameof(CandidateSkills.Skill)" HeaderText="Skill" Width="20%"></GridColumn>
-                    <GridColumn Field="@nameof(CandidateSkills.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-                    <GridColumn Field="@nameof(CandidateSkills.LastUsed)" HeaderText="Last Used" Width="20%"></GridColumn>
-                    <GridColumn Field="@nameof(CandidateSkills.ExpMonth)" HeaderText="Exp. (month)" Width="20%"></GridColumn>
-                    <GridColumn Field="@nameof(CandidateSkills.UpdatedBy)" HeaderText="Updated By" Width="20%"></GridColumn>
+					<GridColumn Field="@nameof(CandidateSkills.Skill)" HeaderText="Skill" Width="30%"/>
+					<GridColumn Field="@nameof(CandidateSkills.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"/>
+					<GridColumn Field="@nameof(CandidateSkills.LastUsed)" HeaderText="Last Used" Width="25%"/>
+					<GridColumn Field="@nameof(CandidateSkills.ExpMonth)" HeaderText="Exp. (month)" Width="25%"/>
+					<GridColumn Field="@nameof(CandidateSkills.UpdatedBy)" HeaderText="Updated By" Width="20%"/>
                     <GridColumn Width="10%">
                         <Template Context="bCon">
                             @{
                                 if (bCon is CandidateSkills _con)
                                 {
-                                    <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)"></SfButton>
+	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)"/>
+	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteSkillMethod(_con.ID)"/>
                                 }
                             }
                         </Template>

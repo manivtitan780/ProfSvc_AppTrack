@@ -1,35 +1,19 @@
-﻿<SfDialog @bind-Visible="@VisibleSkillCandidate" Header="Edit Skill" Height="400px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="400px">
-    <ChildContent>
-        <SfSpinner @bind-Visible="@SpinnerVisible" CssClass="spinnerHeight" Type="SpinnerType.Fabric" ZIndex="12000" @ref="SpinnerSkill" />
-        <DialogPositionData X="right" Y="center"></DialogPositionData>
-        <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight"></DialogAnimationSettings>
-        <DialogEvents></DialogEvents>
-        <EditForm Model="ModelObject">
-            <DataAnnotationsValidator />
-            <div class="divContainerTable">
-                <div class="divFlex">
-                    <div class="divFlexLabel">
-                        <label class="labelStatus" for="textTitle">Title:</label>
-                    </div>
-                    <div class="divFlexSmall">
-                        <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="#textTitle" Width="100%" WindowCollision="true">
-                            @*<LabelTextBox @bind-Value="@(_designationRecord.Text)" ID="textTitle" MaxLength="50" MinLength="1" Multiline="false" Placeholder="Title" Readonly="false"
-                                ValidationMessage="@(() => _designationRecord.Text)" @bind-Value:event="ValueChanged"></LabelTextBox>*@
-                            <SfTextBox @bind-Value="@(ModelObject.Skill)" FloatLabelType="FloatLabelType.Never" ID="textTitle" Multiline="false" Placeholder="Title">
-                            </SfTextBox>
-                            <TooltipTemplates>
-                                <Content>
-                                    <ValidationMessage For="@(() => ModelObject.Skill)"></ValidationMessage>
-                                </Content>
-                            </TooltipTemplates>
-                        </SfTooltip>
-                    </div>
-                </div>
-            </div>
-            <div class="e-footer-content">
-                <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
-                <SfButton IconCss="closeButton" IconPosition="IconPosition.Left" OnClick="Cancel" type="button">Cancel</SfButton>
-            </div>
-        </EditForm>
-    </ChildContent>
+﻿<SfDialog Header="Edit Skill" Height="400px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="400px" Visible="false" @ref="Dialog">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveSkillDialog">
+			<DataAnnotationsValidator />
+			<div class="divContainerTable">
+				<LabelTextBox @bind-Value="@(ModelObject.Skill)" @bind-Value:event="ValueChanged" FieldName="Skill" ID="textSkill" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Skill"
+							  ValidationMessage="@(() => ModelObject.Skill)" />
+				<LabelNumeric @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)" TValue="short"
+							  ValidationMessage="@(() => ModelObject.LastUsed)" />
+				<LabelNumeric @bind-Value="@(ModelObject.ExpMonth)" @bind-Value:event="ValueChanged" ID="numericExpMonth" Max="1500" Placeholder="Experience (Months)" TValue="short"
+							  ValidationMessage="@(() => ModelObject.ExpMonth)" />
+			</div>
+			<DialogFooter CancelMethod="CancelSkillDialog"></DialogFooter>
+		</EditForm>
+	</ChildContent>
 </SfDialog>
