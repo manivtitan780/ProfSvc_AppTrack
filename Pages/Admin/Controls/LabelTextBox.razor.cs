@@ -138,7 +138,7 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = "93%";
+    } = "98%";
 
     private SfTextBox Box
     {

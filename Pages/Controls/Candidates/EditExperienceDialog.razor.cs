@@ -5,17 +5,17 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           EditEducationDialog.razor.cs
+// File Name:           EditExperienceDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          02-04-2022 21:43
-// Last Updated On:     02-06-2022 19:45
+// Created On:          02-06-2022 19:38
+// Last Updated On:     02-06-2022 19:44
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
-public partial class EditEducationDialog
+public partial class EditExperienceDialog
 {
     /// <summary>
     /// </summary>
@@ -33,16 +33,16 @@ public partial class EditEducationDialog
     }
 
     [Parameter]
-    public CandidateEducation ModelObject
+    public CandidateExperience ModelObject
     {
         get;
         set;
-    } = new();
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveEducation
+    public EventCallback<EditContext> SaveExperience
     {
         get;
         set;
@@ -54,19 +54,20 @@ public partial class EditEducationDialog
         set;
     }
 
-    private async Task CancelEducationDialog(MouseEventArgs args)
+    private async Task CancelExperienceDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
         await Cancel.InvokeAsync(args);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
+
     }
 
-    private async Task SaveEducationDialog(EditContext editContext)
+    private async Task SaveExperienceDialog(EditContext editContext)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveEducation.InvokeAsync(editContext);
+        await SaveExperience.InvokeAsync(editContext);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

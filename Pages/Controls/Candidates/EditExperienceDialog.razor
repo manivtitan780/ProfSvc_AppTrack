@@ -1,0 +1,25 @@
+﻿<SfDialog Header="Edit Experience" Height="635px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="480px" Visible="false" @ref="Dialog">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveExperienceDialog">
+			<DataAnnotationsValidator />
+			<div class="divContainerTable">
+				<LabelTextBox @bind-Value="@(ModelObject.Employer)" @bind-Value:event="ValueChanged" FieldName="Employer" ID="textEmployer" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Employer Name"
+							  ValidationMessage="@(() => ModelObject.Employer)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" FieldName="Description" ID="textDescription" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Description"
+							  ValidationMessage="@(() => ModelObject.Description)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Location)" @bind-Value:event="ValueChanged" FieldName="Location" ID="textLocation" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Location"
+							  ValidationMessage="@(() => ModelObject.Location)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" FieldName="Title" ID="textTitle" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Job Title"
+							  ValidationMessage="@(() => ModelObject.Title)" />
+				<LabelTextBox @bind-Value="@(ModelObject.Start)" @bind-Value:event="ValueChanged" FieldName="Start" ID="textStart" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Start Date"
+							  ValidationMessage="@(() => ModelObject.Start)" />
+				<LabelTextBox @bind-Value="@(ModelObject.End)" @bind-Value:event="ValueChanged" FieldName="End" ID="textEnd" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Ending Date"
+							  ValidationMessage="@(() => ModelObject.End)" />
+			</div>
+			<DialogFooter CancelMethod="CancelExperienceDialog"></DialogFooter>
+		</EditForm>
+	</ChildContent>
+</SfDialog>

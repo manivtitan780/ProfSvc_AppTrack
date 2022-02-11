@@ -3,6 +3,7 @@
         <div>
             <SfGrid AllowPaging="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridExperience" @ref="GridExperience" RowHeight="@RowHeight" SelectedRowIndex="0" TValue="CandidateExperience" Width="99%">
                 <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
+                <GridEvents RowSelected="RowSelected" TValue="CandidateExperience" />
                 <GridColumns>
                     <GridColumn Field="@nameof(CandidateExperience.Employer)" HeaderText="Degree" Width="20%"></GridColumn>
                     <GridColumn Field="@nameof(CandidateExperience.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
@@ -11,7 +12,7 @@
                             @{
                                 if (aCon is CandidateExperience _con)
                                 {
-                                    <span>@(_con.Start + " - " + (_con.End == "" ? "Present" : _con.End))</span>
+                                    <span>@($"{_con.Start} - {(_con.End == "" ? "Present" : _con.End)}")</span>
                                 }
                             }
                         </Template>
@@ -22,9 +23,10 @@
                     <GridColumn Width="10%">
                         <Template Context="bCon">
                             @{
-                                if (bCon is CandidateExperience _con)
+                                if (bCon is CandidateExperience { UpdatedBy: "JOLLY" } _con)
                                 {
-                                    <SfButton Content="" IconCss="editIcon" @onclick="() => EditExperience.InvokeAsync(_con.ID)"></SfButton>
+                                    <SfButton Content="" IconCss="editIconInner" @onclick="() => EditExperienceDialog(_con.ID)" />
+                                    <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteExperienceMethod(_con.ID)" />
                                 }
                             }
                         </Template>

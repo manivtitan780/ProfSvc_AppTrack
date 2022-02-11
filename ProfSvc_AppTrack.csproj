@@ -26,6 +26,7 @@
         <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
         <EnableNETAnalyzers>False</EnableNETAnalyzers>
         <AnalysisLevel>none</AnalysisLevel>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

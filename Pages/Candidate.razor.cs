@@ -8,7 +8,7 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-05-2022 20:48
+// Last Updated On:     02-06-2022 19:31
 // *****************************************/
 
 #endregion
@@ -331,6 +331,18 @@ public partial class Candidate
         set;
     }
 
+    private ExperiencePanel ExperiencePanel
+    {
+        get;
+        set;
+    }
+
+    private NotesPanel NotesPanel
+    {
+        get;
+        set;
+    }
+
     private MemoryStream FileData
     {
         get;
@@ -502,6 +514,12 @@ public partial class Candidate
         set;
     } = new();
 
+    private CandidateExperience SelectedExperience
+    {
+        get;
+        set;
+    } = new();
+
     private CandidateSkills SelectedSkill
     {
         get;
@@ -600,6 +618,12 @@ public partial class Candidate
     }
 
     private bool VisibleSkillDialog
+    {
+        get;
+        set;
+    }
+
+    public EditExperienceDialog DialogExperience
     {
         get;
         set;
@@ -755,7 +779,66 @@ public partial class Candidate
             }
 
             _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+        }
+        catch
+        {
+            //
+        }
 
+        await Task.Delay(1);
+    }
+
+    private async Task DeleteExperience(int id)
+    {
+        await Task.Delay(1);
+        try
+        {
+            using RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/DeleteExperience", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("id", id.ToString());
+            _request.AddQueryParameter("candidateID", _target.ID.ToString());
+            _request.AddQueryParameter("user", "JOLLY");
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task DeleteNotes(int id)
+    {
+        await Task.Delay(1);
+        try
+        {
+            using RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/DeleteNotes", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("id", id.ToString());
+            _request.AddQueryParameter("candidateID", _target.ID.ToString());
+            _request.AddQueryParameter("user", "JOLLY");
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
         }
         catch
         {
@@ -880,9 +963,10 @@ public partial class Candidate
         await DialogEducation.Dialog.ShowAsync();
     }
 
-    private void EditExperience(int id)
+    private async Task EditExperience(int id)
     {
-        VisibleExperienceDialog = true;
+        SelectedExperience = ExperiencePanel.SelectedRow;
+        await DialogExperience.Dialog.ShowAsync();
     }
 
     private async Task EditMPC()
@@ -1181,6 +1265,68 @@ public partial class Candidate
             }
 
             _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task SaveExperience(EditContext experience)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveExperience", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(experience.Model);
+            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("candidateID", _target.ID);
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task SaveNotes(EditContext notes)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveNotes", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(notes.Model);
+            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("candidateID", _target.ID);
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
         }
         catch
         {

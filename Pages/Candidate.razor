@@ -127,7 +127,7 @@
 								<TabHeader Text="Experience" />
 							</ChildContent>
 							<ContentTemplate>
-								<ExperiencePanel EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" RowHeight="@RowHeight" />
+								<ExperiencePanel EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" RowHeight="@RowHeight" @ref="ExperiencePanel" DeleteExperience="DeleteExperience"  />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -135,7 +135,7 @@
 								<TabHeader Text="Notes" />
 							</ChildContent>
 							<ContentTemplate>
-								<NotesPanel EditNotes="EditNotes" ModelObject="@_candidateNotesObject" RowHeight="@RowHeight" />
+								<NotesPanel EditNotes="EditNotes" ModelObject="@_candidateNotesObject" RowHeight="@RowHeight" @ref="NotesPanel" DeleteNotes="DeleteNotes" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -186,6 +186,9 @@
 	<EditSkillDialog ModelObject="SelectedSkill" SaveSkill="SaveSkill" @ref="DialogSkill" />
 	
 	<EditEducationDialog ModelObject="SelectedEducation" SaveEducation="SaveEducation" @ref="DialogEducation"/>
+
+	<EditExperienceDialog ModelObject="SelectedExperience" SaveExperience="SaveExperience" @ref="DialogExperience"/>
+
 
 	<div class="divGridFooter">
 		<div style="display: flex">

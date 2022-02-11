@@ -28,9 +28,10 @@
                     <GridColumn Width="10%">
                         <Template Context="bCon">
                             @{
-                                if (bCon is CandidateNotes _con)
+                                if (bCon is CandidateNotes {UpdatedBy: "JOLLY" } _con)
                                 {
-                                    <SfButton Content="" IconCss="editIcon" @onclick="() => EditNotes.InvokeAsync(_con.ID)"></SfButton>
+	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditNotesDialog(_con.ID)" />
+	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteNotesMethod(_con.ID)" />
                                 }
                             }
                         </Template>

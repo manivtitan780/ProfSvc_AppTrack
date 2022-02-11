@@ -25,7 +25,7 @@
 					<GridColumn Width="10%">
 						<Template Context="bCon">
 							@{
-								if (bCon is CandidateEducation _con)
+								if (bCon is CandidateEducation {UpdatedBy: "JOLLY" } _con)
 								{
 									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditEducationDialog(_con.ID)" />
 									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteEducationMethod(_con.ID)" />
