@@ -101,5 +101,6 @@ public partial class Login
         string _serializedLogin = JsonConvert.SerializeObject(_loginCooky);
         string _encryptedText = _aes.Encrypt(_serializedLogin);
         await BlazoredLocalStorage.SetItemAsStringAsync("DeliciousCookie", _encryptedText);
+        await NavManager.RedirectLogin(BlazoredLocalStorage);
     }
 }
