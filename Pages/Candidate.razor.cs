@@ -152,7 +152,7 @@ public partial class Candidate
         set;
     }
 
-    public EditEducationDialog DialogEducation
+    private EditEducationDialog DialogEducation
     {
         get;
         set;
@@ -623,7 +623,7 @@ public partial class Candidate
         set;
     }
 
-    public EditExperienceDialog DialogExperience
+    private EditExperienceDialog DialogExperience
     {
         get;
         set;
@@ -632,7 +632,14 @@ public partial class Candidate
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        await NavManager.RedirectInner(LocalStorageBlazored);
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)  
     {
         if (!firstRender)
         {
@@ -651,16 +658,6 @@ public partial class Candidate
 
         _currentPage = CandidateGridPersistValues.Page;
         PageCount = _currentPage + 1;
-
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        //CandidateGridPersistValues = await _compression.GetCandidateGrid();
-        //CurrentPage = 1;
-        ItemCount = CandidateGridPersistValues.ItemCount;
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
 
         string _result = await LocalStorageBlazored.GetItemAsStringAsync("autoCandidate");
         //Start.SetCache();

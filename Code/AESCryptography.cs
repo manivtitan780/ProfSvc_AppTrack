@@ -63,7 +63,7 @@ public class AESCryptography
     public string Decrypt(string text)
     {
         byte[] _input = Convert.FromBase64String(text);
-        byte[] _bytes = Transform(_input, _aes.CreateDecryptor(_tripleKey, _vectorByte));
+        byte[] _bytes = Transform(_input, _aes.CreateDecryptor());
 
         return _encoder.GetString(_bytes);
     }

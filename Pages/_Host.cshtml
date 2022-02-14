@@ -22,7 +22,7 @@
 		<script src="~/scroll.js"></script>
 	</head>
 	<body id="divTarget">
-		<component render-mode="ServerPrerendered" type="typeof(App)" param-ConnectionString="@Model.ConnectionString" param-IPAddress="@Model.IPAddress" param-Test="@Model.Test" param-UserAgent="@Model.UserAgent" /> @*render-mode="ServerPrerendered"   *@
+		<component render-mode="Server" type="typeof(App)" param-ConnectionString="@Model.ConnectionString" param-IPAddress="@Model.IPAddress" param-Test="@Model.Test" param-UserAgent="@Model.UserAgent" /> @*render-mode="ServerPrerendered"   *@
 
 		<div id="blazor-error-ui">
 			<environment include="Staging,Production">

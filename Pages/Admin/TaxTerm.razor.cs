@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           TaxTerm.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:08
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-14-2022 16:05
 // *****************************************/
 
 #endregion
@@ -17,13 +17,10 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class TaxTerm
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
+    private static IHttpClientFactory _clientFactory;
     private AdminList TaxTermRecord = new();
-
-    #endregion
-
-    #region Properties
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -31,26 +28,40 @@ public partial class TaxTerm
         set;
     }
 
-    private static bool _valueChanged = true;
+    [Inject]
+    private IHttpClientFactory Client
+    {
+        set => _clientFactory = value;
+    }
+
+    private string Code
+    {
+        get;
+        set;
+    } = "";
+
+    private static int Count
+    {
+        get;
+        set;
+    }
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
 
     private bool IsAdd
     {
         get;
         set;
-    }
-
-    private bool VisibleTaxTermInfo
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
     }
 
     [Inject]
@@ -62,12 +73,6 @@ public partial class TaxTerm
 
     [Inject]
     private ILocalStorageService LocalStorageBlazored
-    {
-        get;
-        set;
-    }
-
-    private static int Count
     {
         get;
         set;
@@ -87,55 +92,17 @@ public partial class TaxTerm
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private string Code
-    {
-        get;
-        set;
-    } = "";
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
 
-    private static void FilterSet(string value)
+    private bool VisibleTaxTermInfo
     {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
+        get;
+        set;
     }
-
-    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
-
-    #endregion
-
-    #region Methods
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -152,12 +119,8 @@ public partial class TaxTerm
 
     protected override async Task OnInitializedAsync()
     {
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
+        await Task.Delay(1);
+        await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<AdminList> taxTermAction)
@@ -172,8 +135,6 @@ public partial class TaxTerm
         await JsRuntime.InvokeVoidAsync("scroll", _index);
         Code = "";
     }
-
-    private void RowSelected(RowSelectEventArgs<AdminList> designation) => TaxTermRecord = designation.Data;
 
     private void Cancel() => VisibleTaxTermInfo = false;
 
@@ -213,7 +174,29 @@ public partial class TaxTerm
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> designation) => TaxTermRecord = designation.Data;
 
     private void SaveTaxTerm()
     {
@@ -224,17 +207,14 @@ public partial class TaxTerm
 
     private void ToggleStatusTaxTerm(string taxTermCode) => General.PostToggle("Admin_ToggleTaxTermStatus", taxTermCode, "ADMIN", true, Grid, _clientFactory);
 
-    #endregion
-
-    #region Nested
+    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 
     public class AdminTaxTermAdaptor : DataAdaptor
     {
         #region Methods
 
         /// <summary>Performs data Read operation synchronously.</summary>
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetRead("Admin_GetTaxTerms", Filter, _clientFactory, dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetRead("Admin_GetTaxTerms", Filter, _clientFactory, dm);
 
         #endregion
     }
@@ -247,6 +227,4 @@ public partial class TaxTerm
 
         #endregion
     }
-
-    #endregion
 }

@@ -80,6 +80,13 @@ public partial class JobOptions
     //}
 
     [Inject]
+    private NavigationManager NavManager
+    {
+        get;
+        set;
+    }
+
+    [Inject]
     private IJSRuntime JsRuntime
     {
         get;
@@ -131,16 +138,10 @@ public partial class JobOptions
         FilterSet(_result);
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
-
-        await base.OnInitializedAsync();
+        await Task.Delay(1);
+        await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<JobOption> jobOptionAction)

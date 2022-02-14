@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           StatusCodes.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:08
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-14-2022 16:04
 // *****************************************/
 
 #endregion
@@ -17,7 +17,9 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class StatusCodes
 {
-    #region Fields
+    private static bool _valueChanged = true;
+
+    private static IHttpClientFactory _clientFactory;
 
     private readonly List<KeyValues> _statusDropItems = new()
                                                         {
@@ -28,31 +30,11 @@ public partial class StatusCodes
 
     private StatusCode StatusCodeRecord = new();
 
-    #endregion
-
-    #region Properties
-
     private AutoCompleteButton AutoCompleteControl
     {
         get;
         set;
     }
-
-    private static bool _valueChanged = true;
-
-    private bool IsAdd
-    {
-        get;
-        set;
-    }
-
-    private bool VisibleStatusCodeInfo
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
 
     [Inject]
     private IHttpClientFactory Client
@@ -60,15 +42,19 @@ public partial class StatusCodes
         set => _clientFactory = value;
     }
 
-    [Inject]
-    private IJSRuntime JsRuntime
+    private static int Count
     {
         get;
         set;
     }
 
-    [Inject]
-    private ILocalStorageService LocalStorageBlazored
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<StatusCode> Grid
     {
         get;
         set;
@@ -80,7 +66,21 @@ public partial class StatusCodes
         set;
     }
 
-    private static int Count
+    private bool IsAdd
+    {
+        get;
+        set;
+    }
+
+    [Inject]
+    private IJSRuntime JsRuntime
+    {
+        get;
+        set;
+    }
+
+    [Inject]
+    private ILocalStorageService LocalStorageBlazored
     {
         get;
         set;
@@ -100,49 +100,17 @@ public partial class StatusCodes
         set;
     }
 
-    private SfGrid<StatusCode> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
 
-    private static void FilterSet(string value)
+    private bool VisibleStatusCodeInfo
     {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
+        get;
+        set;
     }
-
-    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
-
-    #endregion
-
-    #region Methods
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -159,12 +127,8 @@ public partial class StatusCodes
 
     protected override async Task OnInitializedAsync()
     {
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
+        await Task.Delay(1);
+        await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<StatusCode> taxTermAction)
@@ -179,8 +143,6 @@ public partial class StatusCodes
         await JsRuntime.InvokeVoidAsync("scroll", _index.Result);
         ID = 0;
     }
-
-    private void RowSelected(RowSelectEventArgs<StatusCode> designation) => StatusCodeRecord = designation.Data;
 
     private void Cancel() => VisibleStatusCodeInfo = false;
 
@@ -218,7 +180,29 @@ public partial class StatusCodes
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<StatusCode> designation) => StatusCodeRecord = designation.Data;
 
     private void SaveStatusCode()
     {
@@ -243,9 +227,7 @@ public partial class StatusCodes
         VisibleStatusCodeInfo = false;
     }
 
-    #endregion
-
-    #region Nested
+    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 
     public class AdminStatusCodeAdaptor : DataAdaptor
     {
@@ -265,6 +247,4 @@ public partial class StatusCodes
 
         #endregion
     }
-
-    #endregion
 }

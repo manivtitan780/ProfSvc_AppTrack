@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           States.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:07
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-14-2022 16:04
 // *****************************************/
 
 #endregion
@@ -17,13 +17,10 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class States
 {
-    #region Fields
+    private static bool _valueChanged = true;
 
+    private static IHttpClientFactory _clientFactory;
     private State StateRecord = new();
-
-    #endregion
-
-    #region Properties
 
     private AutoCompleteButton AutoCompleteControl
     {
@@ -31,26 +28,40 @@ public partial class States
         set;
     }
 
-    private static bool _valueChanged = true;
+    [Inject]
+    private IHttpClientFactory Client
+    {
+        set => _clientFactory = value;
+    }
+
+    private static int Count
+    {
+        get;
+        set;
+    } = 24;
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<State> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    }
 
     private bool IsAdd
     {
         get;
         set;
-    }
-
-    private bool VisibleStateInfo
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
     }
 
     [Inject]
@@ -67,18 +78,6 @@ public partial class States
         set;
     }
 
-    private int ID
-    {
-        get;
-        set;
-    }
-
-    private static int Count
-    {
-        get;
-        set;
-    } = 24;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -93,49 +92,17 @@ public partial class States
         set;
     }
 
-    private SfGrid<State> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private string Title
     {
         get;
         set;
     } = "Edit";
 
-    private static void FilterSet(string value)
+    private bool VisibleStateInfo
     {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
+        get;
+        set;
     }
-
-    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
-
-    #endregion
-
-    #region Methods
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -152,12 +119,8 @@ public partial class States
 
     protected override async Task OnInitializedAsync()
     {
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
+        await Task.Delay(1);
+        await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<State> designationAction)
@@ -172,8 +135,6 @@ public partial class States
         await JsRuntime.InvokeVoidAsync("scroll", _index);
         ID = -1;
     }
-
-    private void RowSelected(RowSelectEventArgs<State> state) => StateRecord = state.Data;
 
     private void Cancel() => VisibleStateInfo = false;
 
@@ -213,7 +174,29 @@ public partial class States
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<State> state) => StateRecord = state.Data;
 
     private void SaveState(EditContext context)
     {
@@ -238,9 +221,7 @@ public partial class States
         VisibleStateInfo = false;
     }
 
-    #endregion
-
-    #region Nested
+    private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 
     public class AdminStateAdaptor : DataAdaptor
     {
@@ -260,6 +241,4 @@ public partial class States
 
         #endregion
     }
-
-    #endregion
 }

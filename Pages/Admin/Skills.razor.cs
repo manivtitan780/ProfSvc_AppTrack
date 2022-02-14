@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Skills.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:07
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-14-2022 16:04
 // *****************************************/
 
 #endregion
@@ -17,7 +17,9 @@ namespace ProfSvc_AppTrack.Pages.Admin;
 
 public partial class Skills
 {
-    #region Fields
+    private static bool _valueChanged = true;
+
+    private static IHttpClientFactory _clientFactory;
 
     private readonly Dictionary<string, object> HtmlAttributes = new()
                                                                  {
@@ -37,31 +39,41 @@ public partial class Skills
 
     private AdminList SkillRecord = new();
 
-    #endregion
-
-    #region Properties
-
     private AutoCompleteButton AutoCompleteControl
     {
         get;
         set;
     }
 
-    private static bool _valueChanged = true;
-
-    private bool VisibleSkillInfo
-    {
-        get;
-        set;
-    }
-
-    private static IHttpClientFactory _clientFactory;
-
     [Inject]
     private IHttpClientFactory Client
     {
         set => _clientFactory = value;
     }
+
+    private static int Count
+    {
+        get;
+        set;
+    }
+
+    private static string Filter
+    {
+        get;
+        set;
+    }
+
+    private SfGrid<AdminList> Grid
+    {
+        get;
+        set;
+    }
+
+    private int ID
+    {
+        get;
+        set;
+    } = -1;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -77,18 +89,6 @@ public partial class Skills
         set;
     }
 
-    private static int Count
-    {
-        get;
-        set;
-    }
-
-    private int ID
-    {
-        get;
-        set;
-    } = -1;
-
     [Inject]
     private NavigationManager NavManager
     {
@@ -103,51 +103,16 @@ public partial class Skills
         set;
     }
 
-    private SfGrid<AdminList> Grid
-    {
-        get;
-        set;
-    }
-
-    private static string Filter
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
 
-    private static void FilterSet(string value)
+    private bool VisibleSkillInfo
     {
-        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
-
-        if (Filter.Length <= 0)
-        {
-            return;
-        }
-
-        if (Filter.StartsWith("\""))
-        {
-            Filter = Filter[1..];
-        }
-
-        if (Filter.EndsWith("\""))
-        {
-            Filter = Filter[..^1];
-        }
-    }
-
-    #endregion
-
-    #region Methods
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        args.Cancel = !args.HasText;
+        get;
+        set;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -165,12 +130,8 @@ public partial class Skills
 
     protected override async Task OnInitializedAsync()
     {
-        StorageCompression _compression = new(SessionStorage);
-        LoginCooky _loginCooky = await _compression.Get("GridVal");
-        if (_loginCooky.UserID.NullOrWhiteSpace())
-        {
-            //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
-        }
+        await Task.Delay(1);
+        await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<AdminList> skillAction)
@@ -184,11 +145,6 @@ public partial class Skills
         await Grid.SelectRowAsync(_index);
         await JsRuntime.InvokeVoidAsync("scroll", _index);
         ID = -1;
-    }
-
-    private void RowSelected(RowSelectEventArgs<AdminList> designation)
-    {
-        SkillRecord = designation.Data;
     }
 
     private void Cancel()
@@ -229,7 +185,32 @@ public partial class Skills
         Grid.Refresh();
     }
 
+    private static void FilterSet(string value)
+    {
+        Filter = !value.NullOrWhiteSpace() && value != "null" ? value : "";
+
+        if (Filter.Length <= 0)
+        {
+            return;
+        }
+
+        if (Filter.StartsWith("\""))
+        {
+            Filter = Filter[1..];
+        }
+
+        if (Filter.EndsWith("\""))
+        {
+            Filter = Filter[..^1];
+        }
+    }
+
     private void RefreshGrid() => Grid.Refresh();
+
+    private void RowSelected(RowSelectEventArgs<AdminList> designation)
+    {
+        SkillRecord = designation.Data;
+    }
 
     private void SaveSkill()
     {
@@ -240,17 +221,17 @@ public partial class Skills
 
     private void ToggleStatus(int skillID) => General.PostToggle("Admin_ToggleSkillStatus", skillID, "ADMIN", false, Grid, _clientFactory);
 
-    #endregion
-
-    #region Nested
+    private static void ToolTipOpen(TooltipEventArgs args)
+    {
+        args.Cancel = !args.HasText;
+    }
 
     public class AdminSkillAdaptor : DataAdaptor
     {
         #region Methods
 
         /// <summary>Performs data Read operation synchronously.</summary>
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) =>
-            General.GetRead("Admin_GetSkills", Filter, _clientFactory, dm, false);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetRead("Admin_GetSkills", Filter, _clientFactory, dm, false);
 
         #endregion
     }
@@ -263,6 +244,4 @@ public partial class Skills
 
         #endregion
     }
-
-    #endregion
 }

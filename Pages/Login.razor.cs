@@ -8,7 +8,7 @@
 // File Name:           Login.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-13-2022 20:49
+// Last Updated On:     02-14-2022 15:45
 // *****************************************/
 
 #endregion
@@ -66,31 +66,13 @@ public partial class Login
         if (firstRender)
         {
             EditContext?.Validate();
-            StorageCompression _compression = new(LocalStorage);
-            //new LoginCheck().RedirectLogin(_compression, NavManager);
-            LoginCooky _loginCooky = await _compression.Get("GridVal");
-            if (!_loginCooky.UserID.NullOrWhiteSpace())
-            {
-                switch (_loginCooky.RoleID)
-                {
-                    case "RC":
-                    case "RS":
-                    case "SM":
-                        NavManager?.NavigateTo($"{NavManager.BaseUri}candidate", true);
-
-                        break;
-                    case "AD":
-                        NavManager?.NavigateTo($"{NavManager.BaseUri}Admin/Title", true);
-
-                        break;
-                }
-            }
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
         EditContext = new(ModelLogin);
+        await NavManager.RedirectLogin(BlazoredLocalStorage);
 
         await base.OnInitializedAsync();
     }
@@ -114,26 +96,10 @@ public partial class Login
             return;
         }
 
-        AESCryptography _aes = new AESCryptography();
+        AESCryptography _aes = new();
         //_tripleDES.Encrypt();
         string _serializedLogin = JsonConvert.SerializeObject(_loginCooky);
         string _encryptedText = _aes.Encrypt(_serializedLogin);
         await BlazoredLocalStorage.SetItemAsStringAsync("DeliciousCookie", _encryptedText);
-        //StorageCompression _compression = new(LocalStorage);
-        //await _compression.Set("GridVal", _loginCooky);
-        //new LoginCheck().RedirectLogin(_compression, NavManager);
-        //switch (_loginCooky.RoleID)
-        //{
-        //    case "RC":
-        //    case "RS":
-        //    case "SM":
-        //        NavManager?.NavigateTo($"{NavManager.BaseUri}candidate", true);
-
-        //        break;
-        //    case "AD":
-        //        NavManager?.NavigateTo($"{NavManager.BaseUri}Admin/Designation", true);
-
-        //        break;
-        //}
     }
 }
