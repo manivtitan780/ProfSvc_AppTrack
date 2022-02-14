@@ -7,18 +7,22 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelTextBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-29-2022 19:31
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-12-2022 19:29
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <inheritdoc />
 public partial class LabelTextBox
 {
     private string _value;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public bool CreateDivTag
     {
@@ -26,6 +30,9 @@ public partial class LabelTextBox
         set;
     } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public bool CreateTooltip
     {
@@ -33,6 +40,9 @@ public partial class LabelTextBox
         set;
     } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string CssClass
     {
@@ -40,6 +50,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [CascadingParameter]
     public EditContext EditContext
     {
@@ -47,6 +60,9 @@ public partial class LabelTextBox
         set;
     } = default!;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string FieldName
     {
@@ -54,6 +70,18 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public string Height
+    {
+        get;
+        set;
+    } = "inherit";
+
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string ID
     {
@@ -61,6 +89,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public int MaxLength
     {
@@ -68,6 +99,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public int MinLength
     {
@@ -75,6 +109,9 @@ public partial class LabelTextBox
         set;
     } = 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public bool Multiline
     {
@@ -82,6 +119,9 @@ public partial class LabelTextBox
         set;
     } = false;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string Placeholder
     {
@@ -89,6 +129,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public bool Readonly
     {
@@ -96,6 +139,18 @@ public partial class LabelTextBox
         set;
     } = false;
 
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public InputType TextBoxType
+    {
+        get;
+        set;
+    } = InputType.Text;
+
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public Expression<Func<string>> ValidationMessage
     {
@@ -103,6 +158,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string Value
     {
@@ -119,6 +177,9 @@ public partial class LabelTextBox
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public EventCallback<string> ValueChanged
     {
@@ -126,6 +187,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public Expression<Func<string>> ValueExpression
     {
@@ -133,6 +197,9 @@ public partial class LabelTextBox
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Parameter]
     public string Width
     {
@@ -151,13 +218,6 @@ public partial class LabelTextBox
         get;
         set;
     }
-
-    [Parameter]
-    public string Height
-    {
-        get;
-        set;
-    } = "inherit";
 
     /*protected override void OnInitialized()
     {

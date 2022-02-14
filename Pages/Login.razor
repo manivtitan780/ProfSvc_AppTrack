@@ -4,7 +4,7 @@
 <div id="navBar">
 	<img alt="Logo" src="images/logo.png" style="height: 50px; width: 63px;" />
 	<label class="labelHeader">Applicant Tracking System</label>
-	<label>IPAddress: @IpAddress</label>
+	<label>IPAddress: @IPAddress</label>
 </div>
 
 <EditForm EditContext="@EditContext" OnValidSubmit="CheckLogin">
@@ -14,44 +14,15 @@
 			<label class="labelInfo">Login to Applicant Tracking System</label>
 		</div>
 		<div class="loginRow">
-			@*<SfTooltip Content="The User Name should be between 3 and 10 characters." Position="Position.TopCenter" Target="#textUserName" WindowCollision="true">*@
-			<SfTextBox @bind-Value="@ModelLogin.UserName" FloatLabelType="FloatLabelType.Auto" ID="textUserName" Placeholder="User Name">
-			</SfTextBox>
-			@*<ValidationMessage For="() => ModelLogin.UserName"></ValidationMessage>*@
-			@*</SfTooltip>*@
+			<LabelTextBox @bind-Value="@ModelLogin.UserName" CreateDivTag="false" CreateTooltip="true" ID="textUserName" Placeholder="User Name" MaxLength="10" MinLength="1" 
+						  @bind-Value:event="ValueChanged" ValidationMessage="@(() => ModelLogin.UserName)"/>
 		</div>
 		<div class="loginRow">
-			@*<SfTooltip Content="The Password should be between 3 and 16 characters." Position="Position.TopCenter" Target="#textPassword" WindowCollision="true">*@
-			<SfTextBox @bind-Value="@ModelLogin.Password" FloatLabelType="FloatLabelType.Auto" ID="textPassword" Placeholder="Password" Type="InputType.Password"></SfTextBox>
-			@*</SfTooltip>*@
+			<LabelTextBox @bind-Value="@ModelLogin.Password" CreateDivTag="false" CreateTooltip="true" ID="textPassword" Placeholder="Password" MaxLength="16" MinLength="1" 
+						  @bind-Value:event="ValueChanged" ValidationMessage="@(() => ModelLogin.Password)" TextBoxType="InputType.Password"/>
 		</div>
-		@*<div class="loginRow">
-			<SfTooltip Content="Should your login information be remembered on this Computer for 14 days? Uncheck this box if you are on a public computer." Position="Position.TopCenter" Target=".e-check" WindowCollision="true">
-            
-			<SfCheckBox @bind-Checked="@ModelLogin.Checked" CssClass="e-primary" ID="checkRemember" Label="Remember me on this Computer?"></SfCheckBox>
-			</SfTooltip>
-		</div>*@
 		<div class="loginRow center" style="margin-top: 50px;">
 			<SfButton IsPrimary="true" type="submit">Login</SfButton>
-			@*<SfButton CssClass="e-warning">Cancel</SfButton>*@
 		</div>
 	</div>
 </EditForm>
-@*<div class="divEncloseBox">
-    <div class="loginTable" style="margin-top: 30px">
-        <div class="loginRow">
-            <div class="leftCol">
-                <telerik:RadLabel AssociatedControlID="textPassword" runat="server" Text="Password:" CssClass="labelRequired"></telerik:RadLabel>
-            </div>
-            <div class="rightCol">
-                <telerik:RadTextBox ID="textPassword" runat="server" CssClass="textBox" Width="90%" MaxLength="16" TextMode="Password">
-                    <ClientEvents OnBlur="CheckIndividualReq" OnFocus="CheckIndividualReq"></ClientEvents>
-                </telerik:RadTextBox>
-                <asp:RequiredFieldValidator runat="server" ID="reqPassword" Display="None" ControlToValidate="textPassword" Text="*"></asp:RequiredFieldValidator>
-            </div>
-        </div>
-    </div>
-    <div class="loginTable" style="margin-top: 30px">
-        <telerik:RadButton ID="buttonLogin" runat="server" Text="Sign-In" CssClass="buttonBig" HoveredCssClass="buttonHover" OnClick="buttonLogin_OnClick"></telerik:RadButton>
-    </div>
-</div>*@

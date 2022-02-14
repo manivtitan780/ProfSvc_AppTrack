@@ -7,186 +7,133 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           General.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          12-16-2021 19:16
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-13-2022 20:23
 // *****************************************/
 
 #endregion
-using ProfSvc_Classes;
+
 namespace ProfSvc_AppTrack.Code;
 
+/// <summary>
+/// </summary>
 public static class General
 {
-    #region Properties
+    //internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,
+    //                                     IHttpClientFactory clientFactory) => throw new NotImplementedException();
 
-    public static byte[] Md5PasswordHash(string inputText) => MD5.Create().ComputeHash(new UTF8Encoding().GetBytes(inputText));
+    /*
+        private static string Encrypt(string str, bool query = false)
+        {
+            if (str.NullOrWhiteSpace())
+            {
+                return "";
+            }
+    
+            GenerateBytes(out byte[] _byteKey, out byte[] _vectorByte, query);
+            using TripleDes _enc = new(_byteKey, _vectorByte);
+    
+            return _enc.Encrypt(str);
+        }
+    */
 
-/*
-    public static Color FromHex(string hex)
+    /*
+        private static void GenerateBytes(out byte[] key, out byte[] vector, bool query = false)
+        {
+            if (!query)
+            {
+                key = new byte[]
+                      {
+                          240, 24, 133, 174, 0, 155, 238, 145, 244, 93, 112, 139, 139, 65, 57, 242, 167, 135, 16, 221, 254, 128, 190, 228
+                      };
+    
+                vector = new byte[]
+                         {
+                             121, 42, 68, 241, 103, 89, 5, 192
+                         };
+            }
+            else
+            {
+                key = new byte[]
+                      {
+                          184, 133, 201, 79, 6, 193, 193, 255, 0, 173, 62, 48, 30, 27, 16, 15
+                      };
+    
+                vector = new byte[]
+                         {
+                             121, 111, 149, 157, 168, 222, 239, 241
+                         };
+            }
+        }
+    */
+
+    /// <summary>
+    /// </summary>
+    /// <param name="array"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>(array?.ToString() ?? string.Empty);
+
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
+    public static async Task<object> GetAutocompleteAsync(string methodName, string parameterName, DataManagerRequest dm)
     {
-        if (hex.StartsWith("#"))
-        {
-            hex = hex[1..];
-        }
+        List<KeyValues> _dataSource = new();
 
-        if (hex.Length != 6)
+        if (dm.Where is not {Count: > 0} || dm.Where[0].value.NullOrWhiteSpace())
         {
-            return Color.Empty;
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 0
+                                       } : _dataSource;
         }
-
-        Color _color = Color.Empty;
 
         try
         {
-            int _red = int.Parse(hex[..2], NumberStyles.HexNumber);
-            int _green = int.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-            int _blue = int.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
+            await Task.Delay(1);
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Admin/SearchDropDown")
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("methodName", methodName);
+            _request.AddQueryParameter("paramName", parameterName);
+            _request.AddQueryParameter("filter", dm.Where[0].value.ToString());
+            List<string> _jobOptionsItems = await _restClient.GetAsync<List<string>>(_request); //JsonConvert.DeserializeObject<List<string>>(_responseStream);
 
-            return Color.FromArgb(_red, _green, _blue);
+            int _count = 0;
+            if (_jobOptionsItems == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = _count
+                                           } : _dataSource;
+            }
+
+            _count = _jobOptionsItems.Count;
+            _dataSource.AddRange(_jobOptionsItems.Select(item => new KeyValues(item, item)));
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
         }
         catch
         {
-            return _color;
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 0
+                                       } : _dataSource;
         }
     }
-*/
-
-/*
-    public static string Decrypt(string str, bool query = false)
-    {
-        if (str.NullOrWhiteSpace())
-        {
-            return "";
-        }
-
-        GenerateBytes(out byte[] _byteKey, out byte[] _vectorByte, query);
-        using TripleDes _enc = new(_byteKey, _vectorByte);
-
-        return _enc.Decrypt(str).Trim();
-    }
-*/
-
-/*
-    public static string Edit<T>(int id, SfGrid<T> grid, ref bool isAdd)
-    {
-        Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
-        grid.SelectRowAsync(_index.Result);
-        string _title;
-        if (id == 0)
-        {
-            _title = "Add";
-            isAdd = true;
-            Task.Yield();
-            grid.AddRecordAsync();
-        }
-        else
-        {
-            _title = "Edit";
-            isAdd = false;
-            grid.StartEditAsync();
-        }
-
-        return _title;
-    }
-*/
-
-/*
-    public static string Encrypt(object str, bool query = false) => str == null ? "" : Encrypt(str.ToString(), query);
-*/
-
-    public static string PostToggle<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid, IHttpClientFactory clientFactory = null)
-    {
-        string _url = $"{Start.ApiHost}admin/ToggleAdminList?methodName={methodName}&id={id}&userName={userName}&idIsString={isString}";
-
-        if (clientFactory == null)
-        {
-            return "";
-        }
-
-        HttpClient _client = clientFactory.CreateClient("app");
-
-        StringContent _adminContent = new(userName, Encoding.UTF8, "application/json");
-        using Task<HttpResponseMessage> _response = _client.PostAsync(_url, _adminContent);
-
-        Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
-
-        grid.Refresh();
-        Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
-        grid.SelectRowAsync(_index.Result);
-
-        return _responseStream.Result;
-    }
-
-    public static async Task<string> PostToggleAsync<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid)
-    {
-        await Task.Yield();
-        RestClient _restClient = new($"{Start.ApiHost}");
-        RestRequest _request = new("Admin/ToggleAdminList", Method.Post);
-        _request.AddQueryParameter("methodName", methodName);
-        _request.AddQueryParameter("id", id.ToString());
-        _request.AddQueryParameter("username", userName);
-        _request.AddQueryParameter("idIsString", isString.ToString());
-        string _response = await _restClient.PostAsync<string>(_request);
-
-        grid.Refresh();
-        double _index = await grid.GetRowIndexByPrimaryKey(id);
-        await grid.SelectRowAsync(_index);
-
-        return await Task.FromResult(_response);
-    }
-
-    public static string SaveAdminList<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid,
-                                          IHttpClientFactory clientFactory = null)
-    {
-        string _url =
-            $"{Start.ApiHost}admin/SaveAdminList?methodName={methodName}&parameterName={parameterName}&containDescription={containDescription}&isString={isString}";
-
-        if (clientFactory == null)
-        {
-            return "";
-        }
-
-        //return "";
-
-        HttpClient _client = clientFactory.CreateClient("app");
-
-        StringContent _adminContent = new(JsonConvert.SerializeObject(adminList), Encoding.UTF8, "application/json");
-        using Task<HttpResponseMessage> _response = _client.PostAsync(_url, _adminContent);
-
-        using Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
-
-        grid.Refresh();
-
-        return _responseStream.Result;
-    }
-
-
-    public static async Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid, AdminList mainAdminList = null)
-    {
-        await Task.Yield();
-        RestClient _restClient = new($"{Start.ApiHost}");
-        RestRequest _request = new("Admin/SaveAdminList", Method.Post)
-        {
-            RequestFormat = DataFormat.Json
-        };
-        _request.AddQueryParameter("methodName", methodName);
-        _request.AddQueryParameter("parameterName", parameterName);
-        _request.AddQueryParameter("containsDescription", containDescription);
-        //_request.AddQueryParameter("username", userName);
-        _request.AddQueryParameter("isString", isString.ToString());
-        _request.AddJsonBody(adminList);
-        string _response = await _restClient.PostAsync<string>(_request);
-
-        if (mainAdminList != null)
-        {
-            mainAdminList = adminList.Copy();
-        }
-
-        grid.Refresh();
-
-        return await Task.FromResult(_response);
-    }
-
 
     /*public static async Task<int> Save<T>(AdminList adminList, string connectionString, string methodName, string parameterName, string userName,
                                           SfGrid<T> grid)
@@ -223,6 +170,14 @@ public static class General
         return _id;
     }*/
 
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="dm"></param>
+    /// <param name="getStates"></param>
+    /// <param name="page"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
     public static async Task<object> GetCandidateReadAdaptor(string name, DataManagerRequest dm, bool getStates, int page, int count)
     {
         List<Candidates> _dataSource = new();
@@ -243,10 +198,10 @@ public static class General
             if (_restResponse == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<Candidates>>(_restResponse["Candidates"].ToString() ?? string.Empty);
@@ -259,10 +214,10 @@ public static class General
             if (!getStates)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = _count /*_count*/
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = _count /*_count*/
+                                           } : _dataSource;
             }
 
             Candidate.States = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["States"].ToString() ?? string.Empty);
@@ -278,88 +233,42 @@ public static class General
             Candidate.StatusCodes = JsonConvert.DeserializeObject<List<KeyValues>>(_restResponse["StatusCodes"].ToString() ?? string.Empty);
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null;
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
         }
     }
 
-    public static async Task<object> GetAutocompleteAsync(string methodName, string parameterName, DataManagerRequest dm)
-    {
-        List<KeyValues> _dataSource = new();
-
-        if (dm.Where is not { Count: > 0 } || dm.Where[0].value.NullOrWhiteSpace())
-        {
-            return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 0
-            } : _dataSource;
-        }
-
-        try
-        {
-            await Task.Delay(1);
-            RestClient _restClient = new($"{Start.ApiHost}");
-            RestRequest _request = new("Admin/SearchDropDown")
-            {
-                RequestFormat = DataFormat.Json
-            };
-            _request.AddQueryParameter("methodName", methodName);
-            _request.AddQueryParameter("paramName", parameterName);
-            _request.AddQueryParameter("filter", dm.Where[0].value.ToString());
-            List<string> _jobOptionsItems = await _restClient.GetAsync<List<string>>(_request); //JsonConvert.DeserializeObject<List<string>>(_responseStream);
-
-            int _count = 0;
-            if (_jobOptionsItems == null)
-            {
-                return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = _count
-                } : _dataSource;
-            }
-            _count = _jobOptionsItems.Count;
-            _dataSource.AddRange(_jobOptionsItems.Select(item => new KeyValues(item, item)));
-
-            return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
-        }
-        catch
-        {
-            return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 0
-            } : _dataSource;
-        }
-    }
-
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="filter"></param>
+    /// <param name="clientFactory"></param>
+    /// <param name="dm"></param>
+    /// <param name="isString"></param>
+    /// <returns></returns>
     public static async Task<object> GetRead(string methodName, string filter, IHttpClientFactory clientFactory, DataManagerRequest dm,
-                                                        bool isString = true)
+                                             bool isString = true)
     {
         List<AdminList> _dataSource = new();
 
@@ -381,10 +290,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -393,42 +302,49 @@ public static class General
             if (_taxTermItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0
+                                           } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_taxTermItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
             int _count = _taxTermItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null;
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="filter"></param>
+    /// <param name="dm"></param>
+    /// <param name="isString"></param>
+    /// <returns></returns>
     public static async Task<object> GetReadAsync(string methodName, string filter, DataManagerRequest dm, bool isString = true)
     {
         List<AdminList> _dataSource = new();
@@ -438,9 +354,9 @@ public static class General
             await Task.Delay(1);
             RestClient _restClient = new($"{Start.ApiHost}");
             RestRequest _request = new("Admin/GetAdminList")
-            {
-                RequestFormat = DataFormat.Json
-            };
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
             _request.AddQueryParameter("methodName", methodName);
             _request.AddQueryParameter("filter", HttpUtility.UrlEncode(filter));
             _request.AddQueryParameter("isString", isString.ToString());
@@ -448,42 +364,48 @@ public static class General
             if (_response == null)
             {
                 return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource);
+                                                                         {
+                                                                             Result = _dataSource,
+                                                                             Count = 0 /*_count*/
+                                                                         } : _dataSource);
             }
 
             _dataSource = DeserializeObject<List<AdminList>>(_response["GeneralItems"]);
             int _count = _response["Count"] as int? ?? 0;
 
             return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource);
+                                                                     {
+                                                                         Result = _dataSource,
+                                                                         Count = _count
+                                                                     } : _dataSource);
         }
         catch
         {
             if (_dataSource == null)
             {
                 return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null);
+                                                                         {
+                                                                             Result = null,
+                                                                             Count = 1
+                                                                         } : null);
             }
 
             _dataSource.Add(new());
 
             return await Task.FromResult<object>(dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource);
+                                                                     {
+                                                                         Result = _dataSource,
+                                                                         Count = 1
+                                                                     } : _dataSource);
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="clientFactory"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
     public static async Task<object> GetRoleDataAdaptor(string filter, IHttpClientFactory clientFactory, DataManagerRequest dm)
     {
         List<Role> _dataSource = new();
@@ -504,10 +426,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -516,110 +438,48 @@ public static class General
             if (_roleItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0
+                                           } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<Role>>((_roleItems["Roles"] as JArray)?.ToString() ?? string.Empty);
             int _count = _roleItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null;
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
         }
     }
 
-    public static async Task<object> GetStatusCodeReadAdaptor(string filter, IHttpClientFactory clientFactory, DataManagerRequest dm)
-    {
-        List<StatusCode> _dataSource = new();
-
-        try
-        {
-            string _url = Start.ApiHost + "admin/GetStatusCodes";
-
-            if (!filter.NullOrWhiteSpace())
-            {
-                _url += $"?filter={HttpUtility.UrlEncode(filter)}";
-            }
-
-            HttpClient _client = clientFactory.CreateClient("app");
-
-            HttpResponseMessage _response = await _client.GetAsync(_url);
-
-            if (!_response.IsSuccessStatusCode)
-            {
-                return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource;
-            }
-
-            string _responseStream = await _response.Content.ReadAsStringAsync();
-            Dictionary<string, object> _statusCodeItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
-
-            if (_statusCodeItems == null)
-            {
-                return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0
-                } : _dataSource;
-            }
-
-            _dataSource = JsonConvert.DeserializeObject<List<StatusCode>>((_statusCodeItems["StatusCodes"] as JArray)?.ToString() ?? string.Empty);
-            int _count = _statusCodeItems["Count"] as int? ?? 0;
-
-            return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
-        }
-        catch
-        {
-            if (_dataSource == null)
-            {
-                return dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null;
-            }
-
-            _dataSource.Add(new());
-
-            return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource;
-        }
-    }
-
+    /// <summary>
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="clientFactory"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
     public static async Task<object> GetStateDataAdaptor(string filter, IHttpClientFactory clientFactory, DataManagerRequest dm)
     {
         List<State> _dataSource = new();
@@ -640,10 +500,10 @@ public static class General
             if (!_response.IsSuccessStatusCode)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0 /*_count*/
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
             }
 
             string _responseStream = await _response.Content.ReadAsStringAsync();
@@ -652,111 +512,404 @@ public static class General
             if (_roleItems == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = _dataSource,
-                    Count = 0
-                } : _dataSource;
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0
+                                           } : _dataSource;
             }
 
             _dataSource = JsonConvert.DeserializeObject<List<State>>((_roleItems["States"] as JArray)?.ToString() ?? string.Empty);
             int _count = _roleItems["Count"] as int? ?? 0;
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = _count
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
         }
         catch
         {
             if (_dataSource == null)
             {
                 return dm.RequiresCounts ? new DataResult
-                {
-                    Result = null,
-                    Count = 1
-                } : null;
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
             }
 
             _dataSource.Add(new());
 
             return dm.RequiresCounts ? new DataResult
-            {
-                Result = _dataSource,
-                Count = 1
-            } : _dataSource;
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
         }
     }
 
-//    public static async Task<object> SetDataManager(string methodName, string connectionString, DataManagerRequest dm, string filterKey = "",
-//                                                    IHttpClientFactory factory = null)
-//    {
-//        List<AdminList> _dataSource = new();
-//        try
-//        {
-//            string _url = $"{Start.ApiHost}admin/GetAdminList?methodName={methodName}&access-control-allow-origin=*";
-//            if (!filterKey.NullOrWhiteSpace())
-//            {
-//                _url += $"&filter={filterKey}";
-//            }
-//
-//            if (factory == null)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0
-//                } : _dataSource;
-//            }
-//
-//            HttpRequestMessage _request = new(HttpMethod.Get, _url);
-//            _request.Headers.Add("Accept", "application/vnd.github.v3+json");
-//            _request.Headers.Add("User-Agent", "ProfSvcTrack-API");
-//
-//            HttpClient _client = factory.CreateClient("appAdmin");
-//
-//            HttpResponseMessage _response = await _client.SendAsync(_request);
-//
-//            if (!_response.IsSuccessStatusCode)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0 /*_count*/
-//                } : _dataSource;
-//            }
-//
-//            string _responseStream = await _response.Content.ReadAsStringAsync();
-//            Dictionary<string, object> _generalItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
-//            if (_generalItems == null)
-//            {
-//                return dm.RequiresCounts ? new DataResult
-//                {
-//                    Result = _dataSource,
-//                    Count = 0
-//                } : _dataSource;
-//            }
-//
-//            _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_generalItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
-//            int _count = _generalItems["Count"] as int? ?? 0;
-//
-//            return dm.RequiresCounts ? new DataResult
-//            {
-//                Result = _dataSource,
-//                Count = _count
-//            } : _dataSource;
-//        }
-//        catch
-//        {
-//            return dm.RequiresCounts ? new DataResult
-//            {
-//                Result = _dataSource,
-//                Count = 0
-//            } : _dataSource;
-//        }
-//    }
+    /// <summary>
+    /// </summary>
+    /// <param name="filter"></param>
+    /// <param name="clientFactory"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
+    public static async Task<object> GetStatusCodeReadAdaptor(string filter, IHttpClientFactory clientFactory, DataManagerRequest dm)
+    {
+        List<StatusCode> _dataSource = new();
 
-    public static void SetAdminListDefault(string type, string methodName, bool isAdd, bool isString)//, IHttpClientFactory clientFactory
+        try
+        {
+            string _url = Start.ApiHost + "admin/GetStatusCodes";
+
+            if (!filter.NullOrWhiteSpace())
+            {
+                _url += $"?filter={HttpUtility.UrlEncode(filter)}";
+            }
+
+            HttpClient _client = clientFactory.CreateClient("app");
+
+            HttpResponseMessage _response = await _client.GetAsync(_url);
+
+            if (!_response.IsSuccessStatusCode)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
+            }
+
+            string _responseStream = await _response.Content.ReadAsStringAsync();
+            Dictionary<string, object> _statusCodeItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
+
+            if (_statusCodeItems == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0
+                                           } : _dataSource;
+            }
+
+            _dataSource = JsonConvert.DeserializeObject<List<StatusCode>>((_statusCodeItems["StatusCodes"] as JArray)?.ToString() ?? string.Empty);
+            int _count = _statusCodeItems["Count"] as int? ?? 0;
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
+        }
+        catch
+        {
+            if (_dataSource == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
+            }
+
+            _dataSource.Add(new());
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="inputText"></param>
+    /// <returns></returns>
+    public static byte[] Md5PasswordHash(string inputText) => MD5.Create().ComputeHash(new UTF8Encoding().GetBytes(inputText));
+
+    /*
+        public static Color FromHex(string hex)
+        {
+            if (hex.StartsWith("#"))
+            {
+                hex = hex[1..];
+            }
+    
+            if (hex.Length != 6)
+            {
+                return Color.Empty;
+            }
+    
+            Color _color = Color.Empty;
+    
+            try
+            {
+                int _red = int.Parse(hex[..2], NumberStyles.HexNumber);
+                int _green = int.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
+                int _blue = int.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
+    
+                return Color.FromArgb(_red, _green, _blue);
+            }
+            catch
+            {
+                return _color;
+            }
+        }
+    */
+
+    /*
+        public static string Decrypt(string str, bool query = false)
+        {
+            if (str.NullOrWhiteSpace())
+            {
+                return "";
+            }
+    
+            GenerateBytes(out byte[] _byteKey, out byte[] _vectorByte, query);
+            using TripleDes _enc = new(_byteKey, _vectorByte);
+    
+            return _enc.Decrypt(str).Trim();
+        }
+    */
+
+    /*
+        public static string Edit<T>(int id, SfGrid<T> grid, ref bool isAdd)
+        {
+            Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
+            grid.SelectRowAsync(_index.Result);
+            string _title;
+            if (id == 0)
+            {
+                _title = "Add";
+                isAdd = true;
+                Task.Yield();
+                grid.AddRecordAsync();
+            }
+            else
+            {
+                _title = "Edit";
+                isAdd = false;
+                grid.StartEditAsync();
+            }
+    
+            return _title;
+        }
+    */
+
+    /*
+        public static string Encrypt(object str, bool query = false) => str == null ? "" : Encrypt(str.ToString(), query);
+    */
+
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="id"></param>
+    /// <param name="userName"></param>
+    /// <param name="isString"></param>
+    /// <param name="grid"></param>
+    /// <param name="clientFactory"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static string PostToggle<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid, IHttpClientFactory clientFactory = null)
+    {
+        string _url = $"{Start.ApiHost}admin/ToggleAdminList?methodName={methodName}&id={id}&userName={userName}&idIsString={isString}";
+
+        if (clientFactory == null)
+        {
+            return "";
+        }
+
+        HttpClient _client = clientFactory.CreateClient("app");
+
+        StringContent _adminContent = new(userName, Encoding.UTF8, "application/json");
+        using Task<HttpResponseMessage> _response = _client.PostAsync(_url, _adminContent);
+
+        Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
+
+        grid.Refresh();
+        Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
+        grid.SelectRowAsync(_index.Result);
+
+        return _responseStream.Result;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="id"></param>
+    /// <param name="userName"></param>
+    /// <param name="isString"></param>
+    /// <param name="grid"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static async Task<string> PostToggleAsync<T>(string methodName, object id, string userName, bool isString, SfGrid<T> grid)
+    {
+        await Task.Yield();
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("Admin/ToggleAdminList", Method.Post);
+        _request.AddQueryParameter("methodName", methodName);
+        _request.AddQueryParameter("id", id.ToString());
+        _request.AddQueryParameter("username", userName);
+        _request.AddQueryParameter("idIsString", isString.ToString());
+        string _response = await _restClient.PostAsync<string>(_request);
+
+        grid.Refresh();
+        double _index = await grid.GetRowIndexByPrimaryKey(id);
+        await grid.SelectRowAsync(_index);
+
+        return await Task.FromResult(_response);
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="containDescription"></param>
+    /// <param name="isString"></param>
+    /// <param name="adminList"></param>
+    /// <param name="grid"></param>
+    /// <param name="clientFactory"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static string SaveAdminList<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid,
+                                          IHttpClientFactory clientFactory = null)
+    {
+        string _url =
+            $"{Start.ApiHost}admin/SaveAdminList?methodName={methodName}&parameterName={parameterName}&containDescription={containDescription}&isString={isString}";
+
+        if (clientFactory == null)
+        {
+            return "";
+        }
+
+        //return "";
+
+        HttpClient _client = clientFactory.CreateClient("app");
+
+        StringContent _adminContent = new(JsonConvert.SerializeObject(adminList), Encoding.UTF8, "application/json");
+        using Task<HttpResponseMessage> _response = _client.PostAsync(_url, _adminContent);
+
+        using Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
+
+        grid.Refresh();
+
+        return _responseStream.Result;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="methodName"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="containDescription"></param>
+    /// <param name="isString"></param>
+    /// <param name="adminList"></param>
+    /// <param name="grid"></param>
+    /// <param name="mainAdminList"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static async Task<string> SaveAdminListAsync<T>(string methodName, string parameterName, bool containDescription, bool isString, AdminList adminList, SfGrid<T> grid,
+                                                           AdminList mainAdminList = null)
+    {
+        await Task.Yield();
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest _request = new("Admin/SaveAdminList", Method.Post)
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
+        _request.AddQueryParameter("methodName", methodName);
+        _request.AddQueryParameter("parameterName", parameterName);
+        _request.AddQueryParameter("containsDescription", containDescription);
+        //_request.AddQueryParameter("username", userName);
+        _request.AddQueryParameter("isString", isString.ToString());
+        _request.AddJsonBody(adminList);
+        string _response = await _restClient.PostAsync<string>(_request);
+
+        if (mainAdminList != null)
+        {
+            mainAdminList = adminList.Copy();
+        }
+
+        grid.Refresh();
+
+        return await Task.FromResult(_response);
+    }
+
+    //    public static async Task<object> SetDataManager(string methodName, string connectionString, DataManagerRequest dm, string filterKey = "",
+    //                                                    IHttpClientFactory factory = null)
+    //    {
+    //        List<AdminList> _dataSource = new();
+    //        try
+    //        {
+    //            string _url = $"{Start.ApiHost}admin/GetAdminList?methodName={methodName}&access-control-allow-origin=*";
+    //            if (!filterKey.NullOrWhiteSpace())
+    //            {
+    //                _url += $"&filter={filterKey}";
+    //            }
+    //
+    //            if (factory == null)
+    //            {
+    //                return dm.RequiresCounts ? new DataResult
+    //                {
+    //                    Result = _dataSource,
+    //                    Count = 0
+    //                } : _dataSource;
+    //            }
+    //
+    //            HttpRequestMessage _request = new(HttpMethod.Get, _url);
+    //            _request.Headers.Add("Accept", "application/vnd.github.v3+json");
+    //            _request.Headers.Add("User-Agent", "ProfSvcTrack-API");
+    //
+    //            HttpClient _client = factory.CreateClient("appAdmin");
+    //
+    //            HttpResponseMessage _response = await _client.SendAsync(_request);
+    //
+    //            if (!_response.IsSuccessStatusCode)
+    //            {
+    //                return dm.RequiresCounts ? new DataResult
+    //                {
+    //                    Result = _dataSource,
+    //                    Count = 0 /*_count*/
+    //                } : _dataSource;
+    //            }
+    //
+    //            string _responseStream = await _response.Content.ReadAsStringAsync();
+    //            Dictionary<string, object> _generalItems = JsonConvert.DeserializeObject<Dictionary<string, object>>(_responseStream);
+    //            if (_generalItems == null)
+    //            {
+    //                return dm.RequiresCounts ? new DataResult
+    //                {
+    //                    Result = _dataSource,
+    //                    Count = 0
+    //                } : _dataSource;
+    //            }
+    //
+    //            _dataSource = JsonConvert.DeserializeObject<List<AdminList>>((_generalItems["GeneralItems"] as JArray)?.ToString() ?? string.Empty);
+    //            int _count = _generalItems["Count"] as int? ?? 0;
+    //
+    //            return dm.RequiresCounts ? new DataResult
+    //            {
+    //                Result = _dataSource,
+    //                Count = _count
+    //            } : _dataSource;
+    //        }
+    //        catch
+    //        {
+    //            return dm.RequiresCounts ? new DataResult
+    //            {
+    //                Result = _dataSource,
+    //                Count = 0
+    //            } : _dataSource;
+    //        }
+    //    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="methodName"></param>
+    /// <param name="isAdd"></param>
+    /// <param name="isString"></param>
+    public static void SetAdminListDefault(string type, string methodName, bool isAdd, bool isString) //, IHttpClientFactory clientFactory
     {
         AdminListDefault.Type = type;
         AdminListDefault.MethodName = methodName;
@@ -764,57 +917,4 @@ public static class General
         AdminListDefault.IsString = isString;
         //AdminListDefault.ClientFactory = clientFactory;
     }
-
-    //internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,
-    //                                     IHttpClientFactory clientFactory) => throw new NotImplementedException();
-
-/*
-    private static string Encrypt(string str, bool query = false)
-    {
-        if (str.NullOrWhiteSpace())
-        {
-            return "";
-        }
-
-        GenerateBytes(out byte[] _byteKey, out byte[] _vectorByte, query);
-        using TripleDes _enc = new(_byteKey, _vectorByte);
-
-        return _enc.Encrypt(str);
-    }
-*/
-
-/*
-    private static void GenerateBytes(out byte[] key, out byte[] vector, bool query = false)
-    {
-        if (!query)
-        {
-            key = new byte[]
-                  {
-                      240, 24, 133, 174, 0, 155, 238, 145, 244, 93, 112, 139, 139, 65, 57, 242, 167, 135, 16, 221, 254, 128, 190, 228
-                  };
-
-            vector = new byte[]
-                     {
-                         121, 42, 68, 241, 103, 89, 5, 192
-                     };
-        }
-        else
-        {
-            key = new byte[]
-                  {
-                      184, 133, 201, 79, 6, 193, 193, 255, 0, 173, 62, 48, 30, 27, 16, 15
-                  };
-
-            vector = new byte[]
-                     {
-                         121, 111, 149, 157, 168, 222, 239, 241
-                     };
-        }
-    }
-*/
-
-    public static T DeserializeObject<T>(object array) => JsonConvert.DeserializeObject<T>((array)?.ToString() ?? string.Empty);
-
-
-    #endregion
 }

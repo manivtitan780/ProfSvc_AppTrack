@@ -7,43 +7,22 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-12-2022 19:47
 // *****************************************/
-
-#endregion
-
-#region Using
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// </summary>
 public partial class LabelBox
 {
-    #region Fields
-
-    //private EditContext _context;
     private string _value;
 
-    #endregion
-
-    #region Properties
-
-    [Parameter]
-    public bool Multiline
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public bool Readonly
-    {
-        get;
-        set;
-    }
-
+    /// <summary>
+    /// </summary>
     [Parameter]
     public EventCallback<string> BindValueChanged
     {
@@ -51,20 +30,24 @@ public partial class LabelBox
         set;
     }
 
+    //[Parameter]
+    //public object Context
+    //{
+    //	get;
+    //	set;
+    //}
+
+    /// <summary>
+    /// </summary>
     [Parameter]
-    public EventCallback<TooltipEventArgs> OnOpen
+    public string ID
     {
         get;
         set;
     }
 
-    [Parameter]
-    public Expression<Func<string>> ValidationMessage
-    {
-        get;
-        set;
-    }
-
+    /// <summary>
+    /// </summary>
     [Parameter]
     public int MaxLength
     {
@@ -72,6 +55,8 @@ public partial class LabelBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public int MinLength
     {
@@ -79,6 +64,53 @@ public partial class LabelBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool Multiline
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<TooltipEventArgs> OnOpen
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public string Placeholder
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool Readonly
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public Expression<Func<string>> ValidationMessage
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
     [Parameter]
     public RenderFragment ValidationTemplate
     {
@@ -86,6 +118,8 @@ public partial class LabelBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Value
     {
@@ -102,52 +136,7 @@ public partial class LabelBox
         }
     }
 
-    //[Parameter]
-    //public object Context
-    //{
-    //	get;
-    //	set;
-    //}
-
-    [Parameter]
-    public string ID
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public string Placeholder
-    {
-        get;
-        set;
-    }
-
-    #endregion
-
-    #region Methods
-
-    public override Task SetParametersAsync(ParameterView parameters) =>
-        //if (Context != null)
-        //{
-        //	_context = new EditContext(Context);
-        //}
-        base.SetParametersAsync(parameters);
-
-    public void ToolTipOpen(TooltipEventArgs args)
-    {
-        //_context?.Validate();
-        args.Cancel = !args.HasText;
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        //_context.Validate();
-        //_context.NotifyValidationStateChanged();
-        //StateHasChanged();
-    }
-
+    /// <inheritdoc />
     protected override async void OnInitialized()
     {
         //if (Context != null)
@@ -159,5 +148,9 @@ public partial class LabelBox
         await base.OnInitializedAsync();
     }
 
-    #endregion
+    private static void ToolTipOpen(TooltipEventArgs args)
+    {
+        //_context?.Validate();
+        args.Cancel = !args.HasText;
+    }
 }

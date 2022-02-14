@@ -13,32 +13,18 @@
 
 #endregion
 
-#region Using
-
-#endregion
-
 namespace ProfSvc_AppTrack.Pages;
 
 public class HostModel : PageModel
 {
-    #region Constructors
-
     public HostModel(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
     {
         _httpContextAccssor = httpContextAccessor;
         _configuration = configuration;
     }
 
-    #endregion
-
-    #region Fields
-
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccssor;
-
-    #endregion
-
-    #region Properties
 
     public string ConnectionString { get; set; }
 
@@ -48,10 +34,6 @@ public class HostModel : PageModel
 
     public string UserAgent { get; set; }
 
-    #endregion
-
-    #region Methods
-
     // The following links may be useful for getting the IP Adress:
     // https://stackoverflow.com/questions/35441521/remoteipaddress-is-always-null
     // https://stackoverflow.com/questions/28664686/how-do-i-get-client-ip-address-in-asp-net-core
@@ -59,17 +41,15 @@ public class HostModel : PageModel
     public void OnGet()
     {
         UserAgent = Request.Headers["User-Agent"];
-        // Note that the RemoteIpAddress property returns an IPAdrress object 
+        // Note that the RemoteIpAddress property returns an IPAddress object 
         // which you can query to get required information. Here, however, we pass 
         // its string representation
         if (Request.HttpContext.Connection.RemoteIpAddress != null)
         {
-            IPAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            IPAddress = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
 
         Test = "ffff";
         ConnectionString = _configuration.GetConnectionString("DBConnect");
     }
-
-    #endregion
 }

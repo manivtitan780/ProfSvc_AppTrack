@@ -653,11 +653,11 @@ public partial class Candidate
         PageCount = _currentPage + 1;
 
         StorageCompression _compression = new(SessionStorage);
-        Cooky _cooky = await _compression.Get("GridVal");
+        LoginCooky _loginCooky = await _compression.Get("GridVal");
         //CandidateGridPersistValues = await _compression.GetCandidateGrid();
         //CurrentPage = 1;
         ItemCount = CandidateGridPersistValues.ItemCount;
-        if (_cooky.UserID.NullOrWhiteSpace())
+        if (_loginCooky.UserID.NullOrWhiteSpace())
         {
             //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
         }

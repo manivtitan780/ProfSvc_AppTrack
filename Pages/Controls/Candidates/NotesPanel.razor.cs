@@ -68,7 +68,7 @@ public partial class NotesPanel
     {
         double _index = await GridNotes.GetRowIndexByPrimaryKey(id);
         await GridNotes.SelectRowAsync(_index);
-        if (await JsRuntime.Confirm("Are you sure you want to delete this Notes?"))
+        if (await JsRuntime.Confirm("Are you sure you want to delete this Note?"))
         {
             await DeleteNotes.InvokeAsync(id);
         }

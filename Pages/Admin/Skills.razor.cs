@@ -166,8 +166,8 @@ public partial class Skills
     protected override async Task OnInitializedAsync()
     {
         StorageCompression _compression = new(SessionStorage);
-        Cooky _cooky = await _compression.Get("GridVal");
-        if (_cooky.UserID.NullOrWhiteSpace())
+        LoginCooky _loginCooky = await _compression.Get("GridVal");
+        if (_loginCooky.UserID.NullOrWhiteSpace())
         {
             //NavManager?.NavigateTo($"{NavManager.BaseUri}", true);
         }

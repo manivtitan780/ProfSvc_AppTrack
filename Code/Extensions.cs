@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Extensions.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          12-16-2021 19:27
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-12-2022 19:38
 // *****************************************/
 
 #endregion
@@ -18,37 +18,11 @@ namespace ProfSvc_AppTrack.Code;
 public static partial class Extensions
 {
     /// <summary>
-    ///     Checks if the string is null or blank.
     /// </summary>
-    /// <param name="s"> String </param>
-    /// <returns> Boolean </returns>
-    public static bool NullOrWhiteSpace(this string s) => string.IsNullOrWhiteSpace(s);
-
-    /// <summary>
-    ///     Checks if the object is null or blank.
-    /// </summary>
-    /// <param name="o"> Object </param>
-    /// <returns> Boolean </returns>
-    public static bool NullOrWhiteSpace(this object o) => o == null || o.ToString().NullOrWhiteSpace();
-
-    /// <summary>
-    ///     Converts a string containing 0 or 1 to Boolean
-    /// </summary>
-    /// <param name="s">string which needs to be converted</param>
-    /// <returns>Boolean</returns>
-    public static bool StringToBoolean(this string s) => s == "1";
-
-    /*/// <summary>
-    ///     Set Value to DBNull.Value if Double Value is null or Optionally "0".
-    /// </summary>
-    /// <param name="s"> String whose property has to be checked. </param>
-    /// <param name="isZero"> If true additionally checks if String Value equals "0". </param>
-    /// <returns> String Value or DBNull.Value </returns>
-    public static object DBNull(this double? s, bool isZero = false) =>
-        isZero ? s == null || s == 0 ? (object) System.DBNull.Value : s : s ?? (object) System.DBNull.Value;*/
-
-    public static int RandomNumber(this Page p, bool negative = true) =>
-        !negative ? RandomNumberGenerator.GetInt32(0, 5000) : RandomNumberGenerator.GetInt32(-5000, 5000);
+    /// <param name="jsRuntime"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public static async ValueTask<bool> Confirm(this IJSRuntime jsRuntime, string message) => await jsRuntime.InvokeAsync<bool>("confirm", message);
 
     /// <summary>
     ///     Set Value to DBNull.Value if Integer Value is 0.
@@ -87,6 +61,48 @@ public static partial class Extensions
     /// <returns> String containing HTML encoded text </returns>
     public static string HtmlEncode(this string s) => HttpUtility.HtmlEncode(s);
 
+    /// <summary>
+    ///     Checks if the string is null or blank.
+    /// </summary>
+    /// <param name="s"> String </param>
+    /// <returns> Boolean </returns>
+    public static bool NullOrWhiteSpace(this string s) => string.IsNullOrWhiteSpace(s);
+
+    /// <summary>
+    ///     Checks if the object is null or blank.
+    /// </summary>
+    /// <param name="o"> Object </param>
+    /// <returns> Boolean </returns>
+    public static bool NullOrWhiteSpace(this object o) => o == null || o.ToString().NullOrWhiteSpace();
+
+    /*/// <summary>
+    ///     Set Value to DBNull.Value if Double Value is null or Optionally "0".
+    /// </summary>
+    /// <param name="s"> String whose property has to be checked. </param>
+    /// <param name="isZero"> If true additionally checks if String Value equals "0". </param>
+    /// <returns> String Value or DBNull.Value </returns>
+    public static object DBNull(this double? s, bool isZero = false) =>
+        isZero ? s == null || s == 0 ? (object) System.DBNull.Value : s : s ?? (object) System.DBNull.Value;*/
+
+    /// <summary>
+    /// </summary>
+    /// <param name="p"></param>
+    /// <param name="negative"></param>
+    /// <returns></returns>
+    public static int RandomNumber(this Page p, bool negative = true) => !negative ? RandomNumberGenerator.GetInt32(0, 5000) : RandomNumberGenerator.GetInt32(-5000, 5000);
+
+    /// <summary>
+    ///     Converts a string containing 0 or 1 to Boolean
+    /// </summary>
+    /// <param name="s">string which needs to be converted</param>
+    /// <returns>Boolean</returns>
+    public static bool StringToBoolean(this string s) => s == "1";
+
+    /// <summary>
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="byteArray"></param>
+    /// <returns></returns>
     public static string ToBase64ByteArray(this Stream s, out byte[] byteArray)
     {
         string _base64String;
@@ -130,21 +146,16 @@ public static partial class Extensions
     }
 
     /// <summary>
-    ///     Encodes a string to URL Safe string.
-    /// </summary>
-    /// <param name="s"> String </param>
-    /// <returns> string </returns>
-    public static string UrlEncode(this string s) => HttpUtility.UrlEncode(s);
-
-    /// <summary>
     ///     Decodes a string from URL Safe string.
     /// </summary>
     /// <param name="s"> String </param>
     /// <returns> string </returns>
     public static string UrlDecode(this string s) => HttpUtility.UrlDecode(s);
 
-    public static async ValueTask<bool> Confirm(this IJSRuntime jsRuntime, string message)
-    {
-        return await jsRuntime.InvokeAsync<bool>("confirm", message);
-    }
+    /// <summary>
+    ///     Encodes a string to URL Safe string.
+    /// </summary>
+    /// <param name="s"> String </param>
+    /// <returns> string </returns>
+    public static string UrlEncode(this string s) => HttpUtility.UrlEncode(s);
 }

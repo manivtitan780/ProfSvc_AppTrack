@@ -7,22 +7,24 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           AutoCompleteButton.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-12-2022 19:41
 // *****************************************/
-
-#endregion
-
-#region Using
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// </summary>
 public partial class AutoCompleteButton
 {
-    #region Properties
+    /// <summary>
+    /// </summary>
+    public SfAutoComplete<string, KeyValues> Acb { get; set; }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public EventCallback ButtonClick
     {
@@ -31,28 +33,14 @@ public partial class AutoCompleteButton
     }
 
     [Parameter]
-    public EventCallback<ChangeEventArgs<string, KeyValues>> ValueChange
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public object Ref
-    {
-        get;
-        set;
-    }
-
-    public SfAutoComplete<string, KeyValues> Acb { get; set; }
-
-    [Parameter]
     public string ID
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string PlaceholderText
     {
@@ -60,8 +48,17 @@ public partial class AutoCompleteButton
         set;
     } = "Select a ...";
 
-    public string Value => Acb.Value;
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public object Ref
+    {
+        get;
+        set;
+    }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public Type TypeInstance
     {
@@ -69,12 +66,16 @@ public partial class AutoCompleteButton
         set;
     }
 
-    #endregion
+    /// <summary>
+    /// </summary>
+    public string Value => Acb.Value;
 
-    //[Parameter]
-    //public string Value
-    //{
-    //	get;
-    //	set;
-    //}
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<ChangeEventArgs<string, KeyValues>> ValueChange
+    {
+        get;
+        set;
+    }
 }

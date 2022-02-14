@@ -7,33 +7,32 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           StorageCompression.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          12-16-2021 19:27
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-12-2022 19:36
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Code;
 
+/// <summary>
+/// </summary>
 public class StorageCompression
 {
-    #region Constructors
-
+    /// <summary>
+    /// </summary>
+    /// <param name="storage"></param>
     public StorageCompression(ProtectedLocalStorage storage) => LocalStorage = storage;
-
-    #endregion
-
-    #region Properties
 
     private ProtectedLocalStorage LocalStorage
     {
         get;
     }
 
-    #endregion
-
-    #region Methods
-
+    /// <summary>
+    /// </summary>
+    /// <param name="cookieName"></param>
+    /// <returns></returns>
     public async Task<bool> Delete(string cookieName)
     {
         try
@@ -48,6 +47,36 @@ public class StorageCompression
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="cookieName"></param>
+    /// <returns></returns>
+    public async Task<LoginCooky> Get(string cookieName)
+    {
+        try
+        {
+            ProtectedBrowserStorageResult<LoginCooky> _resultValue = await LocalStorage.GetAsync<LoginCooky>(cookieName);
+            //if (_resultValue.Value == null)
+            //{
+            //    _cooky = new();
+            //       await LocalStorage.SetAsync("GridVal", _cooky);
+            //}
+            //else
+            //{
+            LoginCooky _loginCooky = _resultValue.Value ?? new();
+            //}
+
+            return _loginCooky;
+        }
+        catch
+        {
+            return new();
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public async Task<CandidateGrid> GetCandidateGrid()
     {
         try
@@ -81,31 +110,12 @@ public class StorageCompression
         }
     }
 
-    public async Task<Cooky> Get(string cookieName)
-    {
-        try
-        {
-            ProtectedBrowserStorageResult<Cooky> _resultValue = await LocalStorage.GetAsync<Cooky>(cookieName);
-            Cooky _cooky;
-            //if (_resultValue.Value == null)
-            //{
-            //    _cooky = new();
-            //       await LocalStorage.SetAsync("GridVal", _cooky);
-            //}
-            //else
-            //{
-            _cooky = _resultValue.Value ?? new();
-            //}
-
-            return _cooky;
-        }
-        catch
-        {
-            return new();
-        }
-    }
-
-    public async Task<int> Set(string cookieName, Cooky cookieValue)
+    /// <summary>
+    /// </summary>
+    /// <param name="cookieName"></param>
+    /// <param name="cookieValue"></param>
+    /// <returns></returns>
+    public async Task<int> Set(string cookieName, LoginCooky cookieValue)
     {
         try
         {
@@ -119,6 +129,9 @@ public class StorageCompression
         return 0;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public async Task<int> SetCandidateGrid()
     {
         try
@@ -133,6 +146,4 @@ public class StorageCompression
 
         return 0;
     }
-
-    #endregion
 }

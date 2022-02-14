@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           Extensions.Add.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          12-16-2021 19:27
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-12-2022 19:39
 // *****************************************/
 
 #endregion
@@ -21,41 +21,10 @@ using System.Data;
 
 namespace ProfSvc_AppTrack.Code;
 
+/// <summary>
+/// </summary>
 public static partial class Extensions
 {
-    #region Properties
-
-    /// <summary>
-    ///     Generates a SQLParameter of type Int.
-    /// </summary>
-    /// <param name="t"> SqlParameterCollection </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value to be assigned to the parameter. </param>
-    /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
-    /// <returns> SQLParameter of type Int </returns>
-    public static SqlParameter AddIntParameter(this SqlCommand t, string name, object value, bool output = false) => t.Parameters.Add(new(name, SqlDbType.Int)
-                                                                                                                                      {
-                                                                                                                                          Value = value,
-                                                                                                                                          Direction =
-                                                                                                                                              output
-                                                                                                                                                  ? ParameterDirection
-                                                                                                                                                     .InputOutput
-                                                                                                                                                  : ParameterDirection
-                                                                                                                                                     .Input
-                                                                                                                                      });
-
-    /// <summary>
-    ///     Generates a SQLParameter of type Xml.
-    /// </summary>
-    /// <param name="t"> SqlParameterCollection </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="value"> The value to be assigned to the parameter. </param>
-    /// <returns> SQLParameter of type Xml </returns>
-    public static SqlParameter AddXmlParameter(this SqlCommand t, string name, object value) => t.Parameters.Add(new(name, SqlDbType.Xml)
-                                                                                                                 {
-                                                                                                                     Value = value
-                                                                                                                 });
-
     /// <summary>
     ///     Generates a SQLParameter of type Binary.
     /// </summary>
@@ -65,11 +34,12 @@ public static partial class Extensions
     /// <param name="value"> The value to be assigned to the parameter. </param>
     /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
     /// <returns> SQLParameter of type Binary </returns>
-    public static void AddBinaryParameter(this SqlCommand t, string name, int size, object value, bool output = false) =>
-        t.Parameters.Add(new(name, SqlDbType.Binary, size)
-                         {
-                             Value = value, Direction = output ? ParameterDirection.InputOutput : ParameterDirection.Input
-                         });
+    public static void AddBinaryParameter(this SqlCommand t, string name, int size, object value, bool output = false) => t.Parameters.Add(new(name, SqlDbType.Binary, size)
+                                                                                                                                           {
+                                                                                                                                               Value = value,
+                                                                                                                                               Direction = output ? ParameterDirection.InputOutput
+                                                                                                                                                               : ParameterDirection.Input
+                                                                                                                                           });
 
     /// <summary>
     ///     Generates a SQLParameter of type Bit.
@@ -156,12 +126,35 @@ public static partial class Extensions
     /// <param name="value"> The value to be assigned to the parameter. </param>
     /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
     /// <returns> SQLParameter of type DateTime </returns>
-    public static void AddDecimalParameter(this SqlCommand t, string name, byte precision, byte scale, object value, bool output = false) =>
-        t.Parameters.Add(new(name, SqlDbType.Decimal)
-                         {
-                             Value = value, Direction = output ? ParameterDirection.InputOutput : ParameterDirection.Input, Precision = precision,
-                             Scale = scale
-                         });
+    public static void AddDecimalParameter(this SqlCommand t, string name, byte precision, byte scale, object value, bool output = false) => t.Parameters.Add(new(name, SqlDbType.Decimal)
+                                                                                                                                                              {
+                                                                                                                                                                  Value = value,
+                                                                                                                                                                  Direction =
+                                                                                                                                                                      output ? ParameterDirection
+                                                                                                                                                                             .InputOutput
+                                                                                                                                                                          : ParameterDirection.Input,
+                                                                                                                                                                  Precision = precision,
+                                                                                                                                                                  Scale = scale
+                                                                                                                                                              });
+
+    /// <summary>
+    ///     Generates a SQLParameter of type Int.
+    /// </summary>
+    /// <param name="t"> SqlParameterCollection </param>
+    /// <param name="name"> The name of the parameter. </param>
+    /// <param name="value"> The value to be assigned to the parameter. </param>
+    /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
+    /// <returns> SQLParameter of type Int </returns>
+    public static SqlParameter AddIntParameter(this SqlCommand t, string name, object value, bool output = false) => t.Parameters.Add(new(name, SqlDbType.Int)
+                                                                                                                                      {
+                                                                                                                                          Value = value,
+                                                                                                                                          Direction =
+                                                                                                                                              output
+                                                                                                                                                  ? ParameterDirection
+                                                                                                                                                     .InputOutput
+                                                                                                                                                  : ParameterDirection
+                                                                                                                                                     .Input
+                                                                                                                                      });
 
     /// <summary>
     ///     Generates a SQLParameter of type SmallDateTime.
@@ -171,11 +164,12 @@ public static partial class Extensions
     /// <param name="value"> The value to be assigned to the parameter. </param>
     /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
     /// <returns> SQLParameter of type SmallDateTime </returns>
-    public static void AddSmallDateTimeParameter(this SqlCommand t, string name, object value, bool output = false) =>
-        t.Parameters.Add(new(name, SqlDbType.SmallDateTime)
-                         {
-                             Value = value, Direction = output ? ParameterDirection.InputOutput : ParameterDirection.Input
-                         });
+    public static void AddSmallDateTimeParameter(this SqlCommand t, string name, object value, bool output = false) => t.Parameters.Add(new(name, SqlDbType.SmallDateTime)
+                                                                                                                                        {
+                                                                                                                                            Value = value,
+                                                                                                                                            Direction = output ? ParameterDirection.InputOutput
+                                                                                                                                                            : ParameterDirection.Input
+                                                                                                                                        });
 
     /// <summary>
     ///     Generates a SQLParameter of type SmallInt.
@@ -242,11 +236,21 @@ public static partial class Extensions
     /// <param name="output"> Should the Parameter Direction b InputOutput or Input. </param>
     /// <returns> SQLParameter of type Varchar </returns>
     public static void AddVarcharParameter(this SqlCommand t, string name, int size, object value,
-                                           bool isNType = true, bool output = false) =>
-        t.Parameters.Add(new(name, isNType ? SqlDbType.NVarChar : SqlDbType.VarChar, size)
-                         {
-                             Value = value, Direction = output ? ParameterDirection.InputOutput : ParameterDirection.Input
-                         });
+                                           bool isNType = true, bool output = false) => t.Parameters.Add(new(name, isNType ? SqlDbType.NVarChar : SqlDbType.VarChar, size)
+                                                                                                         {
+                                                                                                             Value = value,
+                                                                                                             Direction = output ? ParameterDirection.InputOutput : ParameterDirection.Input
+                                                                                                         });
 
-    #endregion
+    /// <summary>
+    ///     Generates a SQLParameter of type Xml.
+    /// </summary>
+    /// <param name="t"> SqlParameterCollection </param>
+    /// <param name="name"> The name of the parameter. </param>
+    /// <param name="value"> The value to be assigned to the parameter. </param>
+    /// <returns> SQLParameter of type Xml </returns>
+    public static SqlParameter AddXmlParameter(this SqlCommand t, string name, object value) => t.Parameters.Add(new(name, SqlDbType.Xml)
+                                                                                                                 {
+                                                                                                                     Value = value
+                                                                                                                 });
 }

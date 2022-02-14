@@ -15,16 +15,23 @@
 
 namespace ProfSvc_AppTrack.Code;
 
+/// <summary>
+/// 
+/// </summary>
 public class Login
 {
-    #region Properties
-
+    /// <summary>
+    /// 
+    /// </summary>
     public bool Checked
     {
         get;
         set;
     } = true;
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Required(ErrorMessage = "Password is required."),
      StringLength(16, MinimumLength = 3, ErrorMessage = "Password should be between 3 and 16 characters long.")]
     public string Password
@@ -33,6 +40,9 @@ public class Login
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Required(ErrorMessage = "User Name is required."),
      StringLength(10, MinimumLength = 3, ErrorMessage = "User Name should be between 3 and 10 characters long.")]
     public string UserName
@@ -40,6 +50,4 @@ public class Login
         get;
         set;
     }
-
-    #endregion
 }

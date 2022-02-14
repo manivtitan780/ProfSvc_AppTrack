@@ -7,20 +7,24 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelDropDown.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-31-2022 15:34
-// Last Updated On:     01-31-2022 15:43
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-12-2022 19:48
 // *****************************************/
 
 #endregion
 
-using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
-
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// </summary>
+/// <typeparam name="TValue"></typeparam>
+/// <typeparam name="TItem"></typeparam>
 public partial class LabelDropDown<TValue, TItem>
 {
     private TValue _value;
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public IEnumerable<TItem> DataSource
     {
@@ -28,6 +32,17 @@ public partial class LabelDropDown<TValue, TItem>
         set;
     }
 
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<ChangeEventArgs<TValue, TItem>> DropDownValueChange
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string ID
     {
@@ -35,6 +50,8 @@ public partial class LabelDropDown<TValue, TItem>
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string TextField
     {
@@ -42,6 +59,8 @@ public partial class LabelDropDown<TValue, TItem>
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public TValue Value
     {
@@ -58,6 +77,8 @@ public partial class LabelDropDown<TValue, TItem>
         }
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public EventCallback<TValue> ValueChanged
     {
@@ -65,6 +86,8 @@ public partial class LabelDropDown<TValue, TItem>
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public Expression<Func<TValue>> ValueExpression
     {
@@ -72,15 +95,10 @@ public partial class LabelDropDown<TValue, TItem>
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string ValueField
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public EventCallback<ChangeEventArgs<TValue, TItem>> DropDownValueChange
     {
         get;
         set;

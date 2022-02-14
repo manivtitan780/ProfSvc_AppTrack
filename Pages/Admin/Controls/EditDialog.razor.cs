@@ -7,28 +7,22 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           EditDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          11-18-2021 19:59
-// Last Updated On:     01-04-2022 16:03
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-12-2022 19:44
 // *****************************************/
-
-#endregion
-
-#region Using
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// </summary>
 public partial class EditDialog
 {
-    #region Fields
-
     private EditContext _context;
 
-    #endregion
-
-    #region Properties
-
+    /// <summary>
+    /// </summary>
     [Parameter]
     public AdminList AdminContext
     {
@@ -36,13 +30,9 @@ public partial class EditDialog
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
-    public bool Readonly
-    {
-        get;
-        set;
-    }
-
     public Dictionary<string, object> Attributes
     {
         get;
@@ -57,6 +47,8 @@ public partial class EditDialog
             }
         };
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string ID
     {
@@ -64,6 +56,8 @@ public partial class EditDialog
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Placeholder
     {
@@ -71,10 +65,19 @@ public partial class EditDialog
         set;
     }
 
-    #endregion
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool Readonly
+    {
+        get;
+        set;
+    }
 
-    #region Methods
-
+    /// <summary>
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
     public override Task SetParametersAsync(ParameterView parameters)
     {
         if (_context != null && AdminContext != null)
@@ -85,11 +88,12 @@ public partial class EditDialog
         return base.SetParametersAsync(parameters);
     }
 
-    public void ToolTipOpen(TooltipEventArgs args)
+    /// <summary>
+    /// </summary>
+    /// <param name="args"></param>
+    private void ToolTipOpen(TooltipEventArgs args)
     {
         _context?.Validate();
         args.Cancel = !args.HasText;
     }
-
-    #endregion
 }

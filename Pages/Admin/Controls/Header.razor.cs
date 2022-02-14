@@ -15,6 +15,9 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// 
+/// </summary>
 public partial class Header
 {
 }

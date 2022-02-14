@@ -7,18 +7,22 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelMaskedTextBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-29-2022 21:31
-// Last Updated On:     01-29-2022 21:43
+// Created On:          01-31-2022 19:26
+// Last Updated On:     02-12-2022 19:48
 // *****************************************/
 
 #endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
+/// <summary>
+/// </summary>
 public partial class LabelMaskedTextBox
 {
     private string _value;
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public bool CreateTooltip
     {
@@ -26,6 +30,8 @@ public partial class LabelMaskedTextBox
         set;
     } = true;
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string CssClass
     {
@@ -33,6 +39,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string ID
     {
@@ -40,6 +48,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Mask
     {
@@ -47,6 +57,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Placeholder
     {
@@ -54,6 +66,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public bool Readonly
     {
@@ -61,6 +75,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public Expression<Func<string>> ValidationMessage
     {
@@ -68,6 +84,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Value
     {
@@ -84,6 +102,8 @@ public partial class LabelMaskedTextBox
         }
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public EventCallback<string> ValueChanged
     {
@@ -91,6 +111,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public Expression<Func<string>> ValueExpression
     {
@@ -98,6 +120,8 @@ public partial class LabelMaskedTextBox
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string Width
     {
