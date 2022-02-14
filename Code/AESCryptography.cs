@@ -5,10 +5,10 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           TripleDESCryptography.cs
+// File Name:           AESCryptography.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-13-2022 20:57
+// Last Updated On:     02-14-2022 15:12
 // *****************************************/
 
 #endregion
@@ -18,42 +18,43 @@ namespace ProfSvc_AppTrack.Code;
 /// <summary>
 ///     Summary description for TripleDES
 /// </summary>
-public class TripleDESCryptography
+public class AESCryptography
 {
     /// <summary>
     /// </summary>
     /// <param name="key"></param>
     /// <param name="iv"></param>
-    public TripleDESCryptography(byte[] key, byte[] iv)
+    public AESCryptography(byte[] key, byte[] iv)
     {
-        //_tripleDes1.KeySize = 16;
-        _tripleDes1.Key = key;
-        _tripleDes1.IV = iv;
+        _aes.Key = key;
+        _aes.IV = iv;
     }
 
-    public TripleDESCryptography()
+    /// <summary>
+    /// </summary>
+    /// <param name="key">32-character Key string (256 bits)</param>
+    /// <param name="iv">16-character Initialization Vector (128 bits)</param>
+    public AESCryptography(string key, string iv)
     {
-        //_tripleDes1.KeySize = 16;
-        //_tripleDes1.BlockSize = 64;
-        //_tripleDes1.Mode = CipherMode.CFB;
-        //_tripleDes1.FeedbackSize = 64;
-        _tripleDes1.Key = Encoding.ASCII.GetBytes("12345678901234567890123456789012");
-        _tripleDes1.IV = Encoding.ASCII.GetBytes("1111111111222222");
+        _aes.Key = Encoding.ASCII.GetBytes(key);
+        _aes.IV = Encoding.ASCII.GetBytes(iv);
     }
+
+    public AESCryptography()
+    {
+        _aes.Key = Encoding.ASCII.GetBytes("~1@3$5^7*9)-+QwErTyUiOpAsDfGhJkL");
+        _aes.IV = Encoding.ASCII.GetBytes("ZxCvBnM,>':[};<=");
+    }
+
+    private readonly Aes _aes = Aes.Create();
 
     private readonly UTF8Encoding _encoder = new();
-
-    private readonly Aes _tripleDes1 = System.Security.Cryptography.Aes.Create();
-
-    private readonly byte[] _tripleKey;
-
-    private readonly byte[] _vectorByte;
 
     /// <summary>
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public byte[] Decrypt(byte[] input) => Transform(input, _tripleDes1.CreateDecryptor());
+    public byte[] Decrypt(byte[] input) => Transform(input, _aes.CreateDecryptor());
 
     /// <summary>
     /// </summary>
@@ -62,7 +63,7 @@ public class TripleDESCryptography
     public string Decrypt(string text)
     {
         byte[] _input = Convert.FromBase64String(text);
-        byte[] _bytes = Transform(_input, _tripleDes1.CreateDecryptor(_tripleKey, _vectorByte));
+        byte[] _bytes = Transform(_input, _aes.CreateDecryptor(_tripleKey, _vectorByte));
 
         return _encoder.GetString(_bytes);
     }
@@ -71,7 +72,7 @@ public class TripleDESCryptography
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public byte[] Encrypt(byte[] input) => Transform(input, _tripleDes1.CreateEncryptor());
+    public byte[] Encrypt(byte[] input) => Transform(input, _aes.CreateEncryptor());
 
     /// <summary>
     /// </summary>
@@ -80,8 +81,8 @@ public class TripleDESCryptography
     public string Encrypt(string text)
     {
         byte[] _bytes = _encoder.GetBytes(text);
-        
-        return Convert.ToBase64String(Transform(_bytes, _tripleDes1.CreateEncryptor()));
+
+        return Convert.ToBase64String(Transform(_bytes, _aes.CreateEncryptor()));
     }
 
     private static byte[] Transform(byte[] input, ICryptoTransform cryptoTransform)

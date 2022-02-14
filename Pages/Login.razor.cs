@@ -114,10 +114,10 @@ public partial class Login
             return;
         }
 
-        TripleDESCryptography _tripleDES = new TripleDESCryptography();
+        AESCryptography _aes = new AESCryptography();
         //_tripleDES.Encrypt();
         string _serializedLogin = JsonConvert.SerializeObject(_loginCooky);
-        string _encryptedText = _tripleDES.Encrypt(_serializedLogin);
+        string _encryptedText = _aes.Encrypt(_serializedLogin);
         await BlazoredLocalStorage.SetItemAsStringAsync("DeliciousCookie", _encryptedText);
         //StorageCompression _compression = new(LocalStorage);
         //await _compression.Set("GridVal", _loginCooky);
