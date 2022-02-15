@@ -520,6 +520,12 @@ public partial class Candidate
         set;
     } = new();
 
+    private CandidateNotes SelectedNotes
+    {
+        get;
+        set;
+    } = new();
+
     private CandidateSkills SelectedSkill
     {
         get;
@@ -624,6 +630,12 @@ public partial class Candidate
     }
 
     private EditExperienceDialog DialogExperience
+    {
+        get;
+        set;
+    }
+
+    private EditNotesDialog DialogNotes
     {
         get;
         set;
@@ -956,12 +968,14 @@ public partial class Candidate
 
     private async Task EditEducation(int id)
     {
+        await Task.Delay(1);
         SelectedEducation = EducationPanel.SelectedRow;
         await DialogEducation.Dialog.ShowAsync();
     }
 
     private async Task EditExperience(int id)
     {
+        await Task.Delay(1);
         SelectedExperience = ExperiencePanel.SelectedRow;
         await DialogExperience.Dialog.ShowAsync();
     }
@@ -974,9 +988,11 @@ public partial class Candidate
         //VisibleMPCCandidate = true;
     }
 
-    private void EditNotes(int id)
+    private async Task EditNotes(int id)
     {
-        VisibleNotesDialog = true;
+        await Task.Delay(1);
+        SelectedNotes = NotesPanel.SelectedRow;
+        await DialogNotes.Dialog.ShowAsync();
     }
 
     private async Task EditRating()

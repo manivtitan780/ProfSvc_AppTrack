@@ -15,7 +15,7 @@
                         </div>
                         <div class="divFlexSmall" style="display: flex;">
                             <div style="width: 38%">
-                                <LabelTextBox @bind-Value="@(ModelObject.FirstName)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="FirstName" ID="textFirst" MaxLength="50"
+                                <LabelTextBox @bind-Value="@(ModelObject.FirstName)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textFirst" MaxLength="50"
                                               MinLength="1" Placeholder="First Name" ValidationMessage="@(() => ModelObject.FirstName)" Width="100%" />
                             </div>
                             <div style="margin-left: 3%; width: 18%;">
@@ -23,7 +23,7 @@
                                               Placeholder="Middle Name" Width="100%" />
                             </div>
                             <div style="margin-left: 3%; width: 38%;">
-                                <LabelTextBox @bind-Value="@(ModelObject.LastName)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="LastName" ID="textLast" MaxLength="50"
+                                <LabelTextBox @bind-Value="@(ModelObject.LastName)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textLast" MaxLength="50"
                                               MinLength="1" Placeholder="Last Name" ValidationMessage="@(() => ModelObject.LastName)" Width="100%" />
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                             <label class="labelStatus" for="textAddress1">Address:</label>
                         </div>
                         <div class="divFlexSmall" style="height: 68px;">
-                            <LabelTextBox @bind-Value="@(ModelObject.Address1)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="Address1" ID="textAddress1" MaxLength="255"
+                            <LabelTextBox @bind-Value="@(ModelObject.Address1)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textAddress1" MaxLength="255"
                                           MinLength="1" Placeholder="Address" ValidationMessage="@(() => ModelObject.Address1)" Width="100%" />
                             <div style="margin-top: 4px;">
                                 <LabelTextBox @bind-Value="@(ModelObject.Address2)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textAddress2" MaxLength="255"
@@ -55,7 +55,7 @@
                         </div>
                         <div style="display: flex; width: 100%">
                             <div class="divFlexSmall" style="width: 35%">
-                                <LabelTextBox @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" FieldName="City" ID="textCity" MaxLength="50"
+                                <LabelTextBox @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textCity" MaxLength="50"
                                               MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <LabelTextBox @bind-Value="@(ModelObject.Email)" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="Email" ID="textEmail" MaxLength="255"
+                    <LabelTextBox @bind-Value="@(ModelObject.Email)" @bind-Value:event="ValueChanged" CreateDivTag="true" ID="textEmail" MaxLength="255"
                                   MinLength="1" Placeholder="Email Address" ValidationMessage="@(() => ModelObject.Email)" Width="100%" />
                     <div class="divFlex">
                         <div style="display: flex; width: 100%">
@@ -89,9 +89,9 @@
                             </div>
                         </div>
                     </div>
-                    <LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="Title" ID="textTitle" MaxLength="200"
+                    <LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" ID="textTitle" MaxLength="200"
                                   MinLength="1" Placeholder="Title" ValidationMessage="@(() => ModelObject.Title)" Width="100%" />
-                    <LabelTextBox @bind-Value="@(ModelObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="Keywords" Height="100px" ID="textKeywords" MaxLength="200"
+                    <LabelTextBox @bind-Value="@(ModelObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textKeywords" MaxLength="200"
                                   MinLength="1" Multiline="true" Placeholder="Keywords" ValidationMessage="@(() => ModelObject.Keywords)" Width="100%" />
                     <LabelTextBox @bind-Value="@(ModelObject.Summary)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textSummary"
                                   MaxLength="32767" Multiline="true" Placeholder="Summary" Width="100%" />

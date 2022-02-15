@@ -6,15 +6,15 @@
 		<EditForm Model="ModelObject" OnValidSubmit="SaveEducationDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelObject.College)" @bind-Value:event="ValueChanged" FieldName="College" ID="textCollege" MaxLength="100" MinLength="1" Multiline="false" Placeholder="School / College"
+				<LabelTextBox @bind-Value="@(ModelObject.College)" @bind-Value:event="ValueChanged" ID="textCollege" MaxLength="100" MinLength="1" Multiline="false" Placeholder="School / College"
 							  ValidationMessage="@(() => ModelObject.College)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Degree)" @bind-Value:event="ValueChanged" FieldName="Degree" ID="textDegree" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Degree"
+				<LabelTextBox @bind-Value="@(ModelObject.Degree)" @bind-Value:event="ValueChanged" ID="textDegree" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Degree"
 							  ValidationMessage="@(() => ModelObject.Degree)" />
-				<LabelTextBox @bind-Value="@(ModelObject.State)" @bind-Value:event="ValueChanged" FieldName="State" ID="textState" MaxLength="100" MinLength="1" Multiline="false" Placeholder="State"
+				<LabelTextBox @bind-Value="@(ModelObject.State)" @bind-Value:event="ValueChanged" ID="textState" MaxLength="100" MinLength="1" Multiline="false" Placeholder="State"
 							  ValidationMessage="@(() => ModelObject.State)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Country)" @bind-Value:event="ValueChanged" FieldName="Country" ID="textCountry" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Country"
+				<LabelTextBox @bind-Value="@(ModelObject.Country)" @bind-Value:event="ValueChanged" ID="textCountry" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Country"
 							  ValidationMessage="@(() => ModelObject.Country)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Year)" @bind-Value:event="ValueChanged" FieldName="Year" ID="textYear" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Year of Passing"
+				<LabelTextBox @bind-Value="@(ModelObject.Year)" @bind-Value:event="ValueChanged" ID="textYear" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Year of Passing"
 							  ValidationMessage="@(() => ModelObject.Year)" />
 			</div>
 			<DialogFooter CancelMethod="CancelEducationDialog"></DialogFooter>

@@ -23,7 +23,7 @@
 							<LabelSwitch @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?" />
 						</div>
 					</div>
-					<LabelTextBox @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" FieldName="MPCComments" Height="100px" ID="textComments"
+					<LabelTextBox @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments"
 								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.MPCComments)" />
 				</div>
 			</div>

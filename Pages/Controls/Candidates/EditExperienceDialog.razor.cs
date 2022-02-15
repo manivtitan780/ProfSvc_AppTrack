@@ -60,7 +60,6 @@ public partial class EditExperienceDialog
         await Cancel.InvokeAsync(args);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
-
     }
 
     private async Task SaveExperienceDialog(EditContext editContext)

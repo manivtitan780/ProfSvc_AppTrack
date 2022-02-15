@@ -6,7 +6,7 @@
 		<EditForm Model="ModelObject" OnValidSubmit="SaveSkillDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelObject.Skill)" @bind-Value:event="ValueChanged" FieldName="Skill" ID="textSkill" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Skill"
+				<LabelTextBox @bind-Value="@(ModelObject.Skill)" @bind-Value:event="ValueChanged" ID="textSkill" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Skill"
 							  ValidationMessage="@(() => ModelObject.Skill)" />
 				<LabelNumeric @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)" TValue="short"
 							  ValidationMessage="@(() => ModelObject.LastUsed)" />

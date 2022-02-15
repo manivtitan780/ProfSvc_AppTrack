@@ -60,7 +60,7 @@ public partial class LabelTextBox
         set;
     } = default!;
 
-    /// <summary>
+    /*/// <summary>
     /// 
     /// </summary>
     [Parameter]
@@ -68,7 +68,7 @@ public partial class LabelTextBox
     {
         get;
         set;
-    }
+    }*/
 
     /// <summary>
     /// </summary>

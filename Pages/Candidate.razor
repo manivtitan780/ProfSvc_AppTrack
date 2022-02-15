@@ -111,7 +111,7 @@
 								<TabHeader Text="Skills" />
 							</ChildContent>
 							<ContentTemplate>
-								<SkillPanel EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" DeleteSkill="DeleteSkill" />
+								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -119,7 +119,7 @@
 								<TabHeader Text="Education" />
 							</ChildContent>
 							<ContentTemplate>
-								<EducationPanel EditEducation="EditEducation" ModelObject="@_candidateEducationObject" RowHeight="@RowHeight" @ref="EducationPanel" DeleteEducation="DeleteEducation" />
+								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" ModelObject="@_candidateEducationObject" @ref="EducationPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -127,7 +127,7 @@
 								<TabHeader Text="Experience" />
 							</ChildContent>
 							<ContentTemplate>
-								<ExperiencePanel EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" RowHeight="@RowHeight" @ref="ExperiencePanel" DeleteExperience="DeleteExperience"  />
+								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -135,7 +135,7 @@
 								<TabHeader Text="Notes" />
 							</ChildContent>
 							<ContentTemplate>
-								<NotesPanel EditNotes="EditNotes" ModelObject="@_candidateNotesObject" RowHeight="@RowHeight" @ref="NotesPanel" DeleteNotes="DeleteNotes" />
+								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -183,12 +183,13 @@
 
 	<MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" />
 
-	<EditSkillDialog ModelObject="SelectedSkill" SaveSkill="SaveSkill" @ref="DialogSkill" />
-	
-	<EditEducationDialog ModelObject="SelectedEducation" SaveEducation="SaveEducation" @ref="DialogEducation"/>
+	<EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" SaveSkill="SaveSkill" />
 
-	<EditExperienceDialog ModelObject="SelectedExperience" SaveExperience="SaveExperience" @ref="DialogExperience"/>
+	<EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" SaveEducation="SaveEducation" />
 
+	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" SaveExperience="SaveExperience" />
+
+	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" SaveNotes="SaveNotes" />
 
 	<div class="divGridFooter">
 		<div style="display: flex">

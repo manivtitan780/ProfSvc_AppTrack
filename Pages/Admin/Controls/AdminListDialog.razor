@@ -6,7 +6,7 @@
         <EditForm Model="@Model" OnValidSubmit="SaveAdminList">
             <DataAnnotationsValidator></DataAnnotationsValidator>
             <div class="divContainerTable">
-                <LabelTextBox @bind-Value="@(Model.Text)" @bind-Value:event="ValueChanged" FieldName="Text" ID="textTitle" MaxLength="100" MinLength="1" Multiline="false" Placeholder="@Placeholder"
+                <LabelTextBox @bind-Value="@(Model.Text)" @bind-Value:event="ValueChanged" MaxLength="100" MinLength="1" Multiline="false" Placeholder="@Placeholder"
                               Readonly="false" ValidationMessage="@(() => Model.Text)" />
                 <LabelSwitch @bind-BindValue="@(Model.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
             </div>
