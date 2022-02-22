@@ -1,7 +1,23 @@
 ﻿@typeparam TValue
 @typeparam TItem
-
-<SfDropDownList Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue">
-	<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange"/>
-	<DropDownListFieldSettings Text="@TextField" Value="@ValueField"/>
-</SfDropDownList>
+@if (CreateDivTag)
+{
+	<div class="divFlex">
+		<div class="divFlexLabel">
+			<label class="labelStatus" for="@ID">@Placeholder:</label>
+		</div>
+		<div class="divFlexSmall">
+			<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression">
+				<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange" />
+				<DropDownListFieldSettings Text="@TextField" Value="@ValueField" />
+			</SfDropDownList>
+		</div>
+	</div>
+}
+else
+{
+	<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression">
+		<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange" />
+		<DropDownListFieldSettings Text="@TextField" Value="@ValueField" />
+	</SfDropDownList>
+}

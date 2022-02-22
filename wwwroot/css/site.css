@@ -385,7 +385,7 @@ span.invalid:after {
     margin-top: 20px;
 }
 
-.editIcon:before, .editIconInner:before, .deleteIconInner:before, .statusOnIcon:before, .statusOffIcon:before, .saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before, .mpcicon:before, .editSectionButton:before {
+.editIcon:before, .editIconInner:before, .undoIconInner:before, .deleteIconInner:before, .statusOnIcon:before, .statusOffIcon:before, .saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before, .addButton:before, .mpcicon:before, .editSectionButton:before {
     font-family: var(--font-icon);
     font-size: 24px;
     margin-left: -3px;
@@ -396,7 +396,7 @@ span.invalid:after {
     margin-right: 8px;
 }
 
-.editIconInner:before, .deleteIconInner:before{
+.editIconInner:before, .deleteIconInner:before, .undoIconInner:before{
     font-size: 20px;
 }
 
@@ -406,6 +406,10 @@ span.invalid:after {
 
 .editIcon:before, .editSectionButton:before, .editIconInner:before {
     content: "\eded";
+}
+
+.undoIconInner:before {
+    content: "\ee0b";
 }
 
 .deleteIconInner:before {
@@ -436,6 +440,18 @@ span.invalid:after {
 
 .refreshButton:before {
     content: "\efd1";
+}
+
+.addButton:before {
+    font-size: 14px;
+    content: "\ec3e";
+}
+
+.tabButtonAdd {
+    position: absolute;
+    top: 55px;
+    right: 100px;
+    z-index: 12001;
 }
 
 .mpcicon:before {
@@ -1213,4 +1229,26 @@ div[id^="e-item-tabCandidates_"] {
     position: absolute;
     top: 110px;
     width: 93%;
+}
+
+.blankActivityNotes {
+    border: 1px solid var(--c-grayCF);
+    color: black;
+    font-style: italic;
+    line-height: 40px;
+    min-height: 40px;
+    padding: 5px;
+    margin-left: 15px;
+    width: 95%;
+}
+
+.activityNotes {
+    border: 1px solid var(--c-grayCF);
+    color: black;
+    font-style: italic;
+    line-height: 25px;
+    min-height: 40px;
+    padding: 5px;
+    margin-left: 15px;
+    width: 95%;
 }

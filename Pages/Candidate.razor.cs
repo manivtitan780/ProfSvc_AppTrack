@@ -8,17 +8,20 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-06-2022 19:31
+// Last Updated On:     02-18-2022 20:18
 // *****************************************/
 
 #endregion
 
 #region Using
 
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Components.Forms;
+
+using System.Diagnostics;
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
+using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
 
@@ -37,7 +40,6 @@ public partial class Candidate
     private readonly Candidates _candidateContext = new();
     private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
     private readonly Dictionary<string, object> _htmlAttributes1 = new() {{"maxlength", "500"}, {"minlength", "1"}, {"rows", "4"}};
-    private readonly IMemoryCache _memoryCache;
 
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
@@ -109,9 +111,22 @@ public partial class Candidate
     private List<CandidateRating> _candidateRatingObject = new();
     private List<CandidateSkills> _candidateSkillsObject = new();
 
+    private List<KeyValues> _communication;
+
     private int _currentPage = 1;
 
     private bool _dontChangePageDetails = true;
+
+    private List<IntValues> _eligibility;
+
+    private List<IntValues> _experience;
+
+    private List<KeyValues> _jobOptions;
+    private int _selectedTab;
+
+    private List<IntValues> _states;
+
+    private List<StatusCode> _statusCodes;
 
     //private readonly DialogSettings _dialogParams = new()
     //{
@@ -134,6 +149,10 @@ public partial class Candidate
 
     private Candidates _target;
 
+    private List<KeyValues> _taxTerms;
+
+    private List<Workflow> _workflows;
+
     //public async Task RecordClickHandler(RecordClickEventArgs<Candidates> args)
     //{
     //    await Grid.ExpandCollapseDetailRowAsync(args.RowData);
@@ -141,28 +160,11 @@ public partial class Candidate
 
     private string SkillObj = "";
 
-    public static List<KeyValues> Communication
-    {
-        get;
-    } = new();
-
     public static decimal Count
     {
         get;
         set;
     }
-
-    private EditEducationDialog DialogEducation
-    {
-        get;
-        set;
-    }
-
-    public static List<IntValues> Eligibility
-    {
-        get;
-        set;
-    } = new();
 
     public static int EndRecord
     {
@@ -170,16 +172,9 @@ public partial class Candidate
         set;
     }
 
-    public static List<IntValues> Experience
+    public List<KeyValues> NextSteps
     {
         get;
-        set;
-    } = new();
-
-    public static List<KeyValues> JobOptions
-    {
-        get;
-        set;
     } = new();
 
     public static int PageCount
@@ -194,23 +189,11 @@ public partial class Candidate
         set;
     }
 
-    public static List<IntValues> States
+    private ActivityPanel ActivityPanel
     {
         get;
         set;
-    } = new();
-
-    public static List<KeyValues> StatusCodes
-    {
-        get;
-        set;
-    } = new();
-
-    public static List<KeyValues> TaxTerms
-    {
-        get;
-        set;
-    } = new();
+    }
 
     private MarkupString Address
     {
@@ -301,13 +284,37 @@ public partial class Candidate
         set;
     } = 1;
 
+    private EditActivityDialog DialogActivity
+    {
+        get;
+        set;
+    }
+
     private EditCandidateDialog DialogEditCandidate
     {
         get;
         set;
     }
 
+    private EditEducationDialog DialogEducation
+    {
+        get;
+        set;
+    }
+
+    private EditExperienceDialog DialogExperience
+    {
+        get;
+        set;
+    }
+
     private MPCCandidateDialog DialogMPC
+    {
+        get;
+        set;
+    }
+
+    private EditNotesDialog DialogNotes
     {
         get;
         set;
@@ -332,12 +339,6 @@ public partial class Candidate
     }
 
     private ExperiencePanel ExperiencePanel
-    {
-        get;
-        set;
-    }
-
-    private NotesPanel NotesPanel
     {
         get;
         set;
@@ -459,6 +460,12 @@ public partial class Candidate
         set;
     }
 
+    private LoginCooky LoginCookyUser
+    {
+        get;
+        set;
+    }
+
     private string MimeType
     {
         get;
@@ -490,6 +497,12 @@ public partial class Candidate
         set;
     }
 
+    private NotesPanel NotesPanel
+    {
+        get;
+        set;
+    }
+
     private MarkupString RatingDate
     {
         get;
@@ -507,6 +520,12 @@ public partial class Candidate
         get;
         set;
     }
+
+    private CandidateActivity SelectedActivity
+    {
+        get;
+        set;
+    } = new();
 
     private CandidateEducation SelectedEducation
     {
@@ -629,29 +648,10 @@ public partial class Candidate
         set;
     }
 
-    private EditExperienceDialog DialogExperience
-    {
-        get;
-        set;
-    }
-
-    private EditNotesDialog DialogNotes
-    {
-        get;
-        set;
-    }
-
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(1);
-        await NavManager.RedirectInner(LocalStorageBlazored);
-        await base.OnInitializedAsync();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)  
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
         {
@@ -683,6 +683,23 @@ public partial class Candidate
         }
 
         SkillObj = "Not Found";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+        IMemoryCache _memoryCache = Start.MemCache;
+        _memoryCache.TryGetValue("States", out _states);
+        _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        _memoryCache.TryGetValue("Experience", out _experience);
+        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
+        _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+        _memoryCache.TryGetValue("Workflow", out _workflows);
+        _memoryCache.TryGetValue("Communication", out _communication);
+
+        await base.OnInitializedAsync();
     }
 
     /*private static void RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
@@ -779,7 +796,7 @@ public partial class Candidate
                                    };
             _request.AddQueryParameter("id", id.ToString());
             _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
             if (_response == null)
@@ -809,7 +826,7 @@ public partial class Candidate
                                    };
             _request.AddQueryParameter("id", id.ToString());
             _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
             if (_response == null)
@@ -839,7 +856,7 @@ public partial class Candidate
                                    };
             _request.AddQueryParameter("id", id.ToString());
             _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
             if (_response == null)
@@ -868,7 +885,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddQueryParameter("id", id.ToString());
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
             if (_response == null)
@@ -933,13 +950,41 @@ public partial class Candidate
             SetExperience();
         }
 
+        _selectedTab = 0;
+
         await Task.Delay(1);
         await Spinner.HideAsync();
     }
 
-    private void EditActivity(int id)
+    private async Task EditActivity(int id)
     {
-        VisibleActivityDialog = true;
+        await Task.Delay(1);
+
+        SelectedActivity = ActivityPanel.SelectedRow;
+        NextSteps.Clear();
+        NextSteps.Add(new("No Change", ""));
+        try
+        {
+            foreach (string[] _next in _workflows.Where(flow => flow.Step == SelectedActivity.StatusCode).Select(flow => flow.Next.Split(',')))
+            {
+                foreach (string _nextString in _next)
+                {
+                    foreach (StatusCode _status in _statusCodes.Where(status => status.Code == _nextString && status.AppliesToCode == "SCN"))
+                    {
+                        NextSteps.Add(new(_status.Status, _nextString));
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+        catch
+        {
+            //
+        }
+
+        await DialogActivity.Dialog.ShowAsync();
     }
 
     private async Task EditCandidate()
@@ -969,14 +1014,30 @@ public partial class Candidate
     private async Task EditEducation(int id)
     {
         await Task.Delay(1);
-        SelectedEducation = EducationPanel.SelectedRow;
+        if (id == 0)
+        {
+            SelectedEducation.ClearData();
+        }
+        else
+        {
+            SelectedEducation = EducationPanel.SelectedRow;
+        }
+
         await DialogEducation.Dialog.ShowAsync();
     }
 
     private async Task EditExperience(int id)
     {
         await Task.Delay(1);
-        SelectedExperience = ExperiencePanel.SelectedRow;
+        if (id == 0)
+        {
+            SelectedExperience.ClearData();
+        }
+        else
+        {
+            SelectedExperience = ExperiencePanel.SelectedRow;
+        }
+
         await DialogExperience.Dialog.ShowAsync();
     }
 
@@ -991,7 +1052,15 @@ public partial class Candidate
     private async Task EditNotes(int id)
     {
         await Task.Delay(1);
-        SelectedNotes = NotesPanel.SelectedRow;
+        if (id == 0)
+        {
+            SelectedNotes.ClearData();
+        }
+        else
+        {
+            SelectedNotes = NotesPanel.SelectedRow;
+        }
+
         await DialogNotes.Dialog.ShowAsync();
     }
 
@@ -1003,7 +1072,15 @@ public partial class Candidate
 
     private async Task EditSkill(int id)
     {
-        SelectedSkill = SkillPanel.SelectedRow;
+        if (id == 0)
+        {
+            SelectedSkill.ClearData();
+        }
+        else
+        {
+            SelectedSkill = SkillPanel.SelectedRow;
+        }
+
         await DialogSkill.Dialog.ShowAsync();
     }
 
@@ -1125,7 +1202,7 @@ public partial class Candidate
         RatingNote = _ratingNote.ToMarkupString();
     }
 
-    private static string GetState(int id) => States.FirstOrDefault(state => state.Key == id)?.Value.Split('-')[0].Trim();
+    private string GetState(int id) => _states.FirstOrDefault(state => state.Key == id)?.Value.Split('-')[1].Replace("[", "").Replace("]", "").Trim();
 
     private async Task LastClick()
     {
@@ -1223,6 +1300,37 @@ public partial class Candidate
 
     private static void RefreshGrid() => Grid.Refresh();
 
+    private async Task SaveActivity(EditContext activity)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveCandidateActivity", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(activity.Model);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+            _request.AddQueryParameter("candidateID", _target.ID);
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
     private async Task SaveCandidate()
     {
         //SpinnerVisible = true;
@@ -1268,7 +1376,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddJsonBody(education.Model);
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
             _request.AddQueryParameter("candidateID", _target.ID);
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1299,7 +1407,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddJsonBody(experience.Model);
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
             _request.AddQueryParameter("candidateID", _target.ID);
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1309,6 +1417,36 @@ public partial class Candidate
             }
 
             _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task SaveMPC(EditContext editContext)
+    {
+        await Task.Delay(1);
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveMPC", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(editContext.Model);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response != null)
+            {
+                _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
+                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
+                GetMPCDate();
+                GetMPCNote();
+            }
         }
         catch
         {
@@ -1330,7 +1468,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddJsonBody(notes.Model);
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
             _request.AddQueryParameter("candidateID", _target.ID);
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1340,36 +1478,6 @@ public partial class Candidate
             }
 
             _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
-        }
-        catch
-        {
-            //
-        }
-
-        await Task.Delay(1);
-    }
-
-    private async Task SaveMPC(EditContext editContext)
-    {
-        await Task.Delay(1);
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveMPC", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(editContext.Model);
-            _request.AddQueryParameter("user", "JOLLY");
-
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response != null)
-            {
-                _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
-                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
-                GetMPCDate();
-                GetMPCNote();
-            }
         }
         catch
         {
@@ -1390,7 +1498,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddJsonBody(editContext.Model);
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
             if (_response != null)
@@ -1422,7 +1530,7 @@ public partial class Candidate
                                        RequestFormat = DataFormat.Json
                                    };
             _request.AddJsonBody(skill.Model);
-            _request.AddQueryParameter("user", "JOLLY");
+            _request.AddQueryParameter("user", LoginCookyUser.UserID.ToUpperInvariant());
             _request.AddQueryParameter("candidateID", _target.ID);
 
             Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
@@ -1466,20 +1574,20 @@ public partial class Candidate
 
     private void SetEligibility()
     {
-        if (Eligibility is {Count: > 0})
+        if (_eligibility is {Count: > 0})
         {
             CandidateEligibility = _candidateDetailsObject.EligibilityID > 0
-                                       ? Eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID)!.Value.ToMarkupString()
+                                       ? _eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID)!.Value.ToMarkupString()
                                        : "".ToMarkupString();
         }
     }
 
     private void SetExperience()
     {
-        if (Experience is {Count: > 0})
+        if (_experience is {Count: > 0})
         {
             CandidateExperience = _candidateDetailsObject.ExperienceID > 0
-                                      ? Experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString()
+                                      ? _experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString()
                                       : "".ToMarkupString();
         }
     }
@@ -1487,7 +1595,7 @@ public partial class Candidate
     private void SetJobOption()
     {
         string _returnValue = "";
-        if (JobOptions is {Count: > 0})
+        if (_jobOptions is {Count: > 0})
         {
             string[] _splitJobOptions = _candidateDetailsObject.JobOptions.Split(',');
             foreach (string _str in _splitJobOptions)
@@ -1499,11 +1607,11 @@ public partial class Candidate
 
                 if (_returnValue != "")
                 {
-                    _returnValue += ", " + JobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
+                    _returnValue += ", " + _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
                 }
                 else
                 {
-                    _returnValue = JobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
+                    _returnValue = _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
                 }
             }
         }
@@ -1514,7 +1622,10 @@ public partial class Candidate
     private void SetTaxTerm()
     {
         string _returnValue = "";
-        if (TaxTerms is {Count: > 0})
+        /*IMemoryCache _memoryCache = Start.MemCache;
+        _memoryCache.TryGetValue("TaxTerms", out List<KeyValues> _taxTerms);*/
+
+        if (_taxTerms is {Count: > 0})
         {
             string[] _splitTaxTerm = _candidateDetailsObject.TaxTerm.Split(',');
             foreach (string _str in _splitTaxTerm)
@@ -1526,11 +1637,11 @@ public partial class Candidate
 
                 if (_returnValue != "")
                 {
-                    _returnValue += ", " + TaxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
+                    _returnValue += ", " + _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
                 }
                 else
                 {
-                    _returnValue = TaxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
+                    _returnValue = _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
                 }
             }
         }
@@ -1565,12 +1676,19 @@ public partial class Candidate
         {
             if (_generateAddress == "")
             {
-                _generateAddress = States.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value.Split('-')[0].Trim();
+                _generateAddress = _states.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
                 // CandidateDetailsObject.State;
             }
             else
             {
-                _generateAddress += ", " + States.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value.Split('-')[0].Trim();
+                try
+                {
+                    _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+                }
+                catch
+                {
+                    //
+                }
                 //+ CandidateDetailsObject.State;
             }
         }
@@ -1590,6 +1708,12 @@ public partial class Candidate
         //NumberOfLines = _generateAddress.Split("<br/>").Length;
 
         Address = _generateAddress.ToMarkupString();
+    }
+
+    private async Task TabSelected(SelectEventArgs args)
+    {
+        await Task.Delay(1);
+        _selectedTab = args.SelectedIndex;
     }
 
     /*private void StateIDChanged(ChangeEventArgs<int, IntValues> args)
@@ -1613,12 +1737,7 @@ public partial class Candidate
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
-            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(Name, dm, _getStates, CandidateGridPersistValues.Page, ItemCount);
-            if (_getStates)
-            {
-                _getStates = false;
-            }
-
+            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(Name, dm, CandidateGridPersistValues.Page, ItemCount);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
             return _candidateReturn;
@@ -1634,5 +1753,35 @@ public partial class Candidate
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
 
         #endregion
+    }
+
+    private async Task UndoActivity(int activityID)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/UndoCandidateActivity", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("submissionID", activityID);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
     }
 }

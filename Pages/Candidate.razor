@@ -56,7 +56,7 @@
 					@{
 						if (aCon is Candidates _con)
 						{
-							@(_con.Phone + " " + SkillObj)
+							@_con.Phone
 						}
 					}
 				</Template>
@@ -90,10 +90,18 @@
 				@{
 					//Candidates _candidates = context! as Candidates;
 				}
+				@* Add Buttons Start *@
+				<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>
+				@* Add Buttons End *@
 				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+						<TabEvents Selected="TabSelected"></TabEvents>
 					</TabAnimationSettings>
 					<TabItems>
 						<TabItem>
@@ -135,7 +143,7 @@
 								<TabHeader Text="Notes" />
 							</ChildContent>
 							<ContentTemplate>
-								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
+								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -164,7 +172,7 @@
 								<TabHeader Text="Candidate Activity" />
 							</ChildContent>
 							<ContentTemplate>
-								<ActivityPanel EditActivity="EditActivity" ModelObject="@_candidateActivityObject" RowHeight="@RowHeight" />
+								<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" RowHeight="@RowHeight" @ref="ActivityPanel" UndoCandidateActivity="UndoActivity" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
@@ -174,8 +182,8 @@
 		</GridTemplates>
 	</SfGrid>
 
-	<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="Communication" Eligibility="Eligibility" Experience="Experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
-						 JobOptions="JobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" SaveCandidate="SaveCandidate" States="States" TaxTerms="TaxTerms" Tools="_tools1" />
+	<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
+						 JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" SaveCandidate="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
 
 	<ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
 
@@ -190,6 +198,8 @@
 	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" SaveExperience="SaveExperience" />
 
 	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" SaveNotes="SaveNotes" />
+
+	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" SaveActivity="SaveActivity" Status="_workflows" />
 
 	<div class="divGridFooter">
 		<div style="display: flex">

@@ -8,7 +8,7 @@
 			@if (CreateTooltip)
 			{
 				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-					<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })"
+					<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
 							   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged"
 							   ValueExpression="@ValueExpression" Width="@Width" Type="@TextBoxType">
 					</SfTextBox>
@@ -21,7 +21,7 @@
 			}
 			else
 			{
-				<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })"
+				<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
 						   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
 						   Width="@Width" Type="@TextBoxType">
 				</SfTextBox>
@@ -34,7 +34,7 @@ else
 	if (CreateTooltip)
 	{
 		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-			<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })"
+			<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
 					   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
 					   Width="@Width" Type="@TextBoxType">
 			</SfTextBox>
@@ -47,7 +47,7 @@ else
 	}
 	else
 	{
-		<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? 3 : 1} })"
+		<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
 				   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
 				   Width="@Width" Type="@TextBoxType">
 		</SfTextBox>

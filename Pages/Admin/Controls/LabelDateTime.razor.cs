@@ -5,20 +5,23 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           LabelTextBox.razor.cs
+// File Name:           LabelDateTime.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-31-2022 19:26
-// Last Updated On:     02-19-2022 20:53
+// Created On:          02-19-2022 15:10
+// Last Updated On:     02-19-2022 15:33
 // *****************************************/
 
 #endregion
 
+using FocusEventArgs = Microsoft.AspNetCore.Components.Web.FocusEventArgs;
+
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-/// <inheritdoc />
-public partial class LabelTextBox
+/// <summary>
+/// </summary>
+public partial class LabelDateTime
 {
-    private string _value;
+    private DateTime _value;
 
     /// <summary>
     /// </summary>
@@ -47,34 +50,13 @@ public partial class LabelTextBox
         set;
     }
 
-    /*/// <summary>
-    /// 
-    /// </summary>
-    [CascadingParameter]
-    public EditContext EditContext
-    {
-        get;
-        set;
-    } = default!;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [Parameter]
-    public string FieldName
-    {
-        get;
-        set;
-    }*/
-
     /// <summary>
     /// </summary>
-    [Parameter]
-    public string Height
+    public SfDateTimePicker<DateTime> DateTimeBox
     {
         get;
         set;
-    } = "inherit";
+    }
 
     /// <summary>
     /// </summary>
@@ -88,29 +70,20 @@ public partial class LabelTextBox
     /// <summary>
     /// </summary>
     [Parameter]
-    public int MaxLength
+    public DateTime Max
     {
         get;
         set;
-    }
+    } = DateTime.MaxValue;
 
     /// <summary>
     /// </summary>
     [Parameter]
-    public int MinLength
+    public DateTime Min
     {
         get;
         set;
-    } = 0;
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public bool Multiline
-    {
-        get;
-        set;
-    } = false;
+    } = DateTime.MinValue;
 
     /// <summary>
     /// </summary>
@@ -128,26 +101,7 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = false;
-
-    /// <summary>
-    ///     Number of rows for a multi-line Text Box. If Multiline is set as false, this property is ignored.
-    /// </summary>
-    [Parameter]
-    public byte Rows
-    {
-        get;
-        set;
-    } = 3;
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public InputType TextBoxType
-    {
-        get;
-        set;
-    } = InputType.Text;
+    }
 
     /// <summary>
     /// </summary>
@@ -161,12 +115,12 @@ public partial class LabelTextBox
     /// <summary>
     /// </summary>
     [Parameter]
-    public string Value
+    public DateTime Value
     {
         get => _value;
         set
         {
-            if (EqualityComparer<string>.Default.Equals(value, _value))
+            if (EqualityComparer<DateTime?>.Default.Equals(value, _value))
             {
                 return;
             }
@@ -179,7 +133,7 @@ public partial class LabelTextBox
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<string> ValueChanged
+    public EventCallback<DateTime> ValueChanged
     {
         get;
         set;
@@ -188,7 +142,7 @@ public partial class LabelTextBox
     /// <summary>
     /// </summary>
     [Parameter]
-    public Expression<Func<string>> ValueExpression
+    public Expression<Func<DateTime>> ValueExpression
     {
         get;
         set;
@@ -201,37 +155,16 @@ public partial class LabelTextBox
     {
         get;
         set;
-    } = "98%";
+    } = "30%";
 
-    private SfTextBox Box
-    {
-        get;
-        set;
-    }
+    /// <summary>
+    /// </summary>
+    /// <param name="args"></param>
+    private void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 
-    private FieldIdentifier Field
-    {
-        get;
-        set;
-    }
-
-    /*protected override void OnInitialized()
-    {
-        if (FieldName.NullOrWhiteSpace())
-        {
-            return;
-        }
-
-        Field = EditContext.Field(FieldName);
-        EditContext.OnValidationStateChanged += HandleValidationStateChanged;
-    }
-
-    private async Task HandleValidationStateChanged(object sender, ValidationStateChangedEventArgs e)
+    private async Task DateTimePickerFocus(FocusEventArgs args)
     {
         await Task.Delay(1);
-        Box?.UpdateParentClass("", "");
-        StateHasChanged();
-    }*/
-
-    private void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
+        await DateTimeBox.ShowDatePopupAsync();
+    }
 }

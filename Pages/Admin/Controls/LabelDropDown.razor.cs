@@ -8,7 +8,7 @@
 // File Name:           LabelDropDown.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-31-2022 19:26
-// Last Updated On:     02-12-2022 19:48
+// Last Updated On:     02-19-2022 20:51
 // *****************************************/
 
 #endregion
@@ -22,6 +22,15 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 public partial class LabelDropDown<TValue, TItem>
 {
     private TValue _value;
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool CreateDivTag
+    {
+        get;
+        set;
+    } = false;
 
     /// <summary>
     /// </summary>
@@ -45,6 +54,15 @@ public partial class LabelDropDown<TValue, TItem>
     /// </summary>
     [Parameter]
     public string ID
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public string Placeholder
     {
         get;
         set;

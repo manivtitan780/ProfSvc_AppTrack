@@ -13,6 +13,8 @@
 
 #endregion
 
+using System.Runtime.InteropServices;
+
 namespace ProfSvc_AppTrack.Code;
 
 /// <summary>
@@ -169,6 +171,8 @@ public static class General
 
         return _id;
     }*/
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            static Dictionary<string, object> _restResponse;
 
     /// <summary>
     /// </summary>
@@ -178,7 +182,7 @@ public static class General
     /// <param name="page"></param>
     /// <param name="count"></param>
     /// <returns></returns>
-    public static async Task<object> GetCandidateReadAdaptor(string name, DataManagerRequest dm, bool getStates, int page, int count)
+    public static async Task<object> GetCandidateReadAdaptor(string name, DataManagerRequest dm, int page, int count)
     {
         List<Candidates> _dataSource = new();
 
@@ -189,12 +193,8 @@ public static class General
             _request.AddQueryParameter("page", page.ToString());
             _request.AddQueryParameter("count", count.ToString());
             _request.AddQueryParameter("name", name);
-            if (getStates)
-            {
-                _request.AddQueryParameter("getStates", true.ToString());
-            }
-
-            Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
+            
+            _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
             if (_restResponse == null)
             {
                 return dm.RequiresCounts ? new DataResult
@@ -211,16 +211,13 @@ public static class General
             Candidate.StartRecord = ((page - 1) * count + 1).ToInt32();
             Candidate.EndRecord = ((page - 1) * count).ToInt32() + _dataSource.Count;
 
-            if (!getStates)
-            {
                 return dm.RequiresCounts ? new DataResult
                                            {
                                                Result = _dataSource,
                                                Count = _count /*_count*/
                                            } : _dataSource;
-            }
 
-            Candidate.States = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["States"].ToString() ?? string.Empty);
+            /*Candidate.States = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["States"].ToString() ?? string.Empty);
             Candidate.Eligibility = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["Eligibility"].ToString() ?? string.Empty);
             Candidate.Experience = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["Experience"].ToString() ?? string.Empty);
             Candidate.Communication.AddRange(new[]
@@ -236,7 +233,7 @@ public static class General
                                        {
                                            Result = _dataSource,
                                            Count = _count
-                                       } : _dataSource;
+                                       } : _dataSource;*/
         }
         catch
         {

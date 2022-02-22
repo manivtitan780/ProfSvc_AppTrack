@@ -8,7 +8,7 @@
 // File Name:           LabelMaskedTextBox.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-31-2022 19:26
-// Last Updated On:     02-12-2022 19:48
+// Last Updated On:     02-19-2022 21:00
 // *****************************************/
 
 #endregion
@@ -20,6 +20,13 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 public partial class LabelMaskedTextBox
 {
     private string _value;
+
+    [Parameter]
+    public bool CreateDivTag
+    {
+        get;
+        set;
+    } = false;
 
     /// <summary>
     /// </summary>

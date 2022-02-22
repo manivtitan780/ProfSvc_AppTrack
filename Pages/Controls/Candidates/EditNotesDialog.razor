@@ -1,4 +1,4 @@
-﻿<SfDialog Header="Edit Notes" Height="635px" IsModal="true" MinHeight="400px" @ref="Dialog" Target="#divTarget" Visible="false" Width="480px">
+﻿<SfDialog Header="Edit Notes" Height="265px" IsModal="true" MinHeight="250px" @ref="Dialog" Target="#divTarget" Visible="false" Width="480px">
 	<ChildContent>
 		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
 		<DialogPositionData X="right" Y="center" />
@@ -6,7 +6,7 @@
 		<EditForm Model="ModelObject" OnValidSubmit="SaveNotesDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelObject.Notes)" @bind-Value:event="ValueChanged" Height="100px" ID="textNotes" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Candidate Notes"
+				<LabelTextBox @bind-Value="@(ModelObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Candidate Notes"
 							  ValidationMessage="@(() => ModelObject.Notes)" />
 			</div>
 			<DialogFooter CancelMethod="CancelNotesDialog"></DialogFooter>

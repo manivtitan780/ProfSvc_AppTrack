@@ -39,6 +39,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.JSInterop;
 global using Microsoft.AspNetCore.Components.Web;
+global using Microsoft.Extensions.Caching.Memory;
 
 global using Blazored.LocalStorage;
 
@@ -53,6 +54,7 @@ global using ProfSvc_AppTrack.Pages.Admin.Controls;
 global using ProfSvc_AppTrack.Pages.Validation;
 
 global using Syncfusion.Blazor;
+global using Syncfusion.Blazor.Calendars;
 global using Syncfusion.Blazor.DropDowns;
 global using Syncfusion.Blazor.Data;
 global using Syncfusion.Blazor.Grids;

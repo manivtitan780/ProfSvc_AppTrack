@@ -38,7 +38,7 @@ public partial class NotesPanel
     }
 
     [Parameter]
-    public List<CandidateNotes> ModelObject
+    public List<CandidateNotes> ModelNotesObject
     {
         get;
         set;

@@ -60,7 +60,7 @@ public static class LoginCheck
     /// <param name="navigationManager">The Navigation Manager object that is injected into the page.</param>
     /// <param name="blazoredStorage">Blazored.LocalStorage object that is injected into the page.</param>
     /// <returns>A Task.</returns>
-    public static async Task RedirectInner(this NavigationManager navigationManager, ILocalStorageService blazoredStorage)
+    public static async Task<LoginCooky> RedirectInner(this NavigationManager navigationManager, ILocalStorageService blazoredStorage)
     {
         string _cookyString = await blazoredStorage.GetItemAsync<string>("DeliciousCookie");
         LoginCooky _loginCooky = null;
@@ -71,9 +71,12 @@ public static class LoginCheck
             _loginCooky = JsonConvert.DeserializeObject<LoginCooky>(_deserializedText);
         }
 
-        if (_loginCooky == null || _loginCooky.UserID.NullOrWhiteSpace())
+        if (_loginCooky != null && !_loginCooky.UserID.NullOrWhiteSpace())
         {
-            navigationManager.NavigateTo($"{navigationManager.BaseUri}", true);
+            return _loginCooky;
         }
+
+        navigationManager.NavigateTo($"{navigationManager.BaseUri}", true);
+        return null;
     }
 }

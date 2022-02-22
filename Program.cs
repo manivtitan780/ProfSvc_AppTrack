@@ -15,8 +15,6 @@
 
 #region Using
 
-using Microsoft.Extensions.Caching.Memory;
-
 using Radzen;
 
 #endregion
@@ -57,23 +55,22 @@ _app.UseStaticFiles();
 _app.UseRouting();
 
 _app.MapBlazorHub();
-_app.MapFallbackToPage("/_Host"); 
+_app.MapFallbackToPage("/_Host");
 
-//Start.SetCache();
 IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
-if (_memoryCache.TryGetValue("Skills", out string _skillObject))
-{
-    return;
-}
 
-MemoryCacheEntryOptions _cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(60));
-_skillObject = DateTime.Now.ToLongTimeString();
-_memoryCache.Set("Skills", _skillObject, _cacheOptions);
+//if (_memoryCache.TryGetValue("Skills", out string _skillObject))
+//{
+//    return;
+//}
+
+//_skillObject = DateTime.Now.ToLongTimeString();
+//_memoryCache.Set("Skills", _skillObject, _cacheOptions);
 Start.MemCache = _memoryCache;
 
 Start.ApiHost = _app.Configuration.GetValue(typeof(string), "APIHost").ToString();
 Start.ConnectionString = _app.Configuration.GetConnectionString("DBConnect");
 
-
+Start.SetCache();
 
 _app.Run();

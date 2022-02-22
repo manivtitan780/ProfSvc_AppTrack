@@ -39,16 +39,16 @@ public partial class EditEducationDialog
         set;
     } = new();
 
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<EditContext> SaveEducation
+    public SfSpinner Spinner
     {
         get;
         set;
     }
 
-    public SfSpinner Spinner
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<EditContext> SaveEducation
     {
         get;
         set;
