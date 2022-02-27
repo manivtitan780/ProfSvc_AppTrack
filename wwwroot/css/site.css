@@ -1245,6 +1245,10 @@ div[id^="e-item-tabCandidates_"] {
     width: 93%;
 }
 
+.uploadDocument {
+    position: inherit;
+}
+
 .blankActivityNotes {
     border: 1px solid var(--c-grayCF);
     color: black;

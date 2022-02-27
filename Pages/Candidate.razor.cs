@@ -8,7 +8,7 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-25-2022 19:04
+// Last Updated On:     02-27-2022 19:30
 // *****************************************/
 
 #endregion
@@ -513,6 +513,11 @@ public partial class Candidate
         set;
     }
 
+    private CandidateDocument NewDocument
+    {
+        get;
+    } = new();
+
     private NotesPanel NotesPanel
     {
         get;
@@ -722,6 +727,15 @@ public partial class Candidate
         _memoryCache.TryGetValue("Communication", out _communication);
 
         await base.OnInitializedAsync();
+    }
+
+    private async Task AddDocument(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+
+        NewDocument.ClearData();
+
+        await DialogDocument.Dialog.ShowAsync();
     }
 
     /*private static void RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
