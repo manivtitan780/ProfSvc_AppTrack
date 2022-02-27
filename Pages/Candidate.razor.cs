@@ -8,16 +8,12 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-18-2022 20:18
+// Last Updated On:     02-25-2022 19:04
 // *****************************************/
 
 #endregion
 
 #region Using
-
-using Microsoft.AspNetCore.Components.Forms;
-
-using System.Diagnostics;
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
@@ -104,6 +100,7 @@ public partial class Candidate
 
     private CandidateDetails _candidateDetailsObject = new();
     private CandidateDetails _candidateDetailsObjectClone = new();
+    private List<CandidateDocument> _candidateDocumentsObject = new();
     private List<CandidateEducation> _candidateEducationObject = new();
     private List<CandidateExperience> _candidateExperienceObject = new();
     private List<CandidateMPC> _candidateMPCObject = new();
@@ -290,6 +287,12 @@ public partial class Candidate
         set;
     }
 
+    private AddDocumentDialog DialogDocument
+    {
+        get;
+        set;
+    }
+
     private EditCandidateDialog DialogEditCandidate
     {
         get;
@@ -332,7 +335,20 @@ public partial class Candidate
         set;
     }
 
+    private DownloadsPanel DownloadsPanel
+    {
+        get;
+        set;
+    }
+
     private EducationPanel EducationPanel
+    {
+        get;
+        set;
+    }
+
+    [Inject]
+    private IWebHostEnvironment Environment
     {
         get;
         set;
@@ -522,6 +538,12 @@ public partial class Candidate
     }
 
     private CandidateActivity SelectedActivity
+    {
+        get;
+        set;
+    } = new();
+
+    private CandidateDocument SelectedDownload
     {
         get;
         set;
@@ -784,6 +806,11 @@ public partial class Candidate
         await Grid.SelectRowAsync(0);
     }
 
+    private async Task DeleteDocument(int arg)
+    {
+        await Task.Delay(1);
+    }
+
     private async Task DeleteEducation(int id)
     {
         await Task.Delay(1);
@@ -937,6 +964,7 @@ public partial class Candidate
             _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
             _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
             _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+            _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
             RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
             GetMPCDate();
             GetMPCNote();
@@ -950,10 +978,22 @@ public partial class Candidate
             SetExperience();
         }
 
-        _selectedTab = 0;
+        _selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
 
         await Task.Delay(1);
         await Spinner.HideAsync();
+    }
+
+    private async Task DownloadDocument(int arg)
+    {
+        await Task.Delay(1);
+        SelectedDownload = DownloadsPanel.SelectedRow;
+        string _queryString = (SelectedDownload.InternalFileName + "^" + _target.ID + "^" + SelectedDownload.Location + "^0").ToBase64String();
+        //NavManager.NavigateTo(NavManager.BaseUri + "Download/" + _queryString);
+        await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
+        /*string _filePath = Path.Combine(Environment.WebRootPath, "Uploads", "Candidate", _target.ID.ToString(), SelectedDownload.InternalFileName).ToBase64String();
+        byte[] _fileBytes = await File.ReadAllBytesAsync(_filePath);
+        return File(_fileBytes, "application/force-download", _decodedStringArray[2]);*/
     }
 
     private async Task EditActivity(int id)
@@ -1716,45 +1756,6 @@ public partial class Candidate
         _selectedTab = args.SelectedIndex;
     }
 
-    /*private void StateIDChanged(ChangeEventArgs<int, IntValues> args)
-    {
-        //IntValues _selectedItem = args.ItemData;
-        //CandidateDetailsObject.State = _selectedItem.Value.Split('-')[0].Trim();
-    }*/
-
-    /*
-        private void ToolTipOpen(TooltipEventArgs args)
-        {
-            _statusEditContext?.Validate();
-            args.Cancel = !args.HasText;
-        }
-    */
-
-    public class AdminCandidateAdaptor : DataAdaptor
-    {
-        #region Methods
-
-        /// <summary>Performs data Read operation synchronously.</summary>
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
-        {
-            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(Name, dm, CandidateGridPersistValues.Page, ItemCount);
-            //Count = ((DataResult)_candidateReturn.Result).Count;
-            Grid.SelectRowAsync(0);
-            return _candidateReturn;
-        }
-
-        #endregion
-    }
-
-    public class AdminCandidateDropDownAdaptor : DataAdaptor
-    {
-        #region Methods
-
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
-
-        #endregion
-    }
-
     private async Task UndoActivity(int activityID)
     {
         await Task.Delay(1);
@@ -1783,5 +1784,30 @@ public partial class Candidate
         }
 
         await Task.Delay(1);
+    }
+
+    public class AdminCandidateAdaptor : DataAdaptor
+    {
+        #region Methods
+
+        /// <summary>Performs data Read operation synchronously.</summary>
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
+        {
+            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(Name, dm, CandidateGridPersistValues.Page, ItemCount);
+            //Count = ((DataResult)_candidateReturn.Result).Count;
+            Grid.SelectRowAsync(0);
+            return _candidateReturn;
+        }
+
+        #endregion
+    }
+
+    public class AdminCandidateDropDownAdaptor : DataAdaptor
+    {
+        #region Methods
+
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
+
+        #endregion
     }
 }

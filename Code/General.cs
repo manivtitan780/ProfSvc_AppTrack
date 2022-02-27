@@ -178,7 +178,6 @@ public static class General
     /// </summary>
     /// <param name="name"></param>
     /// <param name="dm"></param>
-    /// <param name="getStates"></param>
     /// <param name="page"></param>
     /// <param name="count"></param>
     /// <returns></returns>

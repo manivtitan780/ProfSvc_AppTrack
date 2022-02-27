@@ -92,12 +92,12 @@
 				}
 				@* Add Buttons Start *@
 				<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
 				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="RefreshGrid" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>
 				@* Add Buttons End *@
-				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%">
+				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%" SelectedItem="_selectedTab">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
@@ -163,8 +163,7 @@
 								<TabHeader Text="Downloads" />
 							</ChildContent>
 							<ContentTemplate>
-								<div style="height: 100%">
-								</div>
+								<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -200,6 +199,8 @@
 	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" SaveNotes="SaveNotes" />
 
 	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" SaveActivity="SaveActivity" Status="_workflows" />
+
+	<AddDocumentDialog ModelDocumentObject="SelectedDownload" @ref="DialogDocument" SaveDocument="SaveActivity" />
 
 	<div class="divGridFooter">
 		<div style="display: flex">

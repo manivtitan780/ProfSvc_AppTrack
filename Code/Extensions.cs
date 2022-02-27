@@ -99,6 +99,28 @@ public static partial class Extensions
     public static bool StringToBoolean(this string s) => s == "1";
 
     /// <summary>
+    /// Convert a string to Base64 converted string.
+    /// </summary>
+    /// <param name="s">The string to convert.</param>
+    /// <returns>Base64 converted string.</returns>
+    public static string ToBase64String(this string s)
+    {
+        byte[] _bytes = Encoding.UTF8.GetBytes(s);
+        return Convert.ToBase64String(_bytes);
+    }
+
+    /// <summary>
+    /// Convert a Base64 string to plain string.
+    /// </summary>
+    /// <param name="s">Base64 string.</param>
+    /// <returns>The raw string.</returns>
+    public static string FromBase64String(this string s)
+    {
+        byte[] _bytes = Convert.FromBase64String(s);
+        return Encoding.UTF8.GetString(_bytes);
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="s"></param>
     /// <param name="byteArray"></param>

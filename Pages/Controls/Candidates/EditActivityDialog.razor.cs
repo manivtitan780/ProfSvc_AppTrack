@@ -137,11 +137,6 @@ public partial class EditActivityDialog
         if (Status != null)
         {
             IsShow = Status.Any(_ => _.Step == status.Value && _.Schedule);
-            /*foreach (Workflow _ in Status.Any(_ => _.Step == status.Value && _.Schedule))
-            {
-                IsShow = true;
-                break;
-            }*/
         }
 
         Dialog.Height = IsShow ? "98vh" : "460px";
