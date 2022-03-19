@@ -24,7 +24,7 @@ using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 namespace ProfSvc_AppTrack.Pages;
 
-public partial class Candidate:ComponentBase
+public partial class Candidate
 {
     private const byte RowHeight = 38;
 

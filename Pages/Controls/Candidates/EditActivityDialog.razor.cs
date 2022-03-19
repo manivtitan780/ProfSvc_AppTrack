@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
-public partial class EditActivityDialog:ComponentBase
+public partial class EditActivityDialog
 {
     [Parameter]
     public EventCallback CancelActivity

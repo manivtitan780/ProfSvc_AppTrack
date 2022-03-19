@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class Roles:ComponentBase
+public partial class Roles
 {
     private static bool _valueChanged = true;
 

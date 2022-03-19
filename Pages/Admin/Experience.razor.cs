@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class Experience:ComponentBase
+public partial class Experience
 {
     private static bool _valueChanged = true;
 

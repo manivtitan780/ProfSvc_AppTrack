@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class Skills:ComponentBase
+public partial class Skills
 {
     private static bool _valueChanged = true;
 

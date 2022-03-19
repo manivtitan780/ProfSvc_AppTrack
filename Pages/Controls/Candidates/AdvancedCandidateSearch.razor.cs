@@ -13,13 +13,13 @@
 
 #endregion
 
-using Microsoft.AspNetCore.Components.Forms;
+//using Microsoft.AspNetCore.Components.Forms;
 
-using System.Runtime.CompilerServices;
+//using System.Runtime.CompilerServices;
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
-public partial class AdvancedCandidateSearch:ComponentBase
+public partial class AdvancedCandidateSearch
 {
     [Parameter]
     public EventCallback Cancel

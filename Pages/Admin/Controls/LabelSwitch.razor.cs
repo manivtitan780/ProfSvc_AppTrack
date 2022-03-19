@@ -19,7 +19,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
-public partial class LabelSwitch:ComponentBase
+public partial class LabelSwitch
 {
     #region Fields
 

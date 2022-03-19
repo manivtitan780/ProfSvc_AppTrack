@@ -19,7 +19,7 @@
 
 namespace ProfSvc_AppTrack.Shared;
 
-public partial class LoadingScreen:ComponentBase
+public partial class LoadingScreen
 {
     #region Fields
 

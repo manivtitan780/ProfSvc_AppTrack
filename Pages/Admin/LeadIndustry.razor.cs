@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class LeadIndustry:ComponentBase
+public partial class LeadIndustry
 {
     private static bool _valueChanged = true;
 

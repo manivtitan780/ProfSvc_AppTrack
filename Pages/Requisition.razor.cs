@@ -21,7 +21,7 @@ using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 
 namespace ProfSvc_AppTrack.Pages;
 
-public partial class Requisition:ComponentBase
+public partial class Requisition
 {
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
