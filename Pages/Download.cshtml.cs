@@ -52,7 +52,7 @@ public class DownloadModel : PageModel
                            _ => "Candidate"
                        };
 
-        string _filePath = Path.Combine(_environment.WebRootPath, "Uploads", _type, _decodedStringArray[1], _decodedStringArray[0]);
+        string _filePath = Path.Combine(Start.UploadsPath, "Uploads", _type, _decodedStringArray[1], _decodedStringArray[0]);
         byte[] _fileBytes = System.IO.File.ReadAllBytes(_filePath);
         return File(_fileBytes, "application/force-download", _decodedStringArray[2]);
     }

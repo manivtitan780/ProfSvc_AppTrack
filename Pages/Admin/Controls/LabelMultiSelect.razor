@@ -2,26 +2,149 @@
 @using FilterType = Syncfusion.Blazor.DropDowns.FilterType
 @typeparam TValue
 
-@if (CreateTooltip)
+@if (UseCustomTemplate)
 {
-	<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-		<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="VisualMode.Box" Placeholder="@Placeholder"
-					   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
-			@*<MultiSelectEvents  TItem="TItem" TValue="TValue" />*@
-			<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
-		</SfMultiSelect>
-		<TooltipTemplates>
-			<Content>
-				<ValidationMessage For="@ValidationMessage" />
-			</Content>
-		</TooltipTemplates>
-	</SfTooltip>
+	if (CreateDivTag)
+	{
+		if (CreateTooltip)
+		{
+			<div class="divFlex" style="height: 140px">
+				<div class="divFlexLabel">
+					<label class="labelStatus" for="@ID">@Placeholder:</label>
+				</div>
+				<div class="divFlexSmall" id="@("div" + ID)">
+					<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+						<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+									   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+							@*<MultiSelectEvents  TItem="TItem" TValue="TValue" />
+							<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />*@
+							<ItemTemplate>@ItemTemplate</ItemTemplate>
+							<ValueTemplate>@ValueTemplate</ValueTemplate>
+						</SfMultiSelect>
+						<TooltipTemplates>
+							<Content>
+								<ValidationMessage For="@ValidationMessage" />
+							</Content>
+						</TooltipTemplates>
+					</SfTooltip>
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="divFlex" style="height: 140px">
+				<div class="divFlexLabel">
+					<label class="labelStatus" for="@ID">@Placeholder:</label>
+				</div>
+				<div class="divFlexSmall" id="@("div" + ID)">
+					<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+								   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+						@*<MultiSelectEvents TItem="TItem" TValue="TValue" />
+						<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />*@
+						<ItemTemplate>@ItemTemplate</ItemTemplate>
+						<ValueTemplate>@ValueTemplate</ValueTemplate>
+					</SfMultiSelect>
+				</div>
+			</div>
+		}
+	}
+	else
+	{
+		if (CreateTooltip)
+		{
+			<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+				<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+							   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+					@*<MultiSelectEvents  TItem="TItem" TValue="TValue" />
+				<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />*@
+					<ItemTemplate>@ItemTemplate</ItemTemplate>
+					<ValueTemplate>@ValueTemplate</ValueTemplate>
+				</SfMultiSelect>
+				<TooltipTemplates>
+					<Content>
+						<ValidationMessage For="@ValidationMessage" />
+					</Content>
+				</TooltipTemplates>
+			</SfTooltip>
+		}
+		else
+		{
+			<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+						   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+				@*<MultiSelectEvents TItem="TItem" TValue="TValue" />
+			<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />*@
+				<ItemTemplate>@ItemTemplate</ItemTemplate>
+				<ValueTemplate>@ValueTemplate</ValueTemplate>
+			</SfMultiSelect>
+		}
+	}
 }
 else
 {
-	<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="VisualMode.Box" Placeholder="@Placeholder"
-				   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
-		@*<MultiSelectEvents TItem="TItem" TValue="TValue" />*@
-		<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
-	</SfMultiSelect>
+	if (CreateDivTag)
+	{
+		@if (CreateTooltip)
+		{
+			<div class="divFlex" style="height: 140px">
+				<div class="divFlexLabel">
+					<label class="labelStatus" for="@ID">@Placeholder:</label>
+				</div>
+				<div class="divFlexSmall" id="@("div" + ID)">
+					<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+						<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+									   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+							@*<MultiSelectEvents  TItem="TItem" TValue="TValue" />*@
+							<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
+						</SfMultiSelect>
+						<TooltipTemplates>
+							<Content>
+								<ValidationMessage For="@ValidationMessage" />
+							</Content>
+						</TooltipTemplates>
+					</SfTooltip>
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="divFlex" style="height: 140px">
+				<div class="divFlexLabel">
+					<label class="labelStatus" for="@ID">@Placeholder:</label>
+				</div>
+				<div class="divFlexSmall" id="@("div" + ID)">
+					<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+								   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+						@*<MultiSelectEvents TItem="TItem" TValue="TValue" />*@
+						<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
+					</SfMultiSelect>
+				</div>
+			</div>
+		}
+	}
+	else
+	{
+		@if (CreateTooltip)
+		{
+			<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+				<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+							   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+					@*<MultiSelectEvents  TItem="TItem" TValue="TValue" />*@
+					<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
+				</SfMultiSelect>
+				<TooltipTemplates>
+					<Content>
+						<ValidationMessage For="@ValidationMessage" />
+					</Content>
+				</TooltipTemplates>
+			</SfTooltip>
+		}
+		else
+		{
+			<SfMultiSelect AllowFiltering="true" DataSource="@DataSource" FilterBarPlaceholder="@FilterBarPlaceholder" FilterType="FilterType.Contains" ID="@ID" Mode="@Mode" Placeholder="@Placeholder"
+						   TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+				@*<MultiSelectEvents TItem="TItem" TValue="TValue" />*@
+				<MultiSelectFieldSettings Text="@ValueField" Value="@KeyField" />
+			</SfMultiSelect>
+		}
+	}
 }

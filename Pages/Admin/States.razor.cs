@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class States
+public partial class States:ComponentBase
 {
     private static bool _valueChanged = true;
 

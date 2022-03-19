@@ -80,7 +80,7 @@ public partial class EditCandidateDialog
     }
 
     [Parameter]
-    public EventCallback<EditContext> SaveCandidate
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -132,7 +132,7 @@ public partial class EditCandidateDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveCandidate.InvokeAsync(editContext);
+        await Save.InvokeAsync(editContext);
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();

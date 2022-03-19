@@ -121,4 +121,11 @@ public partial class LabelDropDown<TValue, TItem>
         get;
         set;
     }
+
+    [Parameter]
+    public string Width
+    {
+        get;
+        set;
+    } = "98%";
 }

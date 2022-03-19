@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           ParseCandidateDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-04-2022 15:31
-// Last Updated On:     01-04-2022 16:10
+// Created On:          01-26-2022 19:30
+// Last Updated On:     02-27-2022 20:38
 // *****************************************/
 
 #endregion
@@ -17,13 +17,25 @@ namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
 public partial class ParseCandidateDialog
 {
-    #region Fields
-
     private bool _value;
 
-    #endregion
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<CloseEventArgs> CancelCandidate
+    {
+        get;
+        set;
+    }
 
-    #region Properties
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> OnFileUpload
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
@@ -51,24 +63,4 @@ public partial class ParseCandidateDialog
         get;
         set;
     }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<CloseEventArgs> CancelCandidate
-    {
-        get;
-        set;
-    }
-
-    /// <summary>
-    /// </summary>
-    [Parameter]
-    public EventCallback<UploadChangeEventArgs> OnFileUpload
-    {
-        get;
-        set;
-    }
-
-    #endregion
 }

@@ -74,7 +74,7 @@ public partial class MPCCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveMPC
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -114,7 +114,7 @@ public partial class MPCCandidateDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveMPC.InvokeAsync(obj);
+        await Save.InvokeAsync(obj);
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();

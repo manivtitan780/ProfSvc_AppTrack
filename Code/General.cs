@@ -8,12 +8,16 @@
 // File Name:           General.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-31-2022 19:26
-// Last Updated On:     02-13-2022 20:23
+// Last Updated On:     03-19-2022 16:01
 // *****************************************/
 
 #endregion
 
+#region Using
+
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace ProfSvc_AppTrack.Code;
 
@@ -21,6 +25,42 @@ namespace ProfSvc_AppTrack.Code;
 /// </summary>
 public static class General
 {
+    /*public static async Task<int> Save<T>(AdminList adminList, string connectionString, string methodName, string parameterName, string userName,
+                                          SfGrid<T> grid)
+    {
+        await using SqlConnection _con = new(connectionString);
+        _con.Open();
+        int _id = -1;
+        try
+        {
+            await using SqlCommand _command = new(methodName, _con)
+                                              {
+                                                  CommandType = CommandType.StoredProcedure
+                                              };
+            _command.AddIntParameter("@ID", adminList.ID.DbNull());
+            _command.AddVarcharParameter(parameterName, 100, adminList.Text);
+            _command.AddVarcharParameter("@User", 10, userName);
+            _command.AddBitParameter("@Enabled", adminList.IsEnabled);
+            await using SqlDataReader _reader = await _command.ExecuteReaderAsync();
+            if (!_reader.HasRows)
+            {
+                _id = -1;
+            }
+            else
+            {
+                _reader.Read();
+                _id = _reader.GetInt32(0);
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+
+        return _id;
+    }*/
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+    private static Dictionary<string, object> _restResponse;
     //internal static object SaveAdminList(string v1, string v2, bool v3, bool v4, object designationRecord, SfGrid<AdminList> grid,
     //                                     IHttpClientFactory clientFactory) => throw new NotImplementedException();
 
@@ -137,62 +177,29 @@ public static class General
         }
     }
 
-    /*public static async Task<int> Save<T>(AdminList adminList, string connectionString, string methodName, string parameterName, string userName,
-                                          SfGrid<T> grid)
-    {
-        await using SqlConnection _con = new(connectionString);
-        _con.Open();
-        int _id = -1;
-        try
-        {
-            await using SqlCommand _command = new(methodName, _con)
-                                              {
-                                                  CommandType = CommandType.StoredProcedure
-                                              };
-            _command.AddIntParameter("@ID", adminList.ID.DbNull());
-            _command.AddVarcharParameter(parameterName, 100, adminList.Text);
-            _command.AddVarcharParameter("@User", 10, userName);
-            _command.AddBitParameter("@Enabled", adminList.IsEnabled);
-            await using SqlDataReader _reader = await _command.ExecuteReaderAsync();
-            if (!_reader.HasRows)
-            {
-                _id = -1;
-            }
-            else
-            {
-                _reader.Read();
-                _id = _reader.GetInt32(0);
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-
-        return _id;
-    }*/
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            static Dictionary<string, object> _restResponse;
-
     /// <summary>
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="searchModel"></param>
     /// <param name="dm"></param>
-    /// <param name="page"></param>
-    /// <param name="count"></param>
     /// <returns></returns>
-    public static async Task<object> GetCandidateReadAdaptor(string name, DataManagerRequest dm, int page, int count)
+    public static async Task<object> GetCandidateReadAdaptor(CandidateSearch searchModel, DataManagerRequest dm) //string name, int page, int count)
     {
         List<Candidates> _dataSource = new();
 
+        int _itemCount = searchModel.ItemCount;
+        int _page = searchModel.Page;
         try
         {
             RestClient _restClient = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/GetGridCandidates");
-            _request.AddQueryParameter("page", page.ToString());
-            _request.AddQueryParameter("count", count.ToString());
-            _request.AddQueryParameter("name", name);
-            
+            RestRequest _request = new("Candidates/GetGridCandidates")
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            //_request.AddQueryParameter("page", searchModel.Page.ToString());
+            //_request.AddQueryParameter("count", _itemCount.ToString());
+            //_request.AddQueryParameter("name", searchModel.Name);
+            _request.AddJsonBody(searchModel);
+
             _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
             if (_restResponse == null)
             {
@@ -206,15 +213,15 @@ public static class General
             _dataSource = JsonConvert.DeserializeObject<List<Candidates>>(_restResponse["Candidates"].ToString() ?? string.Empty);
             int _count = _restResponse["Count"].ToInt32();
             Candidate.Count = _count;
-            Candidate.PageCount = Math.Ceiling(_count / count.ToDecimal()).ToInt32();
-            Candidate.StartRecord = ((page - 1) * count + 1).ToInt32();
-            Candidate.EndRecord = ((page - 1) * count).ToInt32() + _dataSource.Count;
+            Candidate.PageCount = Math.Ceiling(_count / _itemCount.ToDecimal()).ToInt32();
+            Candidate.StartRecord = ((_page - 1) * _itemCount + 1).ToInt32();
+            Candidate.EndRecord = ((_page - 1) * _itemCount).ToInt32() + _dataSource.Count;
 
-                return dm.RequiresCounts ? new DataResult
-                                           {
-                                               Result = _dataSource,
-                                               Count = _count /*_count*/
-                                           } : _dataSource;
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count /*_count*/
+                                       } : _dataSource;
 
             /*Candidate.States = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["States"].ToString() ?? string.Empty);
             Candidate.Eligibility = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["Eligibility"].ToString() ?? string.Empty);
@@ -393,6 +400,73 @@ public static class General
                                                                          Result = _dataSource,
                                                                          Count = 1
                                                                      } : _dataSource);
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="searchModel"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
+    public static async Task<object> GetRequisitionReadAdaptor(RequisitionSearch searchModel, DataManagerRequest dm) //string name, int page, int count)
+    {
+        List<Requisitions> _dataSource = new();
+
+        int _itemCount = searchModel.ItemCount;
+        int _page = searchModel.Page;
+        try
+        {
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Requisition/GetGridRequisitions")
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            //_request.AddQueryParameter("page", searchModel.Page.ToString());
+            //_request.AddQueryParameter("count", _itemCount.ToString());
+            //_request.AddQueryParameter("name", searchModel.Name);
+            _request.AddJsonBody(searchModel);
+
+            _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
+            if (_restResponse == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
+            }
+
+            _dataSource = JsonConvert.DeserializeObject<List<Requisitions>>(_restResponse["Requisitions"].ToString() ?? string.Empty);
+            int _count = _restResponse["Count"].ToInt32();
+            Requisition.Count = _count;
+            Requisition.PageCount = Math.Ceiling(_count / _itemCount.ToDecimal()).ToInt32();
+            Requisition.StartRecord = ((_page - 1) * _itemCount + 1).ToInt32();
+            Requisition.EndRecord = ((_page - 1) * _itemCount).ToInt32() + _dataSource.Count;
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count /*_count*/
+                                       } : _dataSource;
+        }
+        catch
+        {
+            if (_dataSource == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
+            }
+
+            _dataSource.Add(new());
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
         }
     }
 

@@ -42,7 +42,7 @@ public partial class EditExperienceDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveExperience
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -66,7 +66,7 @@ public partial class EditExperienceDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveExperience.InvokeAsync(editContext);
+        await Save.InvokeAsync(editContext);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

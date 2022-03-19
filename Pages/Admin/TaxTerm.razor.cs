@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class TaxTerm
+public partial class TaxTerm:ComponentBase
 {
     private static bool _valueChanged = true;
 

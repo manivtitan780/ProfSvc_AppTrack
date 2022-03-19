@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class LeadStatus
+public partial class LeadStatus:ComponentBase
 {
     private static bool _valueChanged = true;
 

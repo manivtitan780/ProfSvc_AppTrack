@@ -50,6 +50,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Pages\Admin\Controls\LabelButtonGroup.razor.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\Admin\Controls\LabelButtonGroup.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
@@ -64,10 +72,10 @@
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
-        <PackageReference Include="Radzen.Blazor" Version="3.15.6" />
+        <PackageReference Include="Radzen.Blazor" Version="3.16.3" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.0" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.53" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
     </ItemGroup>
 
     <ItemGroup>

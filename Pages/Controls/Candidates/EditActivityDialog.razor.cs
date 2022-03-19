@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
-public partial class EditActivityDialog
+public partial class EditActivityDialog:ComponentBase
 {
     [Parameter]
     public EventCallback CancelActivity
@@ -58,7 +58,7 @@ public partial class EditActivityDialog
     }
 
     [Parameter]
-    public EventCallback<EditContext> SaveActivity
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -76,7 +76,7 @@ public partial class EditActivityDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveActivity.InvokeAsync(editContext);
+        await Save.InvokeAsync(editContext);
         await Spinner.HideAsync();
         Dialog.Height = "200px";
         await Dialog.HideAsync();

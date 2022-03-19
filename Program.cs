@@ -29,7 +29,7 @@ _builder.Services.AddScoped<TooltipService>();
 _builder.Services.AddScoped<ContextMenuService>();
 _builder.Services.AddRazorPages();
 _builder.Services.AddServerSideBlazor();
-//_builder.Services.AddSingleton<WeatherForecastService>();
+_builder.Services.AddSingleton<Start>();
 _builder.Services.AddHttpContextAccessor();
 _builder.Services.AddHttpClient();
 _builder.Services.AddBlazoredLocalStorage();                                                            // local storage
@@ -66,11 +66,12 @@ IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
 //_skillObject = DateTime.Now.ToLongTimeString();
 //_memoryCache.Set("Skills", _skillObject, _cacheOptions);
+
 Start.MemCache = _memoryCache;
 
 Start.ApiHost = _app.Configuration.GetValue(typeof(string), "APIHost").ToString();
 Start.ConnectionString = _app.Configuration.GetConnectionString("DBConnect");
-
+Start.UploadsPath = _builder.Environment.WebRootPath;
 Start.SetCache();
 
 _app.Run();

@@ -1,0 +1,76 @@
+﻿<SfDialog Header="Search Candidate" Height="98vh" IsModal="true" MinHeight="98vh" @ref="Dialog" Target="#divTarget" Visible="false" Width="800px">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="center" Y="center"></DialogPositionData>
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.FadeZoom"></DialogAnimationSettings>
+		<EditForm Model="ModelSearchObject" OnValidSubmit="SearchCandidateDialog">
+			<DataAnnotationsValidator />
+			<div class="divContainerTable">
+				<LabelTextBox @bind-Value="@(ModelSearchObject.Name)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textName" MaxLength="255" MinLength="0" Multiline="false" Placeholder="Name" />
+				<div class="divSwitchFlex">
+					<div class="divSwitchFlexLabel">
+						<label class="labelStatus">Show:</label>
+					</div>
+					<div class="divSwitchFlexControl divCandidateShow" style="display: flex; width: 400px">
+						<SfRadioButton @bind-Checked="@ModelSearchObject.MyCandidates" Label="All Candidates" Name="showCandidates" Value="false"></SfRadioButton>
+						<SfRadioButton @bind-Checked="@ModelSearchObject.MyCandidates" Label="My Candidates" Name="showCandidates" Value="true"></SfRadioButton>
+					</div>
+				</div>
+				<LabelSwitch @bind-BindValue="@(ModelSearchObject.IncludeAdmin)" ID="checkedIncludeAdmin" OffLabel="NO" OnLabel="YES" Placeholder="Include Admin Candidates?"></LabelSwitch>
+				<LabelTextBox @bind-Value="@(ModelSearchObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textKeywords" MaxLength="2000" MinLength="0"
+							  Multiline="true" Placeholder="Enter Keywords (separated by commas)" Rows="4" />
+				<LabelTextBox @bind-Value="@(ModelSearchObject.Skills)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textSkills" MaxLength="2000" MinLength="0"
+							  Multiline="true" Placeholder="Enter Skills (separated by commas)" Rows="4" />
+				<LabelSwitch @bind-BindValue="@(ModelSearchObject.CityZip)" ID="checkedNarrow" OffLabel="STATE" OnLabel="CITY/ZIP" Placeholder="Narrow Search By"></LabelSwitch>
+				<div id="divZip" style="display: @(ModelSearchObject.CityZip ? "initial" : "none")">
+					<div class="divSwitchFlex">
+						<div class="divSwitchFlexLabel">
+							<label class="labelStatus" for="autoCityZip">City/Zip:</label>
+						</div>
+						<div class="divSwitchFlexControl divCandidateShow" style="display: flex;">
+							<AutoCompleteButton @bind-Value="ModelSearchObject.CityName" @bind-Value:event="ValueChanged" EnablePersistence="false" ID="autoCityZip" PlaceholderText="Select a City or Zip" 
+												@ref="AutoCompleteControl" Ref="AutoCompleteCityZip" TypeInstance="@typeof(CandidateCityZipAdaptor)" />
+						</div>
+					</div>
+					<div>
+						<div style="display: inline-block; width: 12%;">
+							<LabelDropDown @bind-Value="@ModelSearchObject.Proximity" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ProximityValue" ID="dropProximity" Placeholder="Proximity" TextField="Value"
+										   TItem="IntValues" TValue="int" ValueField="Key" Width="75px" />
+						</div>
+						<div style="display: inline-block; width: 25%;">
+							<LabelDropDown @bind-Value="@ModelSearchObject.ProximityUnit" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ProximityUnit" ID="dropProximityUnit" 
+										   TextField="Value" TItem="IntValues" TValue="byte" ValueField="Key" Width="75px" />
+						</div>
+					</div>
+				</div>
+				<div id="divState" style="display: @(ModelSearchObject.CityZip ? "none" : "initial")">
+					<LabelMultiSelect @bind-Value="@(ModelSearchObject.StateID)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="StateDropDown" FilterBarPlaceholder="Search State&hellip;" 
+									  ID="multiState" KeyField="Key" Placeholder="Select State(s)" TItem="IntValues" TValue="string" ValueField="Value" />
+					@*<LabelDropDown @bind-Value="@ModelSearchObject.StateID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@StateDropDown" ID="dropState" Placeholder="State" TextField="Value"
+								   TItem="IntValues" TValue="string" ValueField="Key" Width="50%" />*@
+				</div>
+				<div>
+					<div style="display: inline-block; width: 48%;">
+						<LabelDropDown @bind-Value="@ModelSearchObject.Eligibility" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@EligibilityDropDown" ID="dropEligibility" Placeholder="Eligibility"
+									   TextField="Value" TItem="IntValues" TValue="int" ValueField="Key" />
+					</div>
+					<div style="display: inline-block; width: 48%;">
+						<LabelDropDown @bind-Value="@ModelSearchObject.JobOptions" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@JobOptionsDropDown" ID="dropJobOptions" Placeholder="Job Options"
+									   TextField="Value" TItem="KeyValues" TValue="string" ValueField="Key" />
+					</div>
+				</div>
+				<div>
+					<div style="display: inline-block; width: 48%;">
+						<LabelDropDown @bind-Value="@ModelSearchObject.Relocate" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@RelocateDropDown" ID="dropRelocate" Placeholder="Relocate"
+									   TextField="Value" TItem="KeyValues" TValue="string" ValueField="Key" />
+					</div>
+					<div style="display: inline-block; width: 48%;">
+						<LabelDropDown @bind-Value="@ModelSearchObject.SecurityClearance" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@SecurityClearanceDropDown" ID="dropSecurityClearance"
+									   Placeholder="Security Clearance" TextField="Value" TItem="KeyValues" TValue="string" ValueField="Key" />
+					</div>
+				</div>
+			</div>
+			<DialogFooter CancelMethod="CancelSearchDialog" @ref="DialogFooter" />
+		</EditForm>
+	</ChildContent>
+</SfDialog>

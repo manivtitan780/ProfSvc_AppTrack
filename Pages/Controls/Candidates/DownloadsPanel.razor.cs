@@ -68,7 +68,7 @@ public partial class DownloadsPanel
     {
         double _index = await GridDownload.GetRowIndexByPrimaryKey(id);
         await GridDownload.SelectRowAsync(_index);
-        if (await JsRuntime.Confirm("Are you sure you want to delete this Education?"))
+        if (await JsRuntime.Confirm("Are you sure you want to delete this Document?" + Environment.NewLine +  "Note: This action cannot be reversed."))
         {
             await DeleteDocument.InvokeAsync(id);
         }

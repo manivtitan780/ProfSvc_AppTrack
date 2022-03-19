@@ -8,7 +8,7 @@
 // File Name:           AutoCompleteButton.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-12-2022 19:41
+// Last Updated On:     03-14-2022 21:07
 // *****************************************/
 
 #endregion
@@ -19,6 +19,8 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 /// </summary>
 public partial class AutoCompleteButton
 {
+    private string _value;
+
     /// <summary>
     /// </summary>
     public SfAutoComplete<string, KeyValues> Acb { get; set; }
@@ -31,6 +33,13 @@ public partial class AutoCompleteButton
         get;
         set;
     }
+
+    [Parameter]
+    public bool EnablePersistence
+    {
+        get;
+        set;
+    } = true;
 
     [Parameter]
     public string ID
@@ -68,12 +77,40 @@ public partial class AutoCompleteButton
 
     /// <summary>
     /// </summary>
-    public string Value => Acb.Value;
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            if (EqualityComparer<string>.Default.Equals(value, _value))
+            {
+                return;
+            }
+
+            _value = value;
+            ValueChanged.InvokeAsync(value);
+        }
+    }
 
     /// <summary>
     /// </summary>
     [Parameter]
     public EventCallback<ChangeEventArgs<string, KeyValues>> ValueChange
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public Expression<Func<string>> ValueExpression
     {
         get;
         set;

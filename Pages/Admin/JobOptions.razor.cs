@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class JobOptions
+public partial class JobOptions:ComponentBase
 {
     private static bool _valueChanged = true;
 

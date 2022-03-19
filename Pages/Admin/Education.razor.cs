@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class Education
+public partial class Education:ComponentBase
 {
     private static bool _valueChanged = true;
 

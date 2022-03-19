@@ -69,6 +69,7 @@ global using Syncfusion.Blazor.Inputs;
 
 global using System.Diagnostics.CodeAnalysis;
 global using System.Linq.Expressions;
+global using Syncfusion.Blazor.SplitButtons;
 
 global using ProfSvc_AppTrack.Pages.Controls.Candidates;
 

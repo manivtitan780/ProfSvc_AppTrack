@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class LeadSource
+public partial class LeadSource:ComponentBase
 {
     private static bool _valueChanged = true;
 

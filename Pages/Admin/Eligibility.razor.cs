@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class Eligibility
+public partial class Eligibility:ComponentBase
 {
     private static bool _valueChanged = true;
 

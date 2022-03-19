@@ -73,7 +73,7 @@ public partial class RatingCandidateDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveRating
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -97,7 +97,7 @@ public partial class RatingCandidateDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveRating.InvokeAsync(obj);
+        await Save.InvokeAsync(obj);
         await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();

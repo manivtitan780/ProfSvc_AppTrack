@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
 /// <summary>
 /// </summary>
-public partial class LabelBox
+public partial class LabelBox : ComponentBase
 {
     private string _value;
 

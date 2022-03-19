@@ -1,4 +1,5 @@
 @page "/candidate"
+@using AnimationEffect = Syncfusion.Blazor.AnimationEffect
 @layout ProfSvcLayout
 @inject IJSRuntime _runtime;
 
@@ -21,27 +22,33 @@
 						<SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
 					</div>
 					<div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
-					<SfDropDownList @bind-Value="@ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
+					<SfDropDownList @bind-Value="@SearchModel.ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
 						<DropDownListFieldSettings Text="Value" Value="Key" />
 						<DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
 					</SfDropDownList>
 				</div>
 			</div>
-			<div class="divRightControls" style="width: 520px">
+			<div class="divRightControls" style="width: 720px">
 				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => AddNewCandidate()">Add Candidate</SfButton>
-				<AutoCompleteButton ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate">Add Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
+				<AutoCompleteButton EnablePersistence="false" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
 									TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
 			</div>
 		</div>
 	</div>
-	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
-		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" TValue="Candidates" />@*OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" *@
+		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Candidates" />@* *@
 		<GridColumns>
 			<GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
-			<GridColumn HeaderText="Name" Width="20%">
+			<GridSortSettings AllowUnsort="false">
+				<GridSortColumns>
+					<GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Name)" HeaderText="Name" Width="20%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Candidates _con)
@@ -51,17 +58,17 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn HeaderText="Phone" Width="14%">
-				<Template Context="aCon">
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%">
+				@*<Template Context="aCon">
 					@{
 						if (aCon is Candidates _con)
 						{
 							@_con.Phone
 						}
 					}
-				</Template>
+				</Template>*@
 			</GridColumn>
-			<GridColumn HeaderText="Email" Width="19%">
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Email)" HeaderText="Email" Width="19%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Candidates _con)
@@ -71,19 +78,19 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn HeaderText="Location" Width="19%">
-				<Template Context="aCon">
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%">
+				@*<Template Context="aCon">
 					@{
 						if (aCon is Candidates _con)
 						{
 							@_con.Location
 						}
 					}
-				</Template>
+				</Template>*@
 			</GridColumn>
-			<GridColumn Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%">
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%">
 			</GridColumn>
-			<GridColumn Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%"></GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%"></GridColumn>
 		</GridColumns>
 		<GridTemplates Context="context">
 			<DetailTemplate>
@@ -97,7 +104,7 @@
 				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
 				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>
 				@* Add Buttons End *@
-				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" ShowCloseButton="false" Width="95%" SelectedItem="_selectedTab">
+				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
@@ -171,7 +178,7 @@
 								<TabHeader Text="Candidate Activity" />
 							</ChildContent>
 							<ContentTemplate>
-								<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" RowHeight="@RowHeight" @ref="ActivityPanel" UndoCandidateActivity="UndoActivity" />
+								<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight" UndoCandidateActivity="UndoActivity" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
@@ -182,25 +189,27 @@
 	</SfGrid>
 
 	<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
-						 JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" SaveCandidate="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
+						 JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
 
 	<ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
 
-	<RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" SaveRating="SaveRating" />
+	<RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" Save="SaveRating" />
 
-	<MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" SaveMPC="SaveMPC" />
+	<MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" Save="SaveMPC" />
 
-	<EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" SaveSkill="SaveSkill" />
+	<EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" Save="SaveSkill" />
 
-	<EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" SaveEducation="SaveEducation" />
+	<EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" Save="SaveEducation" />
 
-	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" SaveExperience="SaveExperience" />
+	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" Save="SaveExperience" />
 
-	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" SaveNotes="SaveNotes" />
+	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
 
-	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" SaveActivity="SaveActivity" Status="_workflows" />
+	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
 
-	<AddDocumentDialog ModelDocumentObject="SelectedDownload" @ref="DialogDocument" SaveDocument="SaveActivity" />
+	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
+
+	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate" StateDropDown="_statesCopy"/>
 
 	<div class="divGridFooter">
 		<div style="display: flex">

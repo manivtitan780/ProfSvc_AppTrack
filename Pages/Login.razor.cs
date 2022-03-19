@@ -19,7 +19,7 @@
 
 namespace ProfSvc_AppTrack.Pages;
 
-public partial class Login
+public partial class Login:ComponentBase
 {
     public readonly Code.Login ModelLogin = new();
 

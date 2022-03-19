@@ -386,7 +386,7 @@ span.invalid:after {
 }
 
     .editIcon:before, .editIconInner:before, .undoIconInner:before, .deleteIconInner:before, .statusOnIcon:before, .statusOffIcon:before, .saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before,
-    .addButton:before, .mpcicon:before, .editSectionButton:before, .downloadIconInner:before {
+    .addButton:before, .mpcicon:before, .editSectionButton:before, .downloadIconInner:before, .searchButton:before {
         font-family: var(--font-icon);
         font-size: 24px;
         margin-left: -3px;
@@ -401,7 +401,7 @@ span.invalid:after {
     font-size: 20px;
 }
 
-.saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before {
+.saveButton:before, .closeButton:before, .newButton:before, .refreshButton:before, .searchButton:before {
     font-size: 18px;
 }
 
@@ -441,6 +441,10 @@ span.invalid:after {
 
 .newButton:before {
     content: "\efc2";
+}
+
+.searchButton:before {
+    content: "\ed1b";
 }
 
 .refreshButton:before {
@@ -1237,8 +1241,10 @@ div[id^="e-item-tabCandidates_"] {
         margin-top: -2px !important;
     }
 
+.e-grid.e-default .e-detailrow .e-lastrowcell {
+    border-bottom: none;
+}
 /* File Uploader */
-
 .uploadParseResume div.e-upload {
     position: absolute;
     top: 110px;
@@ -1269,4 +1275,25 @@ div[id^="e-item-tabCandidates_"] {
     min-height: 40px;
     padding: 5px;
     width: 95%;
+}
+
+/* Button Group*/
+.buttonGroupAdvanced .e-btn:active {
+    background: var(--c-red);
+}
+
+.divCandidateShow .e-radio-wrapper {
+    width: 150px;
+}
+
+#divmultiState .e-multiselect.e-control-wrapper {
+    height: 115px;
+    overflow-y: scroll;
+}
+
+#divmultiState .e-multi-select-wrapper {
+    height: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 22px;
 }

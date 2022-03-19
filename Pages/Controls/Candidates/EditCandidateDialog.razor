@@ -155,9 +155,8 @@
                             <label class="labelStatus" for="multiTaxTerms">Tax Terms:</label>
                         </div>
                         <div class="divFlexSmall" id="divMultiTaxTerm">
-                            <LabelMultiSelect @bind-Value="@(ModelObject.TaxTerm)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" ID="multiTaxTerms"
-                                              KeyField="Key" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string" ValueField="Value">
-                            </LabelMultiSelect>
+							<LabelMultiSelect @bind-Value="@(ModelObject.TaxTerm)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" ID="multiTaxTerms"
+											  KeyField="Key" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string" ValueField="Value"/>
                         </div>
                     </div>
                     <div class="divFlex" style="height: 146px">
@@ -165,9 +164,8 @@
                             <label class="labelStatus" for="multiJobOptions">Job Options:</label>
                         </div>
                         <div class="divFlexSmall" id="divMultiJobOption">
-                            <LabelMultiSelect @bind-Value="@(ModelObject.JobOptions)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" ID="multiJobOptions"
-                                              KeyField="Key" Placeholder="Select Job Option(s)" TItem="KeyValues" TValue="string" ValueField="Value">
-                            </LabelMultiSelect>
+							<LabelMultiSelect @bind-Value="@(ModelObject.JobOptions)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" ID="multiJobOptions"
+											  KeyField="Key" Placeholder="Select Job Option(s)" TItem="KeyValues" TValue="string" ValueField="Value"/>
                         </div>
                     </div>
                     <div class="divFlex">

@@ -38,6 +38,12 @@ public class Start
         set;
     }
 
+    public static string UploadsPath
+    {
+        get;
+        set;
+    }
+
     public static async void SetCache()
     {
         if (MemCache == null)
@@ -77,6 +83,7 @@ public class Start
         List<VariableCommission> _variableCommissions = General.DeserializeObject<List<VariableCommission>>(_restResponse["VariableCommissions"]);
         List<Workflow> _workflows = General.DeserializeObject<List<Workflow>>(_restResponse["Workflow"]);
         List<KeyValues> _communications = new();
+        List<IntValues> _documentTypes = General.DeserializeObject<List<IntValues>>(_restResponse["DocumentTypes"]);
         _communications.AddRange(new[]
                                  {
                                      new KeyValues("A", "Average"), new KeyValues("X", "Excellent"), new KeyValues("F", "Fair"),
@@ -87,7 +94,7 @@ public class Start
         MemCache.Set("Eligibility", _eligibility, _cacheOptions);
         MemCache.Set("JobOptions", _jobOptions, _cacheOptions);
         MemCache.Set("TaxTerms", _taxTerms, _cacheOptions);
-        MemCache.Set("Skills", _skills, _cacheOptions); 
+        MemCache.Set("Skills", _skills, _cacheOptions);
         MemCache.Set("Experience", _experience, _cacheOptions);
         MemCache.Set("Templates", _templates, _cacheOptions);
         MemCache.Set("Users", _users, _cacheOptions);
@@ -105,5 +112,6 @@ public class Start
         MemCache.Set("VariableCommissions", _variableCommissions, _cacheOptions);
         MemCache.Set("Communication", _communications, _cacheOptions);
         MemCache.Set("Workflow", _workflows, _cacheOptions);
+        MemCache.Set("DocumentTypes", _documentTypes, _cacheOptions);
     }
 }

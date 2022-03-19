@@ -8,13 +8,14 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-27-2022 19:30
+// Last Updated On:     03-12-2022 16:23
 // *****************************************/
 
 #endregion
 
 #region Using
 
+using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
@@ -23,22 +24,26 @@ using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 namespace ProfSvc_AppTrack.Pages;
 
-public partial class Candidate
+public partial class Candidate:ComponentBase
 {
     private const byte RowHeight = 38;
 
-    private static bool _getStates = true;
+    //private static bool _getStates = true;
 
     private static bool _valueChanged = true;
 
-    private static IHttpClientFactory _clientFactory;
-
     private readonly Candidates _candidateContext = new();
+
+    private readonly List<IntValues> _eligibilityCopy = new();
     private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
     private readonly Dictionary<string, object> _htmlAttributes1 = new() {{"maxlength", "500"}, {"minlength", "1"}, {"rows", "4"}};
 
+    private readonly List<KeyValues> _jobOptionsCopy = new();
+
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
+
+    private readonly List<IntValues> _statesCopy = new();
 
     private readonly List<ToolbarItemModel> _tools1 = new()
                                                       {
@@ -112,6 +117,8 @@ public partial class Candidate
 
     private int _currentPage = 1;
 
+    private List<IntValues> _documentTypes = new();
+
     private bool _dontChangePageDetails = true;
 
     private List<IntValues> _eligibility;
@@ -163,6 +170,12 @@ public partial class Candidate
         set;
     }
 
+    public AdvancedCandidateSearch DialogSearch
+    {
+        get;
+        set;
+    }
+
     public static int EndRecord
     {
         get;
@@ -187,6 +200,12 @@ public partial class Candidate
     }
 
     private ActivityPanel ActivityPanel
+    {
+        get;
+        set;
+    }
+
+    private UploadFiles AddedDocument
     {
         get;
         set;
@@ -261,12 +280,6 @@ public partial class Candidate
     {
         get;
         set;
-    }
-
-    [Inject]
-    private IHttpClientFactory Client
-    {
-        set => _clientFactory = value;
     }
 
     private int Code
@@ -542,6 +555,12 @@ public partial class Candidate
         set;
     }
 
+    private static CandidateSearch SearchModel
+    {
+        get;
+        set;
+    } = new();
+
     private CandidateActivity SelectedActivity
     {
         get;
@@ -596,6 +615,16 @@ public partial class Candidate
         get;
         set;
     }
+
+    private SortDirection SortDirectionProperty
+    {
+        get;
+    } = SortDirection.Ascending;
+
+    private string SortField
+    {
+        get;
+    } = "Updated";
 
     private SfSpinner Spinner
     {
@@ -680,6 +709,7 @@ public partial class Candidate
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await Task.Delay(1);
         if (!firstRender)
         {
             _valueChanged = true;
@@ -687,29 +717,13 @@ public partial class Candidate
             return;
         }
 
-        //_memory.Set("Time", DateTime.Now.ToString(CultureInfo.InvariantCulture));
         if (_candidateContext != null)
         {
             _statusEditContext = new(_candidateContext);
         }
 
-        CandidateGridPersistValues = await LocalStorageBlazored.GetItemAsync<CandidateGrid>("CandidateGrid") ?? new(1, 25, "");
-
-        _currentPage = CandidateGridPersistValues.Page;
+        _currentPage = SearchModel.Page;
         PageCount = _currentPage + 1;
-
-        string _result = await LocalStorageBlazored.GetItemAsStringAsync("autoCandidate");
-        //Start.SetCache();
-
-        FilterSet(_result);
-
-        IMemoryCache _memCache = Start.MemCache;
-        if (_memCache.TryGetValue("Skills", out SkillObj))
-        {
-            return;
-        }
-
-        SkillObj = "Not Found";
     }
 
     protected override async Task OnInitializedAsync()
@@ -717,14 +731,45 @@ public partial class Candidate
         await Task.Delay(1);
         LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
         IMemoryCache _memoryCache = Start.MemCache;
-        _memoryCache.TryGetValue("States", out _states);
-        _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        while (_states == null)
+        {
+            _memoryCache.TryGetValue("States", out _states);
+        }
+
+        _statesCopy.Clear();
+        _statesCopy.Add(new(0, "All"));
+        _statesCopy.AddRange(_states);
+
+        while (_eligibility == null)
+        {
+            _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        }
+
+        _eligibilityCopy.Clear();
+        _eligibilityCopy.Add(new(0, "All"));
+        _eligibilityCopy.AddRange(_eligibility);
+
         _memoryCache.TryGetValue("Experience", out _experience);
         _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
-        _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        while (_jobOptions == null)
+        {
+            _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        }
+
+        _jobOptionsCopy.Clear();
+        _jobOptionsCopy.Add(new("%", "All"));
+        _jobOptionsCopy.AddRange(_jobOptions);
+
         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
         _memoryCache.TryGetValue("Workflow", out _workflows);
         _memoryCache.TryGetValue("Communication", out _communication);
+        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
+
+        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
+        if (!_cookyString.NullOrWhiteSpace())
+        {
+            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+        }
 
         await base.OnInitializedAsync();
     }
@@ -748,14 +793,32 @@ public partial class Candidate
         VisibleNewCandidate = true;
     }
 
+    private async Task AdvancedSearch()
+    {
+        await Task.Delay(1);
+        await DialogSearch.Dialog.ShowAsync();
+    }
+
+    private void AfterDocument(ActionCompleteEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = false;
+        DialogDocument.DialogFooter.CancelButton.Disabled = false;
+    }
+
     private async Task AllAlphabet()
     {
         Name = "";
         _currentPage = 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
+    }
+
+    private void BeforeDocument(BeforeUploadEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = true;
+        DialogDocument.DialogFooter.CancelButton.Disabled = true;
     }
 
     private void CancelCandidate()
@@ -783,30 +846,24 @@ public partial class Candidate
 
     private async Task ChangeItemCount(ChangeEventArgs<int, IntValues> obj)
     {
-        if (!_dontChangePageDetails)
-        {
-            _currentPage = 1;
-            CandidateGridPersistValues.Page = _currentPage;
-            ItemCount = obj.Value;
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        SearchModel.ItemCount = obj.Value;
 
-            await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
-            Grid.Refresh();
-        }
-        else
-        {
-            _dontChangePageDetails = false;
-            _currentPage = CandidateGridPersistValues.Page;
-            await InvokeAsync(StateHasChanged);
-        }
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        Grid.Refresh();
+        StateHasChanged();
     }
 
     private async Task ClearFilter()
     {
         Name = "";
         _currentPage = 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        SearchModel.Page = _currentPage;
+        int _currentPageItemCount = SearchModel.ItemCount;
+        SearchModel.ClearData();
+        SearchModel.ItemCount = _currentPageItemCount;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         Grid.Refresh();
     }
 
@@ -822,6 +879,30 @@ public partial class Candidate
 
     private async Task DeleteDocument(int arg)
     {
+        await Task.Delay(1);
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/DeleteCandidateDocument", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("documentID", arg.ToString());
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
+        }
+        catch
+        {
+            //
+        }
+
         await Task.Delay(1);
     }
 
@@ -1145,9 +1226,9 @@ public partial class Candidate
             return;
         }
 
-        Name = candidate.Value;
-        CandidateGridPersistValues.Page = 1;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        //Name = candidate.Value;
+        SearchModel.Page = 1;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //await new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1180,8 +1261,8 @@ public partial class Candidate
         }
 
         _currentPage = 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1266,8 +1347,8 @@ public partial class Candidate
         }
 
         _currentPage = PageCount.ToInt32();
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1279,15 +1360,39 @@ public partial class Candidate
             _currentPage = 1;
         }
 
-        _currentPage = CandidateGridPersistValues.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : CandidateGridPersistValues.Page + 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        _currentPage = SearchModel.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : SearchModel.Page + 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
 
-    private void OnFileUpload(UploadChangeEventArgs file)
+    private async Task OnActionBegin(ActionEventArgs<Candidates> args)
     {
+        await Task.Delay(1);
+        if (args.RequestType == Action.Sorting)
+        {
+            SearchModel.SortField = args.ColumnName switch
+                                    {
+                                        "Name" => 2,
+                                        "Location" => 5,
+                                        "Status" => 8,
+                                        _ => 1
+                                    };
+            SearchModel.SortDirection = args.Direction == SortDirection.Ascending ? (byte)1 : (byte)0;
+            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+            Grid.Refresh();
+        }
+    }
+
+    private async Task OnActionComplete(ActionEventArgs<Candidates> arg)
+    {
+        await Task.Delay(1);
+    }
+
+    private async Task OnFileUpload(UploadChangeEventArgs file)
+    {
+        await Task.Delay(1);
         foreach (UploadFiles _file in file.Files)
         {
             MimeType = _file.FileInfo.MimeContentType;
@@ -1311,7 +1416,7 @@ public partial class Candidate
                 _request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
                 _request.AddParameter("mime", MimeType, ParameterType.RequestBody);
 
-                _client.PostAsync(_request);
+                await _client.PostAsync(_request);
             }
             catch
             {
@@ -1332,8 +1437,8 @@ public partial class Candidate
             _currentPage = PageCount.ToInt32();
         }
 
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1345,9 +1450,9 @@ public partial class Candidate
             _currentPage = 1;
         }
 
-        _currentPage = CandidateGridPersistValues.Page <= 1 ? 1 : CandidateGridPersistValues.Page - 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        _currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1418,28 +1523,68 @@ public partial class Candidate
         StateHasChanged();
     }
 
+    private async Task SaveDocument(EditContext document)
+    {
+        await Task.Delay(1);
+        try
+        {
+            if (document.Model is CandidateDocument _document)
+            {
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Candidates/UploadDocument", Method.Post)
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
+                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
+                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+                _request.AddParameter("name", _document.Name, ParameterType.GetOrPost);
+                _request.AddParameter("notes", _document.Notes, ParameterType.GetOrPost);
+                _request.AddParameter("candidateID", _target.ID.ToString(), ParameterType.GetOrPost);
+                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
+                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
+                _request.AddParameter("type", _document.DocumentTypeID.ToString(), ParameterType.GetOrPost);
+                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+                if (_response == null)
+                {
+                    return;
+                }
+
+                _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
+            }
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
     private async Task SaveEducation(EditContext education)
     {
         await Task.Delay(1);
 
         try
         {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveEducation", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(education.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-            _request.AddQueryParameter("candidateID", _target.ID);
-
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
+            if (education.Model is CandidateEducation _education)
             {
-                return;
-            }
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Candidates/SaveEducation", Method.Post)
+                                       {
+                                           RequestFormat = DataFormat.Json
+                                       };
+                _request.AddJsonBody(_education);
+                _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+                _request.AddQueryParameter("candidateID", _target.ID);
 
-            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+                if (_response == null)
+                {
+                    return;
+                }
+
+                _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+            }
         }
         catch
         {
@@ -1603,12 +1748,19 @@ public partial class Candidate
         await Task.Delay(1);
     }
 
+    private async Task SearchCandidate(EditContext arg)
+    {
+        await Task.Delay(1);
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", arg.Model as CandidateSearch);
+        Grid.Refresh();
+    }
+
     private async Task SetAlphabet(string alphabet)
     {
         Name = alphabet;
         _currentPage = 1;
-        CandidateGridPersistValues.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", CandidateGridPersistValues);
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         Grid.Refresh();
     }
@@ -1735,7 +1887,7 @@ public partial class Candidate
             }
             else
             {
-                try
+                try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
                 {
                     _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
                 }
@@ -1800,6 +1952,15 @@ public partial class Candidate
         await Task.Delay(1);
     }
 
+    private async Task UploadDocument(UploadChangeEventArgs file)
+    {
+        await Task.Delay(1);
+        foreach (UploadFiles _file in file.Files)
+        {
+            AddedDocument = _file;
+        }
+    }
+
     public class AdminCandidateAdaptor : DataAdaptor
     {
         #region Methods
@@ -1807,7 +1968,7 @@ public partial class Candidate
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
-            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(Name, dm, CandidateGridPersistValues.Page, ItemCount);
+            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(SearchModel, dm);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
             return _candidateReturn;

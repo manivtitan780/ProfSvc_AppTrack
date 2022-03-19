@@ -13,6 +13,8 @@
 
 #endregion
 
+using Syncfusion.Blazor.Buttons;
+
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
 /// <summary>
@@ -45,4 +47,16 @@ public partial class DialogFooter
         get;
         set;
     } = "Save";
+
+    public SfButton CancelButton
+    {
+        get;
+        set;
+    }
+
+    public SfButton SaveButton
+    {
+        get;
+        set;
+    }
 }

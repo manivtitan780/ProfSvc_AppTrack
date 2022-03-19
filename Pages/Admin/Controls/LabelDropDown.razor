@@ -4,10 +4,10 @@
 {
 	<div class="divFlex">
 		<div class="divFlexLabel">
-			<label class="labelStatus" for="@ID">@Placeholder:</label>
+			<label class="labelStatus" for="@ID">@(Placeholder.NullOrWhiteSpace() ? " " : Placeholder + ":")</label>
 		</div>
 		<div class="divFlexSmall">
-			<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression">
+			<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
 				<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange" />
 				<DropDownListFieldSettings Text="@TextField" Value="@ValueField" />
 			</SfDropDownList>
@@ -16,7 +16,7 @@
 }
 else
 {
-	<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression">
+	<SfDropDownList DataSource="@DataSource" ID="@ID" TItem="TItem" TValue="TValue" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
 		<DropDownListEvents TItem="TItem" TValue="TValue" ValueChange="@DropDownValueChange" />
 		<DropDownListFieldSettings Text="@TextField" Value="@ValueField" />
 	</SfDropDownList>

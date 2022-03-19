@@ -15,7 +15,7 @@
 
 namespace ProfSvc_AppTrack.Pages.Admin;
 
-public partial class StatusCodes
+public partial class StatusCodes:ComponentBase
 {
     private static bool _valueChanged = true;
 

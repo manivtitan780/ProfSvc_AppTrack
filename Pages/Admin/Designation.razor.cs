@@ -16,7 +16,7 @@
 namespace ProfSvc_AppTrack.Pages.Admin;
 
 /// <inheritdoc />
-public partial class Designation
+public partial class Designation:ComponentBase
 {
     private static bool _valueChanged = true;
 

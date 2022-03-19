@@ -1,0 +1,144 @@
+﻿@page "/requisition"
+@layout ProfSvcLayout
+@inject IJSRuntime _runtime;
+
+<Header></Header>
+
+<div class="gridHolder">
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				<div style="display: flex; height: 25px; margin-top: 12px">
+					<div style="display: flex; width: 350px;">
+						<SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
+						<SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
+						<SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount"
+										  Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
+						</SfNumericTextBox>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
+						<SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
+						<SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
+					</div>
+					<div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
+					<SfDropDownList @bind-Value="@SearchModel.ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
+						<DropDownListFieldSettings Text="Value" Value="Key" />
+						<DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
+					</SfDropDownList>
+				</div>
+			</div>
+			<div class="divRightControls" style="width: 720px">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate">Add Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
+				<AutoCompleteButton EnablePersistence="false" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(AdminRequisitionDropDownAdaptor)" ValueChange="FilterGrid" />
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Requisitions" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminRequisitionAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Requisitions" />@* *@
+		<GridColumns>
+			<GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridSortSettings AllowUnsort="false">
+				<GridSortColumns>
+					<GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Name)" HeaderText="Name" Width="20%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<span class="@(_con.Mpc ? "mpcicon" : "")">@_con.Name</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%">
+				@*<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							@_con.Phone
+						}
+					}
+				</Template>*@
+			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Email)" HeaderText="Email" Width="19%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<a href="mailto:@(_con.Email)">@_con.Email</a>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%">
+				@*<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							@_con.Location
+						}
+					}
+				</Template>*@
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%">
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%"></GridColumn>
+		</GridColumns>
+		<GridTemplates Context="context">
+			<DetailTemplate>
+				@{
+					//Candidates _candidates = context! as Candidates;
+				}
+				@* Add Buttons Start *@
+			</DetailTemplate>
+		</GridTemplates>
+	</SfGrid>
+
+	<div class="divGridFooter">
+		<div style="display: flex">
+			<div style="flex: 1; padding-left: 15px; text-align: left;">
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
+			</div>
+			<div style="width: 520px">
+				Items
+				<b>@StartRecord</b> to
+				<b>@EndRecord</b> of
+				<b>@Count</b> rows
+			</div>
+		</div>
+	</div>
+</div>

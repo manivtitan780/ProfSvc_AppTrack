@@ -7,8 +7,8 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           LabelMultiSelect.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-26-2022 19:30
-// Last Updated On:     01-30-2022 19:15
+// Created On:          01-31-2022 19:26
+// Last Updated On:     03-17-2022 21:16
 // *****************************************/
 
 #endregion
@@ -55,6 +55,13 @@ public partial class LabelMultiSelect<TItem, TValue>
     }
 
     [Parameter]
+    public VisualMode Mode
+    {
+        get;
+        set;
+    } = VisualMode.Box;
+
+    [Parameter]
     public string Placeholder
     {
         get;
@@ -70,6 +77,13 @@ public partial class LabelMultiSelect<TItem, TValue>
 
     [Parameter]
     public Type TypeValue
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public bool UseCustomTemplate
     {
         get;
         set;
@@ -132,6 +146,25 @@ public partial class LabelMultiSelect<TItem, TValue>
         get;
         set;
     } = "100%";
+
+    public RenderFragment ItemTemplate
+    {
+        get;
+        set;
+    }
+
+    public RenderFragment ValueTemplate
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public bool CreateDivTag
+    {
+        get;
+        set;
+    }
 
     private static void ToolTipOpen(TooltipEventArgs args) => args.Cancel = !args.HasText;
 }

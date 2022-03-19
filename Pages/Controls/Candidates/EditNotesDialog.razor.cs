@@ -28,7 +28,7 @@ public partial class EditNotesDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveNotes
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -53,7 +53,7 @@ public partial class EditNotesDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveNotes.InvokeAsync(editContext);
+        await Save.InvokeAsync(editContext);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

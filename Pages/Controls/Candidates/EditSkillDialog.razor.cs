@@ -69,7 +69,7 @@ public partial class EditSkillDialog
     /// <summary>
     /// </summary>
     [Parameter]
-    public EventCallback<EditContext> SaveSkill
+    public EventCallback<EditContext> Save
     {
         get;
         set;
@@ -85,7 +85,7 @@ public partial class EditSkillDialog
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        await SaveSkill.InvokeAsync(args);
+        await Save.InvokeAsync(args);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

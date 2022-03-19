@@ -17,7 +17,7 @@ namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
 /// <summary>
 /// </summary>
-public partial class EditDialog
+public partial class EditDialog : ComponentBase
 {
     private EditContext _context;
 
