@@ -46,22 +46,67 @@
 			</GridSortColumns>
 		</GridSortSettings>
 		<GridColumns>
-			<GridColumn Field="@nameof(Requisitions.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"/>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Code)" HeaderText="Updated" Width="14%"/>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Title)" HeaderText="Name" Width="20%">
+			<GridColumn Field="@nameof(Requisitions.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Code)" HeaderText="Code" Width="14%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
 						{
-							<span class="@(_con.Priority == "High" ? "mpcicon" : "")">@_con.Title</span>
+							<span style="color: @(_con.PriorityColor)">@_con.Code</span>
 						}
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.Company)" HeaderText="Phone" Width="14%"/>
-			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.JobOptions)" HeaderText="Email" Width="19%"/>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Updated)" HeaderText="Updated" Width="14%"/>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Status)" HeaderText="Status" Width="14%"/>
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Title)" HeaderText="Title" Width="20%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Requisitions _con)
+						{
+							<span style="color: @(_con.PriorityColor)">@_con.Title</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.Company)" HeaderText="Company" Width="14%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Requisitions _con)
+						{
+							<span style="color: @(_con.PriorityColor)">@_con.Company</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.JobOptions)" HeaderText="Type" Width="19%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Requisitions _con)
+						{
+							<span style="color: @(_con.PriorityColor)">@_con.JobOptions</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Updated)" HeaderText="Updated" Width="14%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Requisitions _con)
+						{
+							<span style="color: @(_con.PriorityColor)">@_con.Updated</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Status)" HeaderText="Status" Width="14%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Requisitions _con)
+						{
+							<span style="color: @(_con.PriorityColor)">@_con.Status</span>
+						}
+					}
+				</Template>
+			</GridColumn>
 		</GridColumns>
 		<GridTemplates Context="context">
 			<DetailTemplate>
