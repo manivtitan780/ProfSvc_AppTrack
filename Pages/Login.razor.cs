@@ -82,10 +82,10 @@ public partial class Login
         await Task.Delay(1);
         byte[] _password = General.Md5PasswordHash(ModelLogin.Password.Trim());
         RestClient _restClient = new($"{Start.ApiHost}");
-        RestRequest _request = new("Login/Login", Method.Post)
-                               {
+        RestRequest _request = new("Login/Login", Method.Post);
+                               /*{
                                    RequestFormat = DataFormat.Json
-                               };
+                               };*/
         _request.AddQueryParameter("userName", ModelLogin.UserName);
         _request.AddQueryParameter("password", Convert.ToBase64String(_password));
         _request.AddQueryParameter("ipAddress", IPAddress);

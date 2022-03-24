@@ -32,21 +32,25 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
       <Deterministic>True</Deterministic>
       <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       <Deterministic>True</Deterministic>
       <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <Deterministic>True</Deterministic>
       <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <Deterministic>True</Deterministic>
       <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -65,13 +69,13 @@
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
+        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
         <PackageReference Include="Radzen.Blazor" Version="3.16.3" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.0" />

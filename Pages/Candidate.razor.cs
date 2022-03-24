@@ -119,7 +119,7 @@ public partial class Candidate
 
     private List<IntValues> _documentTypes = new();
 
-    private bool _dontChangePageDetails = true;
+    //private bool _dontChangePageDetails = true;
 
     private List<IntValues> _eligibility;
 
