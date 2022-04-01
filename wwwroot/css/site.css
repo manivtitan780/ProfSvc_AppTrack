@@ -459,7 +459,7 @@ span.invalid:after {
 .tabButtonAdd {
     position: absolute;
     right: 100px;
-    top: 55px;
+    margin-top: 5px;
     z-index: 12001;
 }
 

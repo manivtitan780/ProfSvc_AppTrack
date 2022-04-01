@@ -724,6 +724,7 @@ public partial class Candidate
 
         _currentPage = SearchModel.Page;
         PageCount = _currentPage + 1;
+        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
     }
 
     protected override async Task OnInitializedAsync()
@@ -769,6 +770,10 @@ public partial class Candidate
         if (!_cookyString.NullOrWhiteSpace())
         {
             SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+        }
+        else
+        {
+            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         }
 
         await base.OnInitializedAsync();
@@ -1410,13 +1415,13 @@ public partial class Candidate
                                        {
                                            AlwaysMultipartFormData = true
                                        };
-                _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
                 //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-                _request.AddParameter("filename", FileName, ParameterType.RequestBody);
-                _request.AddParameter("filesize", FileSize, ParameterType.RequestBody);
-                _request.AddParameter("mime", MimeType, ParameterType.RequestBody);
+                _request.AddParameter("fileData",
+                                      $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}", ParameterType.RequestBody);
+                _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 
                 await _client.PostAsync(_request);
+                Grid.Refresh();
             }
             catch
             {

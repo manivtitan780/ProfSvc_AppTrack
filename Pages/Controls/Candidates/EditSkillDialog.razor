@@ -1,19 +1,19 @@
-﻿<SfDialog Header="Edit Skill" Height="400px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="400px" Visible="false" @ref="Dialog">
+﻿<SfDialog Header="Edit Skill" Height="400px" IsModal="true" MinHeight="400px" @ref="Dialog" Target="#divTarget" Visible="false" Width="400px">
 	<ChildContent>
 		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
 		<DialogPositionData X="right" Y="center" />
 		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
-		<EditForm Model="ModelObject" OnValidSubmit="SaveSkillDialog">
-			<DataAnnotationsValidator />
+		<editform Model="ModelObject" OnValidSubmit="SaveSkillDialog">
+			<dataannotationsvalidator />
 			<div class="divContainerTable">
 				<LabelTextBox @bind-Value="@(ModelObject.Skill)" @bind-Value:event="ValueChanged" ID="textSkill" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Skill"
 							  ValidationMessage="@(() => ModelObject.Skill)" />
-				<LabelNumeric @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)" TValue="short"
-							  ValidationMessage="@(() => ModelObject.LastUsed)" />
-				<LabelNumeric @bind-Value="@(ModelObject.ExpMonth)" @bind-Value:event="ValueChanged" ID="numericExpMonth" Max="1500" Placeholder="Experience (Months)" TValue="short"
-							  ValidationMessage="@(() => ModelObject.ExpMonth)" />
+				<LabelNumeric @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)"
+							  TValue="short" ValidationMessage="@(() => ModelObject.LastUsed)" />
+				<LabelNumeric @bind-Value="@(ModelObject.ExpMonth)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericExpMonth" Max="1500"
+							  Placeholder="Experience (Months)" TValue="short" ValidationMessage="@(() => ModelObject.ExpMonth)" />
 			</div>
 			<DialogFooter CancelMethod="CancelSkillDialog"></DialogFooter>
-		</EditForm>
+		</editform>
 	</ChildContent>
 </SfDialog>

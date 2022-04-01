@@ -77,7 +77,7 @@
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
-        <PackageReference Include="Radzen.Blazor" Version="3.17.1" />
+        <PackageReference Include="Radzen.Blazor" Version="3.17.3" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.0" />
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
