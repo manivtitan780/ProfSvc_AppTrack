@@ -868,6 +868,7 @@ public partial class Candidate
         int _currentPageItemCount = SearchModel.ItemCount;
         SearchModel.ClearData();
         SearchModel.ItemCount = _currentPageItemCount;
+        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         Grid.Refresh();
     }
@@ -1762,7 +1763,7 @@ public partial class Candidate
 
     private async Task SetAlphabet(string alphabet)
     {
-        Name = alphabet;
+        SearchModel.Name = alphabet;
         _currentPage = 1;
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);

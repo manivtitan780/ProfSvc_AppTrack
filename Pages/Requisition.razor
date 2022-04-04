@@ -1,4 +1,5 @@
 ﻿@page "/requisition"
+@using AnimationEffect = Syncfusion.Blazor.AnimationEffect
 @layout ProfSvcLayout
 @inject IJSRuntime _runtime;
 
@@ -47,7 +48,7 @@
 		</GridSortSettings>
 		<GridColumns>
 			<GridColumn Field="@nameof(Requisitions.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Code)" HeaderText="Code" Width="14%">
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Code)" HeaderText="Code" Width="12%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -57,7 +58,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Title)" HeaderText="Title" Width="20%">
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Title)" HeaderText="Title" Width="24%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -67,7 +68,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.Company)" HeaderText="Company" Width="14%">
+			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.Company)" HeaderText="Company" Width="18%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -77,7 +78,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.JobOptions)" HeaderText="Type" Width="19%">
+			<GridColumn AllowSorting="false" Field="@nameof(Requisitions.JobOptions)" HeaderText="Type" Width="22%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -87,7 +88,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Updated)" HeaderText="Updated" Width="14%">
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Updated)" HeaderText="Updated" Width="12%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -97,7 +98,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Status)" HeaderText="Status" Width="14%">
+			<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Status)" HeaderText="Status" Width="12%">
 				<Template Context="aCon">
 					@{
 						if (aCon is Requisitions _con)
@@ -114,6 +115,55 @@
 					//Candidates _candidates = context! as Candidates;
 				}
 				@* Add Buttons Start *@
+				@*<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>*@
+				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+					<TabAnimationSettings>
+						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+						<TabEvents Selected="TabSelected"></TabEvents>
+					</TabAnimationSettings>
+					<TabItems>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Requisition Info" />
+							</ChildContent>
+							<ContentTemplate>
+								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
+												GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
+												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Additional Info" />
+							</ChildContent>
+							<ContentTemplate>
+								@*<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" />*@
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Downloads" />
+							</ChildContent>
+							<ContentTemplate>
+								@*<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />*@
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Candidate Activity" />
+							</ChildContent>
+							<ContentTemplate>
+								@*<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight" UndoCandidateActivity="UndoActivity" />*@
+							</ContentTemplate>
+						</TabItem>
+					</TabItems>
+					@*<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />*@
+				</SfTab>
 			</DetailTemplate>
 		</GridTemplates>
 	</SfGrid>

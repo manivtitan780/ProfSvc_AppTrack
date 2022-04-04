@@ -16,6 +16,7 @@
 #region Using
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
+using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
 
@@ -27,6 +28,7 @@ public partial class Requisition
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
     private int _currentPage = 1;
+    private int _selectedTab;
 
     public static int PageCount
     {
@@ -252,6 +254,11 @@ public partial class Requisition
     }
 
     private async Task ClearFilter(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
+
+    private async Task TabSelected(SelectEventArgs arg)
     {
         await Task.Delay(1);
     }
