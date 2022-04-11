@@ -1,5 +1,5 @@
 ﻿<div class="containerBox">
-	<div>
+	<div style="height: 324px">
 		<div>
 			<div>Company Name:</div>
 			<div>@ModelObject.CompanyName</div>
@@ -17,8 +17,20 @@
 			<div>@ModelObject.Positions</div>
 		</div>
 		<div>
+			<div>Location:</div>
+			<div>@(GetLocation(ModelObject.Location))</div>
+		</div>
+		<div>
 			<div>Duration:</div>
-			<div>@($"{ModelObject.Duration} {ModelObject.DurationCode}")</div>
+			<div>@(ModelObject.Duration + " " + GetDurationCode(ModelObject.DurationCode))</div>
+		</div>
+		<div>
+			<div>Expected Start Date:</div>
+			<div>@ModelObject.ExpectedStart.ToString("d", new CultureInfo("en-us"))</div>
+		</div>
+		<div>
+			<div>Due Date:</div>
+			<div>@ModelObject.DueDate.ToString("d", new CultureInfo("en-us"))</div>
 		</div>
 		<div>
 			<div>Expected Rate:</div>
@@ -28,72 +40,80 @@
 			<div>Salary Expected:</div>
 			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.SalaryLow, ModelObject.SalaryHigh)</div>
 		</div>
+		<div>
+			<div>Load Expected:</div>
+			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.ExpLoadLow, ModelObject.ExpLoadHigh)</div>
+		</div>
+		<div>
+			<div>Placement Fee:</div>
+			<div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
+		</div>
 	</div>
-	<div>
+	<div style="height: 324px">
+		<div style="display: block">
+			<div style="display: block">Description:</div>
+			<div style="display: block; width: 98%; overflow-y: auto; height: 310px">@(ModelObject.Description.ToMarkupString())</div>
+		</div>
+	</div>
+	<div style="height: 324px">
 		<div>
-			<div>Authorization:</div>
-			<div>@SetEligibility</div>
+			<div>Status:</div>
+			<div>@ModelObject.Status</div>
 		</div>
 		<div>
-			<div>Experience:</div>
-			<div>@SetExperience</div>
-		</div>
-		<div>
-			<div>Tax Terms:</div>
-			<div>@SetTaxTerm</div>
+			<div>Priority:</div>
+			<div>@ModelObject.Priority</div>
 		</div>
 		<div>
 			<div>Job Options:</div>
-			<div>@SetJobOption</div>
+			<div>@ModelObject.JobOptions</div>
 		</div>
 		<div>
-			<div>Communication:</div>
-			<div>@SetCommunication</div>
+			<div>Experience:</div>
+			<div>@ModelObject.Experience</div>
 		</div>
 		<div>
-			<div>Security Clearance:</div>
-			<div>@(ModelObject.Background ? "Yes" : "No")</div>
+			<div>Report To:</div>
+			<div>@ModelObject.ReportTo</div>
 		</div>
 		<div>
-			<div>Willing to Relocate?:</div>
-			<div>@(ModelObject.Relocate ? "Yes" : "No")</div>
+			<div>Education:</div>
+			<div>@ModelObject.Education</div>
 		</div>
 		<div>
-			<SfButton Content="Edit Candidate Information" CssClass="editSectionButton" @onclick="EditCandidate"></SfButton>
+			<div>Eligibility:</div>
+			<div>@ModelObject.Eligibility</div>
 		</div>
-	</div>
-	<div>
+		<div>
+			<div>Expenses Paid?:</div>
+			<div>@(ModelObject.ExpensesPaid ? "Yes" : "No")</div>
+		</div>
 		<div>
 			<div>Rating:</div>
 			<div>
-				<RadzenRating ReadOnly="true" Stars="5" Value="@ModelObject.RateCandidate" />
 			</div>
 		</div>
 		<div>
 			<div>Last Rating Date:</div>
-			<div>@GetRatingDate</div>
+			<div></div>
 		</div>
 		<div>
 			<div>Rating Notes:</div>
-			<div>@GetRatingNote</div>
+			<div></div>
 		</div>
-		<div>
-			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" @onclick="EditRating" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+@*		<div>
+			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
 		</div>
-		<div>
-			<div>M.P.C?:</div>
-			<div>@(ModelObject.Mpc ? "Yes" : "No")</div>
-		</div>
-		<div>
+*@		<div>
 			<div>M.P.C. Date:</div>
-			<div>@GetMPCDate</div>
+			<div></div>
 		</div>
 		<div>
 			<div>M.P.C. Notes:</div>
-			<div>@GetMPCNote</div>
+			<div></div>
 		</div>
-		<div>
-			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" @onclick="EditMPC" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+@*		<div>
+			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
 		</div>
-	</div>
+*@	</div>
 </div>
