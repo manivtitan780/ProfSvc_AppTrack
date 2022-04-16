@@ -15,6 +15,8 @@
 
 #region Using
 
+using ProfSvc_Classes;
+
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
@@ -117,14 +119,82 @@ public partial class Requisition
         StateHasChanged();
     }
 
+    private bool FirstRender
+    {
+        get;
+        set;
+    } = true;
+
     private async Task DataHandler(object obj)
     {
-        await Task.Delay(1);
+        DotNetObjectReference<Requisition> _dotNetReference = DotNetObjectReference.Create(this); // create dotnet ref
+        await _runtime.InvokeAsync<string>("detail", _dotNetReference);
+        //  send the dotnet ref to JS side
+        FirstRender = false;
+        //Count = Count;
+        await Grid.SelectRowAsync(0);
     }
 
-    private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> arg)
+    private Requisitions _target;
+
+    private SfSpinner Spinner
     {
+        get;
+        set;
+    } = new();
+
+    private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> requisition)
+    {
+        //VisibleProperty = true;
+
+        if (_target != null)
+        {
+            if (_target != requisition.Data) // return when target is equal to args.data
+            {
+                await Grid.ExpandCollapseDetailRowAsync(_target);
+            }
+        }
+
+        _target = requisition.Data;
+
+        //_candidateDetailsObject.ClearData();
         await Task.Delay(1);
+        await Spinner.ShowAsync();
+        //await Task.Delay(1000);
+        RestClient _restClient = new($"{Start.ApiHost}");
+        RestRequest request = new("Requisition/GetRequisitionDetails");
+        request.AddQueryParameter("requisitionID", _target.ID);
+
+        Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
+
+        if (_restResponse != null)
+        {
+            //_candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+            //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+            //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
+            //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
+            //_candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
+            //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
+            //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+            //_candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
+            //RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
+            //GetMPCDate();
+            //GetMPCNote();
+            //GetRatingDate();
+            //GetRatingNote();
+            //SetupAddress();
+            //SetCommunication();
+            //SetEligibility();
+            //SetJobOption();
+            //SetTaxTerm();
+            //SetExperience();
+        }
+
+        //_selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
+
+        await Task.Delay(1);
+        await Spinner.HideAsync();
     }
 
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> arg)

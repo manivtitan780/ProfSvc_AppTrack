@@ -1,5 +1,5 @@
 ﻿<div class="containerBox">
-	<div style="height: 324px">
+	<div style="height: 404px">
 		<div>
 			<div>Company Name:</div>
 			<div>@ModelObject.CompanyName</div>
@@ -49,13 +49,17 @@
 			<div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
 		</div>
 	</div>
-	<div style="height: 324px">
+	<div style="height: 404px">
 		<div style="display: block">
 			<div style="display: block">Description:</div>
-			<div style="display: block; width: 98%; overflow-y: auto; height: 310px">@(ModelObject.Description.ToMarkupString())</div>
+			<div style="display: block; width: 98%; overflow-y: auto; height: 225px;">@(ModelObject.Description.ToMarkupString())</div>
+		</div>
+		<div style="display: block">
+			<div style="display: block">Skills:</div>
+			<div style="display: block; width: 98%; overflow-y: auto; height: 125px;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
 		</div>
 	</div>
-	<div style="height: 324px">
+	<div style="height: 404px">
 		<div>
 			<div>Status:</div>
 			<div>@ModelObject.Status</div>
@@ -89,31 +93,20 @@
 			<div>@(ModelObject.ExpensesPaid ? "Yes" : "No")</div>
 		</div>
 		<div>
-			<div>Rating:</div>
-			<div>
-			</div>
+			<div>Security Clearance?:</div>
+			<div>@ModelObject.SecurityClearance</div>
 		</div>
 		<div>
-			<div>Last Rating Date:</div>
-			<div></div>
+			<div>Benefits?:</div>
+			<div>@(ModelObject.Benefits ? "Yes" : "No")</div>
 		</div>
 		<div>
-			<div>Rating Notes:</div>
-			<div></div>
-		</div>
-@*		<div>
-			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
-		</div>
-*@		<div>
-			<div>M.P.C. Date:</div>
-			<div></div>
+			<div>Benefits Notes:</div>
+			<div>@ModelObject.BenefitNotes</div>
 		</div>
 		<div>
-			<div>M.P.C. Notes:</div>
-			<div></div>
+			<div>OFCCP?:</div>
+			<div>@(ModelObject.OFCCP ? "Yes" : "No")</div>
 		</div>
-@*		<div>
-			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
-		</div>
-*@	</div>
+	</div>
 </div>
