@@ -44,7 +44,9 @@ _builder.Services.AddSignalR(e =>
 WebApplication _app = _builder.Build();
 
 // Configure the HTTP request pipeline.
-SyncfusionLicenseProvider.RegisterLicense("NTUxOTI3QDMxMzkyZTM0MmUzMGY3TWJ0TWx3Z3lXY2ZaOG1mb1pBNFhpamYxWm92d0N1RGFSTmRFQUd4NGM9");
+// ReSharper disable once CommentTypo
+//SyncfusionLicenseProvider.RegisterLicense("NTUxOTI3QDMxMzkyZTM0MmUzMGY3TWJ0TWx3Z3lXY2ZaOG1mb1pBNFhpamYxWm92d0N1RGFSTmRFQUd4NGM9");
+SyncfusionLicenseProvider.RegisterLicense("NjIxMzUyQDMyMzAyZTMxMmUzMG5uWUlIeDlKMXdYeHAxR3FXYmUrbno3ak5oK0IzRUlZTytnUnpUR1d0WVU9");
 
 if (!_app.Environment.IsDevelopment())
 {

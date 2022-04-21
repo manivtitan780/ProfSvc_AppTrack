@@ -338,9 +338,10 @@ public partial class Requisition
         await Task.Delay(1);
     }
 
-    private async Task TabSelected(SelectEventArgs arg)
+    private async Task TabSelected(SelectEventArgs args)
     {
         await Task.Delay(1);
+        _selectedTab = args.SelectedIndex;
     }
 
     private LoginCooky LoginCookyUser
