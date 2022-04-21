@@ -44,7 +44,7 @@ public partial class BasicInfoRequisitionPanel
 
     private string GetLocation(string location)
     {
-        if (location.ToInt32() == 0)
+        if (location.ToInt32() == 0 || States == null)
         {
             return location;
         }

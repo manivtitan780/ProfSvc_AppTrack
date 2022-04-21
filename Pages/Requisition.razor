@@ -1,5 +1,6 @@
 ﻿@page "/requisition"
 @using AnimationEffect = Syncfusion.Blazor.AnimationEffect
+@using ProfSvc_AppTrack.Pages.Controls.Requisitions
 @layout ProfSvcLayout
 @inject IJSRuntime _runtime;
 
@@ -132,26 +133,10 @@
 								<TabHeader Text="Requisition Info" />
 							</ChildContent>
 							<ContentTemplate>
-								<BasicInfoRequisitionPanel></BasicInfoRequisitionPanel>
+								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states"/>
 								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
 												GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
 												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Additional Info" />
-							</ChildContent>
-							<ContentTemplate>
-								@*<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" />*@
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Downloads" />
-							</ChildContent>
-							<ContentTemplate>
-								@*<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />*@
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -163,7 +148,7 @@
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
-					@*<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />*@
+					<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
 				</SfTab>
 			</DetailTemplate>
 		</GridTemplates>

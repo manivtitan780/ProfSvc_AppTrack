@@ -15,6 +15,9 @@
 
 #region Using
 
+using ProfSvc_AppTrack.Pages.Admin;
+using System.Xml.Linq;
+
 using ProfSvc_Classes;
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
@@ -31,6 +34,10 @@ public partial class Requisition
 
     private int _currentPage = 1;
     private int _selectedTab;
+
+    private List<IntValues> _states;
+
+    private readonly List<IntValues> _statesCopy = new();
 
     public static int PageCount
     {
@@ -143,6 +150,9 @@ public partial class Requisition
         set;
     } = new();
 
+    private RequisitionDetails _requisitionDetailsObject = new();
+    private RequisitionDetails _requisitionDetailsObjectClone = new();
+
     private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> requisition)
     {
         //VisibleProperty = true;
@@ -157,7 +167,7 @@ public partial class Requisition
 
         _target = requisition.Data;
 
-        //_candidateDetailsObject.ClearData();
+        //_requisitionDetailsObject.ClearData();
         await Task.Delay(1);
         await Spinner.ShowAsync();
         //await Task.Delay(1000);
@@ -169,7 +179,7 @@ public partial class Requisition
 
         if (_restResponse != null)
         {
-            //_candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+            _requisitionDetailsObject = JsonConvert.DeserializeObject<RequisitionDetails>(_restResponse["Requisition"]?.ToString() ?? string.Empty);
             //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
             //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
             //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
@@ -331,5 +341,69 @@ public partial class Requisition
     private async Task TabSelected(SelectEventArgs arg)
     {
         await Task.Delay(1);
+    }
+
+    private LoginCooky LoginCookyUser
+    {
+        get;
+        set;
+    }
+
+    [Inject]
+    private NavigationManager NavManager
+    {
+        get;
+        set;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+        IMemoryCache _memoryCache = Start.MemCache;
+        while (_states == null)
+        {
+            _memoryCache.TryGetValue("States", out _states);
+        }
+
+        _statesCopy.Clear();
+        _statesCopy.Add(new(0, "All"));
+        _statesCopy.AddRange(_states);
+        /*while (_eligibility == null)
+        {
+            _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        }
+
+        _eligibilityCopy.Clear();
+        _eligibilityCopy.Add(new(0, "All"));
+        _eligibilityCopy.AddRange(_eligibility);
+
+        _memoryCache.TryGetValue("Experience", out _experience);
+        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
+        while (_jobOptions == null)
+        {
+            _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        }
+
+        _jobOptionsCopy.Clear();
+        _jobOptionsCopy.Add(new("%", "All"));
+        _jobOptionsCopy.AddRange(_jobOptions);
+
+        _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+        _memoryCache.TryGetValue("Workflow", out _workflows);
+        _memoryCache.TryGetValue("Communication", out _communication);
+        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
+
+        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
+        if (!_cookyString.NullOrWhiteSpace())
+        {
+            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+        }
+        else
+        {
+            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        }*/
+
+        await base.OnInitializedAsync();
     }
 }

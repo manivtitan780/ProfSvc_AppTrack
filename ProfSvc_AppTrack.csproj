@@ -77,10 +77,10 @@
         <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
-        <PackageReference Include="Radzen.Blazor" Version="3.17.3" />
+        <PackageReference Include="Radzen.Blazor" Version="3.18.4" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.0" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
+        <PackageReference Include="Syncfusion.Blazor" Version="20.1.0.50" />
     </ItemGroup>
 
     <ItemGroup>
