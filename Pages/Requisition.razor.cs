@@ -8,17 +8,14 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     03-15-2022 21:12
+// Last Updated On:     04-25-2022 20:04
 // *****************************************/
 
 #endregion
 
 #region Using
 
-using ProfSvc_AppTrack.Pages.Admin;
-using System.Xml.Linq;
-
-using ProfSvc_Classes;
+using ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
@@ -32,14 +29,61 @@ public partial class Requisition
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
+    private readonly List<IntValues> _statesCopy = new();
+
     private int _currentPage = 1;
+
+    private RequisitionDetails _requisitionDetailsObject = new();
+    private RequisitionDetails _requisitionDetailsObjectClone = new();
     private int _selectedTab;
 
     private List<IntValues> _states;
 
-    private readonly List<IntValues> _statesCopy = new();
+    private Requisitions _target;
+
+    public static int Count
+    {
+        get;
+        set;
+    }
+
+    public static int EndRecord
+    {
+        get;
+        set;
+    }
 
     public static int PageCount
+    {
+        get;
+        set;
+    }
+
+    public int RowHeight
+    {
+        get;
+        set;
+    }
+
+    public SortDirection SortDirectionProperty
+    {
+        get;
+        set;
+    }
+
+    public string SortField
+    {
+        get;
+        set;
+    }
+
+    public static int StartRecord
+    {
+        get;
+        set;
+    }
+
+    private ActivityPanelRequisition ActivityPanel
     {
         get;
         set;
@@ -50,6 +94,12 @@ public partial class Requisition
         get;
         set;
     }
+
+    private bool FirstRender
+    {
+        get;
+        set;
+    } = true;
 
     private static SfGrid<Requisitions> Grid
     {
@@ -64,9 +114,28 @@ public partial class Requisition
         set;
     }
 
+    private LoginCooky LoginCookyUser
+    {
+        get;
+        set;
+    }
+
+    [Inject]
+    private NavigationManager NavManager
+    {
+        get;
+        set;
+    }
+
     private static RequisitionSearch SearchModel
     {
         get;
+    } = new();
+
+    private SfSpinner Spinner
+    {
+        get;
+        set;
     } = new();
 
     private bool VisibleNewCandidate
@@ -75,34 +144,55 @@ public partial class Requisition
         set;
     }
 
-    public string SortField
+    protected override async Task OnInitializedAsync()
     {
-        get;
-        set;
-    }
+        await Task.Delay(1);
+        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+        IMemoryCache _memoryCache = Start.MemCache;
+        while (_states == null)
+        {
+            _memoryCache.TryGetValue("States", out _states);
+        }
 
-    public SortDirection SortDirectionProperty
-    {
-        get;
-        set;
-    }
+        _statesCopy.Clear();
+        _statesCopy.Add(new(0, "All"));
+        _statesCopy.AddRange(_states);
+        /*while (_eligibility == null)
+        {
+            _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        }
 
-    public static int StartRecord
-    {
-        get;
-        set;
-    }
+        _eligibilityCopy.Clear();
+        _eligibilityCopy.Add(new(0, "All"));
+        _eligibilityCopy.AddRange(_eligibility);
 
-    public static int EndRecord
-    {
-        get;
-        set;
-    }
+        _memoryCache.TryGetValue("Experience", out _experience);
+        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
+        while (_jobOptions == null)
+        {
+            _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        }
 
-    public static int Count
-    {
-        get;
-        set;
+        _jobOptionsCopy.Clear();
+        _jobOptionsCopy.Add(new("%", "All"));
+        _jobOptionsCopy.AddRange(_jobOptions);
+
+        _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+        _memoryCache.TryGetValue("Workflow", out _workflows);
+        _memoryCache.TryGetValue("Communication", out _communication);
+        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
+
+        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
+        if (!_cookyString.NullOrWhiteSpace())
+        {
+            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+        }
+        else
+        {
+            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        }*/
+
+        await base.OnInitializedAsync();
     }
 
     private void AddNewCandidate()
@@ -111,6 +201,11 @@ public partial class Requisition
     }
 
     private async Task AdvancedSearch(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
+
+    private async Task AllAlphabet(MouseEventArgs arg)
     {
         await Task.Delay(1);
     }
@@ -126,32 +221,22 @@ public partial class Requisition
         StateHasChanged();
     }
 
-    private bool FirstRender
+    private async Task ClearFilter(MouseEventArgs arg)
     {
-        get;
-        set;
-    } = true;
+        await Task.Delay(1);
+    }
 
     private async Task DataHandler(object obj)
     {
         DotNetObjectReference<Requisition> _dotNetReference = DotNetObjectReference.Create(this); // create dotnet ref
-        await _runtime.InvokeAsync<string>("detail", _dotNetReference);
+        await Runtime.InvokeAsync<string>("detail", _dotNetReference);
         //  send the dotnet ref to JS side
         FirstRender = false;
         //Count = Count;
         await Grid.SelectRowAsync(0);
     }
 
-    private Requisitions _target;
-
-    private SfSpinner Spinner
-    {
-        get;
-        set;
-    } = new();
-
-    private RequisitionDetails _requisitionDetailsObject = new();
-    private RequisitionDetails _requisitionDetailsObjectClone = new();
+    private List<CandidateActivity> _candidateActivityObject = new();
 
     private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> requisition)
     {
@@ -183,7 +268,7 @@ public partial class Requisition
             //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
             //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
             //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
-            //_candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
             //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
             //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
             //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
@@ -205,6 +290,11 @@ public partial class Requisition
 
         await Task.Delay(1);
         await Spinner.HideAsync();
+    }
+
+    private async Task EditActivity(int arg)
+    {
+        await Task.Delay(1);
     }
 
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> arg)
@@ -298,6 +388,21 @@ public partial class Requisition
 
     private static void RefreshGrid() => Grid.Refresh();
 
+    private void SetAlphabet(string alphabet)
+    {
+    }
+
+    private async Task TabSelected(SelectEventArgs args)
+    {
+        await Task.Delay(1);
+        _selectedTab = args.SelectedIndex;
+    }
+
+    private async Task UndoActivity(int arg)
+    {
+        await Task.Delay(1);
+    }
+
     public class AdminRequisitionDropDownAdaptor : DataAdaptor
     {
         #region Methods
@@ -321,90 +426,5 @@ public partial class Requisition
         }
 
         #endregion
-    }
-
-    private void SetAlphabet(string alphabet)
-    {
-        return;
-    }
-
-    private async Task AllAlphabet(MouseEventArgs arg)
-    {
-        await Task.Delay(1);
-    }
-
-    private async Task ClearFilter(MouseEventArgs arg)
-    {
-        await Task.Delay(1);
-    }
-
-    private async Task TabSelected(SelectEventArgs args)
-    {
-        await Task.Delay(1);
-        _selectedTab = args.SelectedIndex;
-    }
-
-    private LoginCooky LoginCookyUser
-    {
-        get;
-        set;
-    }
-
-    [Inject]
-    private NavigationManager NavManager
-    {
-        get;
-        set;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(1);
-        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
-        IMemoryCache _memoryCache = Start.MemCache;
-        while (_states == null)
-        {
-            _memoryCache.TryGetValue("States", out _states);
-        }
-
-        _statesCopy.Clear();
-        _statesCopy.Add(new(0, "All"));
-        _statesCopy.AddRange(_states);
-        /*while (_eligibility == null)
-        {
-            _memoryCache.TryGetValue("Eligibility", out _eligibility);
-        }
-
-        _eligibilityCopy.Clear();
-        _eligibilityCopy.Add(new(0, "All"));
-        _eligibilityCopy.AddRange(_eligibility);
-
-        _memoryCache.TryGetValue("Experience", out _experience);
-        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
-        while (_jobOptions == null)
-        {
-            _memoryCache.TryGetValue("JobOptions", out _jobOptions);
-        }
-
-        _jobOptionsCopy.Clear();
-        _jobOptionsCopy.Add(new("%", "All"));
-        _jobOptionsCopy.AddRange(_jobOptions);
-
-        _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
-        _memoryCache.TryGetValue("Workflow", out _workflows);
-        _memoryCache.TryGetValue("Communication", out _communication);
-        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
-
-        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
-        if (!_cookyString.NullOrWhiteSpace())
-        {
-            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
-        }
-        else
-        {
-            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        }*/
-
-        await base.OnInitializedAsync();
     }
 }

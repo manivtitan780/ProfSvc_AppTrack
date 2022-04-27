@@ -1,8 +1,7 @@
 ﻿@page "/requisition"
 @using AnimationEffect = Syncfusion.Blazor.AnimationEffect
-@using ProfSvc_AppTrack.Pages.Controls.Requisitions
 @layout ProfSvcLayout
-@inject IJSRuntime _runtime;
+@inject IJSRuntime Runtime;
 
 <Header></Header>
 
@@ -134,9 +133,6 @@
 							</ChildContent>
 							<ContentTemplate>
 								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states"/>
-								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
-												GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
-												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -144,7 +140,7 @@
 								<TabHeader Text="Candidate Activity" />
 							</ChildContent>
 							<ContentTemplate>
-								@*<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight" UndoCandidateActivity="UndoActivity" />*@
+								<ActivityPanelRequisition EditActivity="EditActivity" ModelActivityObject="_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight" UndoCandidateActivity="UndoActivity" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>

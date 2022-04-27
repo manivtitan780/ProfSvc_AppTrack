@@ -8,7 +8,7 @@
 // File Name:           BasicInfoRequisitionPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          04-04-2022 19:57
-// Last Updated On:     04-04-2022 20:08
+// Last Updated On:     04-25-2022 15:53
 // *****************************************/
 
 #endregion
@@ -24,6 +24,13 @@ public partial class BasicInfoRequisitionPanel
         set;
     } = new();
 
+    [Parameter]
+    public List<IntValues> States
+    {
+        get;
+        set;
+    }
+
     private string GetDurationCode(string durationCode)
     {
         return durationCode.ToLower() switch
@@ -33,13 +40,6 @@ public partial class BasicInfoRequisitionPanel
                    "d" => "days",
                    _ => "years"
                };
-    }
-
-    [Parameter]
-    public List<IntValues> States
-    {
-        get;
-        set;
     }
 
     private string GetLocation(string location)
