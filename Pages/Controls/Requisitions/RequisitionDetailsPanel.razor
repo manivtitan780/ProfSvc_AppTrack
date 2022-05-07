@@ -1,5 +1,37 @@
-﻿<h3>RequisitionDetailsPanel</h3>
-
-@code {
-
-}
+﻿<SfDialog Header="Edit Candidate" Height="98vh" IsModal="true" MinHeight="98vh" @ref="Dialog" Target="#divTarget" Visible="false" Width="832px">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SaveRequisitionDialog">
+			<DataAnnotationsValidator />
+			<div style="height: 100%">
+				<div class="divContainerTable">
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="dropCompany">Company Name</label>
+						</div>
+						<div class="divFlexSmall" style="display: flex;">
+							<div>
+								<LabelDropDown @bind-Value="@ModelObject.CompanyName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="Value"
+											   TItem="KeyValues" TValue="string" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div class="divFlexLabel">
+							<label class="labelStatus" for="dropCompanyContact">Contact Name</label>
+						</div>
+						<div class="divFlexSmall" style="display: flex;">
+							<div>
+								<LabelDropDown @bind-Value="@ModelObject.ContactName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompanyContact" TextField="Value"
+											   TItem="KeyValues" TValue="string" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<DialogFooter CancelMethod="CancelDialog" />
+		</EditForm>
+	</ChildContent>
+</SfDialog>
