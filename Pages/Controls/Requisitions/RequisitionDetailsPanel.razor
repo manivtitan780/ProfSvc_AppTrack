@@ -29,6 +29,33 @@
 							</div>
 						</div>
 					</div>
+                    <div class="divFlex">
+                        <div style="display: flex; width: 100%">
+                            <div class="divFlexLabel" style="width: 35%">
+                                <label class="labelStatus" for="textCity">City:</label>
+                            </div>
+                            <div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
+                                <label class="labelStatus" for="dropState">State:</label>
+                            </div>
+                            <div class="divFlexLabel" style="margin-left: 3%; width: 24%;">
+                                <label class="labelStatus" for="textZip">Zip Code:</label>
+                            </div>
+                        </div>
+                        <div style="display: flex; width: 100%">
+                            <div class="divFlexSmall" style="width: 35%">
+                                <LabelTextBox @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textCity" MaxLength="50"
+                                              MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
+                            </div>
+                            <div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+                                <LabelDropDown @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
+                                               TItem="IntValues" TValue="int" ValueField="Key" />
+                            </div>
+                            <div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
+                                <LabelMaskedTextBox @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
+                                                    ValidationMessage="@(() => ModelObject.ZipCode)" />
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelDialog" />
