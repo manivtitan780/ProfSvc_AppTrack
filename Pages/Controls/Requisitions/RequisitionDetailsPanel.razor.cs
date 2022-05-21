@@ -33,6 +33,20 @@
             await Task.Delay(1);
         }
 
+        [Parameter]
+        public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
+        {
+            get;
+            set;
+        }
+
+        [Parameter]
+        public List<IntValues> States
+        {
+            get;
+            set;
+        }
+
         private async Task CancelDialog(MouseEventArgs arg)
         {
             await Task.Delay(1);

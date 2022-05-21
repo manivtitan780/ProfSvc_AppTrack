@@ -56,6 +56,14 @@
                             </div>
                         </div>
                     </div>
+					<LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" ID="textTitle" MaxLength="200" MinLength="1" Placeholder="Position Title / Role" 
+								  ValidationMessage="@(() => ModelObject.Title)" Width="100%" />
+					<LabelTextBox @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textPositionDescription"
+								  MaxLength="32767" Multiline="true" Placeholder="Position Description" Width="100%" Rows="3" />
+					<LabelTextBox @bind-Value="@(ModelObject.Mandatory)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="true" Height="100px" ID="textMandatory"
+								  MaxLength="8000" Multiline="true" Placeholder="Mandatory Requirements" Width="100%" Rows="3" />
+					<LabelTextBox @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textOptional"
+								  MaxLength="8000" Multiline="true" Placeholder="Optional Requirements" Width="100%" Rows="3" />
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelDialog" />
