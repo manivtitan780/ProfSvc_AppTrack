@@ -26,7 +26,7 @@
 							<RadzenRating @bind-Value="@ModelObject.Rating" ID="radzenRating" Stars="5" />
 						</div>
 					</div>
-					<LabelTextBox @bind-Value="@(ModelObject.RatingComments)" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments"
+					<TextBoxControl @bind-Value="@(ModelObject.RatingComments)" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments"
 								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.RatingComments)" />
 				</div>
 			</div>

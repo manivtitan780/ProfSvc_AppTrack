@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfSvc_Classes", "..\ProfS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sovren.SDK", "..\sovren-dotnet\src\Sovren.SDK\Sovren.SDK.csproj", "{CDC39A6D-2229-4692-963C-790E3E60F5D7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelComponents", "..\LabelComponents\LabelComponents.csproj", "{0DA82BFD-418E-4B98-B9D5-D5D677111486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{CDC39A6D-2229-4692-963C-790E3E60F5D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDC39A6D-2229-4692-963C-790E3E60F5D7}.Release|x64.ActiveCfg = Release|Any CPU
 		{CDC39A6D-2229-4692-963C-790E3E60F5D7}.Release|x64.Build.0 = Release|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Debug|x64.Build.0 = Debug|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DA82BFD-418E-4B98-B9D5-D5D677111486}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

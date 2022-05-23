@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</div>
-	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%">
+	<SfGrid AllowPaging="false" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" SelectedRowIndex="0" TValue="AdminList" Width="99.75%" ID="Grid" >
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single" />
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminDesignationAdaptor)" Key="ID" />
 		<GridEvents DataBound="DataHandler" OnActionComplete="ActionComplete" RowSelected="RowSelected" TValue="AdminList" />@*OnActionBegin="ActionBegin"*@

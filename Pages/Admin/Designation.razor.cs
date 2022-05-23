@@ -134,7 +134,7 @@ public partial class Designation
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
-        await NavManager.RedirectLogin(LocalStorageBlazored);
+        //await NavManager.RedirectLogin(LocalStorageBlazored);
     }
 
     private async Task ActionComplete(ActionEventArgs<AdminList> designationAction)

@@ -6,7 +6,7 @@
 		<EditForm Model="ModelSearchObject" OnValidSubmit="SearchCandidateDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelSearchObject.Name)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textName" MaxLength="255" MinLength="0" Multiline="false" Placeholder="Name" />
+				<TextBoxControl @bind-Value="@(ModelSearchObject.Name)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textName" MaxLength="255" MinLength="0" Multiline="false" Placeholder="Name" />
 				<div class="divSwitchFlex">
 					<div class="divSwitchFlexLabel">
 						<label class="labelStatus">Show:</label>
@@ -17,9 +17,9 @@
 					</div>
 				</div>
 				<LabelSwitch @bind-BindValue="@(ModelSearchObject.IncludeAdmin)" ID="checkedIncludeAdmin" OffLabel="NO" OnLabel="YES" Placeholder="Include Admin Candidates?"></LabelSwitch>
-				<LabelTextBox @bind-Value="@(ModelSearchObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textKeywords" MaxLength="2000" MinLength="0"
+				<TextBoxControl @bind-Value="@(ModelSearchObject.Keywords)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textKeywords" MaxLength="2000" MinLength="0"
 							  Multiline="true" Placeholder="Enter Keywords (separated by commas)" Rows="4" />
-				<LabelTextBox @bind-Value="@(ModelSearchObject.Skills)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textSkills" MaxLength="2000" MinLength="0"
+				<TextBoxControl @bind-Value="@(ModelSearchObject.Skills)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textSkills" MaxLength="2000" MinLength="0"
 							  Multiline="true" Placeholder="Enter Skills (separated by commas)" Rows="4" />
 				<LabelSwitch @bind-BindValue="@(ModelSearchObject.CityZip)" ID="checkedNarrow" OffLabel="STATE" OnLabel="CITY/ZIP" Placeholder="Narrow Search By"></LabelSwitch>
 				<div id="divZip" style="display: @(ModelSearchObject.CityZip ? "initial" : "none")">

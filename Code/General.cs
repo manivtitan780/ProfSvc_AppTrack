@@ -824,7 +824,7 @@ public static class General
         _request.AddQueryParameter("idIsString", isString.ToString());
         string _response = await _restClient.PostAsync<string>(_request);
 
-        grid.Refresh();
+        await grid.Refresh();
         double _index = await grid.GetRowIndexByPrimaryKey(id);
         await grid.SelectRowAsync(_index);
 
@@ -900,7 +900,7 @@ public static class General
             mainAdminList = adminList.Copy();
         }
 
-        grid.Refresh();
+        await grid.Refresh();
 
         return await Task.FromResult(_response);
     }

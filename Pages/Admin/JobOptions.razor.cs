@@ -231,7 +231,7 @@ public partial class JobOptions
         string _response = await _restClient.PostAsync<string>(_request);
         Code = _response;
 
-        Grid.Refresh();
+        await Grid.Refresh();
 
         await Task.Delay(1);
         await Spinner.HideAsync();

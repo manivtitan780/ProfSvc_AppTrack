@@ -6,10 +6,10 @@
 		<EditForm Model="@ModelObject" OnValidSubmit="SaveActivityDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelObject.Status)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textStatus" MaxLength="255" MinLength="1" Placeholder="Status" Readonly="true" Width="100%" />
+				<TextBoxControl @bind-Value="@(ModelObject.Status)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textStatus" MaxLength="255" MinLength="1" Placeholder="Status" Readonly="true" Width="100%" />
 				<LabelDropDown @bind-Value="ModelObject.NewStatusCode" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ModelSteps" DropDownValueChange="ChangeStatus" ID="dropStatus"
 							   Placeholder="Set New Status" TextField="Key" TItem="KeyValues" TValue="string" ValueField="Value" />
-				<LabelTextBox @bind-Value="@(ModelObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Notes"
+				<TextBoxControl @bind-Value="@(ModelObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Notes"
 							  Rows="5" ValidationMessage="@(() => ModelObject.Notes)" Width="100%" />
 				<div style="display: @(IsShow ? "inherit" : "none")">
 					<LabelSwitch @bind-BindValue="@(ModelObject.ShowCalendar)" ID="checkedShowCalendar" OffLabel="NO" OnLabel="YES" Placeholder="Show Calendar?"></LabelSwitch>
@@ -20,7 +20,7 @@
 					</LabelDropDown>
 					<LabelMaskedTextBox @bind-Value="@(ModelObject.PhoneNumber)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPhoneNumber" Mask="(000) 000-0000"
 										Placeholder="Interview Phone Number" />
-					<LabelTextBox CreateDivTag="true" CreateTooltip="false" ID="textInterviewDetails" MaxLength="2000" MinLength="0" Multiline="true" Placeholder="Interview Details"
+					<TextBoxControl CreateDivTag="true" CreateTooltip="false" ID="textInterviewDetails" MaxLength="2000" MinLength="0" Multiline="true" Placeholder="Interview Details"
 								  Rows="5" Value="@(ModelObject.InterviewDetails)" Width="100%" />
 				</div>
 			</div>

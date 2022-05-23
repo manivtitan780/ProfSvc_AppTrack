@@ -40,13 +40,17 @@ _builder.Services.AddSignalR(e =>
                                     e.MaximumReceiveMessageSize = 10485760;
                                     e.EnableDetailedErrors = true;
                                 });
+//_builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
 
 WebApplication _app = _builder.Build();
 
 // Configure the HTTP request pipeline.
 // ReSharper disable once CommentTypo
 //SyncfusionLicenseProvider.RegisterLicense("NTUxOTI3QDMxMzkyZTM0MmUzMGY3TWJ0TWx3Z3lXY2ZaOG1mb1pBNFhpamYxWm92d0N1RGFSTmRFQUd4NGM9");
-SyncfusionLicenseProvider.RegisterLicense("NjIxMzUyQDMyMzAyZTMxMmUzMG5uWUlIeDlKMXdYeHAxR3FXYmUrbno3ak5oK0IzRUlZTytnUnpUR1d0WVU9");
+//SyncfusionLicenseProvider.RegisterLicense("NjIxMzUyQDMyMzAyZTMxMmUzMG5uWUlIeDlKMXdYeHAxR3FXYmUrbno3ak5oK0IzRUlZTytnUnpUR1d0WVU9");
+
+// v20.1
+SyncfusionLicenseProvider.RegisterLicense("NjQyNzIwQDMyMzAyZTMxMmUzMElCNFZ2dkpDSzk3ZWExNHVVV3pEbWN0VlNmRXgxTmtuekxCc2JqdlJKS1E9");
 
 if (!_app.Environment.IsDevelopment())
 {

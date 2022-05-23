@@ -1,55 +1,56 @@
 ﻿@if (CreateDivTag)
 {
-	<div class="divFlex">
-		<div class="divFlexLabel">
-			<label class="labelStatus" for="@ID">@Placeholder:</label>
-		</div>
-		<div class="@(Multiline ? "divFlexBig" : "divFlexSmall")" style="height: @Height;">
-			@if (CreateTooltip)
-			{
-				<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-					<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
-							   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged"
-							   ValueExpression="@ValueExpression" Width="@Width" Type="@TextBoxType">
-					</SfTextBox>
-					<TooltipTemplates>
+    <div class="divFlex">
+        <div class="divFlexLabel">
+            <label class="labelStatus" for="@ID">@Placeholder:</label>
+        </div>
+        <div class="@(Multiline ? "divFlexBig" : "divFlexSmall")" style="height: @Height;">
+            @if (CreateTooltip)
+            {
+	            <SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
+						   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" Type="@TextBoxType" ValidateOnInput="true" Value="@Value"
+						   ValueChanged="ValueChanged" ValueExpression="@ValueExpression" Width="@Width">
+							<ValidationMessage For="@ValidationMessage"></ValidationMessage>
+				</SfTextBox>
+                <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+                    <TooltipTemplates>
 						<Content>
 							<ValidationMessage For="@ValidationMessage"></ValidationMessage>
 						</Content>
-					</TooltipTemplates>
-				</SfTooltip>
-			}
-			else
-			{
-				<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
-						   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
-						   Width="@Width" Type="@TextBoxType">
-				</SfTextBox>
-			}
-		</div>
-	</div>
+                    </TooltipTemplates>
+                </SfTooltip>
+            }
+            else
+            {
+                <SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
+                   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" Type="@TextBoxType" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged"
+                   ValueExpression="@ValueExpression" Width="@Width">
+                </SfTextBox>
+            }
+        </div>
+    </div>
 }
 else
 {
-	if (CreateTooltip)
-	{
-		<SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
-			<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
-					   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
-					   Width="@Width" Type="@TextBoxType">
-			</SfTextBox>
-			<TooltipTemplates>
-				<Content>
-					<ValidationMessage For="@ValidationMessage"></ValidationMessage>
-				</Content>
-			</TooltipTemplates>
-		</SfTooltip>
-	}
-	else
-	{
-		<SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
-				   ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression"
-				   Width="@Width" Type="@TextBoxType">
-		</SfTextBox>
-	}
+    if (CreateTooltip)
+    {
+        <SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
+           ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" Type="@TextBoxType" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged"
+           ValueExpression="@ValueExpression" Width="@Width">
+        </SfTextBox>
+        <SfTooltip CloseDelay="0" OnOpen="ToolTipOpen" OpenDelay="0" OpensOn="Hover" Position="Position.TopCenter" Target="@("#" + ID)" Width="100%" WindowCollision="true">
+            <TooltipTemplates>
+                <Content>
+                    <ValidationMessage For="@ValidationMessage"></ValidationMessage>
+                </Content>
+            </TooltipTemplates>
+        </SfTooltip>
+    }
+    else
+    {
+        <SfTextBox CssClass="@CssClass" FloatLabelType="FloatLabelType.Never" HtmlAttributes="@(new Dictionary<string, object> { { "maxlength", MaxLength }, {"minlength", MinLength}, {"rows", Multiline ? Rows : 1} })"
+           ID="@ID" Multiline="@Multiline" Placeholder="@Placeholder" Readonly="@Readonly" @ref="Box" Type="@TextBoxType" ValidateOnInput="true" Value="@Value" ValueChanged="ValueChanged"
+           ValueExpression="@ValueExpression" Width="@Width">
+        </SfTextBox>
+    }
 }

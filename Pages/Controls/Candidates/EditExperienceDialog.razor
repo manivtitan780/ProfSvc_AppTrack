@@ -6,17 +6,17 @@
 		<EditForm Model="ModelObject" OnValidSubmit="SaveExperienceDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelObject.Employer)" @bind-Value:event="ValueChanged" ID="textEmployer" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Employer Name"
+				<TextBoxControl @bind-Value="@(ModelObject.Employer)" @bind-Value:event="ValueChanged" ID="textEmployer" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Employer Name"
 							  ValidationMessage="@(() => ModelObject.Employer)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" ID="textDescription" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Description"
+				<TextBoxControl @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" ID="textDescription" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Description"
 							  ValidationMessage="@(() => ModelObject.Description)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Location)" @bind-Value:event="ValueChanged" ID="textLocation" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Location"
+				<TextBoxControl @bind-Value="@(ModelObject.Location)" @bind-Value:event="ValueChanged" ID="textLocation" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Location"
 							  ValidationMessage="@(() => ModelObject.Location)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" ID="textTitle" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Job Title"
+				<TextBoxControl @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" ID="textTitle" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Job Title"
 							  ValidationMessage="@(() => ModelObject.Title)" />
-				<LabelTextBox @bind-Value="@(ModelObject.Start)" @bind-Value:event="ValueChanged" ID="textStart" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Start Date"
+				<TextBoxControl @bind-Value="@(ModelObject.Start)" @bind-Value:event="ValueChanged" ID="textStart" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Start Date"
 							  ValidationMessage="@(() => ModelObject.Start)" />
-				<LabelTextBox @bind-Value="@(ModelObject.End)" @bind-Value:event="ValueChanged" ID="textEnd" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Ending Date"
+				<TextBoxControl @bind-Value="@(ModelObject.End)" @bind-Value:event="ValueChanged" ID="textEnd" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Experience Ending Date"
 							  ValidationMessage="@(() => ModelObject.End)" />
 			</div>
 			<DialogFooter CancelMethod="CancelExperienceDialog"></DialogFooter>

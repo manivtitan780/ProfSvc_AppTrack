@@ -13,11 +13,11 @@
 			<label class="labelInfo">Login to Applicant Tracking System</label>
 		</div>
 		<div class="loginRow">
-			<LabelTextBox @bind-Value="@ModelLogin.UserName" CreateDivTag="false" CreateTooltip="true" ID="textUserName" Placeholder="User Name" MaxLength="10" MinLength="1" 
+			<TextBoxControl @bind-Value="@ModelLogin.UserName" CreateDivTag="false" CreateTooltip="true" ID="textUserName" Placeholder="User Name" MaxLength="10" MinLength="1" 
 						  @bind-Value:event="ValueChanged" ValidationMessage="@(() => ModelLogin.UserName)"/>
 		</div>
 		<div class="loginRow">
-			<LabelTextBox @bind-Value="@ModelLogin.Password" CreateDivTag="false" CreateTooltip="true" ID="textPassword" Placeholder="Password" MaxLength="16" MinLength="1" 
+			<TextBoxControl @bind-Value="@ModelLogin.Password" CreateDivTag="false" CreateTooltip="true" ID="textPassword" Placeholder="Password" MaxLength="16" MinLength="1" 
 						  @bind-Value:event="ValueChanged" ValidationMessage="@(() => ModelLogin.Password)" TextBoxType="InputType.Password"/>
 		</div>
 		<div class="loginRow center" style="margin-top: 50px;">

@@ -43,7 +43,7 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 35%">
-								<LabelTextBox @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textCity" MaxLength="50"
+								<TextBoxControl @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textCity" MaxLength="50"
 											  MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
@@ -56,15 +56,15 @@
 							</div>
 						</div>
 					</div>
-					<LabelTextBox @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" ID="textTitle" MaxLength="200" MinLength="1" Placeholder="Position Title / Role"
+					<TextBoxControl @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" ID="textTitle" MaxLength="200" MinLength="1" Placeholder="Position Title / Role"
 								  ValidationMessage="@(() => ModelObject.Title)" Width="100%" />
-					<LabelTextBox @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textPositionDescription"
+					<TextBoxControl @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textPositionDescription"
 								  MaxLength="32767" Multiline="true" Placeholder="Position Description" Rows="3" Width="100%" />
-					<LabelTextBox @bind-Value="@(ModelObject.Mandatory)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="true" Height="100px" ID="textMandatory"
+					<TextBoxControl @bind-Value="@(ModelObject.Mandatory)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="true" Height="100px" ID="textMandatory"
 								  MaxLength="8000" Multiline="true" Placeholder="Mandatory Requirements" Rows="3" Width="100%" />
-					<LabelTextBox @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textOptional"
+					<TextBoxControl @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textOptional"
 								  MaxLength="8000" Multiline="true" Placeholder="Optional Requirements" Rows="3" Width="100%" />
-					<LabelTextBox @bind-Value="@(ModelObject.SkillsRequired)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textSkills"
+					<TextBoxControl @bind-Value="@(ModelObject.SkillsRequired)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" Height="100px" ID="textSkills"
 								  MaxLength="2000" Multiline="true" Placeholder="Skills Required" Rows="3" Width="100%" />
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">

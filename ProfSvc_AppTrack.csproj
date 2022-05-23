@@ -55,10 +55,12 @@
 
     <ItemGroup>
       <Compile Remove="Pages\Admin\Controls\LabelButtonGroup.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelTextBox.razor.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Remove="Pages\Admin\Controls\LabelButtonGroup.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelTextBox.razor" />
       <Content Remove="Uploads\Candidate\11600\Rboert.json" />
     </ItemGroup>
 
@@ -80,10 +82,11 @@
         <PackageReference Include="Radzen.Blazor" Version="3.18.4" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.3.0" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.56" />
+        <PackageReference Include="Syncfusion.Blazor" Version="20.1.0.56" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\LabelComponents\LabelComponents.csproj" />
       <ProjectReference Include="..\ProfSvc_Classes\ProfSvc_Classes.csproj" />
     </ItemGroup>
 

@@ -162,7 +162,7 @@ public partial class Candidate
     //    await Grid.ExpandCollapseDetailRowAsync(args.RowData);
     //}
 
-    private string SkillObj = "";
+    //private string SkillObj = "";
 
     public static decimal Count
     {
@@ -817,7 +817,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private void BeforeDocument(BeforeUploadEventArgs arg)
@@ -856,7 +856,7 @@ public partial class Candidate
         SearchModel.ItemCount = obj.Value;
 
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        Grid.Refresh();
+        await Grid.Refresh();
         StateHasChanged();
     }
 
@@ -870,7 +870,7 @@ public partial class Candidate
         SearchModel.ItemCount = _currentPageItemCount;
         SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task DataHandler(object obj)
@@ -1236,7 +1236,7 @@ public partial class Candidate
         SearchModel.Page = 1;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //await new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private static void FilterSet(string value)
@@ -1270,7 +1270,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private void GetMPCDate()
@@ -1356,7 +1356,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task NextClick()
@@ -1370,7 +1370,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task OnActionBegin(ActionEventArgs<Candidates> args)
@@ -1387,7 +1387,7 @@ public partial class Candidate
                                     };
             SearchModel.SortDirection = args.Direction == SortDirection.Ascending ? (byte)1 : (byte)0;
             await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-            Grid.Refresh();
+            await Grid.Refresh();
         }
     }
 
@@ -1422,7 +1422,7 @@ public partial class Candidate
                 _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 
                 await _client.PostAsync(_request);
-                Grid.Refresh();
+                await Grid.Refresh();
             }
             catch
             {
@@ -1446,7 +1446,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task PreviousClick()
@@ -1460,7 +1460,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private static void RefreshGrid() => Grid.Refresh();
@@ -1758,7 +1758,7 @@ public partial class Candidate
     {
         await Task.Delay(1);
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", arg.Model as CandidateSearch);
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task SetAlphabet(string alphabet)
@@ -1768,7 +1768,7 @@ public partial class Candidate
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private void SetCommunication()

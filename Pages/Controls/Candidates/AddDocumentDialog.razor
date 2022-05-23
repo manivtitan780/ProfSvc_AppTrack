@@ -6,9 +6,9 @@
 		<EditForm Model="ModelDocumentObject" OnValidSubmit="SaveDocumentDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				<LabelTextBox @bind-Value="@(ModelDocumentObject.Name)" @bind-Value:event="ValueChanged" ID="textName" MaxLength="255" MinLength="1" Multiline="false" Placeholder="Name"
+				<TextBoxControl @bind-Value="@(ModelDocumentObject.Name)" @bind-Value:event="ValueChanged" ID="textName" MaxLength="255" MinLength="1" Multiline="false" Placeholder="Name"
 							  ValidationMessage="@(() => ModelDocumentObject.Name)" />
-				<LabelTextBox @bind-Value="@(ModelDocumentObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="2000" MinLength="1" Multiline="true" Placeholder="Notes" Rows="5"
+				<TextBoxControl @bind-Value="@(ModelDocumentObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="2000" MinLength="1" Multiline="true" Placeholder="Notes" Rows="5"
 							  ValidationMessage="@(() => ModelDocumentObject.Notes)" />
 				<LabelDropDown @bind-Value="@ModelDocumentObject.DocumentTypeID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="DocumentTypes" ID="dropDocumentTypes" TextField="Value"
 							   TItem="IntValues" TValue="int" ValueField="Key" Placeholder="Document Type" />

@@ -217,7 +217,7 @@ public partial class Requisition
         SearchModel.ItemCount = obj.Value;
 
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
-        Grid.Refresh();
+        await Grid.Refresh();
         StateHasChanged();
     }
 
@@ -313,7 +313,7 @@ public partial class Requisition
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task LastClick()
@@ -327,7 +327,7 @@ public partial class Requisition
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task NextClick()
@@ -341,7 +341,7 @@ public partial class Requisition
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task OnActionBegin(ActionEventArgs<Requisitions> arg)
@@ -369,7 +369,7 @@ public partial class Requisition
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private async Task PreviousClick()
@@ -383,7 +383,7 @@ public partial class Requisition
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
         //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        Grid.Refresh();
+        await Grid.Refresh();
     }
 
     private static void RefreshGrid() => Grid.Refresh();

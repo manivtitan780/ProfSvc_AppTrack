@@ -605,6 +605,10 @@ span.invalid:after {
     height: 45px;
 }
 
+table {
+    border-spacing: 0;
+}
+
 #gridSkill .e-row, #gridSkill .e-columnheader, #gridEducation .e-row, #gridEducation .e-columnheader, #gridExperience .e-row, #gridExperience .e-columnheader, #gridNotes .e-row, #gridNotes .e-columnheader,
 #gridActivity .e-row, #gridActivity .e-columnheader, #gridDownload .e-row, #gridDownload .e-columnheader {
     height: 35px;
