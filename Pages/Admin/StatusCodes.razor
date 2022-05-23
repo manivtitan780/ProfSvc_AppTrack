@@ -163,8 +163,8 @@
                             </SfTooltip>
                         </div>
                     </div>
-                    <LabelSwitch @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
-                    <LabelSwitch @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?"></LabelSwitch>
+                    <SwitchControl @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?" />
+                    <SwitchControl @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?" />
                 </div>
             </Template>
             <FooterTemplate>
@@ -268,8 +268,8 @@
 				</SfTooltip>
 			</div>
 		</div>
-		<LabelSwitch @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
-		<LabelSwitch @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?"></LabelSwitch>
+		<SwitchControl @bind-BindValue="@(StatusCodeRecord.SubmitCandidate)" ID="checkedSubmitCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?" />
+		<SwitchControl @bind-BindValue="@(StatusCodeRecord.ShowCommission)" ID="checkedShowCommission" OffLabel="NO" OnLabel="YES" Placeholder="Show Commission?" />
 	</div>
 	<div class="e-footer-content">
 		<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

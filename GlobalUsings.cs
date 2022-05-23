@@ -72,6 +72,7 @@ global using System.Linq.Expressions;
 global using Syncfusion.Blazor.SplitButtons;
 
 global using ProfSvc_AppTrack.Pages.Controls.Candidates;
+global using LabelComponents.Areas.MyFeature.Pages;
 
 global using Action = Syncfusion.Blazor.Grids.Action; //using Microsoft.Extensions.Configuration;
 

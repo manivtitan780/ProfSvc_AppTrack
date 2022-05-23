@@ -87,7 +87,7 @@
 						</SfTooltip>
 					</div>
 				</div>
-				<LabelSwitch @bind-BindValue="@(TaxTermRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Tax Term Status?"></LabelSwitch>
+				<SwitchControl @bind-BindValue="@(TaxTermRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Tax Term Status?" />
 			</div>
 			<div class="e-footer-content">
 				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

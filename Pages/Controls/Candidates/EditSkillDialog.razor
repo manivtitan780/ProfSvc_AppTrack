@@ -8,9 +8,9 @@
 			<div class="divContainerTable">
 				<TextBoxControl @bind-Value="@(ModelObject.Skill)" @bind-Value:event="ValueChanged" ID="textSkill" MaxLength="100" MinLength="1" Multiline="false" Placeholder="Skill"
 							  ValidationMessage="@(() => ModelObject.Skill)" />
-				<LabelNumeric @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)"
+				<NumericControl @bind-Value="@(ModelObject.LastUsed)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericLastUsed" Max="3000" Placeholder="Last Used (Year)"
 							  TValue="short" ValidationMessage="@(() => ModelObject.LastUsed)" />
-				<LabelNumeric @bind-Value="@(ModelObject.ExpMonth)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericExpMonth" Max="1500"
+				<NumericControl @bind-Value="@(ModelObject.ExpMonth)" @bind-Value:event="ValueChanged" Decimals="0" Format="g" ID="numericExpMonth" Max="1500"
 							  Placeholder="Experience (Months)" TValue="short" ValidationMessage="@(() => ModelObject.ExpMonth)" />
 			</div>
 			<DialogFooter CancelMethod="CancelSkillDialog"></DialogFooter>

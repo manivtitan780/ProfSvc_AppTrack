@@ -54,13 +54,29 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Pages\Admin\Controls\LabelBox.razor.cs" />
       <Compile Remove="Pages\Admin\Controls\LabelButtonGroup.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelDateTime.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelDropDown.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelMaskedTextBox.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelMultiSelect.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelNumeric.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelSwitch.razor.cs" />
       <Compile Remove="Pages\Admin\Controls\LabelTextBox.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\TextBoxToolTip.razor.cs" />
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Pages\Admin\Controls\LabelBox.razor" />
       <Content Remove="Pages\Admin\Controls\LabelButtonGroup.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelDateTime.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelDropDown.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelMaskedTextBox.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelMultiSelect.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelNumeric.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelSwitch.razor" />
       <Content Remove="Pages\Admin\Controls\LabelTextBox.razor" />
+      <Content Remove="Pages\Admin\Controls\TextBoxToolTip.razor" />
       <Content Remove="Uploads\Candidate\11600\Rboert.json" />
     </ItemGroup>
 

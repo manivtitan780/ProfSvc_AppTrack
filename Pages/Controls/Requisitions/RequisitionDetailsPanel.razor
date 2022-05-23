@@ -13,7 +13,7 @@
 						</div>
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
-								<LabelDropDown @bind-Value="@ModelObject.CompanyName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="Value"
+								<DropDownControl @bind-Value="@ModelObject.CompanyName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="Value"
 											   TItem="KeyValues" TValue="string" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
@@ -24,7 +24,7 @@
 						</div>
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
-								<LabelDropDown @bind-Value="@ModelObject.ContactName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompanyContact" TextField="Value"
+								<DropDownControl @bind-Value="@ModelObject.ContactName" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompanyContact" TextField="Value"
 											   TItem="KeyValues" TValue="string" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
@@ -47,11 +47,11 @@
 											  MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<LabelDropDown @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
+								<DropDownControl @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
 											   TItem="IntValues" TValue="int" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
-								<LabelMaskedTextBox @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
+								<MaskedTextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
 													ValidationMessage="@(() => ModelObject.ZipCode)" />
 							</div>
 						</div>
@@ -80,15 +80,15 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 24%">
-								<LabelNumeric @bind-Value="@(ModelObject.Positions)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="0" Format="n" ID="numericPositions"
+								<NumericControl @bind-Value="@(ModelObject.Positions)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="0" Format="n" ID="numericPositions"
 											  Max="500" Placeholder="No. of Positions" TValue="int" ValidationMessage="@(() => ModelObject.Positions)" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<LabelDateTime @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
+								<DateTimeControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
 											   Min="@(DateTime.Today.AddMonths(-1))" Placeholder="Start Date" Width="220px" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<LabelDateTime @bind-Value="@ModelObject.DueDate" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateDue" Max="@(DateTime.Today.AddMonths(6))"
+								<DateTimeControl @bind-Value="@ModelObject.DueDate" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateDue" Max="@(DateTime.Today.AddMonths(6))"
 											   Min="@(DateTime.Today.AddMonths(-1))" Placeholder="Due Date" Width="220px" />
 							</div>
 						</div>

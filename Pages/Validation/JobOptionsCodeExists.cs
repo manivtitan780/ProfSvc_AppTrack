@@ -69,7 +69,7 @@ public class JobOptionsCodeExists : ComponentBase
 
     protected void HandleValidation(FieldIdentifier identifier)
     {
-        if (identifier.Model is LabelBox _box && _box.ID != "textCode")
+        if (identifier.Model is TextBoxControl _box && _box.ID != "textCode")
         {
             return;
         }

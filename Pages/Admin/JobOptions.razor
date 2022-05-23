@@ -174,12 +174,12 @@
 							</SfTooltip>
 						</div>
 					</div>
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Rate)" ID="checkedRate" OffLabel="NO" OnLabel="YES" Placeholder="Rate Required?" />
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Exp)" ID="checkedExp" OffLabel="NO" OnLabel="YES" Placeholder="Expenses Required?" />
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.PlaceFee)" ID="checkedPlaceFee" OffLabel="NO" OnLabel="YES" Placeholder="Placement Fee Required?" />
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.Benefits)" ID="checkedBenefits" OffLabel="NO" OnLabel="YES" Placeholder="Benefits Required?" />
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.ShowHours)" ID="checkedShowHours" OffLabel="NO" OnLabel="YES" Placeholder="Show Hours?" />
-					<LabelSwitch @bind-BindValue="@(JobOptionsRecord.ShowPercent)" ID="checkedShowPercent" OffLabel="NO" OnLabel="YES" Placeholder="Show Percent?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.Rate)" ID="checkedRate" OffLabel="NO" OnLabel="YES" Placeholder="Rate Required?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.Exp)" ID="checkedExp" OffLabel="NO" OnLabel="YES" Placeholder="Expenses Required?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.PlaceFee)" ID="checkedPlaceFee" OffLabel="NO" OnLabel="YES" Placeholder="Placement Fee Required?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.Benefits)" ID="checkedBenefits" OffLabel="NO" OnLabel="YES" Placeholder="Benefits Required?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.ShowHours)" ID="checkedShowHours" OffLabel="NO" OnLabel="YES" Placeholder="Show Hours?" />
+					<SwitchControl @bind-BindValue="@(JobOptionsRecord.ShowPercent)" ID="checkedShowPercent" OffLabel="NO" OnLabel="YES" Placeholder="Show Percent?" />
 				</div>
 				<div class="e-footer-content">
 					<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

@@ -59,11 +59,11 @@
                                               MinLength="1" Placeholder="City" ValidationMessage="@(() => ModelObject.City)" Width="100%" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-                                <LabelDropDown @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
+                                <DropDownControl @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
                                                TItem="IntValues" TValue="int" ValueField="Key" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
-                                <LabelMaskedTextBox @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
+                                <MaskedTextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code"
                                                     ValidationMessage="@(() => ModelObject.ZipCode)" />
                             </div>
                         </div>
@@ -81,11 +81,11 @@
                         </div>
                         <div style="display: flex; width: 100%">
                             <div class="divFlexSmall" style="width: 48%">
-                                <LabelMaskedTextBox @bind-Value="@(ModelObject.Phone1)" @bind-Value:event="ValueChanged" ID="textPhone1" Mask="(000) 000-0000" Placeholder="Cell Phone"
+                                <MaskedTextBoxControl @bind-Value="@(ModelObject.Phone1)" @bind-Value:event="ValueChanged" ID="textPhone1" Mask="(000) 000-0000" Placeholder="Cell Phone"
                                                     ValidationMessage="@(() => ModelObject.Phone1)" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 4%; width: 48%;">
-                                <LabelMaskedTextBox @bind-Value="@(ModelObject.Phone2)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textPhone2" Mask="(000) 000-0000" Placeholder="Alternate Phone" />
+                                <MaskedTextBoxControl @bind-Value="@(ModelObject.Phone2)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textPhone2" Mask="(000) 000-0000" Placeholder="Alternate Phone" />
                             </div>
                         </div>
                     </div>
@@ -106,19 +106,19 @@
                         </div>
                         <div style="display: flex; width: 100%">
                             <div class="divFlexSmall" style="width: 23%">
-                                <LabelNumeric @bind-Value="@(ModelObject.HourlyRate)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericHourlyLow"
+                                <NumericControl @bind-Value="@(ModelObject.HourlyRate)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericHourlyLow"
                                               Max="2000" Placeholder="Hourly Rate (Min.)" TValue="decimal" ValidationMessage="@(() => ModelObject.HourlyRate)" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
-                                <LabelNumeric @bind-Value="@(ModelObject.HourlyRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericHourlyHigh"
+                                <NumericControl @bind-Value="@(ModelObject.HourlyRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericHourlyHigh"
                                               Max="2000" Placeholder="Hourly Rate (Max.)" TValue="decimal" ValidationMessage="@(() => ModelObject.HourlyRateHigh)" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 4%; width: 23%;">
-                                <LabelNumeric @bind-Value="@(ModelObject.SalaryLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericSalaryLow"
+                                <NumericControl @bind-Value="@(ModelObject.SalaryLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericSalaryLow"
                                               Max="1000000" Placeholder="Salary (Min.)" TValue="decimal" ValidationMessage="@(() => ModelObject.SalaryLow)" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 2%; width: 23%;">
-                                <LabelNumeric @bind-Value="@(ModelObject.SalaryHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericSalaryHigh"
+                                <NumericControl @bind-Value="@(ModelObject.SalaryHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="2" Format="c2" ID="numericSalaryHigh"
                                               Max="1000000" Placeholder="Salary (Max.)" TValue="decimal" ValidationMessage="@(() => ModelObject.SalaryHigh)" />
                             </div>
                         </div>
@@ -137,15 +137,15 @@
                         </div>
                         <div style="display: flex; width: 100%">
                             <div class="divFlexSmall" style="width: 32%">
-                                <LabelDropDown @bind-Value="@ModelObject.EligibilityID" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TextField="Value" TItem="IntValues"
+                                <DropDownControl @bind-Value="@ModelObject.EligibilityID" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TextField="Value" TItem="IntValues"
                                                TValue="int" ValueField="Key" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
-                                <LabelDropDown @bind-Value="@ModelObject.ExperienceID" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TextField="Value" TItem="IntValues"
+                                <DropDownControl @bind-Value="@ModelObject.ExperienceID" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TextField="Value" TItem="IntValues"
                                                TValue="int" ValueField="Key" />
                             </div>
                             <div class="divFlexSmall" style="margin-left: 2%; width: 32%;">
-                                <LabelDropDown @bind-Value="@ModelObject.Communication" @bind-Value:event="ValueChanged" DataSource="@Communication" ID="dropCommunication" TextField="Value" TItem="KeyValues"
+                                <DropDownControl @bind-Value="@ModelObject.Communication" @bind-Value:event="ValueChanged" DataSource="@Communication" ID="dropCommunication" TextField="Value" TItem="KeyValues"
                                                TValue="string" ValueField="Key" />
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                             <label class="labelStatus" for="multiTaxTerms">Tax Terms:</label>
                         </div>
                         <div class="divFlexSmall" id="divMultiTaxTerm">
-							<LabelMultiSelect @bind-Value="@(ModelObject.TaxTerm)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" ID="multiTaxTerms"
+							<MultiSelectControl @bind-Value="@(ModelObject.TaxTerm)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="TaxTerms" FilterBarPlaceholder="Search Tax Term&hellip;" ID="multiTaxTerms"
 											  KeyField="Key" Placeholder="Select Tax Terms(s)" TItem="KeyValues" TValue="string" ValueField="Value"/>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                             <label class="labelStatus" for="multiJobOptions">Job Options:</label>
                         </div>
                         <div class="divFlexSmall" id="divMultiJobOption">
-							<LabelMultiSelect @bind-Value="@(ModelObject.JobOptions)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" ID="multiJobOptions"
+							<MultiSelectControl @bind-Value="@(ModelObject.JobOptions)" @bind-Value:event="ValueChanged" CreateTooltip="false" DataSource="JobOptions" FilterBarPlaceholder="Search Job Option&hellip;" ID="multiJobOptions"
 											  KeyField="Key" Placeholder="Select Job Option(s)" TItem="KeyValues" TValue="string" ValueField="Value"/>
                         </div>
                     </div>
@@ -208,10 +208,10 @@
                             </div>
                         </div>
                     </div>
-                    <LabelSwitch @bind-BindValue="@(ModelObject.Relocate)" ID="checkedRelocate" OffLabel="NO" OnLabel="YES" Placeholder="Willing to Relocate?"></LabelSwitch>
+                    <SwitchControl @bind-BindValue="@(ModelObject.Relocate)" ID="checkedRelocate" OffLabel="NO" OnLabel="YES" Placeholder="Willing to Relocate?" />
                     <TextBoxControl @bind-Value="@(ModelObject.RelocationNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textRelocationNotes" MaxLength="200"
                                   Placeholder="Relocation Notes" Readonly="@(!ModelObject.Relocate)" Width="100%" />
-                    <LabelSwitch @bind-BindValue="@(ModelObject.Background)" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?"></LabelSwitch>
+                    <SwitchControl @bind-BindValue="@(ModelObject.Background)" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?" />
                     <TextBoxControl @bind-Value="@(ModelObject.SecurityNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textSecurityNotes" MaxLength="200"
                                   Placeholder="Security Clearance Notes" Readonly="@(!ModelObject.Background)" Width="100%" />
                     <div class="divFlex">

@@ -92,18 +92,18 @@
 						</SfTooltip>
 					</div>
 				</div>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewCandidate)" ID="checkedViewCandidate" OffLabel="NO" OnLabel="YES" Placeholder="View Candidate?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.EditCandidate)" ID="checkedEditCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Edit Candidate?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewRequisition)" ID="checkedViewRequisition" OffLabel="NO" OnLabel="YES" Placeholder="View Requisition?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.EditRequisition)" ID="checkedEditRequisition" OffLabel="NO" OnLabel="YES" Placeholder="Edit Requisition?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ViewClients)" ID="checkedViewClients" OffLabel="NO" OnLabel="YES" Placeholder="View Clients?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.EditClients)" ID="checkedEditClient" OffLabel="NO" OnLabel="YES" Placeholder="Edit Clients?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ChangeCandidateStatus)" ID="checkedChangeCandidateStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Candidate Status?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ChangeRequisitionStatus)" ID="checkedChangeRequisitionStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Requisition Status?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.SendEmailCandidate)" ID="checkedSendEmail" OffLabel="NO" OnLabel="YES" Placeholder="Send Email?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.ForwardResume)" ID="checkedForwardResume" OffLabel="NO" OnLabel="YES" Placeholder="Forward Resume?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.DownloadResume)" ID="checkedDownloadResume" OffLabel="NO" OnLabel="YES" Placeholder="Download Resume?"></LabelSwitch>
-				<LabelSwitch @bind-BindValue="@(RoleRecord.SubmitCandidate)" ID="checkedSubmitCandidates" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"></LabelSwitch>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ViewCandidate)" ID="checkedViewCandidate" OffLabel="NO" OnLabel="YES" Placeholder="View Candidate?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.EditCandidate)" ID="checkedEditCandidate" OffLabel="NO" OnLabel="YES" Placeholder="Edit Candidate?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ViewRequisition)" ID="checkedViewRequisition" OffLabel="NO" OnLabel="YES" Placeholder="View Requisition?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.EditRequisition)" ID="checkedEditRequisition" OffLabel="NO" OnLabel="YES" Placeholder="Edit Requisition?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ViewClients)" ID="checkedViewClients" OffLabel="NO" OnLabel="YES" Placeholder="View Clients?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.EditClients)" ID="checkedEditClient" OffLabel="NO" OnLabel="YES" Placeholder="Edit Clients?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ChangeCandidateStatus)" ID="checkedChangeCandidateStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Candidate Status?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ChangeRequisitionStatus)" ID="checkedChangeRequisitionStatus" OffLabel="NO" OnLabel="YES" Placeholder="Change Requisition Status?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.SendEmailCandidate)" ID="checkedSendEmail" OffLabel="NO" OnLabel="YES" Placeholder="Send Email?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.ForwardResume)" ID="checkedForwardResume" OffLabel="NO" OnLabel="YES" Placeholder="Forward Resume?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.DownloadResume)" ID="checkedDownloadResume" OffLabel="NO" OnLabel="YES" Placeholder="Download Resume?"/>
+				<SwitchControl @bind-BindValue="@(RoleRecord.SubmitCandidate)" ID="checkedSubmitCandidates" OffLabel="NO" OnLabel="YES" Placeholder="Submit Candidate?"/>
 			</div>
 			<div class="e-footer-content">
 				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

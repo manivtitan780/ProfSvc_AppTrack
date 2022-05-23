@@ -10,7 +10,7 @@
 							  ValidationMessage="@(() => ModelDocumentObject.Name)" />
 				<TextBoxControl @bind-Value="@(ModelDocumentObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="2000" MinLength="1" Multiline="true" Placeholder="Notes" Rows="5"
 							  ValidationMessage="@(() => ModelDocumentObject.Notes)" />
-				<LabelDropDown @bind-Value="@ModelDocumentObject.DocumentTypeID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="DocumentTypes" ID="dropDocumentTypes" TextField="Value"
+				<DropDownControl @bind-Value="@ModelDocumentObject.DocumentTypeID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="DocumentTypes" ID="dropDocumentTypes" TextField="Value"
 							   TItem="IntValues" TValue="int" ValueField="Key" Placeholder="Document Type" />
 				<div class="divFlex" style="height: 100px">
 					<div class="divFlexLabel">

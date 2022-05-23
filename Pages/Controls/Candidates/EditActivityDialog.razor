@@ -7,18 +7,17 @@
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
 				<TextBoxControl @bind-Value="@(ModelObject.Status)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textStatus" MaxLength="255" MinLength="1" Placeholder="Status" Readonly="true" Width="100%" />
-				<LabelDropDown @bind-Value="ModelObject.NewStatusCode" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ModelSteps" DropDownValueChange="ChangeStatus" ID="dropStatus"
+				<DropDownControl @bind-Value="ModelObject.NewStatusCode" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ModelSteps" DropDownValueChange="ChangeStatus" ID="dropStatus"
 							   Placeholder="Set New Status" TextField="Key" TItem="KeyValues" TValue="string" ValueField="Value" />
 				<TextBoxControl @bind-Value="@(ModelObject.Notes)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="1000" MinLength="1" Multiline="true" Placeholder="Notes"
 							  Rows="5" ValidationMessage="@(() => ModelObject.Notes)" Width="100%" />
 				<div style="display: @(IsShow ? "inherit" : "none")">
-					<LabelSwitch @bind-BindValue="@(ModelObject.ShowCalendar)" ID="checkedShowCalendar" OffLabel="NO" OnLabel="YES" Placeholder="Show Calendar?"></LabelSwitch>
-					<LabelDateTime @bind-Value="@ModelObject.DateTimeInterview" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateInterview" Max="@Max" Min="@Min" Placeholder="Interview Date/Time"
+					<SwitchControl @bind-BindValue="@(ModelObject.ShowCalendar)" ID="checkedShowCalendar" OffLabel="NO" OnLabel="YES" Placeholder="Show Calendar?" />
+					<DateTimeControl @bind-Value="@ModelObject.DateTimeInterview" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateInterview" Max="@Max" Min="@Min" Placeholder="Interview Date/Time"
 								   Width="220px" />
-					<LabelDropDown @bind-Value="ModelObject.TypeOfInterview" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@InterviewTypes" ID="dropType" Placeholder="Type of Interview"
-								   TextField="Key" TItem="KeyValues"TValue="string" ValueField="Value">
-					</LabelDropDown>
-					<LabelMaskedTextBox @bind-Value="@(ModelObject.PhoneNumber)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPhoneNumber" Mask="(000) 000-0000"
+					<DropDownControl @bind-Value="ModelObject.TypeOfInterview" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@InterviewTypes" ID="dropType" Placeholder="Type of Interview"
+									 TextField="Key" TItem="KeyValues"TValue="string" ValueField="Value"/>
+					<MaskedTextBoxControl @bind-Value="@(ModelObject.PhoneNumber)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPhoneNumber" Mask="(000) 000-0000"
 										Placeholder="Interview Phone Number" />
 					<TextBoxControl CreateDivTag="true" CreateTooltip="false" ID="textInterviewDetails" MaxLength="2000" MinLength="0" Multiline="true" Placeholder="Interview Details"
 								  Rows="5" Value="@(ModelObject.InterviewDetails)" Width="100%" />

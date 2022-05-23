@@ -20,7 +20,7 @@
 					</div>
 					<div class="divFlex" style="margin-top: 30px;">
 						<div class="divFlexSmall">
-							<LabelSwitch @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?" />
+							<SwitchControl @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?" />
 						</div>
 					</div>
 					<TextBoxControl @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments"

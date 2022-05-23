@@ -78,7 +78,7 @@
                             </SfTooltip>
                         </div>
                     </div>
-                    <LabelSwitch @bind-BindValue="@(_context.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+                    <SwitchControl @bind-BindValue="@(_context.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?" />
                 </div>
             </Template>
 			<FooterTemplate>
@@ -110,7 +110,7 @@
 						</SfTooltip>
 					</div>
 				</div>
-				<LabelSwitch @bind-BindValue="@(SkillRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+				<SwitchControl @bind-BindValue="@(SkillRecord.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"/>
 			</div>
 			<div class="e-footer-content">
 				<SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>

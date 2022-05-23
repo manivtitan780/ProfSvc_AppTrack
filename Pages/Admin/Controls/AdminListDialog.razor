@@ -9,7 +9,7 @@
 			<div class="divContainerTable">
 				<TextBoxControl @bind-Value="@(Model.Text)" @bind-Value:event="ValueChanged" MaxLength="100" MinLength="1" ID="textText" Multiline="false" Placeholder="@Placeholder" Readonly="false"
 								ValidationMessage="@(() => Model.Text)"/>
-				<LabelSwitch @bind-BindValue="@(Model.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"></LabelSwitch>
+				<SwitchControl @bind-BindValue="@(Model.IsEnabled)" ID="checkedEnabled" OffLabel="INACTIVE" OnLabel="ACTIVE" Placeholder="Status?"/>
 			</div>
             <div class="e-footer-content">
                 <SfButton IconCss="saveButton" IconPosition="IconPosition.Left" IsPrimary="true" type="submit">Save</SfButton>
