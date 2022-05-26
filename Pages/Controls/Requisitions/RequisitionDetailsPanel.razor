@@ -93,6 +93,60 @@
 							</div>
 						</div>
 					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 35%">
+								<label class="labelStatus" for="textCity">Assigned To:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 24%;">
+								<label class="labelStatus" for="dropState">Priority:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
+								<label class="labelStatus" for="textZip">Eligibility:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 24%">
+								<DropDownControl @bind-Value="@ModelObject.AssignedTo" @bind-Value:event="ValueChanged" DataSource="@AssignedTo" ID="dropAssigned" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<DropDownControl @bind-Value="@ModelObject.Priority" @bind-Value:event="ValueChanged" DataSource="@Priority" ID="dropPriority" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<DropDownControl @bind-Value="@ModelObject.Eligibility" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+						</div>
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 31%">
+								<label class="labelStatus" for="textCity">Experience:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 31%;">
+								<label class="labelStatus" for="dropState">Education:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 32%;">
+								<label class="labelStatus" for="textZip">Job Options:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 24%">
+								<DropDownControl @bind-Value="@ModelObject.Experience" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<DropDownControl @bind-Value="@ModelObject.Education" @bind-Value:event="ValueChanged" DataSource="@Education" ID="dropEducation" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<DropDownControl @bind-Value="@ModelObject.JobOptions" @bind-Value:event="ValueChanged" DataSource="@JobOptions" ID="dropJobOptions" TextField="Value" TItem="KeyValues"
+												 TValue="string" ValueField="Key" />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelDialog" />

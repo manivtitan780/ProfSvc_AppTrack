@@ -47,6 +47,42 @@
             set;
         }
 
+        public List<KeyValues> AssignedTo
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> Eligibility
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> Priority
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> Experience
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> Education
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> JobOptions
+        {
+            get;
+            set;
+        }
+
         private async Task CancelDialog(MouseEventArgs arg)
         {
             await Task.Delay(1);
