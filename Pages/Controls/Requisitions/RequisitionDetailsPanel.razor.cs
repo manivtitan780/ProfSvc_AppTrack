@@ -1,4 +1,6 @@
-﻿namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
+﻿using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
+
+namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
 {
     public partial class RequisitionDetailsPanel
     {
@@ -84,6 +86,21 @@
         }
 
         private async Task CancelDialog(MouseEventArgs arg)
+        {
+            await Task.Delay(1);
+        }
+
+        private async Task OnFileUpload(UploadChangeEventArgs arg)
+        {
+            await Task.Delay(1);
+        }
+
+        private async Task BeforeUpload(BeforeUploadEventArgs arg)
+        {
+            await Task.Delay(1);
+        }
+
+        private async Task AfterUpload(ActionCompleteEventArgs arg)
         {
             await Task.Delay(1);
         }
