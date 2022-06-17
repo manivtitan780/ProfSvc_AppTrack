@@ -14,7 +14,7 @@
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
 								<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="Value"
-												 TItem="KeyValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+												 TItem="IntValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
 					</div>
@@ -24,8 +24,8 @@
 						</div>
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
-								<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompanyContact" TextField="Value"
-												 TItem="KeyValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+								<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" DataSource="CompanyContacts" ID="dropCompanyContact" TextField="Value"
+												 TItem="IntValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
 					</div>
@@ -85,11 +85,11 @@
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
 								<DateTimeControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
-												 Min="@(DateTime.Today.AddMonths(-1))" Placeholder="Start Date" Width="220px" />
+												 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Start Date" Width="220px" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
 								<DateTimeControl @bind-Value="@ModelObject.DueDate" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateDue" Max="@(DateTime.Today.AddMonths(6))"
-												 Min="@(DateTime.Today.AddMonths(-1))" Placeholder="Due Date" Width="220px" />
+												 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Due Date" Width="220px" />
 							</div>
 						</div>
 					</div>
@@ -107,16 +107,16 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 24%">
-								<DropDownControl @bind-Value="@ModelObject.AssignedTo" @bind-Value:event="ValueChanged" DataSource="@AssignedTo" ID="dropAssigned" TextField="Value" TItem="KeyValues"
-												 TValue="string" ValueField="Key" />
+								<DropDownControl @bind-Value="@ModelObject.AssignedToID" @bind-Value:event="ValueChanged" DataSource="@AssignedTo" ID="dropAssigned" TextField="Value" TItem="IntValues"
+												 TValue="int" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DropDownControl @bind-Value="@ModelObject.Priority" @bind-Value:event="ValueChanged" DataSource="@Priority" ID="dropPriority" TextField="Value" TItem="KeyValues"
-												 TValue="string" ValueField="Key" />
+								<DropDownControl @bind-Value="@ModelObject.PriorityID" @bind-Value:event="ValueChanged" DataSource="@Priority" ID="dropPriority" TextField="Value" TItem="IntValues"
+												 TValue="int" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DropDownControl @bind-Value="@ModelObject.Eligibility" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TextField="Value" TItem="KeyValues"
-												 TValue="string" ValueField="Key" />
+								<DropDownControl @bind-Value="@ModelObject.EligibilityID" @bind-Value:event="ValueChanged" DataSource="@Eligibility" ID="dropEligibility" TextField="Value" TItem="IntValues"
+												 TValue="int" ValueField="Key" />
 							</div>
 						</div>
 					</div>
@@ -134,15 +134,15 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 24%">
-								<DropDownControl @bind-Value="@ModelObject.Experience" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TextField="Value" TItem="KeyValues"
-												 TValue="string" ValueField="Key" />
+								<DropDownControl @bind-Value="@ModelObject.ExperienceID" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropExperience" TextField="Value" TItem="IntValues"
+												 TValue="int" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DropDownControl @bind-Value="@ModelObject.Education" @bind-Value:event="ValueChanged" DataSource="@Education" ID="dropEducation" TextField="Value" TItem="KeyValues"
-												 TValue="string" ValueField="Key" />
+								<DropDownControl @bind-Value="@ModelObject.EducationID" @bind-Value:event="ValueChanged" DataSource="@Education" ID="dropEducation" TextField="Value" TItem="IntValues"
+												 TValue="int" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DropDownControl @bind-Value="@ModelObject.JobOptions" @bind-Value:event="ValueChanged" DataSource="@JobOptions" ID="dropJobOptions" TextField="Value" TItem="KeyValues"
+								<DropDownControl @bind-Value="@ModelObject.JobOptionsID" @bind-Value:event="ValueChanged" DataSource="@JobOptions" ID="dropJobOptions" TextField="Value" TItem="KeyValues"
 												 TValue="string" ValueField="Key" />
 							</div>
 						</div>
@@ -163,7 +163,7 @@
 							<div class="divFlexSmall" style="width: 40%">
 								<NumericControl @bind-Value="@(ModelObject.ExpRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="0" Format="n" ID="numericDuration"
 												Max="7300" Min="1" Placeholder="Duration" TValue="decimal" ValidationMessage="@(() => ModelObject.ExpRateHigh)" />
-								<DropDownControl @bind-Value="@ModelObject.DurationCode" @bind-Value:event="ValueChanged" DataSource="@Experience" ID="dropDurationCode" TextField="Value" TItem="KeyValues"
+								<DropDownControl @bind-Value="@ModelObject.DurationCode" @bind-Value:event="ValueChanged" DataSource="@DurationCode" ID="dropDurationCode" TextField="Value" TItem="KeyValues"
 												 TValue="string" ValueField="Key" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 57%;">

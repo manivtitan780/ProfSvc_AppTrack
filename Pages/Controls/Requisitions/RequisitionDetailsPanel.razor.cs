@@ -24,7 +24,7 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
         } = new();
 
         [Parameter]
-        public List<KeyValues> Companies
+        public List<IntValues> Companies
         {
             get;
             set;
@@ -49,37 +49,49 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
             set;
         }
 
-        public List<KeyValues> AssignedTo
+        public List<IntValues> AssignedTo
         {
             get;
             set;
         }
 
-        public List<KeyValues> Eligibility
+        public List<IntValues> Eligibility
         {
             get;
             set;
         }
 
-        public List<KeyValues> Priority
+        public List<IntValues> Priority
         {
             get;
             set;
         }
 
-        public List<KeyValues> Experience
+        public List<IntValues> Experience
         {
             get;
             set;
         }
 
-        public List<KeyValues> Education
+        public List<IntValues> Education
         {
             get;
             set;
         }
 
         public List<KeyValues> JobOptions
+        {
+            get;
+            set;
+        }
+
+        public List<IntValues> CompanyContacts
+        {
+            get;
+            set;
+        }
+
+        public List<KeyValues> DurationCode
         {
             get;
             set;
