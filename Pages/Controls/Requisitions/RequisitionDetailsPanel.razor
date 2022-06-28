@@ -153,7 +153,7 @@
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">
 							<div class="divFlexLabel" style="width: 31%">
-								<label class="labelStatus" for="numericDuration">Duration:</label>
+								<label class="labelStatus" for="textDuration">Duration:</label>
 							</div>
 							<div class="divFlexLabel" style="margin-left: 3%; width: 31%;">
 								<label class="labelStatus" for="dropDurationCode">Pay Rate:</label>
@@ -161,8 +161,8 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 40%">
-								<NumericControl @bind-Value="@(ModelObject.ExpRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" Decimals="0" Format="n" ID="numericDuration"
-												Max="7300" Min="1" Placeholder="Duration" TValue="decimal" ValidationMessage="@(() => ModelObject.ExpRateHigh)" />
+								<TextBoxControl @bind-Value="@(ModelObject.Duration)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textDuration" MaxLength="8" MinLength="0" Placeholder="Duration"
+												ValidationMessage="@(() => ModelObject.Duration)" Width="100%" />
 								<DropDownControl @bind-Value="@ModelObject.DurationCode" @bind-Value:event="ValueChanged" DataSource="@DurationCode" ID="dropDurationCode" TextField="Value" TItem="KeyValues"
 												 TValue="string" ValueField="Key" />
 							</div>
