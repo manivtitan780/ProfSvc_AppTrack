@@ -13,8 +13,8 @@
 						</div>
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
-								<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="Value"
-												 TItem="IntValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+								<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" DataSource="Companies" ID="dropCompany" TextField="CompanyName"
+												 TItem="Company" TValue="int" ValueField="ID" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
 					</div>
@@ -24,8 +24,8 @@
 						</div>
 						<div class="divFlexSmall" style="display: flex;">
 							<div>
-								<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" DataSource="CompanyContacts" ID="dropCompanyContact" TextField="Value"
-												 TItem="IntValues" TValue="int" ValueField="Key" />@*DropDownValueChange="StateIDChanged" *@
+								<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" DataSource="CompanyContacts" ID="dropCompanyContact" TextField="ContactName"
+												 TItem="CompanyContact" TValue="int" ValueField="ID" />@*DropDownValueChange="StateIDChanged" *@
 							</div>
 						</div>
 					</div>

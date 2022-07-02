@@ -403,6 +403,18 @@ public partial class Requisition
         await Task.Delay(1);
     }
 
+    internal static List<Company> Companies
+    {
+        get;
+        set;
+    }
+
+    internal static List<CompanyContact> CompanyContacts
+    {
+        get;
+        set;
+    }
+
     public class AdminRequisitionDropDownAdaptor : DataAdaptor
     {
         #region Methods
@@ -419,7 +431,8 @@ public partial class Requisition
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
-            Task<object> _requisitionReturn = General.GetRequisitionReadAdaptor(SearchModel, dm);
+            bool _getInformation = Companies.Count > 0;
+            Task<object> _requisitionReturn = General.GetRequisitionReadAdaptor(SearchModel, dm, _getInformation);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
             return _requisitionReturn;

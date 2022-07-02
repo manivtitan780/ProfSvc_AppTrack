@@ -24,7 +24,7 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
         } = new();
 
         [Parameter]
-        public List<IntValues> Companies
+        public List<Company> Companies
         {
             get;
             set;
@@ -85,7 +85,7 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
             set;
         }
 
-        public List<IntValues> CompanyContacts
+        public List<CompanyContact> CompanyContacts
         {
             get;
             set;

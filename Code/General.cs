@@ -407,8 +407,9 @@ public static class General
     /// </summary>
     /// <param name="searchModel"></param>
     /// <param name="dm"></param>
+    /// <param name="getInformation"></param>
     /// <returns></returns>
-    public static async Task<object> GetRequisitionReadAdaptor(RequisitionSearch searchModel, DataManagerRequest dm) //string name, int page, int count)
+    public static async Task<object> GetRequisitionReadAdaptor(RequisitionSearch searchModel, DataManagerRequest dm, bool getInformation = false) //string name, int page, int count)
     {
         List<Requisitions> _dataSource = new();
 
@@ -421,10 +422,10 @@ public static class General
                                    {
                                        RequestFormat = DataFormat.Json
                                    };
-            //_request.AddQueryParameter("page", searchModel.Page.ToString());
             //_request.AddQueryParameter("count", _itemCount.ToString());
             //_request.AddQueryParameter("name", searchModel.Name);
             _request.AddJsonBody(searchModel);
+            _request.AddQueryParameter("getCompanyInformation", getInformation);
 
             _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
             if (_restResponse == null)
@@ -442,6 +443,12 @@ public static class General
             Requisition.PageCount = Math.Ceiling(_count / _itemCount.ToDecimal()).ToInt32();
             Requisition.StartRecord = ((_page - 1) * _itemCount + 1).ToInt32();
             Requisition.EndRecord = ((_page - 1) * _itemCount).ToInt32() + _dataSource.Count;
+
+            if (getInformation)
+            {
+                Requisition.Companies = JsonConvert.DeserializeObject<List<Company>>(_restResponse["Companies"].ToString() ?? string.Empty);
+                Requisition.CompanyContacts = JsonConvert.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"].ToString() ?? string.Empty);
+            }
 
             return dm.RequiresCounts ? new DataResult
                                        {
