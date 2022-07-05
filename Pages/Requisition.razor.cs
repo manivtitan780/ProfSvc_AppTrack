@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     04-25-2022 20:04
+// Last Updated On:     07-05-2022 16:25
 // *****************************************/
 
 #endregion
@@ -31,10 +31,12 @@ public partial class Requisition
 
     private readonly List<IntValues> _statesCopy = new();
 
+    private List<CandidateActivity> _candidateActivityObject = new();
+
     private int _currentPage = 1;
 
     private RequisitionDetails _requisitionDetailsObject = new();
-    private RequisitionDetails _requisitionDetailsObjectClone = new();
+    private readonly RequisitionDetails _requisitionDetailsObjectClone = new();
     private int _selectedTab;
 
     private List<IntValues> _states;
@@ -78,6 +80,18 @@ public partial class Requisition
     }
 
     public static int StartRecord
+    {
+        get;
+        set;
+    }
+
+    internal static List<Company> Companies
+    {
+        get;
+        set;
+    }
+
+    internal static List<CompanyContact> CompanyContacts
     {
         get;
         set;
@@ -235,8 +249,6 @@ public partial class Requisition
         //Count = Count;
         await Grid.SelectRowAsync(0);
     }
-
-    private List<CandidateActivity> _candidateActivityObject = new();
 
     private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> requisition)
     {
@@ -401,18 +413,6 @@ public partial class Requisition
     private async Task UndoActivity(int arg)
     {
         await Task.Delay(1);
-    }
-
-    internal static List<Company> Companies
-    {
-        get;
-        set;
-    }
-
-    internal static List<CompanyContact> CompanyContacts
-    {
-        get;
-        set;
     }
 
     public class AdminRequisitionDropDownAdaptor : DataAdaptor

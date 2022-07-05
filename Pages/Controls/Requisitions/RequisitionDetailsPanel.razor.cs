@@ -1,120 +1,139 @@
-﻿using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
+﻿#region Header
 
-namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
+// /*****************************************
+// Copyright:           Titan-Techs.
+// Location:            Newtown, PA, USA
+// Solution:            ProfSvc_AppTrack
+// Project:             ProfSvc_AppTrack
+// File Name:           RequisitionDetailsPanel.razor.cs
+// Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
+// Created On:          04-27-2022 20:20
+// Last Updated On:     07-05-2022 16:27
+// *****************************************/
+
+#endregion
+
+#region Using
+
+using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
+
+#endregion
+
+namespace ProfSvc_AppTrack.Pages.Controls.Requisitions;
+
+public partial class RequisitionDetailsPanel
 {
-    public partial class RequisitionDetailsPanel
+    public List<IntValues> AssignedTo
     {
-        public SfDialog Dialog
-        {
-            get;
-            set;
-        }
+        get;
+        set;
+    }
 
-        public SfSpinner Spinner
-        {
-            get;
-            set;
-        }
+    [Parameter]
+    public List<Company> Companies
+    {
+        get;
+        set;
+    }
 
-        [Parameter]
-        public RequisitionDetails ModelObject
-        {
-            get;
-            set;
-        } = new();
+    [Parameter]
+    public List<CompanyContact> CompanyContacts
+    {
+        get;
+        set;
+    }
 
-        [Parameter]
-        public List<Company> Companies
-        {
-            get;
-            set;
-        }
+    public SfDialog Dialog
+    {
+        get;
+        set;
+    }
 
-        private async Task SaveRequisitionDialog(EditContext arg)
-        {
-            await Task.Delay(1);
-        }
+    public List<KeyValues> DurationCode
+    {
+        get;
+        set;
+    }
 
-        [Parameter]
-        public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
-        {
-            get;
-            set;
-        }
+    public List<IntValues> Education
+    {
+        get;
+        set;
+    }
 
-        [Parameter]
-        public List<IntValues> States
-        {
-            get;
-            set;
-        }
+    public List<IntValues> Eligibility
+    {
+        get;
+        set;
+    }
 
-        public List<IntValues> AssignedTo
-        {
-            get;
-            set;
-        }
+    public List<IntValues> Experience
+    {
+        get;
+        set;
+    }
 
-        public List<IntValues> Eligibility
-        {
-            get;
-            set;
-        }
+    public List<KeyValues> JobOptions
+    {
+        get;
+        set;
+    }
 
-        public List<IntValues> Priority
-        {
-            get;
-            set;
-        }
+    [Parameter]
+    public RequisitionDetails ModelObject
+    {
+        get;
+        set;
+    } = new();
 
-        public List<IntValues> Experience
-        {
-            get;
-            set;
-        }
+    public List<IntValues> Priority
+    {
+        get;
+        set;
+    }
 
-        public List<IntValues> Education
-        {
-            get;
-            set;
-        }
+    public SfSpinner Spinner
+    {
+        get;
+        set;
+    }
 
-        public List<KeyValues> JobOptions
-        {
-            get;
-            set;
-        }
+    [Parameter]
+    public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
+    {
+        get;
+        set;
+    }
 
-        public List<CompanyContact> CompanyContacts
-        {
-            get;
-            set;
-        }
+    [Parameter]
+    public List<IntValues> States
+    {
+        get;
+        set;
+    }
 
-        public List<KeyValues> DurationCode
-        {
-            get;
-            set;
-        }
+    private async Task AfterUpload(ActionCompleteEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
 
-        private async Task CancelDialog(MouseEventArgs arg)
-        {
-            await Task.Delay(1);
-        }
+    private async Task BeforeUpload(BeforeUploadEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
 
-        private async Task OnFileUpload(UploadChangeEventArgs arg)
-        {
-            await Task.Delay(1);
-        }
+    private async Task CancelDialog(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
 
-        private async Task BeforeUpload(BeforeUploadEventArgs arg)
-        {
-            await Task.Delay(1);
-        }
+    private async Task OnFileUpload(UploadChangeEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
 
-        private async Task AfterUpload(ActionCompleteEventArgs arg)
-        {
-            await Task.Delay(1);
-        }
+    private async Task SaveRequisitionDialog(EditContext arg)
+    {
+        await Task.Delay(1);
     }
 }
