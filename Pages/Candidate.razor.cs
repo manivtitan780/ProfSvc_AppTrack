@@ -1133,7 +1133,7 @@ public partial class Candidate
         //double _index = await Grid.GetRowIndexByPrimaryKey(_target.ID);
         //await Grid.SelectRowAsync(_index);
         await Task.Delay(1);
-        //await Spinner.ShowAsync();
+        await Spinner.ShowAsync();
         if (_target.ID == 0)
         {
             Title = "Add";
@@ -1149,7 +1149,7 @@ public partial class Candidate
 
         StateHasChanged();
         await DialogEditCandidate.Dialog.ShowAsync();
-        //await Spinner.HideAsync();
+        await Spinner.HideAsync();
     }
 
     private async Task EditEducation(int id)

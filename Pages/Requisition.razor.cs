@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     07-05-2022 16:25
+// Last Updated On:     07-05-2022 20:20
 // *****************************************/
 
 #endregion
@@ -26,6 +26,8 @@ namespace ProfSvc_AppTrack.Pages;
 
 public partial class Requisition
 {
+    private RequisitionDetails _requisitionDetailsObjectClone = new();
+
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
@@ -35,8 +37,15 @@ public partial class Requisition
 
     private int _currentPage = 1;
 
+    private List<IntValues> _education;
+
+    private List<IntValues> _eligibility;
+
+    private List<IntValues> _experience;
+
+    private List<KeyValues> _jobOptions;
+
     private RequisitionDetails _requisitionDetailsObject = new();
-    private readonly RequisitionDetails _requisitionDetailsObjectClone = new();
     private int _selectedTab;
 
     private List<IntValues> _states;
@@ -158,6 +167,42 @@ public partial class Requisition
         set;
     }
 
+    private RequisitionDetailsPanel DialogEditRequisition
+    {
+        get;
+        set;
+    }
+
+    private static string Title
+    {
+        get;
+        set;
+    } = "Edit";
+
+    private async Task EditRequisition()
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        if (_target.ID == 0)
+        {
+            Title = "Add";
+            //IsAdd = true;
+            _requisitionDetailsObjectClone.ClearData();
+        }
+        else
+        {
+            //double _index = await Grid.GetRowIndexByPrimaryKeyAsync(_target.ID);
+            //await Grid.SelectRowAsync(_index);
+            Title = "Edit";
+            //IsAdd = false;
+            _requisitionDetailsObjectClone = _requisitionDetailsObject.Copy();
+        }
+
+        StateHasChanged();
+        await DialogEditRequisition.Dialog.ShowAsync();
+        await Spinner.HideAsync();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
@@ -171,23 +216,28 @@ public partial class Requisition
         _statesCopy.Clear();
         _statesCopy.Add(new(0, "All"));
         _statesCopy.AddRange(_states);
-        /*while (_eligibility == null)
+        while (_eligibility == null)
         {
             _memoryCache.TryGetValue("Eligibility", out _eligibility);
         }
 
-        _eligibilityCopy.Clear();
+        while (_education == null)
+        {
+            _memoryCache.TryGetValue("Education", out _education);
+        }
+
+        /*_eligibilityCopy.Clear();
         _eligibilityCopy.Add(new(0, "All"));
-        _eligibilityCopy.AddRange(_eligibility);
+        _eligibilityCopy.AddRange(_eligibility);*/
 
         _memoryCache.TryGetValue("Experience", out _experience);
-        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
+        /*_memoryCache.TryGetValue("TaxTerms", out _taxTerms);*/
         while (_jobOptions == null)
         {
             _memoryCache.TryGetValue("JobOptions", out _jobOptions);
         }
 
-        _jobOptionsCopy.Clear();
+        /*_jobOptionsCopy.Clear();
         _jobOptionsCopy.Add(new("%", "All"));
         _jobOptionsCopy.AddRange(_jobOptions);
 

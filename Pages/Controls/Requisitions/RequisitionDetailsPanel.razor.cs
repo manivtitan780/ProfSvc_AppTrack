@@ -8,7 +8,7 @@
 // File Name:           RequisitionDetailsPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          04-27-2022 20:20
-// Last Updated On:     07-05-2022 16:27
+// Last Updated On:     07-05-2022 19:06
 // *****************************************/
 
 #endregion
@@ -49,30 +49,28 @@ public partial class RequisitionDetailsPanel
         set;
     }
 
-    public List<KeyValues> DurationCode
-    {
-        get;
-        set;
-    }
-
+    [Parameter]
     public List<IntValues> Education
     {
         get;
         set;
     }
 
+    [Parameter]
     public List<IntValues> Eligibility
     {
         get;
         set;
     }
 
+    [Parameter]
     public List<IntValues> Experience
     {
         get;
         set;
     }
 
+    [Parameter]
     public List<KeyValues> JobOptions
     {
         get;
@@ -85,12 +83,6 @@ public partial class RequisitionDetailsPanel
         get;
         set;
     } = new();
-
-    public List<IntValues> Priority
-    {
-        get;
-        set;
-    }
 
     public SfSpinner Spinner
     {
@@ -107,6 +99,23 @@ public partial class RequisitionDetailsPanel
 
     [Parameter]
     public List<IntValues> States
+    {
+        get;
+        set;
+    }
+
+    private List<KeyValues> DurationCode
+    {
+        get;
+    } = new() {new("M", "Months"), new("Y", "Years")};
+
+    private List<IntValues> Priority
+    {
+        get;
+    } = new() {new(0, "Low"), new(1, "Medium"), new(2, "High")};
+
+    [Parameter]
+    public string Title
     {
         get;
         set;
