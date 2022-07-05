@@ -150,7 +150,7 @@ public partial class StatusCodes
 
     private void EditStatusCode(int id)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(id);
         Grid.SelectRowAsync(_index.Result);
         Task.Yield();
         if (id == 0)

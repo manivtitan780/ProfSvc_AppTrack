@@ -153,7 +153,7 @@ public partial class LeadStatus
 
     private async Task EditLeadStatus(int id)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(id);
         await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);

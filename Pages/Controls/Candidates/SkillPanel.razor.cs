@@ -73,7 +73,7 @@ public partial class SkillPanel
 
     private async Task DeleteSkillMethod(int id)
     {
-        double _index = await GridSkill.GetRowIndexByPrimaryKey(id);
+        double _index = await GridSkill.GetRowIndexByPrimaryKeyAsync(id);
         await GridSkill.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to delete this Skill?"))
         {
@@ -83,7 +83,7 @@ public partial class SkillPanel
 
     private async Task EditSkillDialog(int id)
     {
-        double _index = await GridSkill.GetRowIndexByPrimaryKey(id);
+        double _index = await GridSkill.GetRowIndexByPrimaryKeyAsync(id);
         await GridSkill.SelectRowAsync(_index);
         await EditSkill.InvokeAsync(id);
     }

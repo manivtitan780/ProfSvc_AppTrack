@@ -142,7 +142,7 @@ public partial class TaxTerm
 
     private void EditTaxTerm(string code)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(code);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(code);
         Grid.SelectRowAsync(_index.Result);
         Task.Yield();
         if (code.NullOrWhiteSpace())

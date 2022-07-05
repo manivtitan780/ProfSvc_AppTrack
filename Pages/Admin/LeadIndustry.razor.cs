@@ -146,7 +146,7 @@ public partial class LeadIndustry
     private async Task EditIndustry(int id)
     {
         await Task.Delay(1);
-        double _index = await Grid.GetRowIndexByPrimaryKey(id);
+        double _index = await Grid.GetRowIndexByPrimaryKeyAsync(id);
         await Grid.SelectRowAsync(_index);
         General.SetAdminListDefault("", "", false, false);
         if (id == 0)

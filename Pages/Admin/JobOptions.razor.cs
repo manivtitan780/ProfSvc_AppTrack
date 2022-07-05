@@ -168,7 +168,7 @@ public partial class JobOptions
     private async Task EditJobOption(string code)
     {
         await Task.Delay(1);
-        double _index = await Grid.GetRowIndexByPrimaryKey(code);
+        double _index = await Grid.GetRowIndexByPrimaryKeyAsync(code);
         await Grid.SelectRowAsync(_index);
         if (code.NullOrWhiteSpace())
         {

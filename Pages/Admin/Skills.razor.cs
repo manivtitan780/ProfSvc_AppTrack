@@ -156,7 +156,7 @@ public partial class Skills
 
     private void EditSkill(int id)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(id);
         Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false);
         Task.Yield();

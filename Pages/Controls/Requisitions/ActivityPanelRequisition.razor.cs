@@ -66,7 +66,7 @@ public partial class ActivityPanelRequisition
 
     private async Task EditActivityDialog(int id)
     {
-        double _index = await GridActivity.GetRowIndexByPrimaryKey(id);
+        double _index = await GridActivity.GetRowIndexByPrimaryKeyAsync(id);
         await GridActivity.SelectRowAsync(_index);
         await EditActivity.InvokeAsync(id);
     }
@@ -82,7 +82,7 @@ public partial class ActivityPanelRequisition
     private async Task UndoActivity(int activityID)
     {
         await Task.Delay(1);
-        double _index = await GridActivity.GetRowIndexByPrimaryKey(activityID);
+        double _index = await GridActivity.GetRowIndexByPrimaryKeyAsync(activityID);
         await GridActivity.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to undo the previous Submission Status?\n Note: This operation cannot be reversed and the Status has to be submitted again."))
         {

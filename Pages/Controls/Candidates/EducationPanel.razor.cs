@@ -66,7 +66,7 @@ public partial class EducationPanel
 
     private async Task DeleteEducationMethod(int id)
     {
-        double _index = await GridEducation.GetRowIndexByPrimaryKey(id);
+        double _index = await GridEducation.GetRowIndexByPrimaryKeyAsync(id);
         await GridEducation.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to delete this Education?"))
         {
@@ -76,7 +76,7 @@ public partial class EducationPanel
 
     private async Task EditEducationDialog(int id)
     {
-        double _index = await GridEducation.GetRowIndexByPrimaryKey(id);
+        double _index = await GridEducation.GetRowIndexByPrimaryKeyAsync(id);
         await GridEducation.SelectRowAsync(_index);
         await EditEducation.InvokeAsync(id);
     }

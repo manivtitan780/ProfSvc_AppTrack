@@ -154,7 +154,7 @@ public partial class Designation
 
     private async Task EditDesignationAsync(int id)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(id);
         await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false);
         await Task.Delay(1);

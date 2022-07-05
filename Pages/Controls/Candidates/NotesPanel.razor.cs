@@ -66,7 +66,7 @@ public partial class NotesPanel
 
     private async Task DeleteNotesMethod(int id)
     {
-        double _index = await GridNotes.GetRowIndexByPrimaryKey(id);
+        double _index = await GridNotes.GetRowIndexByPrimaryKeyAsync(id);
         await GridNotes.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to delete this Note?"))
         {
@@ -76,7 +76,7 @@ public partial class NotesPanel
 
     private async Task EditNotesDialog(int id)
     {
-        double _index = await GridNotes.GetRowIndexByPrimaryKey(id);
+        double _index = await GridNotes.GetRowIndexByPrimaryKeyAsync(id);
         await GridNotes.SelectRowAsync(_index);
         await EditNotes.InvokeAsync(id);
     }

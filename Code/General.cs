@@ -805,7 +805,7 @@ public static class General
         Task<string> _responseStream = _response.Result.Content.ReadAsStringAsync();
 
         grid.Refresh();
-        Task<double> _index = grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = grid.GetRowIndexByPrimaryKeyAsync(id);
         grid.SelectRowAsync(_index.Result);
 
         return _responseStream.Result;
@@ -832,7 +832,7 @@ public static class General
         string _response = await _restClient.PostAsync<string>(_request);
 
         await grid.Refresh();
-        double _index = await grid.GetRowIndexByPrimaryKey(id);
+        double _index = await grid.GetRowIndexByPrimaryKeyAsync(id);
         await grid.SelectRowAsync(_index);
 
         return await Task.FromResult(_response);

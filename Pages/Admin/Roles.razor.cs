@@ -149,7 +149,7 @@ public partial class Roles
 
     private void EditRole(string code)
     {
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(code);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(code);
         Grid.SelectRowAsync(_index.Result);
         Task.Yield();
         if (code.NullOrWhiteSpace())

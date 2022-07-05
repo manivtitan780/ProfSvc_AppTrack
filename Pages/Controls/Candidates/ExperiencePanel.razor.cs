@@ -66,7 +66,7 @@ public partial class ExperiencePanel
 
     private async Task DeleteExperienceMethod(int id)
     {
-        double _index = await GridExperience.GetRowIndexByPrimaryKey(id);
+        double _index = await GridExperience.GetRowIndexByPrimaryKeyAsync(id);
         await GridExperience.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to delete this Experience?"))
         {
@@ -76,7 +76,7 @@ public partial class ExperiencePanel
 
     private async Task EditExperienceDialog(int id)
     {
-        double _index = await GridExperience.GetRowIndexByPrimaryKey(id);
+        double _index = await GridExperience.GetRowIndexByPrimaryKeyAsync(id);
         await GridExperience.SelectRowAsync(_index);
         await EditExperience.InvokeAsync(id);
     }

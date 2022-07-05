@@ -160,7 +160,7 @@ public partial class Experience
     private async Task EditExperience(int id)
     {
         await Task.Delay(1);
-        Task<double> _index = Grid.GetRowIndexByPrimaryKey(id);
+        Task<double> _index = Grid.GetRowIndexByPrimaryKeyAsync(id);
         await Grid.SelectRowAsync(_index.Result);
         General.SetAdminListDefault("", "", false, false);
         if (id == 0)

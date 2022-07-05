@@ -66,7 +66,7 @@ public partial class DownloadsPanel
 
     private async Task DeleteDocumentMethod(int id)
     {
-        double _index = await GridDownload.GetRowIndexByPrimaryKey(id);
+        double _index = await GridDownload.GetRowIndexByPrimaryKeyAsync(id);
         await GridDownload.SelectRowAsync(_index);
         if (await JsRuntime.Confirm("Are you sure you want to delete this Document?" + Environment.NewLine +  "Note: This action cannot be reversed."))
         {
@@ -76,7 +76,7 @@ public partial class DownloadsPanel
 
     private async Task DownloadDocumentDialog(int id)
     {
-        double _index = await GridDownload.GetRowIndexByPrimaryKey(id);
+        double _index = await GridDownload.GetRowIndexByPrimaryKeyAsync(id);
         await GridDownload.SelectRowAsync(_index);
         await DownloadDocument.InvokeAsync(id);
     }
