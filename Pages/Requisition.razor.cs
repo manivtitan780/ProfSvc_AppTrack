@@ -481,7 +481,12 @@ public partial class Requisition
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
-            bool _getInformation = Companies.Count > 0;
+            bool _getInformation = true;
+            if (Companies != null)
+            {
+                _getInformation = Companies.Count > 0;
+            }
+
             Task<object> _requisitionReturn = General.GetRequisitionReadAdaptor(SearchModel, dm, _getInformation);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);

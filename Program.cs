@@ -11,7 +11,7 @@
 // Last Updated On:     01-04-2022 16:11
 // *****************************************/
 
-#endregion
+#endregion  
 
 #region Using
 
@@ -50,7 +50,7 @@ WebApplication _app = _builder.Build();
 //SyncfusionLicenseProvider.RegisterLicense("NjIxMzUyQDMyMzAyZTMxMmUzMG5uWUlIeDlKMXdYeHAxR3FXYmUrbno3ak5oK0IzRUlZTytnUnpUR1d0WVU9");
 
 // v20.1
-SyncfusionLicenseProvider.RegisterLicense("NjQyNzIwQDMyMzAyZTMxMmUzMElCNFZ2dkpDSzk3ZWExNHVVV3pEbWN0VlNmRXgxTmtuekxCc2JqdlJKS1E9");
+SyncfusionLicenseProvider.RegisterLicense("NjY5MjIyQDMyMzAyZTMyMmUzMGQwUmxjaWZkYmlZS05HL2QreE9ub1pGU1VJYjN6a0ZRekt4WUdEMkFFcFU9");
 
 if (!_app.Environment.IsDevelopment())
 {
