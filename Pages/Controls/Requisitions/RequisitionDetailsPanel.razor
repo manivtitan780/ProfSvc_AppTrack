@@ -84,11 +84,11 @@
 												Max="500" Placeholder="No. of Positions" TValue="int" ValidationMessage="@(() => ModelObject.Positions)" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DateTimeControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
+								<DateTimeControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" CreateDivTag="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
 												 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Start Date" Width="220px" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DateTimeControl @bind-Value="@ModelObject.DueDate" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="dateDue" Max="@(DateTime.Today.AddMonths(6))"
+								<DateTimeControl @bind-Value="@ModelObject.DueDate" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateDue" Max="@(DateTime.Today.AddMonths(6))"
 												 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Due Date" Width="220px" />
 							</div>
 						</div>
