@@ -30,9 +30,9 @@
             </div>
             <div class="divRightControls" style="width: 720px">
                 <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-                <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate">Add Candidate</SfButton>
+                <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditRequisition(0)">Add Requisition</SfButton>
                 <SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
-                <AutoCompleteButton EnablePersistence="false" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+                <AutoCompleteButton EnablePersistence="false" ID="autoRequisition" PlaceholderText="Select a Requisition" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
                                     TypeInstance="@typeof(AdminRequisitionDropDownAdaptor)" ValueChange="FilterGrid" />
             </div>
         </div>
@@ -115,8 +115,8 @@
                     //Candidates _candidates = context! as Candidates;
                 }
                 @* Add Buttons Start *@
-                @*<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"></SfButton>
-                <SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
+                <SfButton Content="Edit Requisition" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditRequisition(0)"></SfButton>
+                @*<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
                 <SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
                 <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
                 <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>*@
@@ -131,9 +131,9 @@
                             <ChildContent>
                                 <TabHeader Text="Requisition Info" />
                             </ChildContent>
-                            <ContentTemplate>
-                                <BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" />
-                            </ContentTemplate>
+							<ContentTemplate>
+								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" />
+							</ContentTemplate>
                         </TabItem>
                         <TabItem>
                             <ChildContent>

@@ -179,11 +179,11 @@ public partial class Requisition
         set;
     } = "Edit";
 
-    private async Task EditRequisition()
+    private async Task EditRequisition(int id)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
-        if (_target.ID == 0)
+        if (id == 0)
         {
             Title = "Add";
             //IsAdd = true;
