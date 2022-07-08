@@ -7,10 +7,10 @@
             <DataAnnotationsValidator />
             <div style="height: 100%">
                 <div class="divContainerTable">
-                    <DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="Companies" ID="dropCompany" Placeholder="Company Name" TextField="CompanyName"
-                                     TItem="Company" TValue="int" ValueField="ID" Width="100%" />@*DropDownValueChange="StateIDChanged" *@
-                    <DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="CompanyContacts" ID="dropCompanyContact" Placeholder="Contact Name" TextField="ContactName"
-                                     TItem="CompanyContact" TValue="int" ValueField="ID" Width="100%" />@*DropDownValueChange="StateIDChanged" *@
+					<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="Companies" ID="dropCompany"
+									 Placeholder="Company Name" TextField="CompanyName" TItem="Company" TValue="int" ValueField="ID" DropDownValueChange="CompanyChanged" Width="100%" />@**@
+					<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="CompanyContacts" Query="ContactQuery" ID="dropCompanyContact" Placeholder="Contact Name" 
+									 TextField="ContactName" TItem="CompanyContact" TValue="int" ValueField="ID" Width="100%" />@*DropDownValueChange="StateIDChanged" *@
                     <div class="divFlex">
                         <div style="display: flex; width: 100%">
                             <div class="divFlexLabel" style="width: 35%">

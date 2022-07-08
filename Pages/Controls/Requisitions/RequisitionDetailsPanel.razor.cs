@@ -8,7 +8,7 @@
 // File Name:           RequisitionDetailsPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          04-27-2022 20:20
-// Last Updated On:     07-05-2022 19:06
+// Last Updated On:     07-08-2022 20:46
 // *****************************************/
 
 #endregion
@@ -23,6 +23,8 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
 public partial class RequisitionDetailsPanel
 {
+    private List<CompanyContact> _filteredCompanyContacts = new();
+
     public List<IntValues> AssignedTo
     {
         get;
@@ -42,6 +44,12 @@ public partial class RequisitionDetailsPanel
         get;
         set;
     }
+
+    public Query ContactQuery
+    {
+        get; 
+        set;
+    } = null;
 
     public SfDialog Dialog
     {
@@ -104,6 +112,13 @@ public partial class RequisitionDetailsPanel
         set;
     }
 
+    [Parameter]
+    public string Title
+    {
+        get;
+        set;
+    }
+
     private List<KeyValues> DurationCode
     {
         get;
@@ -114,34 +129,39 @@ public partial class RequisitionDetailsPanel
         get;
     } = new() {new(0, "Low"), new(1, "Medium"), new(2, "High")};
 
-    [Parameter]
-    public string Title
+    protected override void OnAfterRender(bool firstRender)
     {
-        get;
-        set;
+        ContactQuery = new Query().Where(new WhereFilter {Field = "ClientID", Operator = "equal", value = ModelObject.CompanyID});
+        base.OnAfterRender(firstRender);
     }
 
-    private async Task AfterUpload(ActionCompleteEventArgs arg)
-    {
-        await Task.Delay(1);
-    }
-
-    private async Task BeforeUpload(BeforeUploadEventArgs arg)
+    private async Task AfterUpload(ActionCompleteEventArgs args)
     {
         await Task.Delay(1);
     }
 
-    private async Task CancelDialog(MouseEventArgs arg)
+    private async Task BeforeUpload(BeforeUploadEventArgs args)
     {
         await Task.Delay(1);
     }
 
-    private async Task OnFileUpload(UploadChangeEventArgs arg)
+    private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
     }
 
-    private async Task SaveRequisitionDialog(EditContext arg)
+    private async Task CompanyChanged(ChangeEventArgs<int, Company> args)
+    {
+        await Task.Delay(1);
+        ContactQuery = new Query().Where(new WhereFilter {Field = "ClientID", Operator = "equal", value = args.Value});
+    }
+
+    private async Task OnFileUpload(UploadChangeEventArgs args)
+    {
+        await Task.Delay(1);
+    }
+
+    private async Task SaveRequisitionDialog(EditContext args)
     {
         await Task.Delay(1);
     }
