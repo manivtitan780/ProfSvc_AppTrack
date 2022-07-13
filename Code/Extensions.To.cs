@@ -204,6 +204,8 @@ public static partial class Extensions
             return (MarkupString)"";
         }
 
+        s = s.Replace(Environment.NewLine, "<br/>");
+
         return (MarkupString)s;
     }
 }

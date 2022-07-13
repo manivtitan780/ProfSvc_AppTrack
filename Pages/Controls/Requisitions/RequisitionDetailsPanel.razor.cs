@@ -145,9 +145,19 @@ public partial class RequisitionDetailsPanel
         await Task.Delay(1);
     }
 
+    [Parameter]
+    public EventCallback CancelRequisition
+    {
+        get;
+        set;
+    }
+
     private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
+        await CancelRequisition.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private async Task CompanyChanged(ChangeEventArgs<int, Company> args)

@@ -8,7 +8,7 @@
 // File Name:           EditActivityDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          02-17-2022 19:33
-// Last Updated On:     02-18-2022 20:12
+// Last Updated On:     07-09-2022 15:56
 // *****************************************/
 
 #endregion
@@ -31,24 +31,11 @@ public partial class EditActivityDialog
     }
 
     [Parameter]
-    public List<StatusCode> StatusCodes
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
     public CandidateActivity ModelObject
     {
         get;
         set;
     } = new();
-
-    public SfSpinner Spinner
-    {
-        get;
-        set;
-    }
 
     [Parameter]
     public List<KeyValues> ModelSteps
@@ -64,22 +51,10 @@ public partial class EditActivityDialog
         set;
     }
 
-    private async Task CancelDialog(MouseEventArgs args)
+    public SfSpinner Spinner
     {
-        await Task.Delay(1);
-        await CancelActivity.InvokeAsync(args);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
-    }
-
-    private async Task SaveActivityDialog(EditContext editContext)
-    {
-        await Task.Delay(1);
-        await Spinner.ShowAsync();
-        await Save.InvokeAsync(editContext);
-        await Spinner.HideAsync();
-        Dialog.Height = "200px";
-        await Dialog.HideAsync();
+        get;
+        set;
     }
 
     [Parameter]
@@ -88,6 +63,37 @@ public partial class EditActivityDialog
         get;
         set;
     } = new();
+
+    [Parameter]
+    public List<StatusCode> StatusCodes
+    {
+        get;
+        set;
+    }
+
+    private ElementReference DivSchedule
+    {
+        get;
+        set;
+    }
+
+    private List<KeyValues> InterviewTypes
+    {
+        get;
+        set;
+    } = new()
+        {
+            new("In-Person Interview", "I"),
+            new("Telephonic Interview", "P"),
+            new("Others", "O"),
+            new("None", "")
+        };
+
+    private bool IsShow
+    {
+        get;
+        set;
+    } = false;
 
     private DateTime Max
     {
@@ -101,33 +107,19 @@ public partial class EditActivityDialog
         set;
     }
 
-    private List<KeyValues> InterviewTypes
-    {
-        get;
-        set;
-    } = new();
-
-    private ElementReference DivSchedule
-    {
-        get;
-        set;
-    }
-
-    private bool IsShow
-    {
-        get;
-        set;
-    } = false;
-
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
-        InterviewTypes.Add(new() {Value = "I", Key = "In-Person Interview"});
-        InterviewTypes.Add(new() {Value = "P", Key = "Telephonic Interview"});
-        InterviewTypes.Add(new() {Value = "O", Key = "Others"});
-        InterviewTypes.Add(new() {Value = "", Key = "None"});
         Min = DateTime.Today.AddMonths(-1);
         Max = DateTime.Today.AddMonths(3);
+    }
+
+    private async Task CancelDialog(MouseEventArgs args)
+    {
+        await Task.Delay(1);
+        await CancelActivity.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private async Task ChangeStatus(ChangeEventArgs<string, KeyValues> status)
@@ -141,5 +133,15 @@ public partial class EditActivityDialog
 
         Dialog.Height = IsShow ? "98vh" : "460px";
         StateHasChanged();
+    }
+
+    private async Task SaveActivityDialog(EditContext editContext)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await Save.InvokeAsync(editContext);
+        await Spinner.HideAsync();
+        Dialog.Height = "200px";
+        await Dialog.HideAsync();
     }
 }

@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Requisitions" Width="99.75%">
+    <SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Requisitions" Width="99.75%">
         <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
         <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminRequisitionAdaptor)" Key="ID" />
         <GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Requisitions" />@* *@
@@ -48,7 +48,7 @@
         </GridSortSettings>
         <GridColumns>
             <GridColumn Field="@nameof(Requisitions.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
-            <GridColumn AllowSorting="true" Field="@nameof(Requisitions.Code)" HeaderText="Code" Width="12%">
+            <GridColumn AllowSorting="true" HeaderText="Code" Width="12%">
                 <Template Context="aCon">
                     @{
                         if (aCon is Requisitions _con)

@@ -22,11 +22,10 @@ using Radzen;
 WebApplicationBuilder _builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-_builder.Services.AddSyncfusionBlazor();
-_builder.Services.AddScoped<DialogService>();
-_builder.Services.AddScoped<NotificationService>();
-_builder.Services.AddScoped<TooltipService>();
-_builder.Services.AddScoped<ContextMenuService>();
+//_builder.Services.AddScoped<DialogService>();
+//_builder.Services.AddScoped<NotificationService>();
+//_builder.Services.AddScoped<TooltipService>();
+//_builder.Services.AddScoped<ContextMenuService>();
 _builder.Services.AddRazorPages();
 _builder.Services.AddServerSideBlazor();
 _builder.Services.AddSingleton<Start>();
@@ -40,9 +39,11 @@ _builder.Services.AddSignalR(e =>
                                     e.MaximumReceiveMessageSize = 10485760;
                                     e.EnableDetailedErrors = true;
                                 });
+_builder.Services.AddSyncfusionBlazor();//options => { options.Animation = GlobalAnimationMode.Disable; });
 //_builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
 
 WebApplication _app = _builder.Build();
+SyncfusionLicenseProvider.RegisterLicense("NjY5MjIyQDMyMzAyZTMyMmUzMGQwUmxjaWZkYmlZS05HL2QreE9ub1pGU1VJYjN6a0ZRekt4WUdEMkFFcFU9");
 
 // Configure the HTTP request pipeline.
 // ReSharper disable once CommentTypo
@@ -50,7 +51,6 @@ WebApplication _app = _builder.Build();
 //SyncfusionLicenseProvider.RegisterLicense("NjIxMzUyQDMyMzAyZTMxMmUzMG5uWUlIeDlKMXdYeHAxR3FXYmUrbno3ak5oK0IzRUlZTytnUnpUR1d0WVU9");
 
 // v20.1
-SyncfusionLicenseProvider.RegisterLicense("NjY5MjIyQDMyMzAyZTMyMmUzMGQwUmxjaWZkYmlZS05HL2QreE9ub1pGU1VJYjN6a0ZRekt4WUdEMkFFcFU9");
 
 if (!_app.Environment.IsDevelopment())
 {
