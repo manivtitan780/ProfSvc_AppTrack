@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     07-05-2022 20:20
+// Last Updated On:     07-16-2022 15:51
 // *****************************************/
 
 #endregion
@@ -27,8 +27,6 @@ namespace ProfSvc_AppTrack.Pages;
 
 public partial class Requisition
 {
-    private RequisitionDetails _requisitionDetailsObjectClone = new();
-
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
@@ -47,6 +45,7 @@ public partial class Requisition
     private List<KeyValues> _jobOptions;
 
     private RequisitionDetails _requisitionDetailsObject = new();
+    private RequisitionDetails _requisitionDetailsObjectClone = new();
     private int _selectedTab;
 
     private List<IntValues> _states;
@@ -125,6 +124,36 @@ public partial class Requisition
         set;
     }
 
+    private RequisitionDetailsPanel DialogEditRequisition
+    {
+        get;
+        set;
+    }
+
+    private MemoryStream FileData
+    {
+        get;
+        set;
+    }
+
+    private FileInfo FileInformation
+    {
+        get;
+        set;
+    }
+
+    private string FileName
+    {
+        get;
+        set;
+    }
+
+    private double FileSize
+    {
+        get;
+        set;
+    }
+
     private bool FirstRender
     {
         get;
@@ -150,6 +179,12 @@ public partial class Requisition
         set;
     }
 
+    private string MimeType
+    {
+        get;
+        set;
+    }
+
     [Inject]
     private NavigationManager NavManager
     {
@@ -168,46 +203,16 @@ public partial class Requisition
         set;
     } = new();
 
-    private bool VisibleNewCandidate
-    {
-        get;
-        set;
-    }
-
-    private RequisitionDetailsPanel DialogEditRequisition
-    {
-        get;
-        set;
-    }
-
     private static string Title
     {
         get;
         set;
     } = "Edit";
 
-    private async Task EditRequisition(bool isAdd)
+    private bool VisibleNewCandidate
     {
-        await Task.Delay(1);
-        await Spinner.ShowAsync();
-        if (isAdd)
-        {
-            Title = "Add";
-            //IsAdd = true;
-            _requisitionDetailsObjectClone.ClearData();
-        }
-        else
-        {
-            //double _index = await Grid.GetRowIndexByPrimaryKeyAsync(_target.ID);
-            //await Grid.SelectRowAsync(_index);
-            Title = "Edit";
-            //IsAdd = false;
-            _requisitionDetailsObjectClone = _requisitionDetailsObject.Copy();
-        }
-
-        StateHasChanged();
-        await DialogEditRequisition.Dialog.ShowAsync();
-        await Spinner.HideAsync();
+        get;
+        set;
     }
 
     protected override async Task OnInitializedAsync()
@@ -366,6 +371,30 @@ public partial class Requisition
         await Task.Delay(1);
     }
 
+    private async Task EditRequisition(bool isAdd)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        if (isAdd)
+        {
+            Title = "Add";
+            //IsAdd = true;
+            _requisitionDetailsObjectClone.ClearData();
+        }
+        else
+        {
+            //double _index = await Grid.GetRowIndexByPrimaryKeyAsync(_target.ID);
+            //await Grid.SelectRowAsync(_index);
+            Title = "Edit";
+            //IsAdd = false;
+            _requisitionDetailsObjectClone = _requisitionDetailsObject.Copy();
+        }
+
+        StateHasChanged();
+        await DialogEditRequisition.Dialog.ShowAsync();
+        await Spinner.HideAsync();
+    }
+
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> arg)
     {
         await Task.Delay(1);
@@ -423,80 +452,6 @@ public partial class Requisition
         await Task.Delay(1);
     }
 
-    private async Task PageNumberChanged(ChangeEventArgs obj)
-    {
-        decimal _currentValue = obj.Value.ToDecimal();
-        if (_currentValue < 1)
-        {
-            _currentPage = 1;
-        }
-        else if (_currentValue > PageCount)
-        {
-            _currentPage = PageCount.ToInt32();
-        }
-
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        await Grid.Refresh();
-    }
-
-    private async Task PreviousClick()
-    {
-        if (_currentPage < 1)
-        {
-            _currentPage = 1;
-        }
-
-        _currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
-        await Grid.Refresh();
-    }
-
-    private static void RefreshGrid() => Grid.Refresh();
-
-    private void SetAlphabet(string alphabet)
-    {
-    }
-
-    private async Task TabSelected(SelectEventArgs args)
-    {
-        await Task.Delay(1);
-        _selectedTab = args.SelectedIndex;
-    }
-
-    private MemoryStream FileData
-    {
-        get;
-        set;
-    }
-
-    private FileInfo FileInformation
-    {
-        get;
-        set;
-    }
-
-    private string FileName
-    {
-        get;
-        set;
-    }
-
-    private double FileSize
-    {
-        get;
-        set;
-    }
-
-    private string MimeType
-    {
-        get;
-        set;
-    }
-
     private async Task OnFileUpload(UploadChangeEventArgs file)
     {
         await Task.Delay(1);
@@ -540,6 +495,89 @@ public partial class Requisition
         }
     }
 
+    private async Task PageNumberChanged(ChangeEventArgs obj)
+    {
+        decimal _currentValue = obj.Value.ToDecimal();
+        if (_currentValue < 1)
+        {
+            _currentPage = 1;
+        }
+        else if (_currentValue > PageCount)
+        {
+            _currentPage = PageCount.ToInt32();
+        }
+
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
+        await Grid.Refresh();
+    }
+
+    private async Task PreviousClick()
+    {
+        if (_currentPage < 1)
+        {
+            _currentPage = 1;
+        }
+
+        _currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetRequisitionGrid();
+        await Grid.Refresh();
+    }
+
+    private static void RefreshGrid() => Grid.Refresh();
+
+    private async Task SaveRequisition(EditContext arg)
+    {
+        //SpinnerVisible = true;
+        await Spinner.ShowAsync();
+        DialogEditRequisition.Footer.CancelButton.Disabled = true;
+        DialogEditRequisition.Footer.SaveButton.Disabled = true;
+        await Task.Delay(1);
+        _requisitionDetailsObject = _requisitionDetailsObject.Copy();
+
+        RestClient _client = new($"{Start.ApiHost}");
+        RestRequest _request = new("Requisition/SaveRequisition", Method.Post)
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
+        _request.AddJsonBody(_requisitionDetailsObject);
+
+        await _client.PostAsync<int>(_request);
+
+        /*_target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
+        _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
+        _target.Email = _candidateDetailsObject.Email;
+        _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
+        _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
+        _target.Status = "Available";
+        SetupAddress();
+        SetCommunication();
+        SetEligibility();
+        SetJobOption();
+        SetTaxTerm();
+        SetExperience();*/
+        //SpinnerVisible = false;
+        await Spinner.HideAsync();
+        DialogEditRequisition.Footer.CancelButton.Disabled = false;
+        DialogEditRequisition.Footer.SaveButton.Disabled = false;
+        await Task.Delay(1);
+        //VisibleCandidateInfo = false;
+        StateHasChanged();
+    }
+
+    private void SetAlphabet(string alphabet)
+    {
+    }
+
+    private async Task TabSelected(SelectEventArgs args)
+    {
+        await Task.Delay(1);
+        _selectedTab = args.SelectedIndex;
+    }
+
     private async Task UndoActivity(int arg)
     {
         await Task.Delay(1);
@@ -574,10 +612,5 @@ public partial class Requisition
         }
 
         #endregion
-    }
-
-    private async Task SaveRequisition(EditContext arg)
-    {
-        await Task.Delay(1);
     }
 }

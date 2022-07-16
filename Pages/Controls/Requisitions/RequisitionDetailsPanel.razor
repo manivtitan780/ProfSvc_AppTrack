@@ -138,29 +138,36 @@
 					<SwitchControl @bind-BindValue="@(ModelObject.OFCCP)" ID="checkedOFCCP" OffLabel="NO" OnLabel="YES" Placeholder="OFCCP Compliance Required?" />
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">
-							<div class="divFlexLabel" style="width: 47%">
+							<div class="divFlexLabel" style="width: 35%">
 								<label class="labelStatus" for="textDuration">Duration:</label>
 							</div>
-							<div class="divFlexLabel" style="margin-left: 3%; width: 47%;">
+							<div class="divFlexLabel" style="margin-left: 3%; width: 42%;">
 								<label class="labelStatus" for="dropDurationCode">Pay Rate:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 15%">
+								<label class="labelStatus" for="numericPlacementFee">Placement Fee:</label>
 							</div>
 						</div>
 						<div style="display: flex; width: 100%">
-							<div class="divFlexSmall" style="width: 47%; display: flex;">
+							<div class="divFlexSmall" style="width: 35%; display: flex;">
 								<TextBoxControl @bind-Value="@(ModelObject.Duration)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textDuration" MaxLength="8" MinLength="0"
-												Placeholder="Duration" Width="45%" />
+												Placeholder="Duration" Width="70%" />
 								<span style="margin-left: 3%">
 									<DropDownControl @bind-Value="@ModelObject.DurationCode" @bind-Value:event="ValueChanged" DataSource="@DurationCode" ID="dropDurationCode" TextField="Value" TItem="KeyValues"
-													 TValue="string" ValueField="Key" Width="48%" />
+													 TValue="string" ValueField="Key" />
 								</span>
 							</div>
-							<div class="divFlexSmall" style="margin-left: 3%; width: 47%; display: flex;">
-								<NumericControl @bind-Value="@(ModelObject.ExpRateLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericPayRateFrom"
+							<div class="divFlexSmall" style="margin-left: 3%; width: 42%; display: flex;">
+								<NumericControl @bind-Value="@(ModelObject.ExpRateLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c0" ID="numericPayRateFrom"
 												Max="10000" Min="1" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
-									<NumericControl @bind-Value="@(ModelObject.ExpRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericPayRateTo"
+									<NumericControl @bind-Value="@(ModelObject.ExpRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c0" ID="numericPayRateTo"
 													Max="10000" Min="1" Placeholder="Pay Rate/Hr To" TValue="decimal" />
 								</span>
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 15%; display: flex;">
+								<NumericControl @bind-Value="@(ModelObject.PlacementFee)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="###'%'" ID="numericPlacementFee"
+												Max="100" Min="1" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="60%" />
 							</div>
 						</div>
 					</div>
@@ -202,7 +209,6 @@
 							<div class="uploadDocument" style="width: 100%">
 								<SfUploader AllowMultiple="false" AutoUpload="true" ID="uploadBenefitsDocument" SequentialUpload="true">
 									<UploaderEvents ValueChange="OnFileUpload"></UploaderEvents>
-									@*<UploaderAsyncSettings SaveUrl="http://localhost/ProfSvc_API/api/Candidates/ParseResume" RemoveUrl="http://localhost/ProfSvc_API/api/Candidates/CancelParseResume" ChunkSize="5000000"></UploaderAsyncSettings>*@
 								</SfUploader>
 							</div>
 						</div>
