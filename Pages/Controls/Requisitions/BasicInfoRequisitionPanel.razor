@@ -1,112 +1,112 @@
 ﻿<div class="containerBox">
-	<div style="height: 404px">
-		<div>
-			<div>Company Name:</div>
-			<div>@ModelObject.CompanyName</div>
-		</div>
-		<div>
-			<div>Contact Name:</div>
-			<div>@ModelObject.ContactName</div>
-		</div>
-		<div>
-			<div>Job Title:</div>
-			<div>@ModelObject.PositionTitle</div>
-		</div>
-		<div>
-			<div>No. of Positions:</div>
-			<div>@ModelObject.Positions</div>
-		</div>
-		<div>
-			<div>Location:</div>
-			<div>@(GetLocation(ModelObject.Location))</div>
-		</div>
-		<div>
-			<div>Duration:</div>
-			<div>@(ModelObject.Duration + " " + GetDurationCode(ModelObject.DurationCode))</div>
-		</div>
-		<div>
-			<div>Expected Start Date:</div>
-			<div>@ModelObject.ExpectedStart.ToString("d", new CultureInfo("en-us"))</div>
-		</div>
-		<div>
-			<div>Due Date:</div>
-			<div>@ModelObject.DueDate.ToString("d", new CultureInfo("en-us"))</div>
-		</div>
-		<div>
-			<div>Expected Rate:</div>
-			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.ExpRateLow, ModelObject.ExpRateHigh)</div>
-		</div>
-		<div>
-			<div>Salary Expected:</div>
-			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.SalaryLow, ModelObject.SalaryHigh)</div>
-		</div>
-		<div>
-			<div>Load Expected:</div>
-			<div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.ExpLoadLow, ModelObject.ExpLoadHigh)</div>
-		</div>
-		<div>
-			<div>Placement Fee:</div>
-			<div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
-		</div>
-	</div>
-	<div style="height: 404px">
-		<div style="display: block">
-			<div style="display: block">Description:</div>
-			<div style="display: block; height: 225px; overflow-y: auto; width: 98%; line-height: 18px;">@(ModelObject.Description.ToMarkupString())</div>
-		</div>
-		<div style="display: block">
-			<div style="display: block">Skills:</div>
-			<div style="display: block; height: 125px; overflow-y: auto; width: 98%;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
-		</div>
-	</div>
-	<div style="height: 404px">
-		<div>
-			<div>Status:</div>
-			<div>@ModelObject.Status</div>
-		</div>
-		<div>
-			<div>Priority:</div>
-			<div>@ModelObject.Priority</div>
-		</div>
-		<div>
-			<div>Job Options:</div>
-			<div>@ModelObject.JobOptions</div>
-		</div>
-		<div>
-			<div>Experience:</div>
-			<div>@ModelObject.Experience</div>
-		</div>
-		<div>
-			<div>Report To:</div>
-			<div>@ModelObject.ReportTo</div>
-		</div>
-		<div>
-			<div>Education:</div>
-			<div>@ModelObject.Education</div>
-		</div>
-		<div>
-			<div>Eligibility:</div>
-			<div>@ModelObject.Eligibility</div>
-		</div>
-		<div>
-			<div>Expenses Paid?:</div>
-			<div>@(ModelObject.ExpensesPaid ? "Yes" : "No")</div>
-		</div>
-		<div>
-			<div>Security Clearance?:</div>
-			<div>@ModelObject.SecurityClearance</div>
-		</div>
-		<div>
-			<div>Benefits?:</div>
-			<div>@(ModelObject.Benefits ? "Yes" : "No")</div>
-		</div>
-		<div>
-			<div>Benefits Notes:</div>
-			<div>@ModelObject.BenefitNotes</div>
-		</div>
-		<div>
-			<div>OFCCP?:</div>
-			<div>@(ModelObject.OFCCP ? "Yes" : "No")</div>
-		</div>
-	</div>
+    <div style="height: 404px">
+        <div>
+            <div>Company Name:</div>
+            <div>@ModelObject.CompanyName</div>
+        </div>
+        <div>
+            <div>Contact Name:</div>
+            <div>@ModelObject.ContactName</div>
+        </div>
+        <div>
+            <div>Job Title:</div>
+            <div>@ModelObject.PositionTitle</div>
+        </div>
+        <div>
+            <div>No. of Positions:</div>
+            <div>@ModelObject.Positions</div>
+        </div>
+        <div>
+            <div>Location:</div>
+            <div>@(GetLocation(ModelObject.Location))</div>
+        </div>
+        <div>
+            <div>Duration:</div>
+            <div>@(ModelObject.Duration + " " + GetDurationCode(ModelObject.DurationCode))</div>
+        </div>
+        <div>
+            <div>Expected Start Date:</div>
+            <div>@ModelObject.ExpectedStart.ToString("d", new CultureInfo("en-us"))</div>
+        </div>
+        <div>
+            <div>Due Date:</div>
+            <div>@ModelObject.DueDate.ToString("d", new CultureInfo("en-us"))</div>
+        </div>
+        <div>
+            <div>Expected Rate:</div>
+            <div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.ExpRateLow, ModelObject.ExpRateHigh)</div>
+        </div>
+        <div>
+            <div>Salary Expected:</div>
+            <div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.SalaryLow, ModelObject.SalaryHigh)</div>
+        </div>
+        <div>
+            <div>Load Expected:</div>
+            <div>@string.Format(new CultureInfo("en-US"), "{0:C} - {1:C}", ModelObject.ExpLoadLow, ModelObject.ExpLoadHigh)</div>
+        </div>
+        <div>
+            <div>Placement Fee:</div>
+            <div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
+        </div>
+    </div>
+    <div style="height: 404px">
+        <div style="display: block">
+            <div style="display: block">Description:</div>
+            <div style="display: block; height: 225px; overflow-y: auto; width: 98%; line-height: 18px;">@(ModelObject.Description.ToMarkupString())</div>
+        </div>
+        <div style="display: block">
+            <div style="display: block">Skills:</div>
+            <div style="display: block; height: 125px; overflow-y: auto; width: 98%;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
+        </div>
+    </div>
+    <div style="height: 404px">
+        <div>
+            <div>Status:</div>
+            <div>@ModelObject.Status</div>
+        </div>
+        <div>
+            <div>Priority:</div>
+            <div>@ModelObject.Priority</div>
+        </div>
+        <div>
+            <div>Job Options:</div>
+            <div>@ModelObject.JobOptions</div>
+        </div>
+        <div>
+            <div>Experience:</div>
+            <div>@ModelObject.Experience</div>
+        </div>
+        <div>
+            <div>Report To:</div>
+            <div>@ModelObject.ReportTo</div>
+        </div>
+        <div>
+            <div>Education:</div>
+            <div>@ModelObject.Education</div>
+        </div>
+        <div>
+            <div>Eligibility:</div>
+            <div>@ModelObject.Eligibility</div>
+        </div>
+        <div>
+            <div>Expenses Paid?:</div>
+            <div>@(ModelObject.ExpensesPaid ? "Yes" : "No")</div>
+        </div>
+        <div>
+            <div>Security Clearance?:</div>
+            <div>@(ModelObject.SecurityClearance ? "Yes" : "No")</div>
+        </div>
+        <div>
+            <div>Benefits?:</div>
+            <div>@(ModelObject.Benefits ? "Yes" : "No")</div>
+        </div>
+        <div>
+            <div>Benefits Notes:</div>
+            <div>@ModelObject.BenefitNotes</div>
+        </div>
+        <div>
+            <div>OFCCP?:</div>
+            <div>@(ModelObject.OFCCP ? "Yes" : "No")</div>
+        </div>
+    </div>
 </div>

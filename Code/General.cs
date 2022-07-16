@@ -444,11 +444,18 @@ public static class General
             Requisition.StartRecord = ((_page - 1) * _itemCount + 1).ToInt32();
             Requisition.EndRecord = ((_page - 1) * _itemCount).ToInt32() + _dataSource.Count;
 
-            if (getInformation)
+            if (!getInformation)
             {
-                Requisition.Companies = JsonConvert.DeserializeObject<List<Company>>(_restResponse["Companies"].ToString() ?? string.Empty);
-                Requisition.CompanyContacts = JsonConvert.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"].ToString() ?? string.Empty);
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = _count /*_count*/
+                                           } : _dataSource;
             }
+
+            Requisition.Companies = JsonConvert.DeserializeObject<List<Company>>(_restResponse["Companies"].ToString() ?? string.Empty);
+            Requisition.CompanyContacts = JsonConvert.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"].ToString() ?? string.Empty);
+            Requisition.Skills = JsonConvert.DeserializeObject<List<IntValues>>(_restResponse["Skills"].ToString() ?? string.Empty);
 
             return dm.RequiresCounts ? new DataResult
                                        {

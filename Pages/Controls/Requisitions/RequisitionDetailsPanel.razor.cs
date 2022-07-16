@@ -16,6 +16,7 @@
 #region Using
 
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
+using BeforeOpenEventArgs = Syncfusion.Blazor.Popups.BeforeOpenEventArgs;
 
 #endregion
 
@@ -135,18 +136,35 @@ public partial class RequisitionDetailsPanel
         base.OnAfterRender(firstRender);
     }
 
-    private async Task AfterUpload(ActionCompleteEventArgs args)
+    [Parameter]
+    public EventCallback CancelRequisition
     {
-        await Task.Delay(1);
-    }
-
-    private async Task BeforeUpload(BeforeUploadEventArgs args)
-    {
-        await Task.Delay(1);
+        get;
+        set;
     }
 
     [Parameter]
-    public EventCallback CancelRequisition
+    public List<IntValues> Skills
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> OnFileUpload
+    {
+        get;
+        set;
+    }
+
+    public DialogFooter Footer
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<EditContext> SaveRequisitionDialog
     {
         get;
         set;
@@ -166,13 +184,9 @@ public partial class RequisitionDetailsPanel
         ContactQuery = new Query().Where(new WhereFilter {Field = "ClientID", Operator = "equal", value = args.Value});
     }
 
-    private async Task OnFileUpload(UploadChangeEventArgs args)
+    private async Task RequisitionOpen(BeforeOpenEventArgs args)
     {
         await Task.Delay(1);
-    }
-
-    private async Task SaveRequisitionDialog(EditContext args)
-    {
-        await Task.Delay(1);
+        ContactQuery = new Query().Where(new WhereFilter {Field = "ClientID", Operator = "equal", value = ModelObject.CompanyID});
     }
 }

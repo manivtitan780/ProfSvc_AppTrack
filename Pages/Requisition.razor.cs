@@ -18,6 +18,7 @@
 using ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
+using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
@@ -101,6 +102,12 @@ public partial class Requisition
     }
 
     internal static List<CompanyContact> CompanyContacts
+    {
+        get;
+        set;
+    }
+
+    internal static List<IntValues> Skills
     {
         get;
         set;
@@ -460,6 +467,79 @@ public partial class Requisition
         _selectedTab = args.SelectedIndex;
     }
 
+    private MemoryStream FileData
+    {
+        get;
+        set;
+    }
+
+    private FileInfo FileInformation
+    {
+        get;
+        set;
+    }
+
+    private string FileName
+    {
+        get;
+        set;
+    }
+
+    private double FileSize
+    {
+        get;
+        set;
+    }
+
+    private string MimeType
+    {
+        get;
+        set;
+    }
+
+    private async Task OnFileUpload(UploadChangeEventArgs file)
+    {
+        await Task.Delay(1);
+        foreach (UploadFiles _file in file.Files)
+        {
+            MimeType = _file.FileInfo.MimeContentType;
+            FileName = _file.FileInfo.Name;
+            FileSize = _file.FileInfo.Size;
+            FileData = _file.Stream;
+
+            //List<AdminList> _dataSource = new();
+            DialogEditRequisition.Footer.CancelButton.Disabled = true;
+            DialogEditRequisition.Footer.SaveButton.Disabled = true;
+            try
+            {
+                //string _url = ;
+
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Requisition/UploadBenefitsDocument", Method.Post)
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
+                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+                _request.AddParameter("fileData",
+                                      $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}",
+                                      ParameterType.RequestBody);
+                _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
+
+                await _client.PostAsync(_request);
+                //await Grid.Refresh();
+            }
+            catch
+            {
+                //
+            }
+            finally
+            {
+                DialogEditRequisition.Footer.SaveButton.Disabled = false;
+                DialogEditRequisition.Footer.CancelButton.Disabled = false;
+            }
+        }
+    }
+
     private async Task UndoActivity(int arg)
     {
         await Task.Delay(1);
@@ -494,5 +574,10 @@ public partial class Requisition
         }
 
         #endregion
+    }
+
+    private async Task SaveRequisition(EditContext arg)
+    {
+        await Task.Delay(1);
     }
 }
