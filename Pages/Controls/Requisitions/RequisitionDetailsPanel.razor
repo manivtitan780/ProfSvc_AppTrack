@@ -46,13 +46,7 @@
 										Multiline="true" ID="multiSkills" KeyField="Key" Placeholder="Select Skill(s) Required" TItem="IntValues" TValue="string" ValueField="Value" />
 					<MultiSelectControl @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="Skills" FilterBarPlaceholder="Search Skills&hellip;"
 										Multiline="true" ID="multiOptional" KeyField="Key" Placeholder="Select Optional Skills" TItem="IntValues" TValue="string" ValueField="Value" />
-					@*<TextBoxControl @bind-Value="@(ModelObject.Mandatory)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textMandatory"
-                                    MaxLength="8000" Multiline="true" Placeholder="Mandatory Requirements" Rows="3" Width="100%" />
-                    <TextBoxControl @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textOptional"
-                                    MaxLength="8000" Multiline="true" Placeholder="Optional Requirements" Rows="3" Width="100%" />*@
-@*					<TextBoxControl @bind-Value="@(ModelObject.SkillsRequired)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textSkills" MaxLength="2000" Multiline="true"
-									Placeholder="Skills Required" Rows="3" Width="100%" />
-*@					<div class="divFlex">
+					<div class="divFlex">
 						<div style="display: flex; width: 100%">
 							<div class="divFlexLabel" style="width: 24%">
 								<label class="labelStatus" for="textCity">Positions:</label>
@@ -159,10 +153,10 @@
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 42%; display: flex;">
 								<NumericControl @bind-Value="@(ModelObject.ExpRateLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c0" ID="numericPayRateFrom"
-												Max="10000" Min="1" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="45%" />
+												Max="10000" Min="0" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
 									<NumericControl @bind-Value="@(ModelObject.ExpRateHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c0" ID="numericPayRateTo"
-													Max="10000" Min="1" Placeholder="Pay Rate/Hr To" TValue="decimal" />
+													Max="10000" Min="0" Placeholder="Pay Rate/Hr To" TValue="decimal" />
 								</span>
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 15%; display: flex;">
@@ -183,36 +177,25 @@
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 47%; display: flex;">
 								<NumericControl @bind-Value="@(ModelObject.SalaryLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericSalaryFrom"
-												Max="10000" Min="1" Placeholder="Duration" TValue="decimal" Width="45%" />
+												Max="10000" Min="0" Placeholder="Min. Salary" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
 									<NumericControl @bind-Value="@(ModelObject.SalaryHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericSalaryTo"
-													Max="10000" Min="1" Placeholder="Duration" TValue="decimal" />
+													Max="10000" Min="0" Placeholder="Max. Salary" TValue="decimal" />
 								</span>
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 47%; display: flex;">
 								<NumericControl @bind-Value="@(ModelObject.ExpLoadLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericLoadLow"
-												Max="7300" Min="1" Placeholder="Load Rate From" TValue="decimal" Width="45%" />
+												Max="7300" Min="0" Placeholder="Min. Load Rate" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
 									<NumericControl @bind-Value="@(ModelObject.ExpLoadHigh)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericLoadHigh"
-													Max="7300" Min="1" Placeholder="Load Rate To" TValue="decimal" />
+													Max="7300" Min="0" Placeholder="Max. Load Rate" TValue="decimal" />
 								</span>
 							</div>
 						</div>
 					</div>
 					<TextBoxControl @bind-Value="@(ModelObject.BenefitNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textBenefits" MaxLength="8000" MinLength="0" Placeholder="Benefits"
 									Multiline="true" Rows="5" Width="100%" />
-					<div class="divFlex" style="height: 100px">
-						<div class="divFlexLabel">
-							<label class="labelStatus" for="uploadBenefitsDocument">Benefits Document:</label>
-						</div>
-						<div class="divFlexSmall" style="display: flex; height: auto; margin-top: 10px;">
-							<div class="uploadDocument" style="width: 100%">
-								<SfUploader AllowMultiple="false" AutoUpload="true" ID="uploadBenefitsDocument" SequentialUpload="true">
-									<UploaderEvents ValueChange="OnFileUpload"></UploaderEvents>
-								</SfUploader>
-							</div>
-						</div>
-					</div>
+					<UploaderControl Placeholder="Benefits Document" AutoUpload="true" Multiple="false" ID="uploadBenefitsDocument" SequentialUpload="true" OnFileUpload="OnFileUpload"></UploaderControl>
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelDialog" @ref="Footer" />
