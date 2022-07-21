@@ -1,5 +1,5 @@
-﻿<div class="containerBox">
-    <div style="height: 404px">
+﻿<div class="containerBox" style="height: 450px">
+    <div style="height: 450px">
         <div>
             <div>Company Name:</div>
             <div>@ModelObject.CompanyName</div>
@@ -48,21 +48,25 @@
             <div>Placement Fee:</div>
             <div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
         </div>
-    </div>
-    <div style="height: 404px">
-        <div style="display: block">
-            <div style="display: block">Description:</div>
-            <div style="display: block; height: 225px; overflow-y: auto; width: 98%; line-height: 18px;">@(ModelObject.Description.ToMarkupString())</div>
-        </div>
-        <div style="display: block">
-            <div style="display: block">Skills:</div>
-            <div style="display: block; height: 125px; overflow-y: auto; width: 98%;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
-        </div>
-    </div>
-    <div style="height: 404px">
         <div>
             <div>Status:</div>
             <div>@ModelObject.Status</div>
+        </div>
+    </div>
+    <div style="height: 450px">
+        <div style="display: block">
+            <div style="display: block">Description:</div>
+            <div style="display: block; height: 233px; overflow-y: auto; width: 98%; line-height: 18px;">@(ModelObject.Description.ToMarkupString())</div>
+        </div>
+        <div style="display: block">
+            <div style="display: block">Skills:</div>
+            <div style="display: block; height: 158px; overflow-y: auto; width: 98%;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
+        </div>
+    </div>
+    <div style="height: 450px">
+        <div>
+            <div>Assigned Recruiter(s):</div>
+            <div>@ModelObject.AssignedTo</div>
         </div>
         <div>
             <div>Priority:</div>
