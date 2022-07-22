@@ -31,6 +31,13 @@ public partial class BasicInfoRequisitionPanel
         set;
     }
 
+    [Parameter]
+    public MarkupString SkillsText
+    {
+        get;
+        set;
+    }
+
     private string GetDurationCode(string durationCode)
     {
         return durationCode.ToLower() switch

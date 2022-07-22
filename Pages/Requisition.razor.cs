@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     07-16-2022 15:51
+// Last Updated On:     07-22-2022 16:14
 // *****************************************/
 
 #endregion
@@ -43,10 +43,15 @@ public partial class Requisition
     private List<IntValues> _experience;
 
     private List<KeyValues> _jobOptions;
+    private List<KeyValues> _recruiters;
+
+    private MarkupString _requisitionDetailSkills = "".ToMarkupString();
 
     private RequisitionDetails _requisitionDetailsObject = new();
     private RequisitionDetails _requisitionDetailsObjectClone = new();
     private int _selectedTab;
+
+    private List<IntValues> _skills;
 
     private List<IntValues> _states;
 
@@ -242,13 +247,36 @@ public partial class Requisition
         _eligibilityCopy.Add(new(0, "All"));
         _eligibilityCopy.AddRange(_eligibility);*/
 
-        _memoryCache.TryGetValue("Experience", out _experience);
+        while (_experience == null)
+        {
+            _memoryCache.TryGetValue("Experience", out _experience);
+        }
+
         /*_memoryCache.TryGetValue("TaxTerms", out _taxTerms);*/
         while (_jobOptions == null)
         {
             _memoryCache.TryGetValue("JobOptions", out _jobOptions);
         }
 
+        while (_recruiters == null)
+        {
+            _memoryCache.TryGetValue("Users", out List<User> _users);
+            if (_users == null)
+            {
+                continue;
+            }
+
+            _recruiters = new();
+            foreach (User _user in _users.Where(user => user.Role is "Recruiter" or "Recruiter & Sales Manager"))
+            {
+                _recruiters?.Add(new(_user.UserName, _user.UserName));
+            }
+        }
+
+        while (_skills == null)
+        {
+            _memoryCache.TryGetValue("Skills", out _skills);
+        }
         /*_jobOptionsCopy.Clear();
         _jobOptionsCopy.Add(new("%", "All"));
         _jobOptionsCopy.AddRange(_jobOptions);
@@ -358,6 +386,7 @@ public partial class Requisition
             //SetJobOption();
             //SetTaxTerm();
             //SetExperience();
+            SetSkills();
         }
 
         //_selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
@@ -536,16 +565,16 @@ public partial class Requisition
         DialogEditRequisition.Footer.CancelButton.Disabled = true;
         DialogEditRequisition.Footer.SaveButton.Disabled = true;
         await Task.Delay(1);
-        _requisitionDetailsObject = _requisitionDetailsObject.Copy();
 
         RestClient _client = new($"{Start.ApiHost}");
         RestRequest _request = new("Requisition/SaveRequisition", Method.Post)
                                {
                                    RequestFormat = DataFormat.Json
                                };
-        _request.AddJsonBody(_requisitionDetailsObject);
+        _request.AddJsonBody(_requisitionDetailsObjectClone);
 
         await _client.PostAsync<int>(_request);
+        _requisitionDetailsObject = _requisitionDetailsObjectClone.Copy();
 
         /*_target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
         _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
@@ -563,6 +592,7 @@ public partial class Requisition
         await Spinner.HideAsync();
         DialogEditRequisition.Footer.CancelButton.Disabled = false;
         DialogEditRequisition.Footer.SaveButton.Disabled = false;
+        await DialogEditRequisition.Dialog.HideAsync();
         await Task.Delay(1);
         //VisibleCandidateInfo = false;
         StateHasChanged();
@@ -570,6 +600,83 @@ public partial class Requisition
 
     private void SetAlphabet(string alphabet)
     {
+    }
+
+    private void SetSkills()
+    {
+        if (_requisitionDetailsObject == null)
+        {
+            return;
+        }
+
+        if (_requisitionDetailsObject.SkillsRequired.NullOrWhiteSpace() && _requisitionDetailsObject.Optional.NullOrWhiteSpace())
+        {
+            return;
+        }
+
+        _requisitionDetailSkills = "".ToMarkupString();
+
+        string[] _skillRequiredStrings = { }, _skillOptionalStrings = { };
+        if (_requisitionDetailsObject.SkillsRequired != "")
+        {
+            _skillRequiredStrings = _requisitionDetailsObject.SkillsRequired.Split(',');
+        }
+
+        if (_requisitionDetailsObject.Optional != "")
+        {
+            _skillOptionalStrings = _requisitionDetailsObject.Optional.Split(',');
+        }
+
+        string _skillsRequired = "", _skillsOptional = "";
+        foreach (string _skillString in _skillRequiredStrings)
+        {
+            IntValues _skill = _skills.FirstOrDefault(skill => skill.Key == _skillString.ToInt32());
+            if (_skill == null)
+            {
+                continue;
+            }
+
+            if (_skillsRequired == "")
+            {
+                _skillsRequired = _skill.Value;
+            }
+            else
+            {
+                _skillsRequired += ", " + _skill.Value;
+            }
+        }
+
+        foreach (string _skillString in _skillOptionalStrings)
+        {
+            IntValues _skill = _skills.FirstOrDefault(skill => skill.Key == _skillString.ToInt32());
+            if (_skill == null)
+            {
+                continue;
+            }
+
+            if (_skillsOptional == "")
+            {
+                _skillsOptional = _skill.Value;
+            }
+            else
+            {
+                _skillsOptional += ", " + _skill.Value;
+            }
+        }
+
+        string _skillStringTemp = "";
+
+        if (!_skillsRequired.NullOrWhiteSpace())
+        {
+            _skillStringTemp = "Required Skills: <br/>" + _skillsRequired + "<br/>";
+        }
+
+        if (!_skillsOptional.NullOrWhiteSpace())
+        {
+            _skillStringTemp += "Optional Skills: <br/>" + _skillsOptional;
+        }
+
+        _requisitionDetailSkills = _skillStringTemp.ToMarkupString();
     }
 
     private async Task TabSelected(SelectEventArgs args)

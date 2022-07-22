@@ -38,7 +38,7 @@
 							</div>
 						</div>
 					</div>
-					<TextBoxControl @bind-Value="@(ModelObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textTitle" MaxLength="200" MinLength="1" Placeholder="Position Title / Role"
+					<TextBoxControl @bind-Value="@(ModelObject.PositionTitle)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textTitle" MaxLength="200" MinLength="1" Placeholder="Position Title / Role"
 									Width="100%" />
 					<TextBoxControl @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPositionDescription"
 									MaxLength="32767" Multiline="true" Placeholder="Position Description" Rows="15" Width="100%" />
@@ -127,6 +127,8 @@
 							</div>
 						</div>
 					</div>
+					<MultiSelectControl @bind-Value="@(ModelObject.AssignedTo)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="Recruiters" FilterBarPlaceholder="Search Skills&hellip;"
+										Multiline="false" ID="multiAssigned" KeyField="Key" Placeholder="Recruiters Assigned To" TItem="KeyValues" TValue="string" ValueField="Value" />
 					<SwitchControl @bind-BindValue="@(ModelObject.ExpensesPaid)" ID="checkedExpenses" OffLabel="NO" OnLabel="YES" Placeholder="Expenses Paid?" />
 					<SwitchControl @bind-BindValue="@(ModelObject.SecurityClearance)" ID="checkedSecurity" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?" />
 					<SwitchControl @bind-BindValue="@(ModelObject.OFCCP)" ID="checkedOFCCP" OffLabel="NO" OnLabel="YES" Placeholder="OFCCP Compliance Required?" />

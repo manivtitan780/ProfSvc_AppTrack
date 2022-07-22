@@ -170,6 +170,13 @@ public partial class RequisitionDetailsPanel
         set;
     }
 
+    [Parameter]
+    public List<KeyValues> Recruiters
+    {
+        get;
+        set;
+    }
+
     private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);

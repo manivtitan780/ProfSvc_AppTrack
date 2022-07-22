@@ -46,7 +46,7 @@
         </div>
         <div>
             <div>Placement Fee:</div>
-            <div>@string.Format(new CultureInfo("en-US"), "{0:P}", ModelObject.PlacementFee)</div>
+            <div>@string.Format(new CultureInfo("en-US"), "{0:P0}", ModelObject.PlacementFee)</div>
         </div>
         <div>
             <div>Status:</div>
@@ -60,7 +60,7 @@
         </div>
         <div style="display: block">
             <div style="display: block">Skills:</div>
-            <div style="display: block; height: 158px; overflow-y: auto; width: 98%;">@(ModelObject.SkillsRequired.ToMarkupString())</div>
+            <div style="display: block; height: 158px; overflow-y: auto; width: 98%;">@(SkillsText)</div>
         </div>
     </div>
     <div style="height: 450px">

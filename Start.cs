@@ -65,7 +65,7 @@ public class Start
         List<IntValues> _eligibility = General.DeserializeObject<List<IntValues>>(_restResponse["Eligibility"]);
         List<KeyValues> _jobOptions = General.DeserializeObject<List<KeyValues>>(_restResponse["JobOptions"]);
         List<KeyValues> _taxTerms = General.DeserializeObject<List<KeyValues>>(_restResponse["TaxTerms"]);
-        List<CandidateSkills> _skills = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+        List<IntValues> _skills = General.DeserializeObject<List<IntValues>>(_restResponse["Skills"]);
         List<IntValues> _experience = General.DeserializeObject<List<IntValues>>(_restResponse["Experience"]);
         List<Template> _templates = General.DeserializeObject<List<Template>>(_restResponse["Templates"]);
         List<User> _users = General.DeserializeObject<List<User>>(_restResponse["Users"]);

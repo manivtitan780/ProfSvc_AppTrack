@@ -132,7 +132,7 @@
                                 <TabHeader Text="Requisition Info" />
                             </ChildContent>
 							<ContentTemplate>
-								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" />
+								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" SkillsText="_requisitionDetailSkills" />
 							</ContentTemplate>
                         </TabItem>
                         <TabItem>
@@ -150,7 +150,7 @@
         </GridTemplates>
     </SfGrid>
 
-	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" 
+	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
 							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" OnFileUpload="OnFileUpload" SaveRequisitionDialog="SaveRequisition" />
 
     <div class="divGridFooter">
