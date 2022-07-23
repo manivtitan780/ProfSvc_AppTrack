@@ -75,10 +75,7 @@
 					</div>
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">
-							<div class="divFlexLabel" style="width: 31%">
-								<label class="labelStatus" for="textCity">Assigned To:</label>
-							</div>
-							<div class="divFlexLabel" style="margin-left: 3%; width: 31%;">
+							<div class="divFlexLabel" style="width: 31%;">
 								<label class="labelStatus" for="dropState">Priority:</label>
 							</div>
 							<div class="divFlexLabel" style="margin-left: 3%; width: 31%;">
@@ -86,11 +83,7 @@
 							</div>
 						</div>
 						<div style="display: flex; width: 100%">
-							<div class="divFlexSmall" style="width: 31%">
-								<DropDownControl @bind-Value="@ModelObject.AssignedToID" @bind-Value:event="ValueChanged" DataSource="@AssignedTo" ID="dropAssigned" TextField="Value" TItem="IntValues"
-												 TValue="int" ValueField="Key" />
-							</div>
-							<div class="divFlexSmall" style="margin-left: 3%; width: 31%;">
+							<div class="divFlexSmall" style="width: 31%;">
 								<DropDownControl @bind-Value="@ModelObject.PriorityID" @bind-Value:event="ValueChanged" DataSource="@Priority" ID="dropPriority" TextField="Value" TItem="IntValues"
 												 TValue="int" ValueField="Key" />
 							</div>
@@ -197,7 +190,7 @@
 					</div>
 					<TextBoxControl @bind-Value="@(ModelObject.BenefitNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textBenefits" MaxLength="8000" MinLength="0" Placeholder="Benefits"
 									Multiline="true" Rows="5" Width="100%" />
-					<UploaderControl Placeholder="Benefits Document" AutoUpload="true" Multiple="false" ID="uploadBenefitsDocument" SequentialUpload="true" OnFileUpload="OnFileUpload"></UploaderControl>
+					@*<UploaderControl Placeholder="Benefits Document" AutoUpload="true" Multiple="false" ID="uploadBenefitsDocument" SequentialUpload="true" OnFileUpload="OnFileUpload"></UploaderControl>*@
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelDialog" @ref="Footer" />

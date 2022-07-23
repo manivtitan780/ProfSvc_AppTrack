@@ -17,6 +17,7 @@
 
 using ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
+using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
@@ -56,6 +57,7 @@ public partial class Requisition
     private List<IntValues> _states;
 
     private Requisitions _target;
+    private List<RequisitionDocuments> _requisitionDocumentsObject = new();
 
     public static int Count
     {
@@ -100,6 +102,12 @@ public partial class Requisition
     }
 
     internal static List<Company> Companies
+    {
+        get;
+        set;
+    }
+
+    private DocumentsPanel DocumentsPanel
     {
         get;
         set;
@@ -371,6 +379,7 @@ public partial class Requisition
             //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
             //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
             _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            _requisitionDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_restResponse["Documents"]);
             //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
             //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
             //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
@@ -389,7 +398,7 @@ public partial class Requisition
             SetSkills();
         }
 
-        //_selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
+        _selectedTab = 0;
 
         await Task.Delay(1);
         await Spinner.HideAsync();
@@ -572,6 +581,8 @@ public partial class Requisition
                                    RequestFormat = DataFormat.Json
                                };
         _request.AddJsonBody(_requisitionDetailsObjectClone);
+        _request.AddQueryParameter("fileName", FileName);
+        _request.AddQueryParameter("mimeType", MimeType);
 
         await _client.PostAsync<int>(_request);
         _requisitionDetailsObject = _requisitionDetailsObjectClone.Copy();
@@ -656,7 +667,7 @@ public partial class Requisition
 
             if (_skillsOptional == "")
             {
-                _skillsOptional = _skill.Value;
+                _skillsOptional = _skill.Value; 
             }
             else
             {
@@ -719,5 +730,104 @@ public partial class Requisition
         }
 
         #endregion
+    }
+
+    private async Task DeleteDocument(int arg)
+    {
+        await Task.Delay(1);
+    }
+
+    private async Task DownloadDocument(int arg)
+    {
+        await Task.Delay(1);
+    }
+
+    private RequisitionDocuments NewDocument
+    {
+        get;
+    } = new();
+
+    private RequisitionDocuments SelectedDownload
+    {
+        get;
+        set;
+    } = new();
+
+    private UploadFiles AddedDocument
+    {
+        get;
+        set;
+    }
+
+    private async Task UploadDocument(UploadChangeEventArgs file)
+    {
+        await Task.Delay(1);
+        foreach (UploadFiles _file in file.Files)
+        {
+            AddedDocument = _file;
+        }
+    }
+
+    private AddRequisitionDocument DialogDocument
+    {
+        get;
+        set;
+    }
+
+    private async Task SaveDocument(EditContext document)
+    {
+        await Task.Delay(1);
+        try
+        {
+            if (document.Model is RequisitionDocuments _document)
+            {
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Requisition/UploadDocument", Method.Post)
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
+                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
+                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+                _request.AddParameter("name", _document.DocumentName, ParameterType.GetOrPost);
+                _request.AddParameter("notes", _document.DocumentNotes, ParameterType.GetOrPost);
+                _request.AddParameter("requisitionID", _target.ID.ToString(), ParameterType.GetOrPost);
+                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
+                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
+                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+                if (_response == null)
+                {
+                    return;
+                }
+
+                _requisitionDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_response["Document"]);
+            }
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private void AfterDocument(ActionCompleteEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = false;
+        DialogDocument.DialogFooter.CancelButton.Disabled = false;
+    }
+
+    private void BeforeDocument(BeforeUploadEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = true;
+        DialogDocument.DialogFooter.CancelButton.Disabled = true;
+    }
+
+    private async Task AddDocument(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+
+        NewDocument.ClearData();
+
+        await DialogDocument.Dialog.ShowAsync();
     }
 }

@@ -115,11 +115,11 @@
                     //Candidates _candidates = context! as Candidates;
                 }
                 @* Add Buttons Start *@
-                <SfButton Content="Edit Requisition" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditRequisition(false)"></SfButton>
+				<SfButton Content="Edit Requisition" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditRequisition(false)" style="@("display:" + (_selectedTab == 0 ? "unset" : "none"))"/>
                 @*<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
                 <SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
-                <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
-                <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>*@
+                <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>*@
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"/>
                 <SfTab CssClass="e-fill" Height="520" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
                     <TabAnimationSettings>
                         <TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
@@ -135,6 +135,14 @@
 								<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" SkillsText="_requisitionDetailSkills" />
 							</ContentTemplate>
                         </TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Documents" />
+							</ChildContent>
+							<ContentTemplate>
+								<DocumentsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_requisitionDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
                         <TabItem>
                             <ChildContent>
                                 <TabHeader Text="Candidate Activity" />
@@ -149,9 +157,10 @@
             </DetailTemplate>
         </GridTemplates>
     </SfGrid>
-
+	@*OnFileUpload="OnFileUpload" *@
 	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
-							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" OnFileUpload="OnFileUpload" SaveRequisitionDialog="SaveRequisition" />
+							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" />
+	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
 
     <div class="divGridFooter">
         <div style="display: flex">
