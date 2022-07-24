@@ -161,6 +161,7 @@
 	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
 							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" />
 	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
+	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="false" />
 
     <div class="divGridFooter">
         <div style="display: flex">

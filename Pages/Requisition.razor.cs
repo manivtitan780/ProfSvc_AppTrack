@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     07-22-2022 16:14
+// Last Updated On:     07-23-2022 20:50
 // *****************************************/
 
 #endregion
@@ -50,6 +50,7 @@ public partial class Requisition
 
     private RequisitionDetails _requisitionDetailsObject = new();
     private RequisitionDetails _requisitionDetailsObjectClone = new();
+    private List<RequisitionDocuments> _requisitionDocumentsObject = new();
     private int _selectedTab;
 
     private List<IntValues> _skills;
@@ -57,7 +58,9 @@ public partial class Requisition
     private List<IntValues> _states;
 
     private Requisitions _target;
-    private List<RequisitionDocuments> _requisitionDocumentsObject = new();
+
+    private List<Workflow> _workflows;
+    private List<StatusCode> _statusCodes;
 
     public static int Count
     {
@@ -70,6 +73,11 @@ public partial class Requisition
         get;
         set;
     }
+
+    public List<KeyValues> NextSteps
+    {
+        get;
+    } = new();
 
     public static int PageCount
     {
@@ -107,12 +115,6 @@ public partial class Requisition
         set;
     }
 
-    private DocumentsPanel DocumentsPanel
-    {
-        get;
-        set;
-    }
-
     internal static List<CompanyContact> CompanyContacts
     {
         get;
@@ -131,13 +133,37 @@ public partial class Requisition
         set;
     }
 
+    private UploadFiles AddedDocument
+    {
+        get;
+        set;
+    }
+
     private AutoCompleteButton AutoCompleteControl
     {
         get;
         set;
     }
 
+    private EditActivityDialog DialogActivity
+    {
+        get;
+        set;
+    }
+
+    private AddRequisitionDocument DialogDocument
+    {
+        get;
+        set;
+    }
+
     private RequisitionDetailsPanel DialogEditRequisition
+    {
+        get;
+        set;
+    }
+
+    private DocumentsPanel DocumentsPanel
     {
         get;
         set;
@@ -180,6 +206,13 @@ public partial class Requisition
     }
 
     [Inject]
+    private IJSRuntime JsRuntime
+    {
+        get;
+        set;
+    }
+
+    [Inject]
     private ILocalStorageService LocalStorageBlazored
     {
         get;
@@ -205,9 +238,26 @@ public partial class Requisition
         set;
     }
 
+    private RequisitionDocuments NewDocument
+    {
+        get;
+    } = new();
+
     private static RequisitionSearch SearchModel
     {
         get;
+    } = new();
+
+    private CandidateActivity SelectedActivity
+    {
+        get;
+        set;
+    } = new();
+
+    private RequisitionDocuments SelectedDownload
+    {
+        get;
+        set;
     } = new();
 
     private SfSpinner Spinner
@@ -285,26 +335,37 @@ public partial class Requisition
         {
             _memoryCache.TryGetValue("Skills", out _skills);
         }
-        /*_jobOptionsCopy.Clear();
-        _jobOptionsCopy.Add(new("%", "All"));
-        _jobOptionsCopy.AddRange(_jobOptions);
 
         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
-        _memoryCache.TryGetValue("Workflow", out _workflows);
-        _memoryCache.TryGetValue("Communication", out _communication);
-        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
-
-        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
-        if (!_cookyString.NullOrWhiteSpace())
-        {
-            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
-        }
-        else
-        {
-            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        }*/
+         _memoryCache.TryGetValue("Workflow", out _workflows);
+        /*_jobOptionsCopy.Clear();
+         _jobOptionsCopy.Add(new("%", "All"));
+         _jobOptionsCopy.AddRange(_jobOptions); 
+ 
+         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+         _memoryCache.TryGetValue("Communication", out _communication);
+         _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
+ 
+         string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
+         if (!_cookyString.NullOrWhiteSpace())
+         {
+             SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+         }
+         else
+         {
+             await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+         }*/
 
         await base.OnInitializedAsync();
+    }
+
+    private async Task AddDocument(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+
+        NewDocument.ClearData();
+
+        await DialogDocument.Dialog.ShowAsync();
     }
 
     private void AddNewCandidate()
@@ -317,9 +378,21 @@ public partial class Requisition
         await Task.Delay(1);
     }
 
+    private void AfterDocument(ActionCompleteEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = false;
+        DialogDocument.DialogFooter.CancelButton.Disabled = false;
+    }
+
     private async Task AllAlphabet(MouseEventArgs arg)
     {
         await Task.Delay(1);
+    }
+
+    private void BeforeDocument(BeforeUploadEventArgs arg)
+    {
+        DialogDocument.DialogFooter.SaveButton.Disabled = true;
+        DialogDocument.DialogFooter.CancelButton.Disabled = true;
     }
 
     private async Task ChangeItemCount(ChangeEventArgs<int, IntValues> obj)
@@ -346,6 +419,35 @@ public partial class Requisition
         FirstRender = false;
         //Count = Count;
         await Grid.SelectRowAsync(0);
+    }
+
+    private async Task DeleteDocument(int args)
+    {
+        await Task.Delay(1);
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Requisition/DeleteRequisitionDocument", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("documentID", args.ToString());
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _requisitionDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_response["Document"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
     }
 
     private async Task DetailDataBind(DetailDataBoundEventArgs<Requisitions> requisition)
@@ -404,9 +506,47 @@ public partial class Requisition
         await Spinner.HideAsync();
     }
 
-    private async Task EditActivity(int arg)
+    private async Task DownloadDocument(int args)
     {
         await Task.Delay(1);
+        SelectedDownload = DocumentsPanel.SelectedRow;
+        string _queryString = (SelectedDownload.DocumentFileName + "^" + _target.ID + "^" + SelectedDownload.OriginalFileName + "^1").ToBase64String();
+        //NavManager.NavigateTo(NavManager.BaseUri + "Download/" + _queryString);
+        await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
+        /*string _filePath = Path.Combine(Environment.WebRootPath, "Uploads", "Candidate", _target.ID.ToString(), SelectedDownload.InternalFileName).ToBase64String();
+        byte[] _fileBytes = await File.ReadAllBytesAsync(_filePath);
+        return File(_fileBytes, "application/force-download", _decodedStringArray[2]);*/
+    }
+
+    private async Task EditActivity(int args)
+    {
+        await Task.Delay(1);
+
+        SelectedActivity = ActivityPanel.SelectedRow;
+        NextSteps.Clear();
+        NextSteps.Add(new("No Change", ""));
+        try
+        {
+            foreach (string[] _next in _workflows.Where(flow => flow.Step == SelectedActivity.StatusCode).Select(flow => flow.Next.Split(',')))
+            {
+                foreach (string _nextString in _next)
+                {
+                    foreach (StatusCode _status in _statusCodes.Where(status => status.Code == _nextString && status.AppliesToCode == "SCN"))
+                    {
+                        NextSteps.Add(new(_status.Status, _nextString));
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+        catch
+        {
+            //
+        }
+
+        await DialogActivity.Dialog.ShowAsync();
     }
 
     private async Task EditRequisition(bool isAdd)
@@ -567,6 +707,74 @@ public partial class Requisition
 
     private static void RefreshGrid() => Grid.Refresh();
 
+    private async Task SaveActivity(EditContext activity)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SaveCandidateActivity", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddJsonBody(activity.Model);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+            _request.AddQueryParameter("candidateID", _target.ID);
+            _request.AddQueryParameter("isCandidateScreen", false);
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task SaveDocument(EditContext document)
+    {
+        await Task.Delay(1);
+        try
+        {
+            if (document.Model is RequisitionDocuments _document)
+            {
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Requisition/UploadDocument", Method.Post)
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
+                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
+                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+                _request.AddParameter("name", _document.DocumentName, ParameterType.GetOrPost);
+                _request.AddParameter("notes", _document.DocumentNotes, ParameterType.GetOrPost);
+                _request.AddParameter("requisitionID", _target.ID.ToString(), ParameterType.GetOrPost);
+                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
+                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
+                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+                if (_response == null)
+                {
+                    return;
+                }
+
+                _requisitionDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_response["Document"]);
+            }
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
     private async Task SaveRequisition(EditContext arg)
     {
         //SpinnerVisible = true;
@@ -667,7 +875,7 @@ public partial class Requisition
 
             if (_skillsOptional == "")
             {
-                _skillsOptional = _skill.Value; 
+                _skillsOptional = _skill.Value;
             }
             else
             {
@@ -696,9 +904,44 @@ public partial class Requisition
         _selectedTab = args.SelectedIndex;
     }
 
-    private async Task UndoActivity(int arg)
+    private async Task UndoActivity(int activityID)
     {
         await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/UndoCandidateActivity", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("submissionID", activityID);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+            _request.AddQueryParameter("isCandidateScreen", false);
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task UploadDocument(UploadChangeEventArgs file)
+    {
+        await Task.Delay(1);
+        foreach (UploadFiles _file in file.Files)
+        {
+            AddedDocument = _file;
+        }
     }
 
     public class AdminRequisitionDropDownAdaptor : DataAdaptor
@@ -730,104 +973,5 @@ public partial class Requisition
         }
 
         #endregion
-    }
-
-    private async Task DeleteDocument(int arg)
-    {
-        await Task.Delay(1);
-    }
-
-    private async Task DownloadDocument(int arg)
-    {
-        await Task.Delay(1);
-    }
-
-    private RequisitionDocuments NewDocument
-    {
-        get;
-    } = new();
-
-    private RequisitionDocuments SelectedDownload
-    {
-        get;
-        set;
-    } = new();
-
-    private UploadFiles AddedDocument
-    {
-        get;
-        set;
-    }
-
-    private async Task UploadDocument(UploadChangeEventArgs file)
-    {
-        await Task.Delay(1);
-        foreach (UploadFiles _file in file.Files)
-        {
-            AddedDocument = _file;
-        }
-    }
-
-    private AddRequisitionDocument DialogDocument
-    {
-        get;
-        set;
-    }
-
-    private async Task SaveDocument(EditContext document)
-    {
-        await Task.Delay(1);
-        try
-        {
-            if (document.Model is RequisitionDocuments _document)
-            {
-                RestClient _client = new($"{Start.ApiHost}");
-                RestRequest _request = new("Requisition/UploadDocument", Method.Post)
-                                       {
-                                           AlwaysMultipartFormData = true
-                                       };
-                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
-                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-                _request.AddParameter("name", _document.DocumentName, ParameterType.GetOrPost);
-                _request.AddParameter("notes", _document.DocumentNotes, ParameterType.GetOrPost);
-                _request.AddParameter("requisitionID", _target.ID.ToString(), ParameterType.GetOrPost);
-                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
-                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
-                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-                if (_response == null)
-                {
-                    return;
-                }
-
-                _requisitionDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_response["Document"]);
-            }
-        }
-        catch
-        {
-            //
-        }
-
-        await Task.Delay(1);
-    }
-
-    private void AfterDocument(ActionCompleteEventArgs arg)
-    {
-        DialogDocument.DialogFooter.SaveButton.Disabled = false;
-        DialogDocument.DialogFooter.CancelButton.Disabled = false;
-    }
-
-    private void BeforeDocument(BeforeUploadEventArgs arg)
-    {
-        DialogDocument.DialogFooter.SaveButton.Disabled = true;
-        DialogDocument.DialogFooter.CancelButton.Disabled = true;
-    }
-
-    private async Task AddDocument(MouseEventArgs arg)
-    {
-        await Task.Delay(1);
-
-        NewDocument.ClearData();
-
-        await DialogDocument.Dialog.ShowAsync();
     }
 }

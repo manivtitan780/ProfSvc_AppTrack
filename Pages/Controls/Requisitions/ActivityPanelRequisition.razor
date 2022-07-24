@@ -28,12 +28,12 @@
 							}
 						</Template>
 					</GridColumn>
-					<GridColumn HeaderText="Positions" Width="20%">
+					<GridColumn HeaderText="Initial Recruiter" Width="20%">
 						<Template Context="aCon">
 							@{
 								if (aCon is CandidateActivity _con)
 								{
-									<span>@($"{_con.Status} [{_con.UpdatedBy}]")</span>
+									<span>@($"{_con.CandidateUpdatedBy}")</span>
 								}
 							}
 						</Template>

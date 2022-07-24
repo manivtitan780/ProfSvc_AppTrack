@@ -24,6 +24,13 @@ public partial class EditActivityDialog
         set;
     }
 
+    [Parameter]
+    public bool IsCandidate
+    {
+        get;
+        set;
+    } = true;
+
     public SfDialog Dialog
     {
         get;

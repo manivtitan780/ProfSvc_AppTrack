@@ -205,7 +205,7 @@
 
 	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
 
-	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
+	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="true" />
 
 	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
 
