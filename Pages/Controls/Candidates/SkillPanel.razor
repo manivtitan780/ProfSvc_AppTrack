@@ -27,8 +27,8 @@
                             @{
                                 if (bCon is CandidateSkills {UpdatedBy: "JOLLY" } _con) 
                                 {
-	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)"/>
-	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteSkillMethod(_con.ID)"/>
+	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))"/>
+	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteSkillMethod(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))"/>
                                 }
                             }
                         </Template>

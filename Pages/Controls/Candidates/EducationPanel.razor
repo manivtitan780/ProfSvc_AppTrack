@@ -27,8 +27,8 @@
 							@{
 								if (bCon is CandidateEducation {UpdatedBy: "JOLLY" } _con)
 								{
-									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditEducationDialog(_con.ID)" />
-									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteEducationMethod(_con.ID)" />
+									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditEducationDialog(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
+									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteEducationMethod(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
 								}
 							}
 						</Template>

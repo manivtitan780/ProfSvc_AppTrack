@@ -1,7 +1,7 @@
 @page "/candidate"
 @using AnimationEffect = Syncfusion.Blazor.AnimationEffect
 @layout ProfSvcLayout
-@inject IJSRuntime _runtime;
+@inject IJSRuntime Runtime;
 
 <Header></Header>
 
@@ -30,7 +30,7 @@
 			</div>
 			<div class="divRightControls" style="width: 720px">
 				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate">Add Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate" style="@("display:" + (RequisitionID > 0 ? "none" : "unset"))">Add Candidate</SfButton>
 				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
 				<AutoCompleteButton EnablePersistence="false" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
 									TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
@@ -118,7 +118,7 @@
 							<ContentTemplate>
 								<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
 												GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
-												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />
+												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" IsRequisition="@(RequisitionID > 0)" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -126,7 +126,7 @@
 								<TabHeader Text="Skills" />
 							</ChildContent>
 							<ContentTemplate>
-								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" />
+								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -134,7 +134,7 @@
 								<TabHeader Text="Education" />
 							</ChildContent>
 							<ContentTemplate>
-								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" ModelObject="@_candidateEducationObject" @ref="EducationPanel" RowHeight="@RowHeight" />
+								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" ModelObject="@_candidateEducationObject" @ref="EducationPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -142,7 +142,7 @@
 								<TabHeader Text="Experience" />
 							</ChildContent>
 							<ContentTemplate>
-								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel" RowHeight="@RowHeight" />
+								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -150,7 +150,7 @@
 								<TabHeader Text="Notes" />
 							</ChildContent>
 							<ContentTemplate>
-								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
+								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>

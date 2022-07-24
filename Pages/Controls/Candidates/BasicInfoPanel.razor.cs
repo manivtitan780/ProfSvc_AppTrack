@@ -7,13 +7,11 @@
 // Project:             ProfSvc_AppTrack
 // File Name:           BasicInfoPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          01-04-2022 15:33
-// Last Updated On:     01-04-2022 19:06
+// Created On:          01-26-2022 19:30
+// Last Updated On:     07-24-2022 19:48
 // *****************************************/
 
 #endregion
-
-using Newtonsoft.Json.Linq;
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
@@ -36,6 +34,15 @@ public partial class BasicInfoPanel
     /// </summary>
     [Parameter]
     public EventCallback EditCandidate
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool IsRequisition
     {
         get;
         set;
@@ -70,7 +77,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString SetEligibility
     {
         get;
@@ -79,7 +86,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString SetExperience
     {
         get;
@@ -88,7 +95,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString SetTaxTerm
     {
         get;
@@ -97,7 +104,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString SetJobOption
     {
         get;
@@ -106,7 +113,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString SetCommunication
     {
         get;
@@ -115,7 +122,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString GetRatingDate
     {
         get;
@@ -124,7 +131,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString GetRatingNote
     {
         get;
@@ -133,7 +140,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString GetMPCNote
     {
         get;
@@ -142,7 +149,7 @@ public partial class BasicInfoPanel
 
     /// <summary>
     /// </summary>
-	[Parameter]
+    [Parameter]
     public MarkupString GetMPCDate
     {
         get;

@@ -59,7 +59,7 @@
 			<div>@(ModelObject.Relocate ? "Yes" : "No")</div>
 		</div>
 		<div>
-			<SfButton Content="Edit Candidate Information" CssClass="editSectionButton" @onclick="EditCandidate"></SfButton>
+			<SfButton Content="Edit Candidate Information" CssClass="editSectionButton" @onclick="EditCandidate" style="@("display:" + (IsRequisition ? "none" : "unset"))"></SfButton>
 		</div>
 	</div>
 	<div>
@@ -78,7 +78,7 @@
 			<div>@GetRatingNote</div>
 		</div>
 		<div>
-			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" @onclick="EditRating" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+			<SfButton Content="Edit Candidate Rating" CssClass="editSectionButton" @onclick="EditRating" style="@("margin-bottom: 5px; margin-top: 6px; display:" + (IsRequisition ? "none" : "unset"))"></SfButton>
 		</div>
 		<div>
 			<div>M.P.C?:</div>
@@ -93,7 +93,7 @@
 			<div>@GetMPCNote</div>
 		</div>
 		<div>
-			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" @onclick="EditMPC" style="margin-bottom: 5px; margin-top: 6px;"></SfButton>
+			<SfButton Content="Edit Candidate M.P.C." CssClass="editSectionButton" @onclick="EditMPC" style="@("margin-bottom: 5px; margin-top: 6px; display:" + (IsRequisition ? "none" : "unset"))"></SfButton>
 		</div>
 	</div>
 </div>

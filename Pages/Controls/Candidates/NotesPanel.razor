@@ -32,8 +32,8 @@
 							@{
 								if (bCon is CandidateNotes {UpdatedBy: "JOLLY" } _con)
 								{
-									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditNotesDialog(_con.ID)" />
-									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteNotesMethod(_con.ID)" />
+									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditNotesDialog(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
+									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteNotesMethod(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
 								}
 							}
 						</Template>

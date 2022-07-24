@@ -8,7 +8,7 @@
 // File Name:           SkillPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-05-2022 19:09
+// Last Updated On:     07-24-2022 19:48
 // *****************************************/
 
 #endregion
@@ -32,6 +32,15 @@ public partial class SkillPanel
     }
 
     public SfGrid<CandidateSkills> GridSkill
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool IsRequisition
     {
         get;
         set;

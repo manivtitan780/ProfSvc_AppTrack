@@ -8,7 +8,7 @@
 // File Name:           NotesPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-07-2022 16:17
+// Last Updated On:     07-24-2022 19:49
 // *****************************************/
 
 #endregion
@@ -32,6 +32,15 @@ public partial class NotesPanel
     }
 
     public SfGrid<CandidateNotes> GridNotes
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool IsRequisition
     {
         get;
         set;

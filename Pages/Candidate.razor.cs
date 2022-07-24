@@ -15,6 +15,9 @@
 
 #region Using
 
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
+
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
@@ -704,6 +707,12 @@ public partial class Candidate
         set;
     }
 
+    public int RequisitionID
+    {
+        get;
+        set;
+    }
+
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
@@ -730,6 +739,11 @@ public partial class Candidate
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
+        Uri _uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        if (QueryHelpers.ParseQuery(_uri.Query).TryGetValue("requisition", out StringValues _tempRequisitionID))
+        {
+            RequisitionID = _tempRequisitionID.ToInt32();
+        }
         LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
         IMemoryCache _memoryCache = Start.MemCache;
         while (_states == null)
@@ -876,7 +890,7 @@ public partial class Candidate
     private async Task DataHandler(object obj)
     {
         DotNetObjectReference<Candidate> _dotNetReference = DotNetObjectReference.Create(this); // create dotnet ref
-        await _runtime.InvokeAsync<string>("detail", _dotNetReference);
+        await Runtime.InvokeAsync<string>("detail", _dotNetReference);
         //  send the dotnet ref to JS side
         FirstRender = false;
         //Count = Count;

@@ -8,7 +8,7 @@
 // File Name:           EducationPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-05-2022 19:08
+// Last Updated On:     07-24-2022 19:49
 // *****************************************/
 
 #endregion
@@ -32,6 +32,15 @@ public partial class EducationPanel
     }
 
     public SfGrid<CandidateEducation> GridEducation
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool IsRequisition
     {
         get;
         set;
