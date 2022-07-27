@@ -2,7 +2,7 @@
 	<div>
 		<div>
 			<SfGrid AllowPaging="false" DataSource="ModelActivityObject" EnableHeaderFocus="true" EnableHover="true" Height="245px" ID="gridActivity" @ref="GridActivity" RowHeight="@RowHeight"
-					SelectedRowIndex="0" TValue="CandidateActivity" Width="99%">
+					SelectedRowIndex="0" TValue="CandidateActivity" Width="99%" EnableStickyHeader="true">
 				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
 				<GridEvents RowSelected="RowSelected" TValue="CandidateActivity" />
 				<GridColumns>

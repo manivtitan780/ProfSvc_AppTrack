@@ -37,7 +37,7 @@
 			</div>
 		</div>
 	</div>
-	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%" EnableStickyHeader="true">
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
 		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Candidates" />@* *@

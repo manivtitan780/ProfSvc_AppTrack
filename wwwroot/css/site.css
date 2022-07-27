@@ -1301,3 +1301,7 @@ div[id^="e-item-tabCandidates_"] {
     padding-bottom: 5px;
     margin-bottom: 22px;
 }
+
+col.e-detail-intent {
+    width: 30px !important;
+}
