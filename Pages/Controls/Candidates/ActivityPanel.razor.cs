@@ -64,6 +64,13 @@ public partial class ActivityPanel
         set;
     }
 
+    [Parameter]
+    public bool IsRequisition
+    {
+        get;
+        set;
+    }
+
     private async Task EditActivityDialog(int id)
     {
         double _index = await GridActivity.GetRowIndexByPrimaryKeyAsync(id);

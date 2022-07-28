@@ -37,7 +37,7 @@
 			</div>
 		</div>
 	</div>
-	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHeaderFocus="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%" EnableStickyHeader="true">
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
 		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Candidates" />@* *@
@@ -58,16 +58,7 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%">
-				@*<Template Context="aCon">
-					@{
-						if (aCon is Candidates _con)
-						{
-							@_con.Phone
-						}
-					}
-				</Template>*@
-			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%" />
 			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Email)" HeaderText="Email" Width="19%">
 				<Template Context="aCon">
 					@{
@@ -78,31 +69,23 @@
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%">
-				@*<Template Context="aCon">
-					@{
-						if (aCon is Candidates _con)
-						{
-							@_con.Location
-						}
-					}
-				</Template>*@
-			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%">
-			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%"></GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%" />
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%" />
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%" />
 		</GridColumns>
 		<GridTemplates Context="context">
 			<DetailTemplate>
-				@{
-					//Candidates _candidates = context! as Candidates;
-				}
 				@* Add Buttons Start *@
-				<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)" style="@("display:" + (_selectedTab == 2 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)" style="@("display:" + (_selectedTab == 3 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)" style="@("display:" + (_selectedTab == 4 ? "unset" : "none"))"></SfButton>
-				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 6 ? "unset" : "none"))"></SfButton>
+				<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)"
+						  style="@("display:" + (_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none"))" />
+				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
+						  style="@("display:" + (_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none"))" />
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+						  style="@("display:" + (_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none"))" />
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
+						  style="@("display:" + (_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none"))" />
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
+						  style="@("display:" + (_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none"))" />
 				@* Add Buttons End *@
 				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
@@ -117,8 +100,8 @@
 							</ChildContent>
 							<ContentTemplate>
 								<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
-												GetRatingNote="RatingNote" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication" SetEligibility="CandidateEligibility"
-												SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" IsRequisition="@(RequisitionID > 0)" />
+												GetRatingNote="RatingNote" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication"
+												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -126,7 +109,8 @@
 								<TabHeader Text="Skills" />
 							</ChildContent>
 							<ContentTemplate>
-								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
+								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
+											RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -134,7 +118,8 @@
 								<TabHeader Text="Education" />
 							</ChildContent>
 							<ContentTemplate>
-								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" ModelObject="@_candidateEducationObject" @ref="EducationPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
+								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateEducationObject" @ref="EducationPanel"
+												RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -142,7 +127,8 @@
 								<TabHeader Text="Experience" />
 							</ChildContent>
 							<ContentTemplate>
-								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
+								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel"
+												 RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -150,7 +136,7 @@
 								<TabHeader Text="Notes" />
 							</ChildContent>
 							<ContentTemplate>
-								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" IsRequisition="@(RequisitionID > 0)" />
+								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" IsRequisition="@(RequisitionID > 0)" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
@@ -178,7 +164,8 @@
 								<TabHeader Text="Candidate Activity" />
 							</ChildContent>
 							<ContentTemplate>
-								<ActivityPanel EditActivity="EditActivity" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight" UndoCandidateActivity="UndoActivity" />
+								<ActivityPanel EditActivity="EditActivity" IsRequisition="@(RequisitionID > 0)" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight"
+											   UndoCandidateActivity="UndoActivity" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
@@ -205,11 +192,13 @@
 
 	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
 
-	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="true" />
+	<EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
 
-	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
+	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
+					   @ref="DialogDocument" Save="SaveDocument" />
 
-	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate" StateDropDown="_statesCopy"/>
+	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
+							 StateDropDown="_statesCopy" />
 
 	<div class="divGridFooter">
 		<div style="display: flex">

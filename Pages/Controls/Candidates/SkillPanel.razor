@@ -25,10 +25,10 @@
                     <GridColumn Width="10%">
                         <Template Context="bCon">
                             @{
-                                if (bCon is CandidateSkills {UpdatedBy: "JOLLY" } _con) 
+                                if (bCon is CandidateSkills {UpdatedBy: "JOLLY" } _con && !IsRequisition) 
                                 {
-	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))"/>
-	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteSkillMethod(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))"/>
+	                                <SfButton Content="" IconCss="editIconInner" @onclick="() => EditSkillDialog(_con.ID)" />
+	                                <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteSkillMethod(_con.ID)" />
                                 }
                             }
                         </Template>

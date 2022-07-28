@@ -1,10 +1,10 @@
 ﻿<div class="notesContainerBox">
 	<div>
 		<div>
-			<SfGrid AllowPaging="false" DataSource="@ModelNotesObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridNotes" @ref="GridNotes" RowHeight="@RowHeight" 
+			<SfGrid AllowPaging="false" DataSource="@ModelNotesObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridNotes" @ref="GridNotes" RowHeight="@RowHeight"
 					SelectedRowIndex="0" TValue="CandidateNotes" Width="99%">
-				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
-                <GridEvents RowSelected="RowSelected" TValue="CandidateNotes" />
+				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single" />
+				<GridEvents RowSelected="RowSelected" TValue="CandidateNotes" />
 				<GridColumns>
 					<GridColumn Field="@nameof(CandidateNotes.Notes)" HeaderText="Notes" Width="75%">
 						<Template Context="aCon">
@@ -16,7 +16,7 @@
 							}
 						</Template>
 					</GridColumn>
-					<GridColumn Field="@nameof(CandidateNotes.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"/>
+					<GridColumn Field="@nameof(CandidateNotes.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
 					<GridColumn HeaderText="Updated" Width="15%">
 						<Template Context="aCon">
 							@{
@@ -30,10 +30,10 @@
 					<GridColumn Width="10%">
 						<Template Context="bCon">
 							@{
-								if (bCon is CandidateNotes {UpdatedBy: "JOLLY" } _con)
+								if (bCon is CandidateNotes {UpdatedBy: "JOLLY" } _con && !IsRequisition)
 								{
-									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditNotesDialog(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
-									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteNotesMethod(_con.ID)" style="@("display:" + (IsRequisition ? "none" : "unset"))" />
+									<SfButton Content="" IconCss="editIconInner" @onclick="() => EditNotesDialog(_con.ID)" />
+									<SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteNotesMethod(_con.ID)" />
 								}
 							}
 						</Template>

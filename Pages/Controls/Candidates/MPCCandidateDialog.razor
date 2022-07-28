@@ -1,4 +1,4 @@
-﻿<SfDialog Header="Edit M.P.C." Height="600px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Width="600px" Visible="false">
+﻿<SfDialog Header="Edit M.P.C." Height="600px" IsModal="true" MinHeight="300px" @ref="Dialog" Target="#divTarget" Visible="false" Width="600px">
 	<ChildContent>
 		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
 		<DialogPositionData X="right" Y="center" />
@@ -23,8 +23,8 @@
 							<SwitchControl @bind-BindValue="@ModelObject.MPC" ID="checkedEnabled" OffLabel="NO" OnLabel="YES" Placeholder="M.P.C.?" />
 						</div>
 					</div>
-					<TextBoxControl @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments"
-								  MaxLength="500" MinLength="1" Multiline="true" Placeholder="Comments" ValidationMessage="@(() => ModelObject.MPCComments)" />
+					<TextBoxControl @bind-Value="@ModelObject.MPCComments" @bind-Value:event="ValueChanged" CreateDivTag="true" Height="100px" ID="textComments" MaxLength="500" MinLength="1" Multiline="true" 
+									Placeholder="Comments" ValidationMessage="@(() => ModelObject.MPCComments)" />
 				</div>
 			</div>
 			<DialogFooter CancelMethod="CancelMPCDialog" />
