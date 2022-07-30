@@ -88,10 +88,10 @@
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
         <PackageReference Include="RestSharp" Version="107.1.2" />
-        <PackageReference Include="Radzen.Blazor" Version="3.19.10" />
+        <PackageReference Include="Radzen.Blazor" Version="3.19.11" />
         <PackageReference Include="RestSharp" Version="107.1.1" />
         <PackageReference Include="RestSharp" Version="108.0.1" />
-        <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.39" />
+        <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.40" />
     </ItemGroup>
 
     <ItemGroup>
