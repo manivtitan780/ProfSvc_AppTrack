@@ -29,14 +29,14 @@ public static partial class Extensions
     /// </summary>
     /// <param name="i"> Integer whose property has to be checked. </param>
     /// <returns> Integer Value or DBNull.Value </returns>
-    public static object DbNull(this double? i) => i == null || i == 0 ? DBNull.Value : i;
+    public static object DBNull(this double? i) => i == null || i == 0 ? System.DBNull.Value : i;
 
     /// <summary>
     ///     Set Value to DBNull.Value if Integer Value is 0.
     /// </summary>
     /// <param name="i"> Integer whose property has to be checked. </param>
     /// <returns> Integer Value or DBNull.Value </returns>
-    public static object DbNull(this int i) => i == 0 ? DBNull.Value : i;
+    public static object DBNull(this int i) => i == 0 ? System.DBNull.Value : i;
 
     /// <summary>
     ///     Set Value to DBNull.Value if String Value is Empty or Optionally "0".
@@ -44,8 +44,8 @@ public static partial class Extensions
     /// <param name="s"> String whose property has to be checked. </param>
     /// <param name="isZero"> If true additionally checks if String Value equals "0". </param>
     /// <returns> String Value or DBNull.Value </returns>
-    public static object DbNull(this string s, bool isZero = false) => isZero ? string.IsNullOrWhiteSpace(s) || s.Trim() == "0" ? DBNull.Value : s.Trim() :
-                                                                       string.IsNullOrWhiteSpace(s) ? DBNull.Value : s.Trim();
+    public static object DBNull(this string s, bool isZero = false) => isZero ? string.IsNullOrWhiteSpace(s) || s.Trim() == "0" ? System.DBNull.Value : s.Trim() :
+                                                                       string.IsNullOrWhiteSpace(s) ? System.DBNull.Value : s.Trim();
 
     /// <summary>
     ///     Converts a HTML-encoded string to a normal string.

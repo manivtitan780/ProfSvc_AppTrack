@@ -2005,4 +2005,9 @@ public partial class Candidate
 
         #endregion
     }
+
+    private async Task SubmitSelectedCandidate(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+    }
 }
