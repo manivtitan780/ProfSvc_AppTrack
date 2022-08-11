@@ -1,0 +1,15 @@
+﻿<SfDialog Header="Submit Candidate" Height="525px" IsModal="true" MinHeight="400px" Target="#divTarget" Width="480px" Visible="false" @ref="Dialog">
+	<ChildContent>
+		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
+		<DialogPositionData X="right" Y="center" />
+		<DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
+		<EditForm Model="ModelObject" OnValidSubmit="SubmitCandidateToRequisitionDialog">
+			<DataAnnotationsValidator />
+			<div class="divContainerTable">
+				<TextBoxControl @bind-Value="@(ModelObject.Text)" @bind-Value:event="ValueChanged" ID="textNotes" MaxLength="2000" MinLength="1" Multiline="false" Placeholder="Submission Notes"
+								ValidationMessage="@(() => ModelObject.Text)" />
+			</div>
+			<DialogFooter CancelMethod="CancelEducationDialog"></DialogFooter>
+		</EditForm>
+	</ChildContent>
+</SfDialog>
