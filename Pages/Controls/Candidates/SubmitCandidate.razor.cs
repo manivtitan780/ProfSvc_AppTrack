@@ -8,17 +8,28 @@
 // File Name:           SubmitCandidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          08-10-2022 21:20
-// Last Updated On:     08-10-2022 21:20
+// Last Updated On:     08-11-2022 15:27
 // *****************************************/
 
 #endregion
-
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace ProfSvc_AppTrack.Pages.Controls.Candidates;
 
 public partial class SubmitCandidate
 {
+    [Parameter]
+    public EventCallback CancelSubmit
+    {
+        get;
+        set;
+    }
+
+    public SfDialog Dialog
+    {
+        get;
+        set;
+    }
+
     [Parameter]
     public SubmitCandidateRequisition ModelObject
     {
@@ -39,10 +50,12 @@ public partial class SubmitCandidate
         set;
     }
 
-    public SfDialog Dialog
+    private async Task CancelDialog(MouseEventArgs args)
     {
-        get;
-        set;
+        await Task.Delay(1);
+        await CancelSubmit.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private async Task SubmitCandidateToRequisitionDialog(EditContext editContext)

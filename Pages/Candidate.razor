@@ -28,12 +28,12 @@
 					</SfDropDownList>
 				</div>
 			</div>
-			<div class="divRightControls" style="width: 720px">
+			<div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
 				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate" style="@("display:" + (RequisitionID > 0 ? "none" : "unset"))">Add Candidate</SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="SubmitSelectedCandidate" style="@("display:" + (RequisitionID > 0 ? "unset" : "none"))">Submit Selected Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate" style="@($"display:{(RequisitionID > 0 ? "none" : "unset")}")">Add Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="SubmitSelectedCandidate" style="@($"display:{(RequisitionID > 0 ? "unset" : "none")}")">Submit Selected Candidate</SfButton>
 				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
-				<AutoCompleteButton EnablePersistence="false" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+				<AutoCompleteButton EnablePersistence="true" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
 									TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
 			</div>
 		</div>
@@ -78,15 +78,15 @@
 			<DetailTemplate>
 				@* Add Buttons Start *@
 				<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)"
-						  style="@("display:" + (_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none"))" />
+						  style="@($"display:{(_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none")}")" />
 				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
-						  style="@("display:" + (_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none"))" />
+						  style="@($"display:{(_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none")}")" />
 				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
-						  style="@("display:" + (_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none"))" />
+						  style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
 				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
-						  style="@("display:" + (_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none"))" />
+						  style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
 				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
-						  style="@("display:" + (_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none"))" />
+						  style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
 				@* Add Buttons End *@
 				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
@@ -200,6 +200,8 @@
 
 	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
 							 StateDropDown="_statesCopy" />
+	
+	<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>
 
 	<div class="divGridFooter">
 		<div style="display: flex">

@@ -8,7 +8,7 @@
 // File Name:           AutoCompleteButton.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     03-14-2022 21:07
+// Last Updated On:     08-12-2022 20:34
 // *****************************************/
 
 #endregion
@@ -34,6 +34,8 @@ public partial class AutoCompleteButton
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public bool EnablePersistence
     {
@@ -41,8 +43,19 @@ public partial class AutoCompleteButton
         set;
     } = true;
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public string ID
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// </summary>
+    [Parameter]
+    public bool ModelValue
     {
         get;
         set;
@@ -102,6 +115,8 @@ public partial class AutoCompleteButton
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public EventCallback<string> ValueChanged
     {
@@ -109,6 +124,8 @@ public partial class AutoCompleteButton
         set;
     }
 
+    /// <summary>
+    /// </summary>
     [Parameter]
     public Expression<Func<string>> ValueExpression
     {

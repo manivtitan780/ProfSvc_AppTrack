@@ -8,7 +8,7 @@
 // File Name:           Candidate.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     03-12-2022 16:23
+// Last Updated On:     08-12-2022 21:17
 // *****************************************/
 
 #endregion
@@ -179,6 +179,12 @@ public partial class Candidate
         set;
     }
 
+    public SubmitCandidate DialogSubmitCandidate
+    {
+        get;
+        set;
+    }
+
     public static int EndRecord
     {
         get;
@@ -196,11 +202,23 @@ public partial class Candidate
         set;
     }
 
+    public int RequisitionID
+    {
+        get;
+        set;
+    }
+
     public static int StartRecord
     {
         get;
         set;
     }
+
+    public SubmitCandidateRequisition SubmitCandidateModel
+    {
+        get;
+        set;
+    } = new();
 
     private ActivityPanel ActivityPanel
     {
@@ -707,12 +725,6 @@ public partial class Candidate
         set;
     }
 
-    public int RequisitionID
-    {
-        get;
-        set;
-    }
-
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
@@ -744,6 +756,7 @@ public partial class Candidate
         {
             RequisitionID = _tempRequisitionID.ToInt32();
         }
+
         LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
         IMemoryCache _memoryCache = Start.MemCache;
         while (_states == null)
@@ -1241,15 +1254,12 @@ public partial class Candidate
 
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> candidate)
     {
-        if (!_valueChanged)
-        {
-            return;
-        }
-
-        //Name = candidate.Value;
-        SearchModel.Page = 1;
+        SearchModel.Name = candidate.Value ?? "";
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        candidate.IsInteracted = true;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //await new StorageCompression(SessionStorage).SetCandidateGrid();
+        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         await Grid.Refresh();
     }
 
@@ -1432,7 +1442,8 @@ public partial class Candidate
                                        };
                 //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
                 _request.AddParameter("fileData",
-                                      $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}", ParameterType.RequestBody);
+                                      $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}",
+                                      ParameterType.RequestBody);
                 _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 
                 await _client.PostAsync(_request);
@@ -1936,6 +1947,46 @@ public partial class Candidate
         Address = _generateAddress.ToMarkupString();
     }
 
+    private async Task SubmitCandidateToRequisition(EditContext arg)
+    {
+        await Task.Delay(1);
+
+        try
+        {
+            RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Candidates/SubmitCandidateRequisition", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("requisitionID", RequisitionID);
+            _request.AddQueryParameter("candidateID", _target.ID);
+            _request.AddQueryParameter("notes", SubmitCandidateModel.Text);
+            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            if (_response == null)
+            {
+                return;
+            }
+
+            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
+    }
+
+    private async Task SubmitSelectedCandidate(MouseEventArgs arg)
+    {
+        await Task.Delay(1);
+
+        SubmitCandidateModel.ClearData();
+        await DialogSubmitCandidate.Dialog.ShowAsync();
+    }
+
     private async Task TabSelected(SelectEventArgs args)
     {
         await Task.Delay(1);
@@ -2004,10 +2055,5 @@ public partial class Candidate
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
 
         #endregion
-    }
-
-    private async Task SubmitSelectedCandidate(MouseEventArgs arg)
-    {
-        await Task.Delay(1);
     }
 }

@@ -12,8 +12,8 @@
 						<label class="labelStatus">Show:</label>
 					</div>
 					<div class="divSwitchFlexControl divCandidateShow" style="display: flex; width: 400px">
-						<SfRadioButton @bind-Checked="@ModelSearchObject.MyCandidates" Label="All Candidates" Name="showCandidates" Value="false"></SfRadioButton>
-						<SfRadioButton @bind-Checked="@ModelSearchObject.MyCandidates" Label="My Candidates" Name="showCandidates" Value="true"></SfRadioButton>
+						<SfRadioButton @bind-Checked="@ModelSearchObject.AllCandidates" Label="All Candidates" Name="showCandidates" Value="true"></SfRadioButton>
+						<SfRadioButton @bind-Checked="@ModelSearchObject.AllCandidates" Label="My Candidates" Name="showCandidates" Value="false"></SfRadioButton>
 					</div>
 				</div>
 				<SwitchControl @bind-BindValue="@(ModelSearchObject.IncludeAdmin)" ID="checkedIncludeAdmin" OffLabel="NO" OnLabel="YES" Placeholder="Include Admin Candidates?" />
@@ -28,8 +28,8 @@
 							<label class="labelStatus" for="autoCityZip">City/Zip:</label>
 						</div>
 						<div class="divSwitchFlexControl divCandidateShow" style="display: flex;">
-							<AutoCompleteButton @bind-Value="ModelSearchObject.CityName" @bind-Value:event="ValueChanged" EnablePersistence="false" ID="autoCityZip" PlaceholderText="Select a City or Zip" 
-												@ref="AutoCompleteControl" Ref="AutoCompleteCityZip" TypeInstance="@typeof(CandidateCityZipAdaptor)" />
+                            <AutoCompleteButton @bind-Value="@(ModelSearchObject.CityName)" @bind-Value:event="ValueChanged" EnablePersistence="false" ID="autoCityZip" PlaceholderText="Select a City or Zip" @ref="AutoCompleteControl" Ref="AutoCompleteCityZip"
+                                                TypeInstance="@typeof(CandidateCityZipAdaptor)" ModelValue="false" />
 						</div>
 					</div>
 					<div>
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</div>
-				<div id="divState" style="display: @(ModelSearchObject.CityZip ? "none" : "initial")">
+				<div id="divState" style="display: @(ModelSearchObject.CityZip ? "none" : "initial"); height: unset;">
 					<MultiSelectControl @bind-Value="@(ModelSearchObject.StateID)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="StateDropDown" FilterBarPlaceholder="Search State&hellip;" 
 									  ID="multiState" KeyField="Key" Placeholder="Select State(s)" TItem="IntValues" TValue="string" ValueField="Value" />
 					@*<DropDownControl @bind-Value="@ModelSearchObject.StateID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@StateDropDown" ID="dropState" Placeholder="State" TextField="Value"

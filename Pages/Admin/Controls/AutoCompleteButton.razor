@@ -1,7 +1,19 @@
-<SfAutoComplete AllowCustom="true" CssClass="leftMargin" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true" TItem="KeyValues" 
-				TValue="string" Width="200px" Value="@Value" ValueChanged="ValueChanged" ValueExpression="@ValueExpression">
-	<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
-	<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
-	<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>
-</SfAutoComplete>
+@if (!ModelValue)
+{
+	<SfAutoComplete AllowCustom="true" @bind-Value="@Value" CssClass="leftMargin" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true"
+					TItem="KeyValues" TValue="string" Width="200px">
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
+		<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
+		<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>
+	</SfAutoComplete>
+}
+else
+{
+	<SfAutoComplete AllowCustom="true" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="ValueExpression" CssClass="leftMargin" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" 
+					MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true" TItem="KeyValues" TValue="string" Width="200px">
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
+		<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
+		<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>
+	</SfAutoComplete>
+}
 @*<SfButton CssClass="buttonSearch" IconCss="searchIcon" IconPosition="IconPosition.Left" IsPrimary="true" @onclick="ButtonClick"></SfButton>*@
