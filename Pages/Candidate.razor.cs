@@ -20,7 +20,7 @@ using Microsoft.Extensions.Primitives;
 
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
-using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
+//using FileInfo = Syncfusion.Blazor.Inputs.FileInfo;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
@@ -33,9 +33,9 @@ public partial class Candidate
 
     //private static bool _getStates = true;
 
-    private static bool _valueChanged = true;
+    //private static bool _valueChanged = true;
 
-    private readonly Candidates _candidateContext = new();
+    //private readonly Candidates _candidateContext = new();
 
     private readonly List<IntValues> _eligibilityCopy = new();
     private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
@@ -152,7 +152,7 @@ public partial class Candidate
     //	new KeyValues("VND", "Vendor")
     //};
 
-    private EditContext _statusEditContext;
+    //private EditContext _statusEditContext;
 
     private Candidates _target;
 
@@ -173,13 +173,13 @@ public partial class Candidate
         set;
     }
 
-    public AdvancedCandidateSearch DialogSearch
+    private AdvancedCandidateSearch DialogSearch
     {
         get;
         set;
     }
 
-    public SubmitCandidate DialogSubmitCandidate
+    private SubmitCandidate DialogSubmitCandidate
     {
         get;
         set;
@@ -191,7 +191,7 @@ public partial class Candidate
         set;
     }
 
-    public List<KeyValues> NextSteps
+    private List<KeyValues> NextSteps
     {
         get;
     } = new();
@@ -202,7 +202,7 @@ public partial class Candidate
         set;
     }
 
-    public int RequisitionID
+    private int RequisitionID
     {
         get;
         set;
@@ -214,7 +214,7 @@ public partial class Candidate
         set;
     }
 
-    public SubmitCandidateRequisition SubmitCandidateModel
+    private SubmitCandidateRequisition SubmitCandidateModel
     {
         get;
         set;
@@ -285,11 +285,13 @@ public partial class Candidate
     //                                                new ToolbarItemModel() { Command = ToolbarCommand.Redo }*/
     //                                            };
 
+/*
     private static CandidateGrid CandidateGridPersistValues
     {
         get;
         set;
     } = new(1, 25, "");
+*/
 
     private MarkupString CandidateJobOptions
     {
@@ -303,7 +305,7 @@ public partial class Candidate
         set;
     }
 
-    private int Code
+    /*private int Code
     {
         get;
         set;
@@ -313,7 +315,7 @@ public partial class Candidate
     {
         get;
         set;
-    } = 1;
+    } = 1;*/
 
     private EditActivityDialog DialogActivity
     {
@@ -400,11 +402,11 @@ public partial class Candidate
         set;
     }
 
-    private FileInfo FileInformation
-    {
-        get;
-        set;
-    }
+    //private FileInfo FileInformation
+    //{
+    //    get;
+    //    set;
+    //}
 
     private string FileName
     {
@@ -436,47 +438,47 @@ public partial class Candidate
         set;
     }
 
-    private SfGrid<CandidateActivity> GridActivity
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateActivity> GridActivity
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateEducation> GridEducation
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateEducation> GridEducation
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateExperience> GridExperience
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateExperience> GridExperience
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateMPC> GridMPC
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateMPC> GridMPC
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateNotes> GridNotes
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateNotes> GridNotes
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateRating> GridRating
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateRating> GridRating
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private SfGrid<CandidateSkills> GridSkill
-    {
-        get;
-        set;
-    }
+    //private SfGrid<CandidateSkills> GridSkill
+    //{
+    //    get;
+    //    set;
+    //}
 
     /*private int Identifier
 	{
@@ -484,17 +486,17 @@ public partial class Candidate
 		set;
 	}*/
 
-    private bool IsAdd
-    {
-        get;
-        set;
-    }
+    //private bool IsAdd
+    //{
+    //    get;
+    //    set;
+    //}
 
-    private static int ItemCount
-    {
-        get;
-        set;
-    } = 25;
+    //private static int ItemCount
+    //{
+    //    get;
+    //    set;
+    //} = 25;
 
     [Inject]
     private IJSRuntime JsRuntime
@@ -653,11 +655,11 @@ public partial class Candidate
         set;
     } = new();
 
-    private bool SpinnerVisible
-    {
-        get;
-        set;
-    }
+    //private bool SpinnerVisible
+    //{
+    //    get;
+    //    set;
+    //}
 
     private static string Title
     {
@@ -665,11 +667,13 @@ public partial class Candidate
         set;
     } = "Edit";
 
+/*
     private bool VisibleActivityDialog
     {
         get;
         set;
     }
+*/
 
     private bool VisibleCandidateInfo
     {
@@ -677,7 +681,7 @@ public partial class Candidate
         set;
     }
 
-    private bool VisibleEducationDialog
+    /*private bool VisibleEducationDialog
     {
         get;
         set;
@@ -687,7 +691,7 @@ public partial class Candidate
     {
         get;
         set;
-    }
+    }*/
 
     /*private bool VisibleMPCCandidate
     {
@@ -701,7 +705,7 @@ public partial class Candidate
         set;
     }
 
-    private bool VisibleNotesDialog
+    /*private bool VisibleNotesDialog
     {
         get;
         set;
@@ -717,7 +721,7 @@ public partial class Candidate
     {
         get;
         set;
-    }
+    }*/
 
     private bool VisibleSkillDialog
     {
@@ -733,15 +737,15 @@ public partial class Candidate
         await Task.Delay(1);
         if (!firstRender)
         {
-            _valueChanged = true;
+            //_valueChanged = true;
 
             return;
         }
 
-        if (_candidateContext != null)
-        {
-            _statusEditContext = new(_candidateContext);
-        }
+        //if (_candidateContext != null)
+        //{
+            //_statusEditContext = new(_candidateContext);
+        //}
 
         _currentPage = SearchModel.Page;
         PageCount = _currentPage + 1;
