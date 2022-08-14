@@ -158,6 +158,7 @@
         </GridTemplates>
     </SfGrid>
 	@*OnFileUpload="OnFileUpload" *@
+	<SfSpinner CssClass="spinnerHeight" @ref="@SpinnerTop" Type="SpinnerType.Fabric" ZIndex="12000" />
 	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
 							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" />
 	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />

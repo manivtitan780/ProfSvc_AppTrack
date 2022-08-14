@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     07-23-2022 20:50
+// Last Updated On:     08-13-2022 20:06
 // *****************************************/
 
 #endregion
@@ -56,11 +56,11 @@ public partial class Requisition
     private List<IntValues> _skills;
 
     private List<IntValues> _states;
+    private List<StatusCode> _statusCodes;
 
     private Requisitions _target;
 
     private List<Workflow> _workflows;
-    private List<StatusCode> _statusCodes;
 
     public static int Count
     {
@@ -246,6 +246,7 @@ public partial class Requisition
     private static RequisitionSearch SearchModel
     {
         get;
+        set;
     } = new();
 
     private CandidateActivity SelectedActivity
@@ -261,6 +262,12 @@ public partial class Requisition
     } = new();
 
     private SfSpinner Spinner
+    {
+        get;
+        set;
+    } = new();
+
+    private SfSpinner SpinnerTop
     {
         get;
         set;
@@ -282,6 +289,16 @@ public partial class Requisition
     {
         await Task.Delay(1);
         LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+ 
+         string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("RequisitionGrid");
+         if (!_cookyString.NullOrWhiteSpace())
+         {
+             SearchModel = JsonConvert.DeserializeObject<RequisitionSearch>(_cookyString);
+         }
+         else
+         {
+             await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+         }
         IMemoryCache _memoryCache = Start.MemCache;
         while (_states == null)
         {
@@ -337,24 +354,16 @@ public partial class Requisition
         }
 
         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
-         _memoryCache.TryGetValue("Workflow", out _workflows);
+        _memoryCache.TryGetValue("Workflow", out _workflows);
         /*_jobOptionsCopy.Clear();
          _jobOptionsCopy.Add(new("%", "All"));
          _jobOptionsCopy.AddRange(_jobOptions); 
  
          _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
          _memoryCache.TryGetValue("Communication", out _communication);
-         _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
- 
-         string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
-         if (!_cookyString.NullOrWhiteSpace())
-         {
-             SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
-         }
-         else
-         {
-             await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-         }*/
+         _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);*/
+
+         await Grid.Refresh();
 
         await base.OnInitializedAsync();
     }
@@ -386,7 +395,12 @@ public partial class Requisition
 
     private async Task AllAlphabet(MouseEventArgs arg)
     {
-        await Task.Delay(1);
+        SearchModel.Title = "";
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        await Grid.Refresh();
     }
 
     private void BeforeDocument(BeforeUploadEventArgs arg)
@@ -408,7 +422,14 @@ public partial class Requisition
 
     private async Task ClearFilter(MouseEventArgs arg)
     {
-        await Task.Delay(1);
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        int _currentPageItemCount = SearchModel.ItemCount;
+        SearchModel.ClearData();
+        SearchModel.ItemCount = _currentPageItemCount;
+        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        await Grid.Refresh();
     }
 
     private async Task DataHandler(object obj)
@@ -418,7 +439,10 @@ public partial class Requisition
         //  send the dotnet ref to JS side
         FirstRender = false;
         //Count = Count;
-        await Grid.SelectRowAsync(0);
+        if (Grid.TotalItemCount > 0)
+        {
+            await Grid.SelectRowAsync(0);
+        }
     }
 
     private async Task DeleteDocument(int args)
@@ -500,7 +524,7 @@ public partial class Requisition
             SetSkills();
         }
 
-        _selectedTab = 0;
+        _selectedTab = _candidateActivityObject.Count > 0 ? 2 : 0;
 
         await Task.Delay(1);
         await Spinner.HideAsync();
@@ -552,30 +576,46 @@ public partial class Requisition
     private async Task EditRequisition(bool isAdd)
     {
         await Task.Delay(1);
-        await Spinner.ShowAsync();
+        if (isAdd)
+        {
+            await SpinnerTop.ShowAsync();
+        }
+        else
+        {
+            await Spinner.ShowAsync();
+        }
+
         if (isAdd)
         {
             Title = "Add";
-            //IsAdd = true;
             _requisitionDetailsObjectClone.ClearData();
         }
         else
         {
-            //double _index = await Grid.GetRowIndexByPrimaryKeyAsync(_target.ID);
-            //await Grid.SelectRowAsync(_index);
             Title = "Edit";
-            //IsAdd = false;
             _requisitionDetailsObjectClone = _requisitionDetailsObject.Copy();
         }
 
         StateHasChanged();
         await DialogEditRequisition.Dialog.ShowAsync();
-        await Spinner.HideAsync();
+        if (isAdd)
+        {
+            await SpinnerTop.HideAsync();
+        }
+        else
+        {
+            await Spinner.HideAsync();
+        }
     }
 
-    private async Task FilterGrid(ChangeEventArgs<string, KeyValues> arg)
+    private async Task FilterGrid(ChangeEventArgs<string, KeyValues> requisition)
     {
-        await Task.Delay(1);
+        SearchModel.Title = requisition.Value ?? "";
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        await Grid.Refresh();
     }
 
     private async Task FirstClick()
@@ -817,8 +857,14 @@ public partial class Requisition
         StateHasChanged();
     }
 
-    private void SetAlphabet(string alphabet)
+    private async void SetAlphabet(string alphabet)
     {
+        SearchModel.Title = alphabet;
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        await Grid.Refresh();
     }
 
     private void SetSkills()

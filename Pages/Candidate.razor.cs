@@ -843,7 +843,7 @@ public partial class Candidate
 
     private async Task AllAlphabet()
     {
-        Name = "";
+        SearchModel.Name = "";
         _currentPage = 1;
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
@@ -911,7 +911,10 @@ public partial class Candidate
         //  send the dotnet ref to JS side
         FirstRender = false;
         //Count = Count;
-        await Grid.SelectRowAsync(0);
+        if (Grid.TotalItemCount > 0)
+        {
+            await Grid.SelectRowAsync(0);
+        }
     }
 
     private async Task DeleteDocument(int arg)
