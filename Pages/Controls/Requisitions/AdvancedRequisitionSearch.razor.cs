@@ -133,13 +133,13 @@ public partial class AdvancedRequisitionSearch
         get;
     } = new();
 
-    private DateControl CreatedMin
+    private DateControl CreatedMax
     {
         get;
         set;
     }
 
-    private DateControl DueMin
+    private DateControl DueMax
     {
         get;
         set;
@@ -165,10 +165,14 @@ public partial class AdvancedRequisitionSearch
     private async Task CreatedOnSelect(ChangedEventArgs<DateTime> args)
     {
         await Task.Delay(1);
-        CreatedMin.Min = args.Value;
+        CreatedMax.Min = args.Value;
         if (ModelSearchObject.CreatedOnEnd < args.Value)
         {
             ModelSearchObject.CreatedOnEnd = args.Value;
+        }
+        if (ModelSearchObject.CreatedOnEnd > CreatedMax.Max)
+        {
+            ModelSearchObject.CreatedOnEnd = CreatedMax.Max;
         }
     }
 
@@ -194,10 +198,14 @@ public partial class AdvancedRequisitionSearch
     private async Task DueOnSelect(ChangedEventArgs<DateTime> args)
     {
         await Task.Delay(1);
-        DueMin.Min = args.Value;
+        DueMax.Min = args.Value;
         if (ModelSearchObject.DueEnd < args.Value)
         {
             ModelSearchObject.DueEnd = args.Value;
+        }
+        if (ModelSearchObject.DueEnd > DueMax.Max)
+        {
+            ModelSearchObject.DueEnd = DueMax.Max;
         }
     }
 }

@@ -36,7 +36,7 @@
 						</div>
 						<div class="divFlexSmall" style="margin-left: 3%; width: 45%;">
 							<DateControl @bind-Value="@ModelSearchObject.CreatedOnEnd" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateCreatedEnd" Max="@(DateTime.Today.AddMonths(6))"
-										 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Created Date End" Width="220px" @ref="CreatedMin" />
+										 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Created Date End" Width="220px" @ref="CreatedMax" />
 						</div>
 					</div>
                 </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="divFlexSmall" style="margin-left: 3%; width: 45%;">
                             <DateControl @bind-Value="@ModelSearchObject.DueEnd" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateDueEnd" Max="@(DateTime.Today.AddMonths(6))"
-                                         Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Due Date End" Width="220px" @ref="DueMin" />
+                                         Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Due Date End" Width="220px" @ref="DueMax" />
                         </div>
                     </div>
                 </div>

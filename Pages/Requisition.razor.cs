@@ -285,6 +285,12 @@ public partial class Requisition
         set;
     }
 
+    private AdvancedRequisitionSearch DialogSearch
+    {
+        get;
+        set;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
@@ -385,6 +391,7 @@ public partial class Requisition
     private async Task AdvancedSearch(MouseEventArgs arg)
     {
         await Task.Delay(1);
+        await DialogSearch.Dialog.ShowAsync();
     }
 
     private void AfterDocument(ActionCompleteEventArgs arg)

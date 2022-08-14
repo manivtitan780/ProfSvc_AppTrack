@@ -157,14 +157,19 @@
             </DetailTemplate>
         </GridTemplates>
     </SfGrid>
-	@*OnFileUpload="OnFileUpload" *@
+
 	<SfSpinner CssClass="spinnerHeight" @ref="@SpinnerTop" Type="SpinnerType.Fabric" ZIndex="12000" />
+
 	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
 							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" />
-	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
-	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="false" />
 
-    <div class="divGridFooter">
+	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
+
+	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="false" />
+    
+    <AdvancedRequisitionSearch ModelSearchObject="SearchModel" @ref="DialogSearch"></AdvancedRequisitionSearch>
+
+	<div class="divGridFooter">
         <div style="display: flex">
             <div style="flex: 1; padding-left: 15px; text-align: left;">
                 <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
