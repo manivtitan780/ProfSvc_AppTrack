@@ -1,7 +1,7 @@
 @if (!ModelValue)
 {
-	<SfAutoComplete AllowCustom="true" @bind-Value="@Value" CssClass="leftMargin" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true"
-					TItem="KeyValues" TValue="string" Width="200px">
+	<SfAutoComplete AllowCustom="true" @bind-Value="@Value" CssClass="@(SetLeft ? "leftMargin" : "")" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true"
+					TItem="KeyValues" TValue="string" Width="@Width">
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
 		<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
 		<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>
@@ -9,8 +9,8 @@
 }
 else
 {
-	<SfAutoComplete AllowCustom="true" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="ValueExpression" CssClass="leftMargin" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" 
-					MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true" TItem="KeyValues" TValue="string" Width="200px">
+	<SfAutoComplete AllowCustom="true" Value="@Value" ValueChanged="@ValueChanged" ValueExpression="ValueExpression" CssClass="@(SetLeft ? "leftMargin" : "")" EnablePersistence="@EnablePersistence" Highlight="true" ID="@ID" 
+					MinLength="3" Placeholder="@PlaceholderText" @ref="Acb" ShowClearButton="true" TItem="KeyValues" TValue="string" Width="@Width">
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@TypeInstance" Key="Key"></SfDataManager>
 		<AutoCompleteFieldSettings Text="Key" Value="Value"></AutoCompleteFieldSettings>
 		<AutoCompleteEvents TItem="KeyValues" TValue="string" ValueChange="ValueChange"></AutoCompleteEvents>

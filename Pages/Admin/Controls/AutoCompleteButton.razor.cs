@@ -132,4 +132,18 @@ public partial class AutoCompleteButton
         get;
         set;
     }
+
+    [Parameter]
+    public bool SetLeft
+    {
+        get;
+        set;
+    } = true;
+
+    [Parameter]
+    public string Width
+    {
+        get;
+        set;
+    } = "200px";
 }

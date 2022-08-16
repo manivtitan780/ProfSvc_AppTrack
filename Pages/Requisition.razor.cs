@@ -291,6 +291,9 @@ public partial class Requisition
         set;
     }
 
+    private readonly List<KeyValues> _statusSearch = new();
+    private List<KeyValues> _companies = new();
+
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
@@ -360,6 +363,14 @@ public partial class Requisition
         }
 
         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+        if (_statusCodes is {Count: > 0})
+        {
+            foreach (StatusCode _statusCode in _statusCodes.Where(statusCode => statusCode.AppliesToCode == "REQ"))
+            {
+                _statusSearch.Add(new(_statusCode.Status, _statusCode.Code));
+            }
+        }
+
         _memoryCache.TryGetValue("Workflow", out _workflows);
         /*_jobOptionsCopy.Clear();
          _jobOptionsCopy.Add(new("%", "All"));

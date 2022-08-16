@@ -8,7 +8,7 @@
 // File Name:           AdvancedRequisitionSearch.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          08-13-2022 21:06
-// Last Updated On:     08-14-2022 20:33
+// Last Updated On:     08-15-2022 18:52
 // *****************************************/
 
 #endregion
@@ -104,6 +104,18 @@ public partial class AdvancedRequisitionSearch
         set;
     }
 
+    private DateControl CreatedMax
+    {
+        get;
+        set;
+    }
+
+    private DateControl DueMax
+    {
+        get;
+        set;
+    }
+
     private List<IntValues> ProximityUnit
     {
         get;
@@ -133,18 +145,6 @@ public partial class AdvancedRequisitionSearch
         get;
     } = new();
 
-    private DateControl CreatedMax
-    {
-        get;
-        set;
-    }
-
-    private DateControl DueMax
-    {
-        get;
-        set;
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
@@ -166,14 +166,32 @@ public partial class AdvancedRequisitionSearch
     {
         await Task.Delay(1);
         CreatedMax.Min = args.Value;
-        if (ModelSearchObject.CreatedOnEnd < args.Value)
+        CreatedMax.Max = args.Value.AddMonths(6);
+        /*if (ModelSearchObject.CreatedOnEnd < args.Value)
         {
-            ModelSearchObject.CreatedOnEnd = args.Value;
+            args.Value = CreatedMax.Min;
         }
+
         if (ModelSearchObject.CreatedOnEnd > CreatedMax.Max)
         {
-            ModelSearchObject.CreatedOnEnd = CreatedMax.Max;
+            args.Value = CreatedMax.Max;
+        }*/
+    }
+
+    private async Task DueOnSelect(ChangedEventArgs<DateTime> args)
+    {
+        await Task.Delay(1);
+        DueMax.Min = args.Value;
+        DueMax.Max = args.Value.AddMonths(6);
+        /*if (ModelSearchObject.DueEnd < args.Value)
+        {
+            args.Value = DueMax.Min;
         }
+
+        if (ModelSearchObject.DueEnd > DueMax.Max)
+        {
+            args.Value = DueMax.Max;
+        }*/
     }
 
     private async Task SearchCandidateDialog(EditContext editContext)
@@ -193,19 +211,5 @@ public partial class AdvancedRequisitionSearch
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("GetCityZipList", "@CityZip", dm);
 
         #endregion
-    }
-
-    private async Task DueOnSelect(ChangedEventArgs<DateTime> args)
-    {
-        await Task.Delay(1);
-        DueMax.Min = args.Value;
-        if (ModelSearchObject.DueEnd < args.Value)
-        {
-            ModelSearchObject.DueEnd = args.Value;
-        }
-        if (ModelSearchObject.DueEnd > DueMax.Max)
-        {
-            ModelSearchObject.DueEnd = DueMax.Max;
-        }
     }
 }
