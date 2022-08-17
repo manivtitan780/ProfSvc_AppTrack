@@ -1,4 +1,4 @@
-﻿<SfDialog Header="Search Candidate" Height="98vh" IsModal="true" MinHeight="98vh" @ref="Dialog" Target="#divTarget" Visible="false" Width="800px">
+﻿<SfDialog Header="Search Candidate" Height="785px" IsModal="true" MinHeight="400px" @ref="Dialog" Target="#divTarget" Visible="false" Width="800px">
 	<ChildContent>
 		<SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
 		<DialogPositionData X="center" Y="center"></DialogPositionData>
@@ -10,17 +10,10 @@
 								Placeholder="Code" />
 				<TextBoxControl @bind-Value="@(ModelSearchObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textTitle" MaxLength="255" MinLength="0" Multiline="false"
 								Placeholder="Job Position / Title" />
-				<div class="divFlex" id="divCompany">
-					<div class="divFlexLabel">
-						<label class="labelStatus">Company Name:</label>
-					</div>
-					<div class="divFlexSmall" id="divCompanyInner">
-						<AutoCompleteButton @bind-Value="@(ModelSearchObject.Company)" @bind-Value:event="ValueChanged" EnablePersistence="false" ID="autoCompany" ModelValue="false" PlaceholderText="Select a Company" 
-											@ref="AutoCompleteControl" Ref="AutoCompleteCityZip" SetLeft="false" TypeInstance="@typeof(CandidateCityZipAdaptor)" />
-					</div>
-				</div>
+				<DropDownControl AllowFilter="true" @bind-Value="@ModelSearchObject.Company" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@Companies" ID="dropCompany" Placeholder="Company"
+								 TextField="Key" TItem="KeyValues" TValue="string" ValueField="Value" Width="450px" ShowClearButton="true" />
 				<DropDownControl @bind-Value="@ModelSearchObject.Option" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@JobOption" ID="dropJobOption" Placeholder="Job Option" TextField="Value"
-								 TItem="KeyValues" TValue="string" ValueField="Key" Width="350px" AllowFilter="true" />
+								 TItem="KeyValues" TValue="string" ValueField="Key" Width="350px" />
 				<MultiSelectControl @bind-Value="@(ModelSearchObject.Status)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="StatusDropDown" FilterBarPlaceholder="Search Status&hellip;"
 									ID="multiStatus" KeyField="Value" Multiline="false" Placeholder="Select Status(s)" TItem="KeyValues" TValue="string" ValueField="Key" />
 				<DropDownControl @bind-Value="@ModelSearchObject.CreatedBy" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@ShowRequisitions" ID="dropCreatedBy" Placeholder="Show Requisitions:"
@@ -32,7 +25,7 @@
 					<div style="display: flex; width: 100%">
 						<div class="divFlexSmall" style="width: 45%;">
 							<DateControl @bind-Value="@ModelSearchObject.CreatedOn" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateCreatedStart" Max="@(DateTime.Today.AddMonths(6))"
-										 Min="@(DateTime.Today.AddMonths(-3))" OnChange="CreatedOnSelect" Placeholder="Created Date Start" Width="220px" />
+										 OnChange="CreatedOnSelect" Placeholder="Created Date Start" Width="220px" />
 						</div>
 						<div class="divFlexSmall" style="margin-left: 3%; width: 45%;">
 							<DateControl @bind-Value="@ModelSearchObject.CreatedOnEnd" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateCreatedEnd" Placeholder="Created Date End" @ref="CreatedMax"
@@ -47,7 +40,7 @@
 					<div style="display: flex; width: 100%">
 						<div class="divFlexSmall" style="width: 45%;">
 							<DateControl @bind-Value="@ModelSearchObject.Due" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateDueStart" Max="@(DateTime.Today.AddMonths(6))"
-										 Min="@(DateTime.Today.AddMonths(-3))" OnChange="DueOnSelect" Placeholder="Due Date Start" Width="220px" />
+										 OnChange="DueOnSelect" Placeholder="Due Date Start" Width="220px" />
 						</div>
 						<div class="divFlexSmall" style="margin-left: 3%; width: 45%;">
 							<DateControl @bind-Value="@(ModelSearchObject.DueEnd)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateDueEnd" Placeholder="Due Date End" @ref="DueMax"
@@ -56,7 +49,7 @@
 					</div>
 				</div>
 			</div>
-			<DialogFooter CancelMethod="CancelSearchDialog" @ref="DialogFooter" />
+			<DialogFooter CancelMethod="CancelSearchDialog" @ref="DialogFooter" Save="Search" />
 		</EditForm>
 	</ChildContent>
 </SfDialog>

@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     08-13-2022 20:06
+// Last Updated On:     08-17-2022 20:04
 // *****************************************/
 
 #endregion
@@ -33,7 +33,10 @@ public partial class Requisition
 
     private readonly List<IntValues> _statesCopy = new();
 
+    private readonly List<KeyValues> _statusSearch = new();
+
     private List<CandidateActivity> _candidateActivityObject = new();
+    private readonly List<KeyValues> _companies = new();
 
     private int _currentPage = 1;
 
@@ -163,6 +166,12 @@ public partial class Requisition
         set;
     }
 
+    private AdvancedRequisitionSearch DialogSearch
+    {
+        get;
+        set;
+    }
+
     private DocumentsPanel DocumentsPanel
     {
         get;
@@ -285,29 +294,31 @@ public partial class Requisition
         set;
     }
 
-    private AdvancedRequisitionSearch DialogSearch
-    {
-        get;
-        set;
-    }
-
-    private readonly List<KeyValues> _statusSearch = new();
-    private List<KeyValues> _companies = new();
-
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
         LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
- 
-         string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("RequisitionGrid");
-         if (!_cookyString.NullOrWhiteSpace())
-         {
-             SearchModel = JsonConvert.DeserializeObject<RequisitionSearch>(_cookyString);
-         }
-         else
-         {
-             await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
-         }
+
+        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("RequisitionGrid");
+        if (!_cookyString.NullOrWhiteSpace())
+        {
+            SearchModel = JsonConvert.DeserializeObject<RequisitionSearch>(_cookyString);
+        }
+        else
+        {
+            SearchModel.Company = "%";
+            SearchModel.Status = "NEW,OPN,PAR";
+            SearchModel.CreatedOn = new DateTime(2010, 1, 1);
+            SearchModel.CreatedOnEnd = DateTime.Today.AddYears(1);
+            SearchModel.Due = new DateTime(2010, 1, 1);
+            SearchModel.DueEnd = DateTime.Today.AddYears(2);
+            SearchModel.CreatedBy = "A";
+            SearchModel.ItemCount = 25;
+            SearchModel.Page = 1;
+
+            await LocalStorageBlazored.SetItemAsync("RequisitionGrid", SearchModel);
+        }
+
         IMemoryCache _memoryCache = Start.MemCache;
         while (_states == null)
         {
@@ -371,16 +382,20 @@ public partial class Requisition
             }
         }
 
-        _memoryCache.TryGetValue("Workflow", out _workflows);
-        /*_jobOptionsCopy.Clear();
-         _jobOptionsCopy.Add(new("%", "All"));
-         _jobOptionsCopy.AddRange(_jobOptions); 
- 
-         _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
-         _memoryCache.TryGetValue("Communication", out _communication);
-         _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);*/
+        List<Company> _companyList = null;
+        _memoryCache.TryGetValue("Companies", out _companyList);
+        _companies.Add(new("All Companies", "%"));
+        if (_companyList != null)
+        {
+            foreach (Company _company in _companyList)
+            {
+                _companies.Add(new(_company.CompanyName, _company.CompanyName));
+            }
+        }
 
-         await Grid.Refresh();
+        _memoryCache.TryGetValue("Workflow", out _workflows);
+
+        await Grid.Refresh();
 
         await base.OnInitializedAsync();
     }
@@ -764,6 +779,13 @@ public partial class Requisition
     }
 
     private static void RefreshGrid() => Grid.Refresh();
+
+    private async Task RequisitionAdvancedSearch(EditContext args)
+    {
+        await Task.Delay(1);
+        await LocalStorageBlazored.SetItemAsync("RequisitionGrid", args.Model as RequisitionSearch);
+        await Grid.Refresh();
+    }
 
     private async Task SaveActivity(EditContext activity)
     {

@@ -17,6 +17,8 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
 public partial class AdvancedRequisitionSearch
 {
+    private Dictionary<string, object> HtmlObject = new(){{"max-height", "785px"}};
+
     [Parameter]
     public object AutoCompleteCityZip
     {
@@ -144,6 +146,13 @@ public partial class AdvancedRequisitionSearch
     {
         get;
     } = new();
+
+    [Parameter]
+    public List<KeyValues> Companies
+    {
+        get;
+        set;
+    }
 
     protected override async Task OnInitializedAsync()
     {
