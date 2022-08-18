@@ -8,7 +8,7 @@
 // File Name:           AutoCompleteButton.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     08-12-2022 20:34
+// Last Updated On:     08-18-2022 16:18
 // *****************************************/
 
 #endregion
@@ -52,6 +52,13 @@ public partial class AutoCompleteButton
         set;
     }
 
+    [Parameter]
+    public int MinLength
+    {
+        get;
+        set;
+    } = 3;
+
     /// <summary>
     /// </summary>
     [Parameter]
@@ -78,6 +85,13 @@ public partial class AutoCompleteButton
         get;
         set;
     }
+
+    [Parameter]
+    public bool SetLeft
+    {
+        get;
+        set;
+    } = true;
 
     /// <summary>
     /// </summary>
@@ -132,13 +146,6 @@ public partial class AutoCompleteButton
         get;
         set;
     }
-
-    [Parameter]
-    public bool SetLeft
-    {
-        get;
-        set;
-    } = true;
 
     [Parameter]
     public string Width

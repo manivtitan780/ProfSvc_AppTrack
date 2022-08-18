@@ -32,7 +32,7 @@
                 <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
                 <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditRequisition(true)">Add Requisition</SfButton>
                 <SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
-                <AutoCompleteButton EnablePersistence="false" ID="autoRequisition" PlaceholderText="Select a Requisition" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+                <AutoCompleteButton EnablePersistence="true" ID="autoRequisition" PlaceholderText="Select a Requisition" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
                                     TypeInstance="@typeof(AdminRequisitionDropDownAdaptor)" ValueChange="FilterGrid" />
             </div>
         </div>

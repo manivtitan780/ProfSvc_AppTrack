@@ -1305,3 +1305,8 @@ div[id^="e-item-tabCandidates_"] {
 col.e-detail-intent {
     width: 30px !important;
 }
+
+.showInfoIcon:after {
+    font-family: icofont;
+    content: "\ef4e";
+}

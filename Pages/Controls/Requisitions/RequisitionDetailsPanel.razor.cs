@@ -177,6 +177,12 @@ public partial class RequisitionDetailsPanel
         set;
     }
 
+    private AutoCompleteButton AutoCompleteControl
+    {
+        get;
+        set;
+    }
+
     private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
@@ -195,5 +201,21 @@ public partial class RequisitionDetailsPanel
     {
         await Task.Delay(1);
         ContactQuery = new Query().Where(new WhereFilter {Field = "ClientID", Operator = "equal", value = ModelObject.CompanyID});
+    }
+
+    private async Task ZipChange(ChangeEventArgs<string, KeyValues> arg)
+    {
+        await Task.Delay(1);
+        throw new NotImplementedException();
+    }
+
+    public class ZipDropDownAdaptor : DataAdaptor
+    {
+        #region Methods
+
+        /// <summary>Performs data Read operation synchronously.</summary>
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchZip", "@Zip", dm);
+
+        #endregion
     }
 }

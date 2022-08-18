@@ -8,9 +8,12 @@
 			<DataAnnotationsValidator />
 			<div style="height: 100%">
 				<div class="divContainerTable">
-					<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="Companies" ID="dropCompany"
-									 Placeholder="Company Name" TextField="CompanyName" TItem="Company" TValue="int" ValueField="ID" DropDownValueChange="CompanyChanged" Width="100%" />@**@
-					<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="CompanyContacts" Query="ContactQuery" ID="dropCompanyContact" Placeholder="Contact Name"
+					<div style="border-bottom: 1px solid var(--c-200); font-size: larger; font-weight: bold; height: 25px; margin-bottom: 10px; width: 100%;">
+						COMPANY INFORMATION
+					</div>
+					<DropDownControl @bind-Value="@ModelObject.CompanyID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="Companies" DropDownValueChange="CompanyChanged"
+									 ID="dropCompany" Placeholder="Company Name" TextField="CompanyName" TItem="Company" TValue="int" ValueField="ID" Width="100%" />@**@
+					<DropDownControl @bind-Value="@ModelObject.ContactID" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="CompanyContacts" ID="dropCompanyContact" Placeholder="Contact Name" Query="ContactQuery"
 									 TextField="ContactName" TItem="CompanyContact" TValue="int" ValueField="ID" Width="100%" />@*DropDownValueChange="StateIDChanged" *@
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">
@@ -18,7 +21,7 @@
 								<label class="labelStatus" for="textCity">City:</label>
 							</div>
 							<div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
-								<label class="labelStatus" for="dropState">State:</label>
+								<label class="labelStatus" for="textState">State:</label>
 							</div>
 							<div class="divFlexLabel" style="margin-left: 3%; width: 24%;">
 								<label class="labelStatus" for="textZip">Zip Code:</label>
@@ -26,15 +29,51 @@
 						</div>
 						<div style="display: flex; width: 100%">
 							<div class="divFlexSmall" style="width: 35%">
-								<TextBoxControl @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" ID="textCity" MaxLength="50" CreateTooltip="false"
-												MinLength="1" Placeholder="City" Width="100%" />
+								<TextBoxControl @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textCity" MaxLength="50"
+												MinLength="1" Placeholder="City" Readonly="true" Width="100%" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DropDownControl @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
-												 TItem="IntValues" TValue="int" ValueField="Key" />
+								<TextBoxControl @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textState" MaxLength="50"
+												MinLength="1" Placeholder="State" Readonly="true" Width="100%" />
+								@*<DropDownControl @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropState" TextField="Value"
+                                                 TItem="IntValues" TValue="int" ValueField="Key"  />*@
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 24%;">
-								<MaskedTextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code" CreateTooltip="false" />
+								<TextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textZip" MaxLength="50"
+												MinLength="1" Placeholder="Zip" Readonly="true" Width="100%" />
+								@*<MaskedTextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" ID="textZip" Mask="00000-0000" Placeholder="Zip Code" CreateTooltip="false" />*@
+							</div>
+						</div>
+					</div>
+					<div class="showInfoIcon" style="border-bottom: 1px solid var(--c-200); font-size: larger; font-weight: bold; height: 25px; margin-bottom: 10px; width: 100%; width: 100%;"
+						 title="Enter a Zip Code to populate City and State automatically.">
+						PROJECT LOCATION
+					</div>
+					<div class="divFlex">
+						<div style="display: flex; width: 100%">
+							<div class="divFlexLabel" style="width: 24%;">
+								<label class="labelStatus" for="textLocZip">Zip Code:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 35%">
+								<label class="labelStatus" for="textLocCity">City:</label>
+							</div>
+							<div class="divFlexLabel" style="margin-left: 3%; width: 35%;">
+								<label class="labelStatus" for="dropLocState">State:</label>
+							</div>
+						</div>
+						<div style="display: flex; width: 100%">
+							<div class="divFlexSmall" style="width: 24%;">
+								<AutoCompleteButton EnablePersistence="false" ID="autoRequisition" PlaceholderText="Select a Zip Code" @ref="AutoCompleteControl" Ref="AutoCompleteControl" MinLength="1"
+													TypeInstance="@typeof(ZipDropDownAdaptor)" ValueChange="ZipChange" />
+								<MaskedTextBoxControl @bind-Value="@(ModelObject.ZipCode)" @bind-Value:event="ValueChanged" CreateTooltip="false" ID="textLocZip" Mask="00000-0000" Placeholder="Zip Code" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%">
+								<TextBoxControl @bind-Value="@(ModelObject.City)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textLocCity" MaxLength="50" MinLength="1" 
+												Placeholder="City" Width="100%" />
+							</div>
+							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
+								<DropDownControl @bind-Value="@ModelObject.StateID" @bind-Value:event="ValueChanged" DataSource="States" DropDownValueChange="StateIDChanged" ID="dropLocState" TextField="Value"
+												 TItem="IntValues" TValue="int" ValueField="Key" />
 							</div>
 						</div>
 					</div>
@@ -43,9 +82,9 @@
 					<TextBoxControl @bind-Value="@(ModelObject.Description)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPositionDescription"
 									MaxLength="32767" Multiline="true" Placeholder="Position Description" Rows="15" Width="100%" />
 					<MultiSelectControl @bind-Value="@(ModelObject.SkillsRequired)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="Skills" FilterBarPlaceholder="Search Skills&hellip;"
-										Multiline="true" ID="multiSkills" KeyField="Key" Placeholder="Select Skill(s) Required" TItem="IntValues" TValue="string" ValueField="Value" />
+										ID="multiSkills" KeyField="Key" Multiline="true" Placeholder="Select Skill(s) Required" TItem="IntValues" TValue="string" ValueField="Value" />
 					<MultiSelectControl @bind-Value="@(ModelObject.Optional)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="Skills" FilterBarPlaceholder="Search Skills&hellip;"
-										Multiline="true" ID="multiOptional" KeyField="Key" Placeholder="Select Optional Skills" TItem="IntValues" TValue="string" ValueField="Value" />
+										ID="multiOptional" KeyField="Key" Multiline="true" Placeholder="Select Optional Skills" TItem="IntValues" TValue="string" ValueField="Value" />
 					<div class="divFlex">
 						<div style="display: flex; width: 100%">
 							<div class="divFlexLabel" style="width: 24%">
@@ -64,7 +103,7 @@
 												Max="500" Placeholder="No. of Positions" TValue="int" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
-								<DateControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateTooltip="false" CreateDivTag="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
+								<DateControl @bind-Value="@ModelObject.ExpectedStart" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="dateStart" Max="@(DateTime.Today.AddMonths(6))"
 											 Min="@(DateTime.Today.AddMonths(-3))" Placeholder="Start Date" Width="220px" />
 							</div>
 							<div class="divFlexSmall" style="margin-left: 3%; width: 35%;">
@@ -121,7 +160,7 @@
 						</div>
 					</div>
 					<MultiSelectControl @bind-Value="@(ModelObject.AssignedTo)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" DataSource="Recruiters" FilterBarPlaceholder="Search Skills&hellip;"
-										Multiline="false" ID="multiAssigned" KeyField="Key" Placeholder="Recruiters Assigned To" TItem="KeyValues" TValue="string" ValueField="Value" />
+										ID="multiAssigned" KeyField="Key" Multiline="false" Placeholder="Recruiters Assigned To" TItem="KeyValues" TValue="string" ValueField="Value" />
 					<SwitchControl @bind-BindValue="@(ModelObject.ExpensesPaid)" ID="checkedExpenses" OffLabel="NO" OnLabel="YES" Placeholder="Expenses Paid?" />
 					<SwitchControl @bind-BindValue="@(ModelObject.SecurityClearance)" ID="checkedSecurity" OffLabel="NO" OnLabel="YES" Placeholder="Security Clearance?" />
 					<SwitchControl @bind-BindValue="@(ModelObject.OFCCP)" ID="checkedOFCCP" OffLabel="NO" OnLabel="YES" Placeholder="OFCCP Compliance Required?" />
@@ -138,7 +177,7 @@
 							</div>
 						</div>
 						<div style="display: flex; width: 100%">
-							<div class="divFlexSmall" style="width: 35%; display: flex;">
+							<div class="divFlexSmall" style="display: flex; width: 35%;">
 								<TextBoxControl @bind-Value="@(ModelObject.Duration)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" ID="textDuration" MaxLength="8" MinLength="0"
 												Placeholder="Duration" Width="70%" />
 								<span style="margin-left: 3%">
@@ -146,7 +185,7 @@
 													 TValue="string" ValueField="Key" />
 								</span>
 							</div>
-							<div class="divFlexSmall" style="margin-left: 3%; width: 42%; display: flex;">
+							<div class="divFlexSmall" style="display: flex; margin-left: 3%; width: 42%;">
 								<NumericControl @bind-Value="@(ModelObject.ExpRateLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c0" ID="numericPayRateFrom"
 												Max="10000" Min="0" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
@@ -154,7 +193,7 @@
 													Max="10000" Min="0" Placeholder="Pay Rate/Hr To" TValue="decimal" />
 								</span>
 							</div>
-							<div class="divFlexSmall" style="margin-left: 3%; width: 15%; display: flex;">
+							<div class="divFlexSmall" style="display: flex; margin-left: 3%; width: 15%;">
 								<NumericControl @bind-Value="@(ModelObject.PlacementFee)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="###'%'" ID="numericPlacementFee"
 												Max="100" Min="1" Placeholder="Pay Rate/Hr From" TValue="decimal" Width="60%" />
 							</div>
@@ -170,7 +209,7 @@
 							</div>
 						</div>
 						<div style="display: flex; width: 100%">
-							<div class="divFlexSmall" style="width: 47%; display: flex;">
+							<div class="divFlexSmall" style="display: flex; width: 47%;">
 								<NumericControl @bind-Value="@(ModelObject.SalaryLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericSalaryFrom"
 												Max="10000" Min="0" Placeholder="Min. Salary" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
@@ -178,7 +217,7 @@
 													Max="10000" Min="0" Placeholder="Max. Salary" TValue="decimal" />
 								</span>
 							</div>
-							<div class="divFlexSmall" style="margin-left: 3%; width: 47%; display: flex;">
+							<div class="divFlexSmall" style="display: flex; margin-left: 3%; width: 47%;">
 								<NumericControl @bind-Value="@(ModelObject.ExpLoadLow)" @bind-Value:event="ValueChanged" CreateDivTag="false" CreateTooltip="false" Decimals="0" Format="c" ID="numericLoadLow"
 												Max="7300" Min="0" Placeholder="Min. Load Rate" TValue="decimal" Width="45%" />
 								<span style="margin-left: 3%">
@@ -188,8 +227,8 @@
 							</div>
 						</div>
 					</div>
-					<TextBoxControl @bind-Value="@(ModelObject.BenefitNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textBenefits" MaxLength="8000" MinLength="0" Placeholder="Benefits"
-									Multiline="true" Rows="5" Width="100%" />
+					<TextBoxControl @bind-Value="@(ModelObject.BenefitNotes)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textBenefits" MaxLength="8000" MinLength="0" Multiline="true"
+									Placeholder="Benefits" Rows="5" Width="100%" />
 					@*<UploaderControl Placeholder="Benefits Document" AutoUpload="true" Multiple="false" ID="uploadBenefitsDocument" SequentialUpload="true" OnFileUpload="OnFileUpload"></UploaderControl>*@
 				</div>
 			</div>
