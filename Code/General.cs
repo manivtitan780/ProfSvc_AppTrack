@@ -15,6 +15,7 @@
 
 #region Using
 
+using System.IO.Compression;
 using System.Runtime.InteropServices;
 
 #endregion
@@ -179,6 +180,64 @@ public static class General
 
     /// <summary>
     /// </summary>
+    /// <param name="dm"></param>
+    /// <returns></returns>
+    public static async Task<object> GetAutocompleteZipAsync(DataManagerRequest dm)
+    {
+        List<KeyValues> _dataSource = new();
+
+        if (dm.Where is not {Count: > 0} || dm.Where[0].value.NullOrWhiteSpace())
+        {
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 0
+                                       } : _dataSource;
+        }
+
+        try
+        {
+            await Task.Delay(1);
+
+            IMemoryCache _memoryCache = Start.MemCache;
+            List<Zip> _zips = null;
+            while (_zips == null)
+            {
+                _memoryCache.TryGetValue("Zips", out _zips);
+            }
+
+            if (_zips.Count == 0)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0
+                                           } : _dataSource;
+            }
+
+            _dataSource.AddRange(_zips.Where(zip => zip.ZipCode.StartsWith(dm.Where[0].value.ToString() ?? string.Empty)).Select(zip => new KeyValues(zip.ZipCode, zip.ZipCode)));
+
+            int _count = 0;
+            _count = _dataSource.Count;
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count
+                                       } : _dataSource;
+        }
+        catch
+        {
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 0
+                                       } : _dataSource;
+        }
+    }
+
+    /// <summary>
+    /// </summary>
     /// <param name="searchModel"></param>
     /// <param name="dm"></param>
     /// <returns></returns>
@@ -240,6 +299,84 @@ public static class General
                                            Result = _dataSource,
                                            Count = _count
                                        } : _dataSource;*/
+        }
+        catch
+        {
+            if (_dataSource == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
+            }
+
+            _dataSource.Add(new());
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = 1
+                                       } : _dataSource;
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="searchModel"></param>
+    /// <param name="user"></param>
+    /// <param name="dm"></param>
+    /// <returns></returns>
+    public static async Task<object> GetCompanyReadAdaptor(CandidateSearch searchModel, string user, DataManagerRequest dm) //string name, int page, int count)
+    {
+        List<Company> _dataSource = new();
+
+        int _itemCount = searchModel.ItemCount;
+        int _page = searchModel.Page;
+        try
+        {
+            RestClient _restClient = new($"{Start.ApiHost}");
+            RestRequest _request = new("Company/GetGridCompanies")
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("user", user);
+            //_request.AddQueryParameter("count", _itemCount.ToString());
+            //_request.AddQueryParameter("name", searchModel.Name);
+            //_request.AddJsonBody(searchModel); //TODO: Enable this line later
+
+            _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
+            if (_restResponse == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = _dataSource,
+                                               Count = 0 /*_count*/
+                                           } : _dataSource;
+            }
+
+            _dataSource = JsonConvert.DeserializeObject<List<Company>>(_restResponse["Companies"].ToString() ?? string.Empty);
+            int _count = _restResponse["Count"].ToInt32();
+            Companies.Count = _count;
+            Companies.PageCount = Math.Ceiling(_count / _itemCount.ToDecimal()).ToInt32();
+            Companies.StartRecord = ((_page - 1) * _itemCount + 1).ToInt32();
+            if (_dataSource == null)
+            {
+                return dm.RequiresCounts ? new DataResult
+                                           {
+                                               Result = null,
+                                               Count = 1
+                                           } : null;
+            }
+
+            Companies.EndRecord = ((_page - 1) * _itemCount).ToInt32() + _dataSource.Count;
+
+            return dm.RequiresCounts ? new DataResult
+                                       {
+                                           Result = _dataSource,
+                                           Count = _count /*_count*/
+                                       } : _dataSource;
+
         }
         catch
         {

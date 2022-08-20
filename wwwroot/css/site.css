@@ -1310,3 +1310,7 @@ col.e-detail-intent {
     font-family: icofont;
     content: "\ef4e";
 }
+
+#textPositionDescription .e-toolbar-container, #richTextResume .e-toolbar-container {
+    height: unset !important;
+}

@@ -1,0 +1,246 @@
+﻿@page "/company"
+@using AnimationEffect = Syncfusion.Blazor.AnimationEffect
+@layout ProfSvcLayout
+@inject IJSRuntime Runtime;
+
+<Header></Header>
+
+<div class="gridHolder">
+	<div class="divGridToolBar">
+		<div style="display: flex">
+			<div style="flex: 1; text-align: left">
+				<div style="display: flex; height: 25px; margin-top: 12px">
+					<div style="display: flex; width: 350px;">
+						<SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
+						<SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
+						<SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount"
+										  Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
+						</SfNumericTextBox>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
+						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
+						<SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
+						<SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
+					</div>
+					<div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
+					<SfDropDownList @bind-Value="@SearchModel.ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
+						<DropDownListFieldSettings Text="Value" Value="Key" />
+						<DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
+					</SfDropDownList>
+				</div>
+			</div>
+			<div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
+				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate" style="@($"display:{(RequisitionID > 0 ? "none" : "unset")}")">Add Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="SubmitSelectedCandidate" style="@($"display:{(RequisitionID > 0 ? "unset" : "none")}")">Submit Selected Candidate</SfButton>
+				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
+				<AutoCompleteButton EnablePersistence="true" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
+			</div>
+		</div>
+	</div>
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableStickyHeader="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
+		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
+		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Candidates" />@* *@
+		<GridColumns>
+			<GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridSortSettings AllowUnsort="false">
+				<GridSortColumns>
+					<GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Name)" HeaderText="Name" Width="20%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<span class="@(_con.Mpc ? "mpcicon" : "")">@_con.Name</span>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%" />
+			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Email)" HeaderText="Email" Width="19%">
+				<Template Context="aCon">
+					@{
+						if (aCon is Candidates _con)
+						{
+							<a href="mailto:@(_con.Email)">@_con.Email</a>
+						}
+					}
+				</Template>
+			</GridColumn>
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%" />
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%" />
+			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%" />
+		</GridColumns>
+		<GridTemplates Context="context">
+			<DetailTemplate>
+				@* Add Buttons Start *@
+				@*<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)"
+						  style="@($"display:{(_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
+						  style="@($"display:{(_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+						  style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
+						  style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
+						  style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
+				@* Add Buttons End * @
+				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+					<TabAnimationSettings>
+						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+						<TabEvents Selected="TabSelected"></TabEvents>
+					</TabAnimationSettings>
+					<TabItems>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Basic Info" />
+							</ChildContent>
+							<ContentTemplate>
+								<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
+												GetRatingNote="RatingNote" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication"
+												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Skills" />
+							</ChildContent>
+							<ContentTemplate>
+								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
+											RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Education" />
+							</ChildContent>
+							<ContentTemplate>
+								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateEducationObject" @ref="EducationPanel"
+												RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Experience" />
+							</ChildContent>
+							<ContentTemplate>
+								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel"
+												 RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Notes" />
+							</ChildContent>
+							<ContentTemplate>
+								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" IsRequisition="@(RequisitionID > 0)" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Resume" />
+							</ChildContent>
+							<ContentTemplate>
+								<div class="resumeContainerBox">
+									<SfRichTextEditor Height="300px" Readonly="true" Value="@_candidateDetailsObject.TextResume">
+										<RichTextEditorToolbarSettings Items="@_tools1" />
+									</SfRichTextEditor>
+								</div>
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Attachment" />
+							</ChildContent>
+							<ContentTemplate>
+								<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />
+							</ContentTemplate>
+						</TabItem>
+						<TabItem>
+							<ChildContent>
+								<TabHeader Text="Candidate Activity" />
+							</ChildContent>
+							<ContentTemplate>
+								<ActivityPanel EditActivity="EditActivity" IsRequisition="@(RequisitionID > 0)" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight"
+											   UndoCandidateActivity="UndoActivity" />
+							</ContentTemplate>
+						</TabItem>
+					</TabItems>
+					<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />@** @
+				</SfTab>*@
+			</DetailTemplate>
+		</GridTemplates>
+	</SfGrid>
+
+	@*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
+						 JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
+
+	<ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
+
+	<RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" Save="SaveRating" />
+
+	<MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" Save="SaveMPC" />
+
+	<EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" Save="SaveSkill" />
+
+	<EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" Save="SaveEducation" />
+
+	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" Save="SaveExperience" />
+
+	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
+
+	<EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
+
+	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
+					   @ref="DialogDocument" Save="SaveDocument" />
+
+	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
+							 StateDropDown="_statesCopy" />
+	
+	<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
+
+	<div class="divGridFooter">
+		<div style="display: flex">
+			<div style="flex: 1; padding-left: 15px; text-align: left;">
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
+				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
+				<SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
+			</div>
+			<div style="width: 520px">
+				Items
+				<b>@StartRecord</b> to
+				<b>@EndRecord</b> of
+				<b>@Count</b> rows
+			</div>
+		</div>
+	</div>
+</div>

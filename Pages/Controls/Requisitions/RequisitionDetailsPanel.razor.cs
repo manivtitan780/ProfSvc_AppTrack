@@ -183,6 +183,69 @@ public partial class RequisitionDetailsPanel
         set;
     }
 
+    private readonly List<ToolbarItemModel> _tools1 = new()
+                                                      {
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Bold
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Italic
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Underline
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.StrikeThrough
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.LowerCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.UpperCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SuperScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SubScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.ClearFormat
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Undo
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Redo
+                                                          }
+                                                      };
+
+    [Parameter]
+    public List<ToolbarItemModel> Tools
+    {
+        get;
+        set;
+    }
+
     private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
@@ -206,7 +269,21 @@ public partial class RequisitionDetailsPanel
     private async Task ZipChange(ChangeEventArgs<string, KeyValues> arg)
     {
         await Task.Delay(1);
-        throw new NotImplementedException();
+        IMemoryCache _memoryCache = Start.MemCache;
+        List<Zip> _zips = null;
+        while (_zips == null)
+        {
+            _memoryCache.TryGetValue("Zips", out _zips);
+        }
+
+        if (_zips.Count > 0)
+        {
+            foreach (Zip _zip in _zips.Where(zip => zip.ZipCode == arg.Value))
+            {
+                ModelObject.City = _zip.City;
+                ModelObject.StateID = _zip.StateID;
+            }
+        }
     }
 
     public class ZipDropDownAdaptor : DataAdaptor
@@ -214,7 +291,7 @@ public partial class RequisitionDetailsPanel
         #region Methods
 
         /// <summary>Performs data Read operation synchronously.</summary>
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchZip", "@Zip", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteZipAsync(dm);
 
         #endregion
     }

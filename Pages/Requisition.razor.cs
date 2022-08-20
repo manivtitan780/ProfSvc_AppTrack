@@ -8,7 +8,7 @@
 // File Name:           Requisition.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          03-15-2022 19:54
-// Last Updated On:     08-17-2022 20:04
+// Last Updated On:     08-19-2022 19:58
 // *****************************************/
 
 #endregion
@@ -28,6 +28,8 @@ namespace ProfSvc_AppTrack.Pages;
 
 public partial class Requisition
 {
+    private readonly List<KeyValues> _companies = new();
+
     private readonly List<IntValues> _showRecords =
         new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
@@ -35,8 +37,63 @@ public partial class Requisition
 
     private readonly List<KeyValues> _statusSearch = new();
 
+    private readonly List<ToolbarItemModel> _tools1 = new()
+                                                      {
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Bold
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Italic
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Underline
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.StrikeThrough
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.LowerCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.UpperCase
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SuperScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.SubScript
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.ClearFormat
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Separator
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Undo
+                                                          },
+                                                          new()
+                                                          {
+                                                              Command = ToolbarCommand.Redo
+                                                          }
+                                                      };
+
     private List<CandidateActivity> _candidateActivityObject = new();
-    private readonly List<KeyValues> _companies = new();
 
     private int _currentPage = 1;
 
@@ -308,9 +365,9 @@ public partial class Requisition
         {
             SearchModel.Company = "%";
             SearchModel.Status = "NEW,OPN,PAR";
-            SearchModel.CreatedOn = new DateTime(2010, 1, 1);
+            SearchModel.CreatedOn = new(2010, 1, 1);
             SearchModel.CreatedOnEnd = DateTime.Today.AddYears(1);
-            SearchModel.Due = new DateTime(2010, 1, 1);
+            SearchModel.Due = new(2010, 1, 1);
             SearchModel.DueEnd = DateTime.Today.AddYears(2);
             SearchModel.CreatedBy = "A";
             SearchModel.ItemCount = 25;
@@ -1034,7 +1091,7 @@ public partial class Requisition
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchRequisition", "@Requisition", dm);
 
         #endregion
     }

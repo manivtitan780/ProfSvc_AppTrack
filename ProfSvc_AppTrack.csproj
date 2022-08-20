@@ -84,14 +84,18 @@
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-        <PackageReference Include="Radzen.Blazor" Version="3.20.3" />
+        <PackageReference Include="Radzen.Blazor" Version="3.20.4" />
         <PackageReference Include="RestSharp" Version="108.0.1" />
-        <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.43" />
+        <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.44" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\LabelComponents\LabelComponents.csproj" />
       <ProjectReference Include="..\ProfSvc_Classes\ProfSvc_Classes.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Controls\Companies\" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

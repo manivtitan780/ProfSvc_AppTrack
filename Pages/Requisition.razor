@@ -161,13 +161,13 @@
 	<SfSpinner CssClass="spinnerHeight" @ref="@SpinnerTop" Type="SpinnerType.Fabric" ZIndex="12000" />
 
 	<RequisitionDetailsPanel Companies="Companies" CompanyContacts="CompanyContacts" Education="_education" Eligibility="_eligibility" Experience="_experience" JobOptions="_jobOptions" Recruiters="_recruiters"
-							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" />
+							 ModelObject="_requisitionDetailsObjectClone" @ref="DialogEditRequisition" States="_states" Title="@Title" Skills="Skills" SaveRequisitionDialog="SaveRequisition" Tools="_tools1" />
 
 	<AddRequisitionDocument AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
 
 	<EditActivityDialog ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" IsCandidate="false" />
     
-    <AdvancedRequisitionSearch ModelSearchObject="SearchModel" @ref="DialogSearch" JobOption="_jobOptions" StatusDropDown="_statusSearch" Companies="_companies" Search="RequisitionAdvancedSearch"></AdvancedRequisitionSearch>
+	<AdvancedRequisitionSearch ModelSearchObject="SearchModel" @ref="DialogSearch" JobOption="_jobOptions" StatusDropDown="_statusSearch" Companies="_companies" Search="RequisitionAdvancedSearch"/>
 
 	<div class="divGridFooter">
         <div style="display: flex">
