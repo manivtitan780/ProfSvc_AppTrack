@@ -1544,7 +1544,7 @@ public partial class Candidate
         await _client.PostAsync<int>(_request);
 
         _target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
-        _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
+        _target.Phone = _candidateDetailsObject.Phone1.FormatPhoneNumber();
         _target.Email = _candidateDetailsObject.Email;
         _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
         _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";

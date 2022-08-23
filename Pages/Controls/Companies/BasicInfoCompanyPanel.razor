@@ -1,0 +1,49 @@
+﻿<div class="containerBox">
+	<div>
+		<div>
+			<div>Address:</div>
+			<div>@SetupAddress</div>
+		</div>
+		<div>
+			<div>Email Address:</div>
+			<div>@ModelObject.EmailAddress</div>
+		</div>
+		<div>
+			<div>Phone #:</div>
+			<div>@($"{ModelObject.Phone.FormatPhoneNumber()}" + (ModelObject.Extension.NullOrWhiteSpace() ? "" : $"ext.-{ModelObject.Extension}"))</div>
+		</div>
+		<div>
+			<div>Fax #:</div>
+			<div>@(ModelObject.Fax == "" ? "-" : $"{ModelObject.Fax.FormatPhoneNumber()}")</div>
+		</div>
+		<div>
+			<div>Website:</div>
+			<div>@(ModelObject.Website)</div>
+		</div>
+		<div>
+			<div>Preferred Client:</div>
+			<div>@(ModelObject.IsHot ? "Yes": "No")</div>
+		</div>
+	</div>
+	<div>
+		<div>
+			<div>Status:</div>
+			<div>@(ModelObject.Status)</div>
+		</div>
+		<div>
+			<div>Created By:</div>
+			<div>@(ModelObject.CreatedDate.ToString("MM/dd/yyyy") + " [" + ModelObject.CreatedBy + "]")</div>
+		</div>
+		<div>
+			<div>Last Updated By:</div>
+			<div>@(ModelObject.UpdatedDate.ToString("MM/dd/yyyy") + " [" + ModelObject.UpdatedBy + "]")</div>
+		</div>
+		<div>
+			<div>Notes:</div>
+			<div>@(ModelObject.Notes)</div>
+		</div>
+		@*<div>
+			<SfButton Content="Edit Candidate Information" CssClass="editSectionButton" @onclick="EditCandidate" style="@("display:" + (IsRequisition ? "none" : "unset"))"></SfButton>
+		</div>*@
+	</div>
+</div>

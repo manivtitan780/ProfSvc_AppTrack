@@ -340,7 +340,7 @@ public static class General
                                    {
                                        RequestFormat = DataFormat.Json
                                    };
-            _request.AddQueryParameter("user", user);
+            //_request.AddQueryParameter("user", user);
             //_request.AddQueryParameter("count", _itemCount.ToString());
             //_request.AddQueryParameter("name", searchModel.Name);
             //_request.AddJsonBody(searchModel); //TODO: Enable this line later

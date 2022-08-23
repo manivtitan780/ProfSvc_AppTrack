@@ -26,69 +26,86 @@
         <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
         <EnableNETAnalyzers>False</EnableNETAnalyzers>
         <AnalysisLevel>none</AnalysisLevel>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
       <Deterministic>True</Deterministic>
+      <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       <Deterministic>True</Deterministic>
+      <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <Deterministic>True</Deterministic>
+      <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <Deterministic>True</Deterministic>
+      <NoWarn>1701;1702;1591</NoWarn>
+      <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.1" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
-=======
-<<<<<<< HEAD
-        <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
->>>>>>> parent of 75d4ce4 (stash)
-=======
-        <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
->>>>>>> parent of 9840861 (Revert "commit")
-        <PackageReference Include="RestSharp" Version="107.1.2" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
-=======
-        <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
-<<<<<<< HEAD
-        <PackageReference Include="RestSharp" Version="107.1.1" />
-=======
-        <PackageReference Include="RestSharp" Version="107.1.2" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of 85dedff (commit)
-=======
->>>>>>> 7ecd66aa8a5314bda5d8f46c18ac14a331fbbadf
->>>>>>> parent of 75d4ce4 (stash)
-=======
->>>>>>> parent of 9840861 (Revert "commit")
-=======
-        <PackageReference Include="Radzen.Blazor" Version="3.14.9" />
-        <PackageReference Include="RestSharp" Version="107.1.2" />
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.48" />
-        <PackageReference Include="Radzen.Blazor" Version="3.14.7" />
-        <PackageReference Include="RestSharp" Version="107.1.1" />
-        <PackageReference Include="RestSharp" Version="107.1.2" />
->>>>>>> parent of 9840861 (Revert "commit")
-        <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.47" />
->>>>>>> 8de6a59c4e733e63887427935872ef86208a7038
+      <Compile Remove="Pages\Admin\Controls\LabelBox.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelButtonGroup.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelDateTime.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelDropDown.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelMaskedTextBox.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelMultiSelect.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelNumeric.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelSwitch.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\LabelTextBox.razor.cs" />
+      <Compile Remove="Pages\Admin\Controls\TextBoxToolTip.razor.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pages\Admin\Controls\LabelBox.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelButtonGroup.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelDateTime.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelDropDown.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelMaskedTextBox.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelMultiSelect.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelNumeric.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelSwitch.razor" />
+      <Content Remove="Pages\Admin\Controls\LabelTextBox.razor" />
+      <Content Remove="Pages\Admin\Controls\TextBoxToolTip.razor" />
+      <Content Remove="Uploads\Candidate\11600\Rboert.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+        <PackageReference Include="Radzen.Blazor" Version="3.20.4" />
+        <PackageReference Include="RestSharp" Version="108.0.1" />
+        <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.44" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LabelComponents\LabelComponents.csproj" />
+      <ProjectReference Include="..\ProfSvc_Classes\ProfSvc_Classes.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-      <Exec Command="taskkill /f /im scriptcode.exe 2&gt;nul 1&gt;nul&#xD;&#xA;exit 0" />
+      <Exec Command="taskkill /f /im &quot;w3wp.exe&quot; 2&gt;nul 1&gt;nul&#xD;&#xA;exit 0" />
     </Target>
 
     <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">

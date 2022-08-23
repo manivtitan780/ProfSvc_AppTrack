@@ -83,7 +83,17 @@
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
         <PackageReference Include="Radzen.Blazor" Version="3.20.4" />
         <PackageReference Include="RestSharp" Version="108.0.1" />
         <PackageReference Include="Syncfusion.Blazor" Version="20.2.0.44" />
@@ -94,21 +104,8 @@
       <ProjectReference Include="..\ProfSvc_Classes\ProfSvc_Classes.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages\Controls\Companies\" />
-    </ItemGroup>
-
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
       <Exec Command="taskkill /f /im &quot;w3wp.exe&quot; 2&gt;nul 1&gt;nul&#xD;&#xA;exit 0" />
     </Target>
-
-    <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="net start w3svc" />
-    </Target>-->
-
-    <!--<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-      <Exec Command="net stop w3svc" />
-      <Exec Command="iisreset" />
-    </Target>-->
 
 </Project>

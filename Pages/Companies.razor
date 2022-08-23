@@ -1,4 +1,5 @@
 ﻿@page "/company"
+@using Microsoft.IdentityModel.Tokens
 @using AnimationEffect = Syncfusion.Blazor.AnimationEffect
 @layout ProfSvcLayout
 @inject IJSRuntime Runtime;
@@ -38,57 +39,49 @@
 			</div>
 		</div>
 	</div>
-	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableStickyHeader="true" EnableHover="true" Height="100%" @ref="Grid" TValue="Candidates" Width="99.75%">
+	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Company" Width="99.75%">
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
 		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
-		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Candidates" />@* *@
+		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Company" />@* *@
 		<GridColumns>
-			<GridColumn Field="@nameof(Candidates.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0"></GridColumn>
+			<GridColumn Field="@nameof(Company.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
 			<GridSortSettings AllowUnsort="false">
 				<GridSortColumns>
 					<GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
 				</GridSortColumns>
 			</GridSortSettings>
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Name)" HeaderText="Name" Width="20%">
+			<GridColumn AllowSorting="true" Field="@nameof(Company.CompanyName)" HeaderText="Name" Width="20%" />
+			<GridColumn AllowSorting="false" Field="@nameof(Company.EmailAddress)" HeaderText="Email" Width="18%" />
+			<GridColumn AllowSorting="true" Field="@nameof(Company.Phone)" HeaderText="Phone" Width="15%" />
+			<GridColumn AllowSorting="false" HeaderText="Location" Width="47%">
 				<Template Context="aCon">
 					@{
-						if (aCon is Candidates _con)
+						if (aCon is Company _con)
 						{
-							<span class="@(_con.Mpc ? "mpcicon" : "")">@_con.Name</span>
+							<span>
+								@($"{(_con.Address.IsNullOrEmpty() ? "" : _con.Address)}, {(_con.City.IsNullOrEmpty() ? "" : _con.City)}, {(_con.State.IsNullOrEmpty() ? "" : _con.State)}, " +
+								  $"{(_con.ZipCode.IsNullOrEmpty() ? "" : _con.ZipCode)}")
+							</span>
 						}
 					}
 				</Template>
 			</GridColumn>
-			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Phone)" HeaderText="Phone" Width="14%" />
-			<GridColumn AllowSorting="false" Field="@nameof(Candidates.Email)" HeaderText="Email" Width="19%">
-				<Template Context="aCon">
-					@{
-						if (aCon is Candidates _con)
-						{
-							<a href="mailto:@(_con.Email)">@_con.Email</a>
-						}
-					}
-				</Template>
-			</GridColumn>
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Location)" HeaderText="Location" Width="19%" />
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Updated)" HeaderText="Updated" Width="14%" />
-			<GridColumn AllowSorting="true" Field="@nameof(Candidates.Status)" HeaderText="Status" Width="14%" />
 		</GridColumns>
 		<GridTemplates Context="context">
 			<DetailTemplate>
 				@* Add Buttons Start *@
 				@*<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)"
-						  style="@($"display:{(_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
-						  style="@($"display:{(_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
-						  style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
-						  style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
-						  style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
-				@* Add Buttons End * @
-				<SfTab CssClass="e-fill" Height="365" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+                style="@($"display:{(_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
+                style="@($"display:{(_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+                style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
+                style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
+                style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
+                @* Add Buttons End *@
+				<SfTab CssClass="e-fill" Height="365" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
@@ -97,111 +90,75 @@
 					<TabItems>
 						<TabItem>
 							<ChildContent>
-								<TabHeader Text="Basic Info" />
+								<TabHeader Text="Company Info" />
 							</ChildContent>
 							<ContentTemplate>
-								<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
+								<BasicInfoCompanyPanel ModelObject="_companyDetailsObject"/>
+								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
 												GetRatingNote="RatingNote" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication"
-												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />
+												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
 							<ChildContent>
-								<TabHeader Text="Skills" />
+								<TabHeader Text="Contacts" />
 							</ChildContent>
 							<ContentTemplate>
-								<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
-											RowHeight="@RowHeight" />
+								@*<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
+											RowHeight="@RowHeight" />*@
 							</ContentTemplate>
 						</TabItem>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Attachment" />
+                            </ChildContent>
+                            <ContentTemplate>
+                                @*<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />*@
+                            </ContentTemplate>
+                        </TabItem>
 						<TabItem>
 							<ChildContent>
-								<TabHeader Text="Education" />
+								<TabHeader Text="Requisitions" />
 							</ChildContent>
 							<ContentTemplate>
-								<EducationPanel DeleteEducation="DeleteEducation" EditEducation="EditEducation" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateEducationObject" @ref="EducationPanel"
-												RowHeight="@RowHeight" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Experience" />
-							</ChildContent>
-							<ContentTemplate>
-								<ExperiencePanel DeleteExperience="DeleteExperience" EditExperience="EditExperience" IsRequisition="@(RequisitionID > 0)" ModelObject="@_candidateExperienceObject" @ref="ExperiencePanel"
-												 RowHeight="@RowHeight" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Notes" />
-							</ChildContent>
-							<ContentTemplate>
-								<NotesPanel DeleteNotes="DeleteNotes" EditNotes="EditNotes" IsRequisition="@(RequisitionID > 0)" ModelNotesObject="@_candidateNotesObject" @ref="NotesPanel" RowHeight="@RowHeight" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Resume" />
-							</ChildContent>
-							<ContentTemplate>
-								<div class="resumeContainerBox">
-									<SfRichTextEditor Height="300px" Readonly="true" Value="@_candidateDetailsObject.TextResume">
-										<RichTextEditorToolbarSettings Items="@_tools1" />
-									</SfRichTextEditor>
-								</div>
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Attachment" />
-							</ChildContent>
-							<ContentTemplate>
-								<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Candidate Activity" />
-							</ChildContent>
-							<ContentTemplate>
-								<ActivityPanel EditActivity="EditActivity" IsRequisition="@(RequisitionID > 0)" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight"
-											   UndoCandidateActivity="UndoActivity" />
+								@*<ActivityPanel EditActivity="EditActivity" IsRequisition="@(RequisitionID > 0)" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight"
+											   UndoCandidateActivity="UndoActivity" />*@
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
-					<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />@** @
-				</SfTab>*@
+					<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />@**@
+				</SfTab>
 			</DetailTemplate>
 		</GridTemplates>
 	</SfGrid>
+	
 
 	@*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
-						 JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
+    JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
 
-	<ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
+    <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
 
-	<RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" Save="SaveRating" />
+    <RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" Save="SaveRating" />
 
-	<MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" Save="SaveMPC" />
+    <MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" Save="SaveMPC" />
 
-	<EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" Save="SaveSkill" />
+    <EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" Save="SaveSkill" />
 
-	<EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" Save="SaveEducation" />
+    <EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" Save="SaveEducation" />
 
-	<EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" Save="SaveExperience" />
+    <EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" Save="SaveExperience" />
 
-	<EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
+    <EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
 
-	<EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
+    <EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
 
-	<AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
-					   @ref="DialogDocument" Save="SaveDocument" />
+    <AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
+    @ref="DialogDocument" Save="SaveDocument" />
 
-	<AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
-							 StateDropDown="_statesCopy" />
-	
-	<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
+    <AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
+    StateDropDown="_statesCopy" />
+
+    <SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
 
 	<div class="divGridFooter">
 		<div style="display: flex">

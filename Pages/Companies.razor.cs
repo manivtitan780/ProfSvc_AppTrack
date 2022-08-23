@@ -104,8 +104,8 @@ public partial class Companies
 
     private List<CandidateActivity> _candidateActivityObject = new();
 
-    private CandidateDetails _candidateDetailsObject = new();
-    private CandidateDetails _candidateDetailsObjectClone = new();
+    private CompanyDetails _companyDetailsObject = new();
+    private CompanyDetails _companyDetailsObjectClone = new();
     private List<CandidateDocument> _candidateDocumentsObject = new();
     private List<CandidateEducation> _candidateEducationObject = new();
     private List<CandidateExperience> _candidateExperienceObject = new();
@@ -152,7 +152,7 @@ public partial class Companies
 
     //private EditContext _statusEditContext;
 
-    private Candidates _target;
+    private Company _target;
 
     private List<KeyValues> _taxTerms;
 
@@ -413,7 +413,7 @@ public partial class Companies
         set;
     } = true;
 
-    private static SfGrid<Candidates> Grid
+    private static SfGrid<Company> Grid
     {
         get;
         set;
@@ -731,89 +731,89 @@ public partial class Companies
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Task.Delay(1);
-        if (!firstRender)
-        {
-            //_valueChanged = true;
-
-            return;
-        }
-
-        //if (_candidateContext != null)
+        //await Task.Delay(1);
+        //if (!firstRender)
         //{
-        //_statusEditContext = new(_candidateContext);
+        //    //_valueChanged = true;
+
+        //    return;
         //}
 
-        _currentPage = SearchModel.Page;
-        PageCount = _currentPage + 1;
-        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+        ////if (_candidateContext != null)
+        ////{
+        ////_statusEditContext = new(_candidateContext);
+        ////}
+
+        //_currentPage = SearchModel.Page;
+        //PageCount = _currentPage + 1;
+        //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1);
-        Uri _uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-        if (QueryHelpers.ParseQuery(_uri.Query).TryGetValue("requisition", out StringValues _tempRequisitionID))
-        {
-            RequisitionID = _tempRequisitionID.ToInt32();
-        }
+        //await Task.Delay(1);
+        //Uri _uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        //if (QueryHelpers.ParseQuery(_uri.Query).TryGetValue("requisition", out StringValues _tempRequisitionID))
+        //{
+        //    RequisitionID = _tempRequisitionID.ToInt32();
+        //}
 
-        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
-        IMemoryCache _memoryCache = Start.MemCache;
-        while (_states == null)
-        {
-            _memoryCache.TryGetValue("States", out _states);
-        }
+        //LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+        //IMemoryCache _memoryCache = Start.MemCache;
+        //while (_states == null)
+        //{
+        //    _memoryCache.TryGetValue("States", out _states);
+        //}
 
-        _statesCopy.Clear();
-        _statesCopy.Add(new(0, "All"));
-        _statesCopy.AddRange(_states);
+        //_statesCopy.Clear();
+        //_statesCopy.Add(new(0, "All"));
+        //_statesCopy.AddRange(_states);
 
-        while (_eligibility == null)
-        {
-            _memoryCache.TryGetValue("Eligibility", out _eligibility);
-        }
+        //while (_eligibility == null)
+        //{
+        //    _memoryCache.TryGetValue("Eligibility", out _eligibility);
+        //}
 
-        _eligibilityCopy.Clear();
-        _eligibilityCopy.Add(new(0, "All"));
-        _eligibilityCopy.AddRange(_eligibility);
+        //_eligibilityCopy.Clear();
+        //_eligibilityCopy.Add(new(0, "All"));
+        //_eligibilityCopy.AddRange(_eligibility);
 
-        _memoryCache.TryGetValue("Experience", out _experience);
-        _memoryCache.TryGetValue("TaxTerms", out _taxTerms);
-        while (_jobOptions == null)
-        {
-            _memoryCache.TryGetValue("JobOptions", out _jobOptions);
-        }
+        //_memoryCache.TryGetValue("Experience", out _experience);
+        //_memoryCache.TryGetValue("TaxTerms", out _taxTerms);
+        //while (_jobOptions == null)
+        //{
+        //    _memoryCache.TryGetValue("JobOptions", out _jobOptions);
+        //}
 
-        _jobOptionsCopy.Clear();
-        _jobOptionsCopy.Add(new("%", "All"));
-        _jobOptionsCopy.AddRange(_jobOptions);
+        //_jobOptionsCopy.Clear();
+        //_jobOptionsCopy.Add(new("%", "All"));
+        //_jobOptionsCopy.AddRange(_jobOptions);
 
-        _memoryCache.TryGetValue("StatusCodes", out _statusCodes);
-        _memoryCache.TryGetValue("Workflow", out _workflows);
-        _memoryCache.TryGetValue("Communication", out _communication);
-        _memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
+        //_memoryCache.TryGetValue("StatusCodes", out _statusCodes);
+        //_memoryCache.TryGetValue("Workflow", out _workflows);
+        //_memoryCache.TryGetValue("Communication", out _communication);
+        //_memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
 
-        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
-        if (!_cookyString.NullOrWhiteSpace())
-        {
-            SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
-        }
-        else
-        {
-            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        }
+        //string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
+        //if (!_cookyString.NullOrWhiteSpace())
+        //{
+        //    SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
+        //}
+        //else
+        //{
+        //    await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        //}
 
         await base.OnInitializedAsync();
     }
 
     private async Task AddDocument(MouseEventArgs arg)
     {
-        await Task.Delay(1);
+        //await Task.Delay(1);
 
-        NewDocument.ClearData();
+        //NewDocument.ClearData();
 
-        await DialogDocument.Dialog.ShowAsync();
+        //await DialogDocument.Dialog.ShowAsync();
     }
 
     /*private static void RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
@@ -823,35 +823,35 @@ public partial class Companies
 
     private void AddNewCandidate()
     {
-        VisibleNewCandidate = true;
+        //VisibleNewCandidate = true;
     }
 
     private async Task AdvancedSearch()
     {
         await Task.Delay(1);
-        await DialogSearch.Dialog.ShowAsync();
+        //await DialogSearch.Dialog.ShowAsync();
     }
 
     private void AfterDocument(ActionCompleteEventArgs arg)
     {
-        DialogDocument.DialogFooter.SaveButton.Disabled = false;
-        DialogDocument.DialogFooter.CancelButton.Disabled = false;
+        //DialogDocument.DialogFooter.SaveButton.Disabled = false;
+        //DialogDocument.DialogFooter.CancelButton.Disabled = false;
     }
 
     private async Task AllAlphabet()
     {
-        SearchModel.Name = "";
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //SearchModel.Name = "";
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private void BeforeDocument(BeforeUploadEventArgs arg)
     {
-        DialogDocument.DialogFooter.SaveButton.Disabled = true;
-        DialogDocument.DialogFooter.CancelButton.Disabled = true;
+        //DialogDocument.DialogFooter.SaveButton.Disabled = true;
+        //DialogDocument.DialogFooter.CancelButton.Disabled = true;
     }
 
     private void CancelCandidate()
@@ -862,14 +862,14 @@ public partial class Companies
     private async Task CancelMPC()
     {
         await Task.Delay(1);
-        await DialogMPC.Dialog.HideAsync();
+        //await DialogMPC.Dialog.HideAsync();
         //VisibleMPCCandidate = false;
     }
 
     private async Task CancelRating()
     {
         await Task.Delay(1);
-        await DialogRating.Dialog.HideAsync();
+        //await DialogRating.Dialog.HideAsync();
     }
 
     private void CancelSkill()
@@ -879,26 +879,27 @@ public partial class Companies
 
     private async Task ChangeItemCount(ChangeEventArgs<int, IntValues> obj)
     {
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        SearchModel.ItemCount = obj.Value;
+        await Task.Delay(1);
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //SearchModel.ItemCount = obj.Value;
 
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        await Grid.Refresh();
-        StateHasChanged();
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        //await Grid.Refresh();
+        //StateHasChanged();
     }
 
     private async Task ClearFilter()
     {
-        Name = "";
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        int _currentPageItemCount = SearchModel.ItemCount;
-        SearchModel.ClearData();
-        SearchModel.ItemCount = _currentPageItemCount;
-        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        await Grid.Refresh();
+        //Name = "";
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //int _currentPageItemCount = SearchModel.ItemCount;
+        //SearchModel.ClearData();
+        //SearchModel.ItemCount = _currentPageItemCount;
+        //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        //await Grid.Refresh();
     }
 
     private async Task DataHandler(object obj)
@@ -917,178 +918,179 @@ public partial class Companies
     private async Task DeleteDocument(int arg)
     {
         await Task.Delay(1);
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/DeleteCandidateDocument", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("documentID", arg.ToString());
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/DeleteCandidateDocument", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("documentID", arg.ToString());
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task DeleteEducation(int id)
     {
         await Task.Delay(1);
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/DeleteEducation", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("id", id.ToString());
-            _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/DeleteEducation", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("id", id.ToString());
+        //    _request.AddQueryParameter("candidateID", _target.ID.ToString());
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task DeleteExperience(int id)
     {
         await Task.Delay(1);
-        try
-        {
-            using RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/DeleteExperience", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("id", id.ToString());
-            _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    using RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/DeleteExperience", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("id", id.ToString());
+        //    _request.AddQueryParameter("candidateID", _target.ID.ToString());
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task DeleteNotes(int id)
     {
         await Task.Delay(1);
-        try
-        {
-            using RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/DeleteNotes", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("id", id.ToString());
-            _request.AddQueryParameter("candidateID", _target.ID.ToString());
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    using RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/DeleteNotes", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("id", id.ToString());
+        //    _request.AddQueryParameter("candidateID", _target.ID.ToString());
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task DeleteSkill(int id)
     {
         await Task.Delay(1);
-        try
-        {
-            using RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/DeleteSkill", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("id", id.ToString());
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    using RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/DeleteSkill", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("id", id.ToString());
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skill"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skill"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
-    private async Task DetailDataBind(DetailDataBoundEventArgs<Candidates> candidate)
+    private async Task DetailDataBind(DetailDataBoundEventArgs<Company> company)
     {
         //VisibleProperty = true;
-
         if (_target != null)
         {
-            if (_target != candidate.Data) // return when target is equal to args.data
+            if (_target != company.Data) // return when target is equal to args.data
             {
                 await Grid.ExpandCollapseDetailRowAsync(_target);
             }
         }
 
-        _target = candidate.Data;
+        _target = company.Data;
 
-        //_candidateDetailsObject.ClearData();
+        //_companyDetailsObject.ClearData();
         await Task.Delay(1);
+
         await Spinner.ShowAsync();
         //await Task.Delay(1000);
         RestClient _restClient = new($"{Start.ApiHost}");
-        RestRequest request = new("Candidates/GetCandidateDetails");
-        request.AddQueryParameter("candidateID", _target.ID);
+        RestRequest request = new("Company/GetCompanyDetails");
+        request.AddQueryParameter("companyID", _target.ID);
+        request.AddQueryParameter("user", LoginCookyUser.UserID);
 
         Dictionary<string, object> _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(request);
 
         if (_restResponse != null)
         {
-            _candidateDetailsObject = JsonConvert.DeserializeObject<CandidateDetails>(_restResponse["Candidate"]?.ToString() ?? string.Empty);
+            _companyDetailsObject = JsonConvert.DeserializeObject<CompanyDetails>(_restResponse["Company"]?.ToString() ?? string.Empty);
             _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
             _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
             _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
@@ -1098,16 +1100,16 @@ public partial class Companies
             _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
             _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
             RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
-            GetMPCDate();
-            GetMPCNote();
-            GetRatingDate();
-            GetRatingNote();
-            SetupAddress();
-            SetCommunication();
-            SetEligibility();
-            SetJobOption();
-            SetTaxTerm();
-            SetExperience();
+            //GetMPCDate();
+            //GetMPCNote();
+            //GetRatingDate();
+            //GetRatingNote();
+            //SetupAddress();
+            //SetCommunication();
+            //SetEligibility();
+            //SetJobOption();
+            //SetTaxTerm();
+            //SetExperience();
         }
 
         _selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
@@ -1119,44 +1121,44 @@ public partial class Companies
     private async Task DownloadDocument(int arg)
     {
         await Task.Delay(1);
-        SelectedDownload = DownloadsPanel.SelectedRow;
-        string _queryString = (SelectedDownload.InternalFileName + "^" + _target.ID + "^" + SelectedDownload.Location + "^0").ToBase64String();
-        //NavManager.NavigateTo(NavManager.BaseUri + "Download/" + _queryString);
-        await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
-        /*string _filePath = Path.Combine(Environment.WebRootPath, "Uploads", "Candidate", _target.ID.ToString(), SelectedDownload.InternalFileName).ToBase64String();
-        byte[] _fileBytes = await File.ReadAllBytesAsync(_filePath);
-        return File(_fileBytes, "application/force-download", _decodedStringArray[2]);*/
+        //SelectedDownload = DownloadsPanel.SelectedRow;
+        //string _queryString = (SelectedDownload.InternalFileName + "^" + _target.ID + "^" + SelectedDownload.Location + "^0").ToBase64String();
+        ////NavManager.NavigateTo(NavManager.BaseUri + "Download/" + _queryString);
+        //await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
+        // /*string _filePath = Path.Combine(Environment.WebRootPath, "Uploads", "Candidate", _target.ID.ToString(), SelectedDownload.InternalFileName).ToBase64String();
+        //byte[] _fileBytes = await File.ReadAllBytesAsync(_filePath);
+        //return File(_fileBytes, "application/force-download", _decodedStringArray[2]);*/
     }
 
     private async Task EditActivity(int id)
     {
         await Task.Delay(1);
 
-        SelectedActivity = ActivityPanel.SelectedRow;
-        NextSteps.Clear();
-        NextSteps.Add(new("No Change", ""));
-        try
-        {
-            foreach (string[] _next in _workflows.Where(flow => flow.Step == SelectedActivity.StatusCode).Select(flow => flow.Next.Split(',')))
-            {
-                foreach (string _nextString in _next)
-                {
-                    foreach (StatusCode _status in _statusCodes.Where(status => status.Code == _nextString && status.AppliesToCode == "SCN"))
-                    {
-                        NextSteps.Add(new(_status.Status, _nextString));
-                        break;
-                    }
-                }
+        //SelectedActivity = ActivityPanel.SelectedRow;
+        //NextSteps.Clear();
+        //NextSteps.Add(new("No Change", ""));
+        //try
+        //{
+        //    foreach (string[] _next in _workflows.Where(flow => flow.Step == SelectedActivity.StatusCode).Select(flow => flow.Next.Split(',')))
+        //    {
+        //        foreach (string _nextString in _next)
+        //        {
+        //            foreach (StatusCode _status in _statusCodes.Where(status => status.Code == _nextString && status.AppliesToCode == "SCN"))
+        //            {
+        //                NextSteps.Add(new(_status.Status, _nextString));
+        //                break;
+        //            }
+        //        }
 
-                break;
-            }
-        }
-        catch
-        {
-            //
-        }
+        //        break;
+        //    }
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await DialogActivity.Dialog.ShowAsync();
+        //await DialogActivity.Dialog.ShowAsync();
     }
 
     private async Task EditCandidate()
@@ -1164,23 +1166,23 @@ public partial class Companies
         //double _index = await Grid.GetRowIndexByPrimaryKey(_target.ID);
         //await Grid.SelectRowAsync(_index);
         await Task.Delay(1);
-        await Spinner.ShowAsync();
-        if (_target.ID == 0)
-        {
-            Title = "Add";
-            //IsAdd = true;
-            _candidateDetailsObjectClone.ClearData();
-        }
-        else
-        {
-            Title = "Edit";
-            //IsAdd = false;
-            _candidateDetailsObjectClone = _candidateDetailsObject.Copy();
-        }
+        //await Spinner.ShowAsync();
+        //if (_target.ID == 0)
+        //{
+        //    Title = "Add";
+        //    //IsAdd = true;
+        //    _companyDetailsObjectClone.ClearData();
+        //}
+        //else
+        //{
+        //    Title = "Edit";
+        //    //IsAdd = false;
+        //    _companyDetailsObjectClone = _companyDetailsObject.Copy();
+        //}
 
-        StateHasChanged();
-        await DialogEditCandidate.Dialog.ShowAsync();
-        await Spinner.HideAsync();
+        //StateHasChanged();
+        //await DialogEditCandidate.Dialog.ShowAsync();
+        //await Spinner.HideAsync();
     }
 
     private async Task EditEducation(int id)
@@ -1201,70 +1203,72 @@ public partial class Companies
     private async Task EditExperience(int id)
     {
         await Task.Delay(1);
-        if (id == 0)
-        {
-            SelectedExperience.ClearData();
-        }
-        else
-        {
-            SelectedExperience = ExperiencePanel.SelectedRow;
-        }
+        //if (id == 0)
+        //{
+        //    SelectedExperience.ClearData();
+        //}
+        //else
+        //{
+        //    SelectedExperience = ExperiencePanel.SelectedRow;
+        //}
 
-        await DialogExperience.Dialog.ShowAsync();
+        //await DialogExperience.Dialog.ShowAsync();
     }
 
     private async Task EditMPC()
     {
         await Task.Delay(1);
-        StateHasChanged();
-        await DialogMPC.Dialog.ShowAsync();
-        //VisibleMPCCandidate = true;
+        //StateHasChanged();
+        //await DialogMPC.Dialog.ShowAsync();
+        ////VisibleMPCCandidate = true;
     }
 
     private async Task EditNotes(int id)
     {
         await Task.Delay(1);
-        if (id == 0)
-        {
-            SelectedNotes.ClearData();
-        }
-        else
-        {
-            SelectedNotes = NotesPanel.SelectedRow;
-        }
+        //if (id == 0)
+        //{
+        //    SelectedNotes.ClearData();
+        //}
+        //else
+        //{
+        //    SelectedNotes = NotesPanel.SelectedRow;
+        //}
 
-        await DialogNotes.Dialog.ShowAsync();
+        //await DialogNotes.Dialog.ShowAsync();
     }
 
     private async Task EditRating()
     {
         await Task.Delay(1);
-        await DialogRating.Dialog.ShowAsync();
+        //await DialogRating.Dialog.ShowAsync();
     }
 
     private async Task EditSkill(int id)
     {
-        if (id == 0)
-        {
-            SelectedSkill.ClearData();
-        }
-        else
-        {
-            SelectedSkill = SkillPanel.SelectedRow;
-        }
+        await Task.Delay(1);
+        //if (id == 0)
+        //{
+        //    SelectedSkill.ClearData();
+        //}
+        //else
+        //{
+        //    SelectedSkill = SkillPanel.SelectedRow;
+        //}
 
-        await DialogSkill.Dialog.ShowAsync();
+        //await DialogSkill.Dialog.ShowAsync();
     }
 
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> candidate)
     {
-        SearchModel.Name = candidate.Value ?? "";
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        candidate.IsInteracted = true;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        await Task.Delay(1);
+        //SearchModel.Name = candidate.Value ?? "";
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //candidate.IsInteracted = true;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private static void FilterSet(string value)
@@ -1289,137 +1293,139 @@ public partial class Companies
 
     private async Task FirstClick()
     {
-        if (_currentPage < 1)
-        {
-            _currentPage = 1;
-        }
+        //if (_currentPage < 1)
+        //{
+        //    _currentPage = 1;
+        //}
 
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private void GetMPCDate()
     {
-        string _mpcDate = "";
-        if (_candidateDetailsObject.MpcNotes == "")
-        {
-            MPCDate = _mpcDate.ToMarkupString();
-        }
+        //string _mpcDate = "";
+        //if (_companyDetailsObject.MpcNotes == "")
+        //{
+        //    MPCDate = _mpcDate.ToMarkupString();
+        //}
 
-        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
-        if (_candidateMPCObjectFirst != null)
-        {
-            _mpcDate =
-                $"{_candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
-        }
+        //CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        //if (_candidateMPCObjectFirst != null)
+        //{
+        //    _mpcDate =
+        //        $"{_candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
+        //}
 
-        MPCDate = _mpcDate.ToMarkupString();
+        //MPCDate = _mpcDate.ToMarkupString();
     }
 
     private void GetMPCNote()
     {
-        string _mpcNote = "";
-        if (_candidateDetailsObject.MpcNotes == "")
-        {
-            MPCNote = _mpcNote.ToMarkupString();
-        }
+        //string _mpcNote = "";
+        //if (_companyDetailsObject.MpcNotes == "")
+        //{
+        //    MPCNote = _mpcNote.ToMarkupString();
+        //}
 
-        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
-        if (_candidateMPCObjectFirst != null)
-        {
-            _mpcNote = _candidateMPCObjectFirst.Comments;
-        }
+        //CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.MaxBy(x => x.Date);
+        //if (_candidateMPCObjectFirst != null)
+        //{
+        //    _mpcNote = _candidateMPCObjectFirst.Comments;
+        //}
 
-        MPCNote = _mpcNote.ToMarkupString();
+        //MPCNote = _mpcNote.ToMarkupString();
     }
 
     private void GetRatingDate()
     {
-        string _ratingDate = "";
-        if (_candidateDetailsObject.RateNotes == "")
-        {
-            RatingDate = _ratingDate.ToMarkupString();
-        }
+        //string _ratingDate = "";
+        //if (_companyDetailsObject.RateNotes == "")
+        //{
+        //    RatingDate = _ratingDate.ToMarkupString();
+        //}
 
-        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
-        if (_candidateRatingObjectFirst != null)
-        {
-            _ratingDate =
-                $"{_candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
-        }
+        //CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        //if (_candidateRatingObjectFirst != null)
+        //{
+        //    _ratingDate =
+        //        $"{_candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
+        //}
 
-        RatingDate = _ratingDate.ToMarkupString();
+        //RatingDate = _ratingDate.ToMarkupString();
     }
 
     private void GetRatingNote()
     {
-        string _ratingNote = "";
-        if (_candidateDetailsObject.RateNotes == "")
-        {
-            RatingNote = _ratingNote.ToMarkupString();
-        }
+        //string _ratingNote = "";
+        //if (_companyDetailsObject.RateNotes == "")
+        //{
+        //    RatingNote = _ratingNote.ToMarkupString();
+        //}
 
-        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
-        if (_candidateRatingObjectFirst != null)
-        {
-            _ratingNote = _candidateRatingObjectFirst.Comments;
-        }
+        //CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        //if (_candidateRatingObjectFirst != null)
+        //{
+        //    _ratingNote = _candidateRatingObjectFirst.Comments;
+        //}
 
-        RatingNote = _ratingNote.ToMarkupString();
+        //RatingNote = _ratingNote.ToMarkupString();
     }
 
     private string GetState(int id) => _states.FirstOrDefault(state => state.Key == id)?.Value.Split('-')[1].Replace("[", "").Replace("]", "").Trim();
 
     private async Task LastClick()
     {
-        if (_currentPage < 1)
-        {
-            _currentPage = 1;
-        }
+        await Task.Delay(1);
+        //if (_currentPage < 1)
+        //{
+        //    _currentPage = 1;
+        //}
 
-        _currentPage = PageCount.ToInt32();
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //_currentPage = PageCount.ToInt32();
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private async Task NextClick()
     {
-        if (_currentPage < 1)
-        {
-            _currentPage = 1;
-        }
+        await Task.Delay(1);
+        //if (_currentPage < 1)
+        //{
+        //    _currentPage = 1;
+        //}
 
-        _currentPage = SearchModel.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : SearchModel.Page + 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //_currentPage = SearchModel.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : SearchModel.Page + 1;
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
-    private async Task OnActionBegin(ActionEventArgs<Candidates> args)
+    private async Task OnActionBegin(ActionEventArgs<Company> args)
     {
         await Task.Delay(1);
-        if (args.RequestType == Action.Sorting)
-        {
-            SearchModel.SortField = args.ColumnName switch
-                                    {
-                                        "Name" => 2,
-                                        "Location" => 5,
-                                        "Status" => 8,
-                                        _ => 1
-                                    };
-            SearchModel.SortDirection = args.Direction == SortDirection.Ascending ? (byte)1 : (byte)0;
-            await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-            await Grid.Refresh();
-        }
+        //if (args.RequestType == Action.Sorting)
+        //{
+        //    SearchModel.SortField = args.ColumnName switch
+        //                            {
+        //                                "Name" => 2,
+        //                                "Location" => 5,
+        //                                "Status" => 8,
+        //                                _ => 1
+        //                            };
+        //    SearchModel.SortDirection = args.Direction == SortDirection.Ascending ? (byte)1 : (byte)0;
+        //    await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        //    await Grid.Refresh();
+        //}
     }
 
-    private async Task OnActionComplete(ActionEventArgs<Candidates> arg)
+    private async Task OnActionComplete(ActionEventArgs<Company> arg)
     {
         await Task.Delay(1);
     }
@@ -1427,69 +1433,71 @@ public partial class Companies
     private async Task OnFileUpload(UploadChangeEventArgs file)
     {
         await Task.Delay(1);
-        foreach (UploadFiles _file in file.Files)
-        {
-            MimeType = _file.FileInfo.MimeContentType;
-            FileName = _file.FileInfo.Name;
-            FileSize = _file.FileInfo.Size;
-            FileData = _file.Stream;
+        //foreach (UploadFiles _file in file.Files)
+        //{
+        //    MimeType = _file.FileInfo.MimeContentType;
+        //    FileName = _file.FileInfo.Name;
+        //    FileSize = _file.FileInfo.Size;
+        //    FileData = _file.Stream;
 
-            //List<AdminList> _dataSource = new();
-            try
-            {
-                //string _url = ;
+        //    //List<AdminList> _dataSource = new();
+        //    try
+        //    {
+        //        //string _url = ;
 
-                RestClient _client = new($"{Start.ApiHost}");
-                RestRequest _request = new("Candidates/ParseResume", Method.Post)
-                                       {
-                                           AlwaysMultipartFormData = true
-                                       };
-                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-                _request.AddParameter("fileData",
-                                      $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}",
-                                      ParameterType.RequestBody);
-                _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
+        //        RestClient _client = new($"{Start.ApiHost}");
+        //        RestRequest _request = new("Candidates/ParseResume", Method.Post)
+        //                               {
+        //                                   AlwaysMultipartFormData = true
+        //                               };
+        //        //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+        //        _request.AddParameter("fileData",
+        //                              $"{FileName}^{FileSize}^{MimeType}^{(LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant())}",
+        //                              ParameterType.RequestBody);
+        //        _request.AddFile("file", FileData.ToArray(), FileName, MimeType);
 
-                await _client.PostAsync(_request);
-                await Grid.Refresh();
-            }
-            catch
-            {
-                //
-            }
-        }
+        //        await _client.PostAsync(_request);
+        //        await Grid.Refresh();
+        //    }
+        //    catch
+        //    {
+        //        //
+        //    }
+        //}
     }
 
     private async Task PageNumberChanged(ChangeEventArgs obj)
     {
-        decimal _currentValue = obj.Value.ToDecimal();
-        if (_currentValue < 1)
-        {
-            _currentPage = 1;
-        }
-        else if (_currentValue > PageCount)
-        {
-            _currentPage = PageCount.ToInt32();
-        }
+        await Task.Delay(1);
+        //decimal _currentValue = obj.Value.ToDecimal();
+        //if (_currentValue < 1)
+        //{
+        //    _currentPage = 1;
+        //}
+        //else if (_currentValue > PageCount)
+        //{
+        //    _currentPage = PageCount.ToInt32();
+        //}
 
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private async Task PreviousClick()
     {
-        if (_currentPage < 1)
-        {
-            _currentPage = 1;
-        }
+        await Task.Delay(1);
+        //if (_currentPage < 1)
+        //{
+        //    _currentPage = 1;
+        //}
 
-        _currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        //_currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private static void RefreshGrid() => Grid.Refresh();
@@ -1498,497 +1506,498 @@ public partial class Companies
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveCandidateActivity", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(activity.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-            _request.AddQueryParameter("candidateID", _target.ID);
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveCandidateActivity", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(activity.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //    _request.AddQueryParameter("candidateID", _target.ID);
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveCandidate()
     {
         //SpinnerVisible = true;
         await Task.Delay(1);
-        _candidateDetailsObject = _candidateDetailsObjectClone.Copy();
+        //_companyDetailsObject = _companyDetailsObjectClone.Copy();
 
-        RestClient _client = new($"{Start.ApiHost}");
-        RestRequest _request = new("Candidates/SaveCandidate", Method.Post)
-                               {
-                                   RequestFormat = DataFormat.Json
-                               };
-        _request.AddJsonBody(_candidateDetailsObject);
+        //RestClient _client = new($"{Start.ApiHost}");
+        //RestRequest _request = new("Candidates/SaveCandidate", Method.Post)
+        //                       {
+        //                           RequestFormat = DataFormat.Json
+        //                       };
+        //_request.AddJsonBody(_companyDetailsObject);
 
-        await _client.PostAsync<int>(_request);
+        //await _client.PostAsync<int>(_request);
 
-        _target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
-        _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
-        _target.Email = _candidateDetailsObject.Email;
-        _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
-        _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
-        _target.Status = "Available";
-        SetupAddress();
-        SetCommunication();
-        SetEligibility();
-        SetJobOption();
-        SetTaxTerm();
-        SetExperience();
-        //SpinnerVisible = false;
-        await Task.Delay(1);
-        //VisibleCandidateInfo = false;
-        StateHasChanged();
+        ////_target.Name = _companyDetailsObject.FirstName + " " + _companyDetailsObject.LastName;
+        ////_target.Phone = _companyDetailsObject.Phone1.FormatPhoneNumber();
+        ////_target.Email = _companyDetailsObject.Email;
+        ////_target.Location = _companyDetailsObject.City + ", " + GetState(_companyDetailsObject.StateID) + ", " + _companyDetailsObject.ZipCode;
+        ////_target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
+        ////_target.Status = "Available";
+        //SetupAddress();
+        //SetCommunication();
+        //SetEligibility();
+        //SetJobOption();
+        //SetTaxTerm();
+        //SetExperience();
+        ////SpinnerVisible = false;
+        //await Task.Delay(1);
+        ////VisibleCandidateInfo = false;
+        //StateHasChanged();
     }
 
     private async Task SaveDocument(EditContext document)
     {
         await Task.Delay(1);
-        try
-        {
-            if (document.Model is CandidateDocument _document)
-            {
-                RestClient _client = new($"{Start.ApiHost}");
-                RestRequest _request = new("Candidates/UploadDocument", Method.Post)
-                                       {
-                                           AlwaysMultipartFormData = true
-                                       };
-                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
-                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-                _request.AddParameter("name", _document.Name, ParameterType.GetOrPost);
-                _request.AddParameter("notes", _document.Notes, ParameterType.GetOrPost);
-                _request.AddParameter("candidateID", _target.ID.ToString(), ParameterType.GetOrPost);
-                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
-                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
-                _request.AddParameter("type", _document.DocumentTypeID.ToString(), ParameterType.GetOrPost);
-                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-                if (_response == null)
-                {
-                    return;
-                }
+        //try
+        //{
+        //    if (document.Model is CandidateDocument _document)
+        //    {
+        //        RestClient _client = new($"{Start.ApiHost}");
+        //        RestRequest _request = new("Candidates/UploadDocument", Method.Post)
+        //                               {
+        //                                   AlwaysMultipartFormData = true
+        //                               };
+        //        _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
+        //        //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+        //        _request.AddParameter("name", _document.Name, ParameterType.GetOrPost);
+        //        _request.AddParameter("notes", _document.Notes, ParameterType.GetOrPost);
+        //        _request.AddParameter("candidateID", _target.ID.ToString(), ParameterType.GetOrPost);
+        //        _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
+        //        _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
+        //        _request.AddParameter("type", _document.DocumentTypeID.ToString(), ParameterType.GetOrPost);
+        //        Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //        if (_response == null)
+        //        {
+        //            return;
+        //        }
 
-                _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
-            }
-        }
-        catch
-        {
-            //
-        }
+        //        _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
+        //    }
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveEducation(EditContext education)
     {
         await Task.Delay(1);
 
-        try
-        {
-            if (education.Model is CandidateEducation _education)
-            {
-                RestClient _client = new($"{Start.ApiHost}");
-                RestRequest _request = new("Candidates/SaveEducation", Method.Post)
-                                       {
-                                           RequestFormat = DataFormat.Json
-                                       };
-                _request.AddJsonBody(_education);
-                _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-                _request.AddQueryParameter("candidateID", _target.ID);
+        //try
+        //{
+        //    if (education.Model is CandidateEducation _education)
+        //    {
+        //        RestClient _client = new($"{Start.ApiHost}");
+        //        RestRequest _request = new("Candidates/SaveEducation", Method.Post)
+        //                               {
+        //                                   RequestFormat = DataFormat.Json
+        //                               };
+        //        _request.AddJsonBody(_education);
+        //        _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //        _request.AddQueryParameter("candidateID", _target.ID);
 
-                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-                if (_response == null)
-                {
-                    return;
-                }
+        //        Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //        if (_response == null)
+        //        {
+        //            return;
+        //        }
 
-                _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
-            }
-        }
-        catch
-        {
-            //
-        }
+        //        _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
+        //    }
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveExperience(EditContext experience)
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveExperience", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(experience.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-            _request.AddQueryParameter("candidateID", _target.ID);
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveExperience", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(experience.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //    _request.AddQueryParameter("candidateID", _target.ID);
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveMPC(EditContext editContext)
     {
         await Task.Delay(1);
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveMPC", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(editContext.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveMPC", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(editContext.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response != null)
-            {
-                _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
-                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
-                GetMPCDate();
-                GetMPCNote();
-            }
-        }
-        catch
-        {
-            //
-        }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response != null)
+        //    {
+        //        _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
+        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
+        //        GetMPCDate();
+        //        GetMPCNote();
+        //    }
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveNotes(EditContext notes)
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveNotes", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(notes.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-            _request.AddQueryParameter("candidateID", _target.ID);
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveNotes", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(notes.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //    _request.AddQueryParameter("candidateID", _target.ID);
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveRating(EditContext editContext)
     {
         await Task.Delay(1);
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveRating", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(editContext.Model);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveRating", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(editContext.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response != null)
-            {
-                _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_response["RatingList"]);
-                RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstRating"]?.ToString() ?? string.Empty);
-                _candidateDetailsObject.RateCandidate = RatingMPC.Rating;
-                GetRatingDate();
-                GetRatingNote();
-            }
-        }
-        catch
-        {
-            //
-        }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response != null)
+        //    {
+        //        _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_response["RatingList"]);
+        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstRating"]?.ToString() ?? string.Empty);
+        //        //_companyDetailsObject.RateCandidate = RatingMPC.Rating;
+        //        GetRatingDate();
+        //        GetRatingNote();
+        //    }
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SaveSkill(EditContext skill)
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SaveSkill", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddJsonBody(skill.Model);
-            _request.AddQueryParameter("user", LoginCookyUser.UserID.ToUpperInvariant());
-            _request.AddQueryParameter("candidateID", _target.ID);
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SaveSkill", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddJsonBody(skill.Model);
+        //    _request.AddQueryParameter("user", LoginCookyUser.UserID.ToUpperInvariant());
+        //    _request.AddQueryParameter("candidateID", _target.ID);
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skills"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skills"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SearchCandidate(EditContext arg)
     {
         await Task.Delay(1);
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", arg.Model as CandidateSearch);
-        await Grid.Refresh();
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", arg.Model as CandidateSearch);
+        //await Grid.Refresh();
     }
 
     private async Task SetAlphabet(string alphabet)
     {
-        SearchModel.Name = alphabet;
-        _currentPage = 1;
-        SearchModel.Page = _currentPage;
-        await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        await Grid.Refresh();
+        await Task.Delay(1);
+        //SearchModel.Name = alphabet;
+        //_currentPage = 1;
+        //SearchModel.Page = _currentPage;
+        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await Grid.Refresh();
     }
 
     private void SetCommunication()
     {
-        string _returnValue = _candidateDetailsObject.Communication switch
-                              {
-                                  "G" => "Good",
-                                  "A" => "Average",
-                                  "X" => "Excellent",
-                                  _ => "Fair"
-                              };
+        //string _returnValue = _companyDetailsObject.Communication switch
+        //                      {
+        //                          "G" => "Good",
+        //                          "A" => "Average",
+        //                          "X" => "Excellent",
+        //                          _ => "Fair"
+        //                      };
 
-        CandidateCommunication = _returnValue.ToMarkupString();
+        //CandidateCommunication = _returnValue.ToMarkupString();
     }
 
     private void SetEligibility()
     {
-        if (_eligibility is {Count: > 0})
-        {
-            CandidateEligibility = _candidateDetailsObject.EligibilityID > 0
-                                       ? _eligibility.FirstOrDefault(eligibility => eligibility.Key == _candidateDetailsObject.EligibilityID)!.Value.ToMarkupString()
-                                       : "".ToMarkupString();
-        }
+        //if (_eligibility is {Count: > 0})
+        //{
+        //    CandidateEligibility = _companyDetailsObject.EligibilityID > 0
+        //                               ? _eligibility.FirstOrDefault(eligibility => eligibility.Key == _companyDetailsObject.EligibilityID)!.Value.ToMarkupString()
+        //                               : "".ToMarkupString();
+        //}
     }
 
     private void SetExperience()
     {
-        if (_experience is {Count: > 0})
-        {
-            CandidateExperience = _candidateDetailsObject.ExperienceID > 0
-                                      ? _experience.FirstOrDefault(experience => experience.Key == _candidateDetailsObject.ExperienceID).Value.ToMarkupString()
-                                      : "".ToMarkupString();
-        }
+        //if (_experience is {Count: > 0})
+        //{
+        //    CandidateExperience = _companyDetailsObject.ExperienceID > 0
+        //                              ? _experience.FirstOrDefault(experience => experience.Key == _companyDetailsObject.ExperienceID).Value.ToMarkupString()
+        //                              : "".ToMarkupString();
+        //}
     }
 
     private void SetJobOption()
     {
-        string _returnValue = "";
-        if (_jobOptions is {Count: > 0})
-        {
-            string[] _splitJobOptions = _candidateDetailsObject.JobOptions.Split(',');
-            foreach (string _str in _splitJobOptions)
-            {
-                if (_str == "")
-                {
-                    continue;
-                }
+        //string _returnValue = "";
+        //if (_jobOptions is {Count: > 0})
+        //{
+        //    string[] _splitJobOptions = _companyDetailsObject.JobOptions.Split(',');
+        //    foreach (string _str in _splitJobOptions)
+        //    {
+        //        if (_str == "")
+        //        {
+        //            continue;
+        //        }
 
-                if (_returnValue != "")
-                {
-                    _returnValue += ", " + _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
-                }
-                else
-                {
-                    _returnValue = _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
-                }
-            }
-        }
+        //        if (_returnValue != "")
+        //        {
+        //            _returnValue += ", " + _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
+        //        }
+        //        else
+        //        {
+        //            _returnValue = _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
+        //        }
+        //    }
+        //}
 
-        CandidateJobOptions = _returnValue.ToMarkupString();
+        //CandidateJobOptions = _returnValue.ToMarkupString();
     }
 
     private void SetTaxTerm()
     {
-        string _returnValue = "";
-        /*IMemoryCache _memoryCache = Start.MemCache;
-        _memoryCache.TryGetValue("TaxTerms", out List<KeyValues> _taxTerms);*/
+        //string _returnValue = "";
+        ///*IMemoryCache _memoryCache = Start.MemCache;
+        //_memoryCache.TryGetValue("TaxTerms", out List<KeyValues> _taxTerms);*/
 
-        if (_taxTerms is {Count: > 0})
-        {
-            string[] _splitTaxTerm = _candidateDetailsObject.TaxTerm.Split(',');
-            foreach (string _str in _splitTaxTerm)
-            {
-                if (_str == "")
-                {
-                    continue;
-                }
+        //if (_taxTerms is {Count: > 0})
+        //{
+        //    string[] _splitTaxTerm = _companyDetailsObject.TaxTerm.Split(',');
+        //    foreach (string _str in _splitTaxTerm)
+        //    {
+        //        if (_str == "")
+        //        {
+        //            continue;
+        //        }
 
-                if (_returnValue != "")
-                {
-                    _returnValue += ", " + _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
-                }
-                else
-                {
-                    _returnValue = _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
-                }
-            }
-        }
+        //        if (_returnValue != "")
+        //        {
+        //            _returnValue += ", " + _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
+        //        }
+        //        else
+        //        {
+        //            _returnValue = _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
+        //        }
+        //    }
+        //}
 
-        CandidateTaxTerms = _returnValue.ToMarkupString();
+        //CandidateTaxTerms = _returnValue.ToMarkupString();
     }
 
     private void SetupAddress()
     {
         //NumberOfLines = 1;
-        string _generateAddress = _candidateDetailsObject.Address1;
+        //string _generateAddress = _companyDetailsObject.Address1;
 
-        if (_generateAddress == "")
-        {
-            _generateAddress = _candidateDetailsObject.Address2;
-        }
-        else
-        {
-            _generateAddress += _candidateDetailsObject.Address2 == "" ? "" : "<br/>" + _candidateDetailsObject.Address2;
-        }
+        //if (_generateAddress == "")
+        //{
+        //    _generateAddress = _companyDetailsObject.Address2;
+        //}
+        //else
+        //{
+        //    _generateAddress += _companyDetailsObject.Address2 == "" ? "" : "<br/>" + _companyDetailsObject.Address2;
+        //}
 
-        if (_generateAddress == "")
-        {
-            _generateAddress = _candidateDetailsObject.City;
-        }
-        else
-        {
-            _generateAddress += _candidateDetailsObject.City == "" ? "" : "<br/>" + _candidateDetailsObject.City;
-        }
+        //if (_generateAddress == "")
+        //{
+        //    _generateAddress = _companyDetailsObject.City;
+        //}
+        //else
+        //{
+        //    _generateAddress += _companyDetailsObject.City == "" ? "" : "<br/>" + _companyDetailsObject.City;
+        //}
 
-        if (_candidateDetailsObject.StateID > 0)
-        {
-            if (_generateAddress == "")
-            {
-                _generateAddress = _states.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-                // CandidateDetailsObject.State;
-            }
-            else
-            {
-                try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
-                {
-                    _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _candidateDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-                }
-                catch
-                {
-                    //
-                }
-                //+ CandidateDetailsObject.State;
-            }
-        }
+        //if (_companyDetailsObject.StateID > 0)
+        //{
+        //    if (_generateAddress == "")
+        //    {
+        //        _generateAddress = _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+        //        // CandidateDetailsObject.State;
+        //    }
+        //    else
+        //    {
+        //        try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
+        //        {
+        //            _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+        //        }
+        //        catch
+        //        {
+        //            //
+        //        }
+        //        //+ CandidateDetailsObject.State;
+        //    }
+        //}
 
-        if (_candidateDetailsObject.ZipCode != "")
-        {
-            if (_generateAddress == "")
-            {
-                _generateAddress = _candidateDetailsObject.ZipCode;
-            }
-            else
-            {
-                _generateAddress += ", " + _candidateDetailsObject.ZipCode;
-            }
-        }
+        //if (_companyDetailsObject.ZipCode != "")
+        //{
+        //    if (_generateAddress == "")
+        //    {
+        //        _generateAddress = _companyDetailsObject.ZipCode;
+        //    }
+        //    else
+        //    {
+        //        _generateAddress += ", " + _companyDetailsObject.ZipCode;
+        //    }
+        //}
 
-        //NumberOfLines = _generateAddress.Split("<br/>").Length;
+        ////NumberOfLines = _generateAddress.Split("<br/>").Length;
 
-        Address = _generateAddress.ToMarkupString();
+        //Address = _generateAddress.ToMarkupString();
     }
 
     private async Task SubmitCandidateToRequisition(EditContext arg)
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/SubmitCandidateRequisition", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("requisitionID", RequisitionID);
-            _request.AddQueryParameter("candidateID", _target.ID);
-            _request.AddQueryParameter("notes", SubmitCandidateModel.Text);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/SubmitCandidateRequisition", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("requisitionID", RequisitionID);
+        //    _request.AddQueryParameter("candidateID", _target.ID);
+        //    _request.AddQueryParameter("notes", SubmitCandidateModel.Text);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task SubmitSelectedCandidate(MouseEventArgs arg)
     {
         await Task.Delay(1);
 
-        SubmitCandidateModel.ClearData();
-        await DialogSubmitCandidate.Dialog.ShowAsync();
+        //SubmitCandidateModel.ClearData();
+        //await DialogSubmitCandidate.Dialog.ShowAsync();
     }
 
     private async Task TabSelected(Syncfusion.Blazor.Navigations.SelectEventArgs args)
@@ -2001,39 +2010,39 @@ public partial class Companies
     {
         await Task.Delay(1);
 
-        try
-        {
-            RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Candidates/UndoCandidateActivity", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("submissionID", activityID);
-            _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+        //try
+        //{
+        //    RestClient _client = new($"{Start.ApiHost}");
+        //    RestRequest _request = new("Candidates/UndoCandidateActivity", Method.Post)
+        //                           {
+        //                               RequestFormat = DataFormat.Json
+        //                           };
+        //    _request.AddQueryParameter("submissionID", activityID);
+        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
-            Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            if (_response == null)
-            {
-                return;
-            }
+        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+        //    if (_response == null)
+        //    {
+        //        return;
+        //    }
 
-            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
-        }
-        catch
-        {
-            //
-        }
+        //    _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_response["Activity"]);
+        //}
+        //catch
+        //{
+        //    //
+        //}
 
-        await Task.Delay(1);
+        //await Task.Delay(1);
     }
 
     private async Task UploadDocument(UploadChangeEventArgs file)
     {
         await Task.Delay(1);
-        foreach (UploadFiles _file in file.Files)
-        {
-            AddedDocument = _file;
-        }
+        //foreach (UploadFiles _file in file.Files)
+        //{
+        //    AddedDocument = _file;
+        //}
     }
 
     public class AdminCandidateAdaptor : DataAdaptor
@@ -2043,10 +2052,10 @@ public partial class Companies
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
-            Task<object> _candidateReturn = General.GetCandidateReadAdaptor(SearchModel, dm);
+            Task<object> _companyReturn = General.GetCompanyReadAdaptor(SearchModel, "JOLLY", dm);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
-            return _candidateReturn;
+            return _companyReturn;
         }
 
         #endregion

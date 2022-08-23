@@ -10,11 +10,11 @@
 		</div>
 		<div>
 			<div>Cell Phone #:</div>
-			<div>@($"{ModelObject.Phone1.ToInt64():(###) ###-####}")</div>
+			<div>@($"{ModelObject.Phone1.FormatPhoneNumber()}")</div>
 		</div>
 		<div>
 			<div>Alternate Phone #:</div>
-			<div>@(ModelObject.Phone2 == "" ? "-" : $"{ModelObject.Phone2.ToInt64():(###) ###-####}")</div>
+			<div>@(ModelObject.Phone2 == "" ? "-" : $"{ModelObject.Phone2.FormatPhoneNumber()}")</div>
 		</div>
 		<div>
 			<div>Title:</div>

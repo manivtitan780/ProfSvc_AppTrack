@@ -13,6 +13,8 @@
 
 #endregion
 
+using System.Text.RegularExpressions;
+
 namespace ProfSvc_AppTrack.Code;
 
 public static partial class Extensions
@@ -180,4 +182,18 @@ public static partial class Extensions
     /// <param name="s"> String </param>
     /// <returns> string </returns>
     public static string UrlEncode(this string s) => HttpUtility.UrlEncode(s);
+
+    /// <summary>
+    /// Strips non-numerical characters from the string.
+    /// </summary>
+    /// <param name="s">String to strip characters from.</param>
+    /// <returns></returns>
+    public static string StripPhoneNumber(this string s) => Regex.Replace(s, "[^0-9]", string.Empty);
+
+    /// <summary>
+    /// Formats String to US Phone Number format.
+    /// </summary>
+    /// <param name="s">String to format.</param>
+    /// <returns></returns>
+    public static string FormatPhoneNumber(this string s) => $"{s.ToInt32():(###) ###-####}";
 }
