@@ -25,7 +25,7 @@ public partial class BasicInfoCompanyPanel
     }
 
     [Parameter]
-    public MarkupString SetupAddress
+    public MarkupString Address
     {
         get;
         set;

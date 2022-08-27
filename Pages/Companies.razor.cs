@@ -18,6 +18,8 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
+using ProfSvc_AppTrack.Pages.Controls.Companies;
+
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
 
@@ -157,6 +159,7 @@ public partial class Companies
     private List<KeyValues> _taxTerms;
 
     private List<Workflow> _workflows;
+    private List<CompanyContact> _companyContactsObject = new();
 
     //public async Task RecordClickHandler(RecordClickEventArgs<Candidates> args)
     //{
@@ -606,7 +609,7 @@ public partial class Companies
         set;
     } = new();
 
-    private CandidateSkills SelectedSkill
+    private CompanyContact SelectedContact
     {
         get;
         set;
@@ -726,6 +729,12 @@ public partial class Companies
         set;
     }
 
+    public ContactsPanel ContactPanel
+    {
+        get;
+        set;
+    }
+
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
@@ -749,21 +758,73 @@ public partial class Companies
         //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
     }
 
+    private void SetupAddress()
+    {
+        //NumberOfLines = 1;
+        string _generateAddress = _companyDetailsObject.Address;
+
+        if (_generateAddress == "")
+        {
+            _generateAddress = _companyDetailsObject.City;
+        }
+        else
+        {
+            _generateAddress += _companyDetailsObject.City == "" ? "" : $"<br/>{_companyDetailsObject.City}";
+        }
+
+        if (_companyDetailsObject.StateID > 0)
+        {
+            if (_generateAddress == "")
+            {
+                _generateAddress = _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+                // CandidateDetailsObject.State;
+            }
+            else
+            {
+                try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
+                {
+                    _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+                }
+                catch
+                {
+                    //
+                }
+                //+ CandidateDetailsObject.State;
+            }
+        }
+
+        if (_companyDetailsObject.ZipCode != "")
+        {
+            if (_generateAddress == "")
+            {
+                _generateAddress = _companyDetailsObject.ZipCode;
+            }
+            else
+            {
+                _generateAddress += ", " + _companyDetailsObject.ZipCode;
+            }
+        }
+
+        //NumberOfLines = _generateAddress.Split("<br/>").Length;
+
+        Address = _generateAddress.ToMarkupString();
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        //await Task.Delay(1);
+        await Task.Delay(1);
         //Uri _uri = NavManager.ToAbsoluteUri(NavManager.Uri);
         //if (QueryHelpers.ParseQuery(_uri.Query).TryGetValue("requisition", out StringValues _tempRequisitionID))
         //{
         //    RequisitionID = _tempRequisitionID.ToInt32();
         //}
 
-        //LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
-        //IMemoryCache _memoryCache = Start.MemCache;
-        //while (_states == null)
-        //{
-        //    _memoryCache.TryGetValue("States", out _states);
-        //}
+        LoginCookyUser = await NavManager.RedirectInner(LocalStorageBlazored);
+        IMemoryCache _memoryCache = Start.MemCache;
+        while (_states == null)
+        {
+            _memoryCache.TryGetValue("States", out _states);
+        }
 
         //_statesCopy.Clear();
         //_statesCopy.Add(new(0, "All"));
@@ -1091,20 +1152,21 @@ public partial class Companies
         if (_restResponse != null)
         {
             _companyDetailsObject = JsonConvert.DeserializeObject<CompanyDetails>(_restResponse["Company"]?.ToString() ?? string.Empty);
-            _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
-            _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
-            _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
-            _candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
-            _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
-            _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
-            _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
-            _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
-            RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
+            _companyContactsObject = General.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"]);
+            //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
+            //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
+            //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
+            //_candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
+            //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
+            //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
+            //_candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
+            //RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
             //GetMPCDate();
             //GetMPCNote();
             //GetRatingDate();
             //GetRatingNote();
-            //SetupAddress();
+            SetupAddress();
             //SetCommunication();
             //SetEligibility();
             //SetJobOption();
@@ -1112,7 +1174,7 @@ public partial class Companies
             //SetExperience();
         }
 
-        _selectedTab = _candidateActivityObject.Count > 0 ? 7 : 0;
+        _selectedTab = 0;
 
         await Task.Delay(1);
         await Spinner.HideAsync();
@@ -1899,67 +1961,6 @@ public partial class Companies
         //CandidateTaxTerms = _returnValue.ToMarkupString();
     }
 
-    private void SetupAddress()
-    {
-        //NumberOfLines = 1;
-        //string _generateAddress = _companyDetailsObject.Address1;
-
-        //if (_generateAddress == "")
-        //{
-        //    _generateAddress = _companyDetailsObject.Address2;
-        //}
-        //else
-        //{
-        //    _generateAddress += _companyDetailsObject.Address2 == "" ? "" : "<br/>" + _companyDetailsObject.Address2;
-        //}
-
-        //if (_generateAddress == "")
-        //{
-        //    _generateAddress = _companyDetailsObject.City;
-        //}
-        //else
-        //{
-        //    _generateAddress += _companyDetailsObject.City == "" ? "" : "<br/>" + _companyDetailsObject.City;
-        //}
-
-        //if (_companyDetailsObject.StateID > 0)
-        //{
-        //    if (_generateAddress == "")
-        //    {
-        //        _generateAddress = _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-        //        // CandidateDetailsObject.State;
-        //    }
-        //    else
-        //    {
-        //        try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
-        //        {
-        //            _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-        //        }
-        //        catch
-        //        {
-        //            //
-        //        }
-        //        //+ CandidateDetailsObject.State;
-        //    }
-        //}
-
-        //if (_companyDetailsObject.ZipCode != "")
-        //{
-        //    if (_generateAddress == "")
-        //    {
-        //        _generateAddress = _companyDetailsObject.ZipCode;
-        //    }
-        //    else
-        //    {
-        //        _generateAddress += ", " + _companyDetailsObject.ZipCode;
-        //    }
-        //}
-
-        ////NumberOfLines = _generateAddress.Split("<br/>").Length;
-
-        //Address = _generateAddress.ToMarkupString();
-    }
-
     private async Task SubmitCandidateToRequisition(EditContext arg)
     {
         await Task.Delay(1);
@@ -2068,5 +2069,49 @@ public partial class Companies
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
 
         #endregion
+    }
+
+    private async Task EditContact(int id)
+    {
+        await Task.Delay(1);
+        if (id == 0)
+        {
+            SelectedContact.ClearData();
+        }
+        else
+        {
+            SelectedContact = ContactPanel.SelectedRow;
+        }
+
+        //await DialogSkill.Dialog.ShowAsync();
+    }
+
+    private async Task DeleteContact(int id)
+    {
+        await Task.Delay(1);
+        try
+        {
+            using RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Company/DeleteContact", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("id", id.ToString());
+            //_request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            //Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            //if (_response == null)
+            {
+               // return;
+            }
+
+            //_companyContactsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skill"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
     }
 }

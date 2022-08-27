@@ -1009,6 +1009,10 @@ div[id^="e-item-tabCandidates_"] {
     border-top-right-radius: 5px;
 }
 
+#tabCompany .e-content {
+    height: unset !important;
+}
+
 /* Detail Section Expand Box */
 
 .containerBox {
@@ -1058,6 +1062,17 @@ div[id^="e-item-tabCandidates_"] {
                 flex: 1;
                 padding-left: 5px;
             }
+
+.companyBox {
+    height: 225px;
+    min-height: 200px;
+}
+
+.companyBox > div {
+    height: 205px;
+    min-height: 200px;
+    width: 49%;
+}
 
 .skillContainerBox, .educationContainerBox, .experienceContainerBox, .notesContainerBox, .activityContainerBox, .downloadContainerBox {
     display: flex;
@@ -1127,6 +1142,16 @@ div[id^="e-item-tabCandidates_"] {
         padding-bottom: 3px;
         padding-top: 3px;
     }
+
+.contactBox {
+    height: 225px;
+    min-height: 200px;
+}
+
+.contactBox > div:first-child {
+    height: 200px !important;
+    min-height: 200px !important;
+}
 
 #gridSkill .e-content, #gridEducation .e-content, #gridExperience .e-content, #gridNotes .e-content, .resumeContainerBox .e-content, #gridActivity .e-content, #gridDownload .e-content {
     border: none;

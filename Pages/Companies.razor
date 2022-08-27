@@ -81,7 +81,7 @@
                 <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
                 style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
                 @* Add Buttons End *@
-				<SfTab CssClass="e-fill" Height="365" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+				<SfTab CssClass="e-fill" Height="280" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
@@ -93,7 +93,7 @@
 								<TabHeader Text="Company Info" />
 							</ChildContent>
 							<ContentTemplate>
-								<BasicInfoCompanyPanel ModelObject="_companyDetailsObject"/>
+								<BasicInfoCompanyPanel ModelObject="_companyDetailsObject" Address="Address"/>
 								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
 												GetRatingNote="RatingNote" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication"
 												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
@@ -104,6 +104,7 @@
 								<TabHeader Text="Contacts" />
 							</ChildContent>
 							<ContentTemplate>
+								<ContactsPanel ModelObject="_companyContactsObject" UserName="@LoginCookyUser.UserID" EditContact="EditContact" DeleteContact="DeleteContact" @ref="ContactPanel"></ContactsPanel>
 								@*<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
 											RowHeight="@RowHeight" />*@
 							</ContentTemplate>
