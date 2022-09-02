@@ -5,29 +5,27 @@
 // Location:            Newtown, PA, USA
 // Solution:            ProfSvc_AppTrack
 // Project:             ProfSvc_AppTrack
-// File Name:           DocumentsPanel.razor.cs
+// File Name:           DocumentsCompanyPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
-// Created On:          07-22-2022 20:51
-// Last Updated On:     07-22-2022 21:03
+// Created On:          08-29-2022 15:23
+// Last Updated On:     08-29-2022 15:24
 // *****************************************/
 
 #endregion
 
-using Microsoft.JSInterop;
+namespace ProfSvc_AppTrack.Pages.Controls.Companies;
 
-namespace ProfSvc_AppTrack.Pages.Controls.Requisitions;
-    
-public partial class DocumentsPanel
+public partial class DocumentsCompanyPanel
 {
     [Parameter]
-    public EventCallback<int> DownloadDocument
+    public EventCallback<int> DeleteDocument
     {
         get;
         set;
     }
 
     [Parameter]
-    public EventCallback<int> DeleteDocument
+    public EventCallback<int> DownloadDocument
     {
         get;
         set;

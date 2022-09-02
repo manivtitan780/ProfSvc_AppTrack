@@ -1312,11 +1312,11 @@ public partial class Candidate
             MPCDate = _mpcDate.ToMarkupString();
         }
 
-        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.MaxBy(x => x.Date);
         if (_candidateMPCObjectFirst != null)
         {
             _mpcDate =
-                $"{_candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
+                $"{_candidateMPCObjectFirst.Date.CultureDate()} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
         }
 
         MPCDate = _mpcDate.ToMarkupString();
@@ -1330,7 +1330,7 @@ public partial class Candidate
             MPCNote = _mpcNote.ToMarkupString();
         }
 
-        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        CandidateMPC _candidateMPCObjectFirst = _candidateMPCObject.MaxBy(x => x.Date);
         if (_candidateMPCObjectFirst != null)
         {
             _mpcNote = _candidateMPCObjectFirst.Comments;
@@ -1347,11 +1347,11 @@ public partial class Candidate
             RatingDate = _ratingDate.ToMarkupString();
         }
 
-        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.MaxBy(x => x.Date);
         if (_candidateRatingObjectFirst != null)
         {
             _ratingDate =
-                $"{_candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
+                $"{_candidateRatingObjectFirst.Date.CultureDate()} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
         }
 
         RatingDate = _ratingDate.ToMarkupString();
@@ -1365,7 +1365,7 @@ public partial class Candidate
             RatingNote = _ratingNote.ToMarkupString();
         }
 
-        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.OrderByDescending(x => x.Date).FirstOrDefault();
+        CandidateRating _candidateRatingObjectFirst = _candidateRatingObject.MaxBy(x => x.Date);
         if (_candidateRatingObjectFirst != null)
         {
             _ratingNote = _candidateRatingObjectFirst.Comments;
@@ -1547,7 +1547,7 @@ public partial class Candidate
         _target.Phone = _candidateDetailsObject.Phone1.FormatPhoneNumber();
         _target.Email = _candidateDetailsObject.Email;
         _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
-        _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
+        _target.Updated = DateTime.Today.CultureDate() + "[ADMIN]";
         _target.Status = "Available";
         SetupAddress();
         SetCommunication();

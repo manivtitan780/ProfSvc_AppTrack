@@ -936,7 +936,7 @@ public partial class Requisition
         _target.Phone = $"{_candidateDetailsObject.Phone1.ToInt64(): (###) ###-####}";
         _target.Email = _candidateDetailsObject.Email;
         _target.Location = _candidateDetailsObject.City + ", " + GetState(_candidateDetailsObject.StateID) + ", " + _candidateDetailsObject.ZipCode;
-        _target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
+        _target.Updated = DateTime.Today.CultureDate() + "[ADMIN]";
         _target.Status = "Available";
         SetupAddress();
         SetCommunication();

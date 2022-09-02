@@ -26,11 +26,11 @@
         </div>
         <div>
             <div>Expected Start Date:</div>
-            <div>@ModelObject.ExpectedStart.ToString("d", new CultureInfo("en-us"))</div>
+            <div>@ModelObject.ExpectedStart.CultureDate()</div>
         </div>
         <div>
             <div>Due Date:</div>
-            <div>@ModelObject.DueDate.ToString("d", new CultureInfo("en-us"))</div>
+            <div>@ModelObject.DueDate.CultureDate()</div>
         </div>
         <div>
             <div>Expected Rate:</div>

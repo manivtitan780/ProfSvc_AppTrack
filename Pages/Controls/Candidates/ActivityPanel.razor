@@ -23,7 +23,7 @@
 							@{
 								if (aCon is CandidateActivity _con)
 								{
-									<span>@_con.UpdatedDate.ToString("MM/dd/yyyy")</span>
+									<span>@_con.UpdatedDate.CultureDate()</span>
 								}
 							}
 						</Template>

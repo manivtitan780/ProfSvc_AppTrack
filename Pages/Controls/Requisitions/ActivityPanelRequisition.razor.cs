@@ -64,6 +64,13 @@ public partial class ActivityPanelRequisition
         set;
     }
 
+    [Parameter]
+    public bool IsCompany
+    {
+        get;
+        set;
+    }
+
     private async Task EditActivityDialog(int id)
     {
         double _index = await GridActivity.GetRowIndexByPrimaryKeyAsync(id);

@@ -1,7 +1,7 @@
-﻿<div class="activityContainerBox">
+﻿<div class="activityContainerBox" style="height: 450px">
 	<div>
 		<div>
-			<SfGrid AllowPaging="false" DataSource="ModelActivityObject" EnableHeaderFocus="true" EnableHover="true" Height="245px" ID="gridActivity" @ref="GridActivity" RowHeight="@RowHeight"
+			<SfGrid AllowPaging="false" DataSource="ModelActivityObject" EnableHeaderFocus="true" EnableHover="true" Height="410px" ID="gridActivity" @ref="GridActivity" RowHeight="@RowHeight"
 					SelectedRowIndex="0" TValue="CandidateActivity" Width="99%">
 				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"/>
 				<GridEvents RowSelected="RowSelected" TValue="CandidateActivity" />
@@ -23,7 +23,7 @@
 							@{
 								if (aCon is CandidateActivity _con)
 								{
-									<span>@_con.UpdatedDate.ToString("MM/dd/yyyy")</span>
+									<span>@_con.UpdatedDate.CultureDate()</span>
 								}
 							}
 						</Template>

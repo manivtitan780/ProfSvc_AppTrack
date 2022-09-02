@@ -70,18 +70,18 @@
 		<GridTemplates Context="context">
 			<DetailTemplate>
 				@* Add Buttons Start *@
-				@*<SfButton Content="Add Skill" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditSkill(0)"
-                style="@($"display:{(_selectedTab == 1 && RequisitionID < 1 ? "unset" : "none")}")" />
-                <SfButton Content="Add Education" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditEducation(0)"
-                style="@($"display:{(_selectedTab == 2 && RequisitionID < 1 ? "unset" : "none")}")" />
-                <SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
-                style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
-                <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
-                style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
-                <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
-                style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
-                @* Add Buttons End *@
-				<SfTab CssClass="e-fill" Height="280" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+				<SfButton Content="Edit Company" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditCompany(0)"
+						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
+				<SfButton Content="Add Contact" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditContact(0)"
+						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
+				@*<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+				style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
+				style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
+				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
+				style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
+				@* Add Buttons End *@
+				<SfTab CssClass="e-fill" Height="540" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
 					<TabAnimationSettings>
 						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
 						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
@@ -93,37 +93,24 @@
 								<TabHeader Text="Company Info" />
 							</ChildContent>
 							<ContentTemplate>
-								<BasicInfoCompanyPanel ModelObject="_companyDetailsObject" Address="Address"/>
-								@*<BasicInfoPanel EditCandidate="EditCandidate" EditMPC="EditMPC" EditRating="EditRating" GetMPCDate="MPCDate" GetMPCNote="MPCNote" GetRatingDate="RatingDate"
-												GetRatingNote="RatingNote" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" SetCommunication="CandidateCommunication"
-												SetEligibility="CandidateEligibility" SetExperience="CandidateExperience" SetJobOption="CandidateJobOptions" SetTaxTerm="CandidateTaxTerms" SetupAddress="Address" />*@
+								<BasicInfoCompanyPanel Address="Address" DeleteContact="DeleteContact" EditContact="EditContact" ModelContactObject="_companyContactsObject" ModelObject="_companyDetailsObject"
+													   @ref="ContactPanel" UserName="@LoginCookyUser.UserID" />
 							</ContentTemplate>
 						</TabItem>
 						<TabItem>
 							<ChildContent>
-								<TabHeader Text="Contacts" />
+								<TabHeader Text="Documents" />
 							</ChildContent>
 							<ContentTemplate>
-								<ContactsPanel ModelObject="_companyContactsObject" UserName="@LoginCookyUser.UserID" EditContact="EditContact" DeleteContact="DeleteContact" @ref="ContactPanel"></ContactsPanel>
-								@*<SkillPanel DeleteSkill="DeleteSkill" EditSkill="EditSkill" IsRequisition="@(RequisitionID > 0)" ModelObject="_candidateDetailsObject" ModelSkillObject="_candidateSkillsObject" @ref="SkillPanel"
-											RowHeight="@RowHeight" />*@
+								<DocumentsCompanyPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_companyDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
 							</ContentTemplate>
 						</TabItem>
-                        <TabItem>
-                            <ChildContent>
-                                <TabHeader Text="Attachment" />
-                            </ChildContent>
-                            <ContentTemplate>
-                                @*<DownloadsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_candidateDocumentsObject" @ref="DownloadsPanel" RowHeight="@RowHeight" />*@
-                            </ContentTemplate>
-                        </TabItem>
 						<TabItem>
 							<ChildContent>
 								<TabHeader Text="Requisitions" />
 							</ChildContent>
 							<ContentTemplate>
-								@*<ActivityPanel EditActivity="EditActivity" IsRequisition="@(RequisitionID > 0)" ModelActivityObject="@_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeight"
-											   UndoCandidateActivity="UndoActivity" />*@
+								<CompanyRequisitions ModelObject="_companyRequisitionsObject" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
@@ -132,7 +119,6 @@
 			</DetailTemplate>
 		</GridTemplates>
 	</SfGrid>
-	
 
 	@*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
     JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />

@@ -8,20 +8,18 @@
 // File Name:           Companies.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          08-19-2022 21:14
-// Last Updated On:     08-19-2022 21:26
+// Last Updated On:     09-02-2022 20:13
 // *****************************************/
 
 #endregion
 
 #region Using
 
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Primitives;
-
 using ProfSvc_AppTrack.Pages.Controls.Companies;
 
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
+using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
 
@@ -104,11 +102,6 @@ public partial class Companies
                                                           }
                                                       };
 
-    private List<CandidateActivity> _candidateActivityObject = new();
-
-    private CompanyDetails _companyDetailsObject = new();
-    private CompanyDetails _companyDetailsObjectClone = new();
-    private List<CandidateDocument> _candidateDocumentsObject = new();
     private List<CandidateEducation> _candidateEducationObject = new();
     private List<CandidateExperience> _candidateExperienceObject = new();
     private List<CandidateMPC> _candidateMPCObject = new();
@@ -117,6 +110,13 @@ public partial class Companies
     private List<CandidateSkills> _candidateSkillsObject = new();
 
     private List<KeyValues> _communication;
+    private List<CompanyContact> _companyContactsObject = new();
+
+    private CompanyDetails _companyDetailsObject = new();
+    private CompanyDetails _companyDetailsObjectClone = new();
+    private List<RequisitionDocuments> _companyDocumentsObject = new();
+
+    private List<Requisitions> _companyRequisitionsObject = new();
 
     private int _currentPage = 1;
 
@@ -129,6 +129,7 @@ public partial class Companies
     private List<IntValues> _experience;
 
     private List<KeyValues> _jobOptions;
+    private List<RequisitionDocuments> _requisitionDocumentsObject = new();
     private int _selectedTab;
 
     private List<IntValues> _states;
@@ -159,7 +160,12 @@ public partial class Companies
     private List<KeyValues> _taxTerms;
 
     private List<Workflow> _workflows;
-    private List<CompanyContact> _companyContactsObject = new();
+
+    public BasicInfoCompanyPanel ContactPanel
+    {
+        get;
+        set;
+    }
 
     //public async Task RecordClickHandler(RecordClickEventArgs<Candidates> args)
     //{
@@ -350,6 +356,12 @@ public partial class Companies
     }
 
     private SubmitCandidate DialogSubmitCandidate
+    {
+        get;
+        set;
+    }
+
+    private DocumentsCompanyPanel DocumentsPanel
     {
         get;
         set;
@@ -576,10 +588,15 @@ public partial class Companies
     private static CandidateSearch SearchModel
     {
         get;
-        set;
     } = new();
 
     private CandidateActivity SelectedActivity
+    {
+        get;
+        set;
+    } = new();
+
+    private CompanyContact SelectedContact
     {
         get;
         set;
@@ -604,12 +621,6 @@ public partial class Companies
     } = new();
 
     private CandidateNotes SelectedNotes
-    {
-        get;
-        set;
-    } = new();
-
-    private CompanyContact SelectedContact
     {
         get;
         set;
@@ -729,18 +740,12 @@ public partial class Companies
         set;
     }
 
-    public ContactsPanel ContactPanel
-    {
-        get;
-        set;
-    }
-
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //await Task.Delay(1);
+        await Task.Delay(1);
         //if (!firstRender)
         //{
         //    //_valueChanged = true;
@@ -756,58 +761,6 @@ public partial class Companies
         //_currentPage = SearchModel.Page;
         //PageCount = _currentPage + 1;
         //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
-    }
-
-    private void SetupAddress()
-    {
-        //NumberOfLines = 1;
-        string _generateAddress = _companyDetailsObject.Address;
-
-        if (_generateAddress == "")
-        {
-            _generateAddress = _companyDetailsObject.City;
-        }
-        else
-        {
-            _generateAddress += _companyDetailsObject.City == "" ? "" : $"<br/>{_companyDetailsObject.City}";
-        }
-
-        if (_companyDetailsObject.StateID > 0)
-        {
-            if (_generateAddress == "")
-            {
-                _generateAddress = _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-                // CandidateDetailsObject.State;
-            }
-            else
-            {
-                try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
-                {
-                    _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
-                }
-                catch
-                {
-                    //
-                }
-                //+ CandidateDetailsObject.State;
-            }
-        }
-
-        if (_companyDetailsObject.ZipCode != "")
-        {
-            if (_generateAddress == "")
-            {
-                _generateAddress = _companyDetailsObject.ZipCode;
-            }
-            else
-            {
-                _generateAddress += ", " + _companyDetailsObject.ZipCode;
-            }
-        }
-
-        //NumberOfLines = _generateAddress.Split("<br/>").Length;
-
-        Address = _generateAddress.ToMarkupString();
     }
 
     protected override async Task OnInitializedAsync()
@@ -870,7 +823,7 @@ public partial class Companies
 
     private async Task AddDocument(MouseEventArgs arg)
     {
-        //await Task.Delay(1);
+        await Task.Delay(1);
 
         //NewDocument.ClearData();
 
@@ -901,6 +854,7 @@ public partial class Companies
 
     private async Task AllAlphabet()
     {
+        await Task.Delay(1);
         //SearchModel.Name = "";
         //_currentPage = 1;
         //SearchModel.Page = _currentPage;
@@ -952,6 +906,7 @@ public partial class Companies
 
     private async Task ClearFilter()
     {
+        await Task.Delay(1);
         //Name = "";
         //_currentPage = 1;
         //SearchModel.Page = _currentPage;
@@ -974,6 +929,50 @@ public partial class Companies
         {
             await Grid.SelectRowAsync(0);
         }
+    }
+
+    /*private async Task EditContact(int id)
+    {
+        await Task.Delay(1);
+        if (id == 0)
+        {
+            SelectedContact.ClearData();
+        }
+        else
+        {
+            SelectedContact = ContactPanel.SelectedRow;
+        }
+
+        //await DialogSkill.Dialog.ShowAsync();
+    }*/
+
+    private async Task DeleteContact(int id)
+    {
+        await Task.Delay(1);
+        try
+        {
+            using RestClient _client = new($"{Start.ApiHost}");
+            RestRequest _request = new("Company/DeleteContact", Method.Post)
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
+            _request.AddQueryParameter("id", id.ToString());
+            //_request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+            //Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+            //if (_response == null)
+            {
+                // return;
+            }
+
+            //_companyContactsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skill"]);
+        }
+        catch
+        {
+            //
+        }
+
+        await Task.Delay(1);
     }
 
     private async Task DeleteDocument(int arg)
@@ -1153,14 +1152,14 @@ public partial class Companies
         {
             _companyDetailsObject = JsonConvert.DeserializeObject<CompanyDetails>(_restResponse["Company"]?.ToString() ?? string.Empty);
             _companyContactsObject = General.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"]);
+            _companyDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_restResponse["Document"]);
             //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
             //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
             //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
-            //_candidateActivityObject = General.DeserializeObject<List<CandidateActivity>>(_restResponse["Activity"]);
+            _companyRequisitionsObject = General.DeserializeObject<List<Requisitions>>(_restResponse["Requisitions"]);
             //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
             //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
             //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
-            //_candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_restResponse["Document"]);
             //RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
             //GetMPCDate();
             //GetMPCNote();
@@ -1247,7 +1246,22 @@ public partial class Companies
         //await Spinner.HideAsync();
     }
 
-    private async Task EditEducation(int id)
+    private async Task EditCompany(int id)
+    {
+        await Task.Delay(1);
+        //if (id == 0)
+        //{
+        //    SelectedSkill.ClearData();
+        //}
+        //else
+        //{
+        //    SelectedSkill = SkillPanel.SelectedRow;
+        //}
+
+        //await DialogSkill.Dialog.ShowAsync();
+    }
+
+    private async Task EditContact(int id)
     {
         await Task.Delay(1);
         if (id == 0)
@@ -1306,21 +1320,6 @@ public partial class Companies
         //await DialogRating.Dialog.ShowAsync();
     }
 
-    private async Task EditSkill(int id)
-    {
-        await Task.Delay(1);
-        //if (id == 0)
-        //{
-        //    SelectedSkill.ClearData();
-        //}
-        //else
-        //{
-        //    SelectedSkill = SkillPanel.SelectedRow;
-        //}
-
-        //await DialogSkill.Dialog.ShowAsync();
-    }
-
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> candidate)
     {
         await Task.Delay(1);
@@ -1355,6 +1354,7 @@ public partial class Companies
 
     private async Task FirstClick()
     {
+        await Task.Delay(1);
         //if (_currentPage < 1)
         //{
         //    _currentPage = 1;
@@ -1379,7 +1379,7 @@ public partial class Companies
         //if (_candidateMPCObjectFirst != null)
         //{
         //    _mpcDate =
-        //        $"{_candidateMPCObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
+        //        $"{_candidateMPCObjectFirst.Date.CultureDate()} [{string.Concat(_candidateMPCObjectFirst.User.Where(char.IsLetter))}]";
         //}
 
         //MPCDate = _mpcDate.ToMarkupString();
@@ -1414,7 +1414,7 @@ public partial class Companies
         //if (_candidateRatingObjectFirst != null)
         //{
         //    _ratingDate =
-        //        $"{_candidateRatingObjectFirst.Date.ToString("d", new CultureInfo("en-us"))} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
+        //        $"{_candidateRatingObjectFirst.Date.CultureDate()} [{string.Concat(_candidateRatingObjectFirst.User.Where(char.IsLetter))}]";
         //}
 
         //RatingDate = _ratingDate.ToMarkupString();
@@ -1614,7 +1614,7 @@ public partial class Companies
         ////_target.Phone = _companyDetailsObject.Phone1.FormatPhoneNumber();
         ////_target.Email = _companyDetailsObject.Email;
         ////_target.Location = _companyDetailsObject.City + ", " + GetState(_companyDetailsObject.StateID) + ", " + _companyDetailsObject.ZipCode;
-        ////_target.Updated = DateTime.Today.ToString("d", new CultureInfo("en-US")) + "[ADMIN]";
+        ////_target.Updated = DateTime.Today.CultureDate() + "[ADMIN]";
         ////_target.Status = "Available";
         //SetupAddress();
         //SetCommunication();
@@ -1961,6 +1961,58 @@ public partial class Companies
         //CandidateTaxTerms = _returnValue.ToMarkupString();
     }
 
+    private void SetupAddress()
+    {
+        //NumberOfLines = 1;
+        string _generateAddress = _companyDetailsObject.Address;
+
+        if (_generateAddress == "")
+        {
+            _generateAddress = _companyDetailsObject.City;
+        }
+        else
+        {
+            _generateAddress += _companyDetailsObject.City == "" ? "" : $"<br/>{_companyDetailsObject.City}";
+        }
+
+        if (_companyDetailsObject.StateID > 0)
+        {
+            if (_generateAddress == "")
+            {
+                _generateAddress = _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+                // CandidateDetailsObject.State;
+            }
+            else
+            {
+                try //Because sometimes the default values are not getting set. It's so random that it can't be debugged. And it never fails during debugging session.
+                {
+                    _generateAddress += ", " + _states.FirstOrDefault(state => state.Key == _companyDetailsObject.StateID)?.Value?.Split('-')[0].Trim();
+                }
+                catch
+                {
+                    //
+                }
+                //+ CandidateDetailsObject.State;
+            }
+        }
+
+        if (_companyDetailsObject.ZipCode != "")
+        {
+            if (_generateAddress == "")
+            {
+                _generateAddress = _companyDetailsObject.ZipCode;
+            }
+            else
+            {
+                _generateAddress += ", " + _companyDetailsObject.ZipCode;
+            }
+        }
+
+        //NumberOfLines = _generateAddress.Split("<br/>").Length;
+
+        Address = _generateAddress.ToMarkupString();
+    }
+
     private async Task SubmitCandidateToRequisition(EditContext arg)
     {
         await Task.Delay(1);
@@ -2001,7 +2053,7 @@ public partial class Companies
         //await DialogSubmitCandidate.Dialog.ShowAsync();
     }
 
-    private async Task TabSelected(Syncfusion.Blazor.Navigations.SelectEventArgs args)
+    private async Task TabSelected(SelectEventArgs args)
     {
         await Task.Delay(1);
         _selectedTab = args.SelectedIndex;
@@ -2069,49 +2121,5 @@ public partial class Companies
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
 
         #endregion
-    }
-
-    private async Task EditContact(int id)
-    {
-        await Task.Delay(1);
-        if (id == 0)
-        {
-            SelectedContact.ClearData();
-        }
-        else
-        {
-            SelectedContact = ContactPanel.SelectedRow;
-        }
-
-        //await DialogSkill.Dialog.ShowAsync();
-    }
-
-    private async Task DeleteContact(int id)
-    {
-        await Task.Delay(1);
-        try
-        {
-            using RestClient _client = new($"{Start.ApiHost}");
-            RestRequest _request = new("Company/DeleteContact", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
-            _request.AddQueryParameter("id", id.ToString());
-            //_request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-
-            //Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-            //if (_response == null)
-            {
-               // return;
-            }
-
-            //_companyContactsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skill"]);
-        }
-        catch
-        {
-            //
-        }
-
-        await Task.Delay(1);
     }
 }

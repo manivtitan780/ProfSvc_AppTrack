@@ -24,7 +24,7 @@
                     <GridColumn Width="10%">
                         <Template Context="bCon">
                             @{
-	                            if (bCon is CompanyContact _con && (_con.UpdatedBy == UserName || _con.CreatedBy == UserName))
+	                            if (bCon is CompanyContact _con)// /*&& (_con.UpdatedBy == UserName || _con.CreatedBy == UserName)*/)
                                 {
                                     <SfButton Content="" IconCss="editIconInner" @onclick="() => EditContactDialog(_con.ID)" />
                                     <SfButton Content="" IconCss="deleteIconInner" @onclick="() => DeleteContactMethod(_con.ID)" />

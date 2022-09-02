@@ -1,7 +1,7 @@
-﻿<div class="downloadContainerBox" style="height: 450px">
+﻿<div class="experienceContainerBox contactBox">
 	<div>
 		<div>
-			<SfGrid AllowPaging="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" Height="410px" ID="gridDownload" @ref="GridDownload" RowHeight="@RowHeight" SelectedRowIndex="0"
+			<SfGrid AllowPaging="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" Height="255px" ID="gridDownload" @ref="GridDownload" RowHeight="@RowHeight" SelectedRowIndex="0"
 					TValue="RequisitionDocuments" Width="99%">
 				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" PersistSelection="true" Type="SelectionType.Single"></GridSelectionSettings>
 				<GridEvents RowSelected="RowSelected" TValue="RequisitionDocuments" />
@@ -32,7 +32,7 @@
 						{
 							if (_document.DocumentNotes.NullOrWhiteSpace())
 							{
-								<div class="blankActivityNotes">There are no Notes for this Activity.</div>
+								<div class="blankActivityNotes">There are no Notes for this Client/Company.</div>
 							}
 							else
 							{

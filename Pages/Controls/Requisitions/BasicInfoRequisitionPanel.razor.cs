@@ -13,6 +13,8 @@
 
 #endregion
 
+using Syncfusion.Blazor.PivotView;
+
 namespace ProfSvc_AppTrack.Pages.Controls.Requisitions;
 
 public partial class BasicInfoRequisitionPanel
@@ -47,6 +49,25 @@ public partial class BasicInfoRequisitionPanel
                    "d" => "days",
                    _ => "years"
                };
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        /*while (ModelObject == null)
+        {
+            ModelObject = new();
+        }*/
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        while (ModelObject == null)
+        {
+            ModelObject = new();
+        }
+        await base.OnParametersSetAsync();
+
     }
 
     private string GetLocation(string location)

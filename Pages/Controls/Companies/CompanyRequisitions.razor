@@ -1,0 +1,107 @@
+﻿@using AnimationEffect = Syncfusion.Blazor.AnimationEffect
+@inject IJSRuntime Runtime;
+
+<div class="experienceContainerBox contactBox">
+    @*"*@
+	<div>
+		<div>
+			<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" EnableStickyHeader="true" Height="255px" @ref="GridInnerRequisition" 
+					TValue="Requisitions" Width="99.75%" ID="divInnerReq">
+				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
+				<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Requisitions" />@* *@
+				<GridColumns>
+					<GridColumn Field="@nameof(Requisitions.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
+					<GridColumn AllowSorting="true" HeaderText="Code" Width="13%">
+						<Template Context="aCon">
+							@{
+								if (aCon is Requisitions _con)
+								{
+									<span style="color: @(_con.PriorityColor)">@_con.Code</span>
+								}
+							}
+						</Template>
+					</GridColumn>
+					<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Title)" HeaderText="Title" Width="36%">
+						<Template Context="aCon">
+							@{
+								if (aCon is Requisitions _con)
+								{
+									<span style="color: @(_con.PriorityColor)">@_con.Title</span>
+								}
+							}
+						</Template>
+					</GridColumn>
+					<GridColumn AllowSorting="false" Field="@nameof(Requisitions.JobOptions)" HeaderText="Type" Width="24%">
+						<Template Context="aCon">
+							@{
+								if (aCon is Requisitions _con)
+								{
+									<span style="color: @(_con.PriorityColor)">@_con.JobOptions</span>
+								}
+							}
+						</Template>
+					</GridColumn>
+					<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Updated)" HeaderText="Updated" Width="13%">
+						<Template Context="aCon">
+							@{
+								if (aCon is Requisitions _con)
+								{
+									<span style="color: @(_con.PriorityColor)">@_con.Updated</span>
+								}
+							}
+						</Template>
+					</GridColumn>
+					<GridColumn AllowSorting="true" Field="@nameof(Requisitions.Status)" HeaderText="Status" Width="13%">
+						<Template Context="aCon">
+							@{
+								if (aCon is Requisitions _con)
+								{
+									<span style="color: @(_con.PriorityColor)">@_con.Status</span>
+								}
+							}
+						</Template>
+					</GridColumn>
+				</GridColumns>
+				<GridTemplates Context="context">
+                <DetailTemplate>
+                        <SfTab CssClass="e-fill" Height="520" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedReqTab" ShowCloseButton="false" Width="95%">
+                        <TabAnimationSettings>
+                            <TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+                            <TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+                            <TabEvents Selected="TabSelected"></TabEvents>
+                        </TabAnimationSettings>
+                        <TabItems>
+                            <TabItem>
+                                <ChildContent>
+                                    <TabHeader Text="Requisition Info" />
+                                </ChildContent>
+                                <ContentTemplate>
+                                    <BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" SkillsText="_requisitionDetailSkills" />
+                                </ContentTemplate>
+                            </TabItem>
+                            <TabItem>
+                                <ChildContent>
+                                    <TabHeader Text="Documents" />
+                                </ChildContent>
+                                <ContentTemplate>
+                                    <DocumentsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_requisitionDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
+                                </ContentTemplate>
+                            </TabItem>
+                            <TabItem>
+                                <ChildContent>
+                                    <TabHeader Text="Candidate Activity" />
+                                </ChildContent>
+                                <ContentTemplate>
+                                    <ActivityPanelRequisition EditActivity="EditActivity" ModelActivityObject="_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeightActivity" UndoCandidateActivity="UndoActivity" />
+                                </ContentTemplate>
+                            </TabItem>
+                        </TabItems>
+                        <SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="13000" />
+                    </SfTab>
+                </DetailTemplate>
+            </GridTemplates>
+			</SfGrid>
+
+		</div>
+	</div>
+</div>

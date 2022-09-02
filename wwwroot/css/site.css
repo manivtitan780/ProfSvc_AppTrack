@@ -999,6 +999,16 @@ span[class^="column-icon-"] {
         padding: 10px;
     }
 
+#divInnerReq .e-content:first-child {
+    border: none;
+}
+
+#divInnerReq .e-tab .e-content {
+    border: 2px solid var(--c-red);
+    border-top: none;
+    padding: 10px;
+}
+
 div[id^="e-item-tabCandidates_"] {
     border: 1px solid #ccc;
     min-width: 70px !important;
@@ -1011,6 +1021,10 @@ div[id^="e-item-tabCandidates_"] {
 
 #tabCompany .e-content {
     height: unset !important;
+}
+
+#divInnerReq #tabCandidates .e-content:first-child {
+    border: none;
 }
 
 /* Detail Section Expand Box */
@@ -1064,15 +1078,26 @@ div[id^="e-item-tabCandidates_"] {
             }
 
 .companyBox {
-    height: 225px;
+    height: 485px;
     min-height: 200px;
 }
 
-.companyBox > div {
-    height: 205px;
-    min-height: 200px;
-    width: 49%;
-}
+    .companyBox > div:first-child {
+        height: 460px;
+        min-height: 200px;
+        font-weight: normal;
+        width: 33%;
+    }
+
+    .companyBox > div:last-child {
+        height: 460px;
+        min-height: 200px;
+        width: 65%;
+    }
+
+    .companyBox > div > div > div:first-child {
+        font-weight: normal;
+    }
 
 .skillContainerBox, .educationContainerBox, .experienceContainerBox, .notesContainerBox, .activityContainerBox, .downloadContainerBox {
     display: flex;
@@ -1144,14 +1169,14 @@ div[id^="e-item-tabCandidates_"] {
     }
 
 .contactBox {
-    height: 225px;
+    height: 485px;
     min-height: 200px;
 }
 
-.contactBox > div:first-child {
-    height: 200px !important;
-    min-height: 200px !important;
-}
+    .contactBox > div:first-child {
+        height: 460px !important;
+        min-height: 200px !important;
+    }
 
 #gridSkill .e-content, #gridEducation .e-content, #gridExperience .e-content, #gridNotes .e-content, .resumeContainerBox .e-content, #gridActivity .e-content, #gridDownload .e-content {
     border: none;
@@ -1338,4 +1363,12 @@ col.e-detail-intent {
 
 #textPositionDescription .e-toolbar-container, #richTextResume .e-toolbar-container {
     height: unset !important;
+}
+
+.e-control.e-toolbar.e-lib.e-tab-header.e-keyboard.e-sticky {
+    width: auto !important;
+}
+
+.e-control.e-toolbar.e-lib.e-tab-header.e-keyboard {
+    width: auto !important;
 }

@@ -8,12 +8,16 @@
 // File Name:           Extensions.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-26-2022 19:30
-// Last Updated On:     02-12-2022 19:38
+// Last Updated On:     08-29-2022 20:46
 // *****************************************/
 
 #endregion
 
+#region Using
+
 using System.Text.RegularExpressions;
+
+#endregion
 
 namespace ProfSvc_AppTrack.Code;
 
@@ -25,6 +29,20 @@ public static partial class Extensions
     /// <param name="message"></param>
     /// <returns></returns>
     public static async ValueTask<bool> Confirm(this IJSRuntime jsRuntime, string message) => await jsRuntime.InvokeAsync<bool>("confirm", message);
+
+    /// <summary>
+    ///     Formats Date to default US short date.
+    /// </summary>
+    /// <param name="d">Date to format.</param>
+    /// <param name="format">Format string.</param>
+    /// <param name="c">Culture to use to format.</param>
+    /// <returns></returns>
+    public static string CultureDate(this DateTime d, string format = "d", CultureInfo c = null)
+    {
+        c ??= new("en-us");
+
+        return d.ToString(format, c);
+    }
 
     /// <summary>
     ///     Set Value to DBNull.Value if Integer Value is 0.
@@ -48,6 +66,24 @@ public static partial class Extensions
     /// <returns> String Value or DBNull.Value </returns>
     public static object DBNull(this string s, bool isZero = false) => isZero ? string.IsNullOrWhiteSpace(s) || s.Trim() == "0" ? System.DBNull.Value : s.Trim() :
                                                                        string.IsNullOrWhiteSpace(s) ? System.DBNull.Value : s.Trim();
+
+    /// <summary>
+    ///     Formats String to US Phone Number format.
+    /// </summary>
+    /// <param name="s">String to format.</param>
+    /// <returns></returns>
+    public static string FormatPhoneNumber(this string s) => s.ToInt64() > 0 ? $"{s.ToInt64():(###) ###-####}" : "";
+
+    /// <summary>
+    ///     Convert a Base64 string to plain string.
+    /// </summary>
+    /// <param name="s">Base64 string.</param>
+    /// <returns>The raw string.</returns>
+    public static string FromBase64String(this string s)
+    {
+        byte[] _bytes = Convert.FromBase64String(s);
+        return Encoding.UTF8.GetString(_bytes);
+    }
 
     /// <summary>
     ///     Converts a HTML-encoded string to a normal string.
@@ -101,26 +137,11 @@ public static partial class Extensions
     public static bool StringToBoolean(this string s) => s == "1";
 
     /// <summary>
-    /// Convert a string to Base64 converted string.
+    ///     Strips non-numerical characters from the string.
     /// </summary>
-    /// <param name="s">The string to convert.</param>
-    /// <returns>Base64 converted string.</returns>
-    public static string ToBase64String(this string s)
-    {
-        byte[] _bytes = Encoding.UTF8.GetBytes(s);
-        return Convert.ToBase64String(_bytes);
-    }
-
-    /// <summary>
-    /// Convert a Base64 string to plain string.
-    /// </summary>
-    /// <param name="s">Base64 string.</param>
-    /// <returns>The raw string.</returns>
-    public static string FromBase64String(this string s)
-    {
-        byte[] _bytes = Convert.FromBase64String(s);
-        return Encoding.UTF8.GetString(_bytes);
-    }
+    /// <param name="s">String to strip characters from.</param>
+    /// <returns></returns>
+    public static string StripPhoneNumber(this string s) => Regex.Replace(s, "[^0-9]", string.Empty);
 
     /// <summary>
     /// </summary>
@@ -170,6 +191,17 @@ public static partial class Extensions
     }
 
     /// <summary>
+    ///     Convert a string to Base64 converted string.
+    /// </summary>
+    /// <param name="s">The string to convert.</param>
+    /// <returns>Base64 converted string.</returns>
+    public static string ToBase64String(this string s)
+    {
+        byte[] _bytes = Encoding.UTF8.GetBytes(s);
+        return Convert.ToBase64String(_bytes);
+    }
+
+    /// <summary>
     ///     Decodes a string from URL Safe string.
     /// </summary>
     /// <param name="s"> String </param>
@@ -182,18 +214,4 @@ public static partial class Extensions
     /// <param name="s"> String </param>
     /// <returns> string </returns>
     public static string UrlEncode(this string s) => HttpUtility.UrlEncode(s);
-
-    /// <summary>
-    /// Strips non-numerical characters from the string.
-    /// </summary>
-    /// <param name="s">String to strip characters from.</param>
-    /// <returns></returns>
-    public static string StripPhoneNumber(this string s) => Regex.Replace(s, "[^0-9]", string.Empty);
-
-    /// <summary>
-    /// Formats String to US Phone Number format.
-    /// </summary>
-    /// <param name="s">String to format.</param>
-    /// <returns></returns>
-    public static string FormatPhoneNumber(this string s) => $"{s.ToInt32():(###) ###-####}";
 }
