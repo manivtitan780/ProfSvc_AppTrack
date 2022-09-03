@@ -8,24 +8,29 @@
 // File Name:           AdvancedCompanySearch.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          09-03-2022 20:15
-// Last Updated On:     09-03-2022 20:15
+// Last Updated On:     09-03-2022 20:36
 // *****************************************/
 
 #endregion
-
-using System.Threading.Channels;
 
 namespace ProfSvc_AppTrack.Pages.Controls.Companies;
 
 public partial class AdvancedCompanySearch
 {
+    [Parameter]
+    public EventCallback Cancel
+    {
+        get;
+        set;
+    }
+
     public SfDialog Dialog
     {
         get;
         set;
     }
 
-    public SfSpinner Spinner
+    public DialogFooter DialogFooter
     {
         get;
         set;
@@ -45,16 +50,16 @@ public partial class AdvancedCompanySearch
         set;
     }
 
-    public DialogFooter DialogFooter
+    public SfSpinner Spinner
     {
         get;
         set;
     }
 
-    [Parameter]
-    public EventCallback Cancel
+    [Inject]
+    private IJSRuntime JsRuntime
     {
-        get;
+        get; 
         set;
     }
 
@@ -74,5 +79,10 @@ public partial class AdvancedCompanySearch
         await Spinner.HideAsync();
         Dialog.Height = "200px";
         await Dialog.HideAsync();
+    }
+
+    private async Task NumbersOnly(object arg)
+    {
+        await JsRuntime.InvokeVoidAsync("onCreate", "textbox"); 
     }
 }

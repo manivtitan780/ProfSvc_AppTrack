@@ -6,9 +6,11 @@
 		<EditForm Model="ModelSearchObject" OnValidSubmit="SearchCompanyDialog">
 			<DataAnnotationsValidator />
 			<div class="divContainerTable">
-				@*<TextBoxControl @bind-Value="@(ModelSearchObject.Code)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textCode" MaxLength="255" MinLength="0" Multiline="false"
-								Placeholder="Code" />
-				<TextBoxControl @bind-Value="@(ModelSearchObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textTitle" MaxLength="255" MinLength="0" Multiline="false"
+				<TextBoxControl @bind-Value="@(ModelSearchObject.CompanyName)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textCompanyName" MaxLength="255" MinLength="0" Multiline="false"
+								Placeholder="Enter full or Partial Company Name" />
+				<TextBoxControl @bind-Value="@(ModelSearchObject.Phone)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textPhone" MaxLength="255" MinLength="0" Multiline="false"
+								Placeholder="Enter full or Partial Company Name" Created="NumbersOnly" />
+				@*<TextBoxControl @bind-Value="@(ModelSearchObject.Title)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textTitle" MaxLength="255" MinLength="0" Multiline="false"
 								Placeholder="Job Position / Title" />
 				<DropDownControl AllowFilter="true" @bind-Value="@ModelSearchObject.Company" @bind-Value:event="ValueChanged" CreateDivTag="true" DataSource="@Companies" ID="dropCompany" Placeholder="Company"
 								 TextField="Key" TItem="KeyValues" TValue="string" ValueField="Value" Width="450px" ShowClearButton="true" />
