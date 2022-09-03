@@ -327,7 +327,7 @@ public static class General
     /// <param name="user"></param>
     /// <param name="dm"></param>
     /// <returns></returns>
-    public static async Task<object> GetCompanyReadAdaptor(CandidateSearch searchModel, string user, DataManagerRequest dm) //string name, int page, int count)
+    public static async Task<object> GetCompanyReadAdaptor(CompanySearch searchModel, string user, DataManagerRequest dm) //string name, int page, int count)
     {
         List<Company> _dataSource = new();
 
@@ -343,7 +343,7 @@ public static class General
             //_request.AddQueryParameter("user", user);
             //_request.AddQueryParameter("count", _itemCount.ToString());
             //_request.AddQueryParameter("name", searchModel.Name);
-            //_request.AddJsonBody(searchModel); //TODO: Enable this line later
+            _request.AddJsonBody(searchModel); //TODO: Enable this line later
 
             _restResponse = await _restClient.GetAsync<Dictionary<string, object>>(_request);
             if (_restResponse == null)

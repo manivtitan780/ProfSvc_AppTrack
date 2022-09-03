@@ -585,9 +585,10 @@ public partial class Companies
         set;
     }
 
-    private static CandidateSearch SearchModel
+    private static CompanySearch SearchModel
     {
         get;
+        set;
     } = new();
 
     private CandidateActivity SelectedActivity
@@ -808,15 +809,16 @@ public partial class Companies
         //_memoryCache.TryGetValue("Communication", out _communication);
         //_memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
 
-        //string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CandidateGrid");
-        //if (!_cookyString.NullOrWhiteSpace())
-        //{
-        //    SearchModel = JsonConvert.DeserializeObject<CandidateSearch>(_cookyString);
-        //}
-        //else
-        //{
-        //    await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //}
+        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CompanyGrid");
+        if (!_cookyString.NullOrWhiteSpace())
+        {
+            SearchModel = JsonConvert.DeserializeObject<CompanySearch>(_cookyString);
+        }
+        else
+        {
+            SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+            await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        }
 
         await base.OnInitializedAsync();
     }
@@ -2098,7 +2100,7 @@ public partial class Companies
         //}
     }
 
-    public class AdminCandidateAdaptor : DataAdaptor
+    public class CompanyAdaptor : DataAdaptor
     {
         #region Methods
 
@@ -2114,11 +2116,11 @@ public partial class Companies
         #endregion
     }
 
-    public class AdminCandidateDropDownAdaptor : DataAdaptor
+    public class CompanyDropDownAdaptor : DataAdaptor
     {
         #region Methods
 
-        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCandidate", "@Candidate", dm);
+        public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCompany", "@Company", dm);
 
         #endregion
     }

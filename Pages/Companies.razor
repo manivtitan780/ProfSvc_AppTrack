@@ -31,17 +31,16 @@
 			</div>
 			<div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
 				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="AddNewCandidate" style="@($"display:{(RequisitionID > 0 ? "none" : "unset")}")">Add Candidate</SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="SubmitSelectedCandidate" style="@($"display:{(RequisitionID > 0 ? "unset" : "none")}")">Submit Selected Candidate</SfButton>
-				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
-				<AutoCompleteButton EnablePersistence="true" ID="autoCandidate" PlaceholderText="Select a Candidate" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
-									TypeInstance="@typeof(AdminCandidateDropDownAdaptor)" ValueChange="FilterGrid" />
+				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditCompany(0)">Add Company</SfButton>
+				@*<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>*@
+				<AutoCompleteButton EnablePersistence="true" ID="autoCompany" PlaceholderText="Select a Company" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+									TypeInstance="@typeof(CompanyDropDownAdaptor)" ValueChange="FilterGrid" />
 			</div>
 		</div>
 	</div>
 	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Company" Width="99.75%">
 		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
-		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(AdminCandidateAdaptor)" Key="ID" />
+		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(CompanyAdaptor)" Key="ID" />
 		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Company" />@* *@
 		<GridColumns>
 			<GridColumn Field="@nameof(Company.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
