@@ -19,6 +19,7 @@ using ProfSvc_AppTrack.Pages.Controls.Companies;
 
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
+using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
@@ -343,7 +344,7 @@ public partial class Companies
         set;
     }
 
-    private AdvancedCandidateSearch DialogSearch
+    private AdvancedCompanySearch DialogSearch
     {
         get;
         set;
@@ -591,6 +592,12 @@ public partial class Companies
         set;
     } = new();
 
+    private CompanySearch SearchModelClone
+    {
+        get;
+        set;
+    } = new();
+
     private CandidateActivity SelectedActivity
     {
         get;
@@ -780,9 +787,9 @@ public partial class Companies
             _memoryCache.TryGetValue("States", out _states);
         }
 
-        //_statesCopy.Clear();
-        //_statesCopy.Add(new(0, "All"));
-        //_statesCopy.AddRange(_states);
+        _statesCopy.Clear();
+        _statesCopy.Add(new(0, "All"));
+        _statesCopy.AddRange(_states);
 
         //while (_eligibility == null)
         //{
@@ -820,6 +827,8 @@ public partial class Companies
             await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         }
 
+        AutoCompleteControl.Value = SearchModel?.CompanyName;
+
         await base.OnInitializedAsync();
     }
 
@@ -845,7 +854,8 @@ public partial class Companies
     private async Task AdvancedSearch()
     {
         await Task.Delay(1);
-        //await DialogSearch.Dialog.ShowAsync();
+        SearchModelClone = SearchModel.Copy();
+        await DialogSearch.Dialog.ShowAsync();
     }
 
     private void AfterDocument(ActionCompleteEventArgs arg)
@@ -857,10 +867,11 @@ public partial class Companies
     private async Task AllAlphabet()
     {
         await Task.Delay(1);
-        //SearchModel.Name = "";
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        SearchModel.CompanyName = "";
+        AutoCompleteControl.Value = "";
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         //await Grid.Refresh();
     }
@@ -910,13 +921,14 @@ public partial class Companies
     {
         await Task.Delay(1);
         //Name = "";
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //int _currentPageItemCount = SearchModel.ItemCount;
-        //SearchModel.ClearData();
-        //SearchModel.ItemCount = _currentPageItemCount;
-        //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        int _currentPageItemCount = SearchModel.ItemCount;
+        SearchModel.ClearData();
+        AutoCompleteControl.Value = SearchModel.CompanyName;
+        SearchModel.ItemCount = _currentPageItemCount;
+        SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         //await Grid.Refresh();
     }
 
@@ -1322,16 +1334,14 @@ public partial class Companies
         //await DialogRating.Dialog.ShowAsync();
     }
 
-    private async Task FilterGrid(ChangeEventArgs<string, KeyValues> candidate)
+    private async Task FilterGrid(ChangeEventArgs<string, KeyValues> company)
     {
         await Task.Delay(1);
-        //SearchModel.Name = candidate.Value ?? "";
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //candidate.IsInteracted = true;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        //await Grid.Refresh();
+        SearchModel.CompanyName = company.Value ?? "";
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        await Grid.Refresh();
     }
 
     private static void FilterSet(string value)
@@ -1865,10 +1875,11 @@ public partial class Companies
     private async Task SetAlphabet(string alphabet)
     {
         await Task.Delay(1);
-        //SearchModel.Name = alphabet;
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        SearchModel.CompanyName = alphabet;
+        AutoCompleteControl.Value = alphabet;
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
         //await Grid.Refresh();
     }
@@ -2123,5 +2134,12 @@ public partial class Companies
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCompany", "@Company", dm);
 
         #endregion
+    }
+
+    private async Task SearchCompany(EditContext args)
+    {
+        SearchModel = (args.Model as CompanySearch)?.Copy();
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        await Grid.Refresh();
     }
 }

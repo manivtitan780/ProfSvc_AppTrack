@@ -32,7 +32,7 @@
 			<div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
 				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
 				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditCompany(0)">Add Company</SfButton>
-				@*<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>*@
+				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
 				<AutoCompleteButton EnablePersistence="true" ID="autoCompany" PlaceholderText="Select a Company" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
 									TypeInstance="@typeof(CompanyDropDownAdaptor)" ValueChange="FilterGrid" />
 			</div>
@@ -139,12 +139,11 @@
     <EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
 
     <AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
-    @ref="DialogDocument" Save="SaveDocument" />
+    @ref="DialogDocument" Save="SaveDocument" />*@
 
-    <AdvancedCandidateSearch EligibilityDropDown="_eligibilityCopy" JobOptionsDropDown="_jobOptionsCopy" ModelSearchObject="SearchModel" @ref="DialogSearch" Search="SearchCandidate"
-    StateDropDown="_statesCopy" />
+    <AdvancedCompanySearch ModelSearchObject="SearchModelClone" @ref="DialogSearch" Search="SearchCompany" StateDropDown="_statesCopy" />
 
-    <SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
+    @*<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
 
 	<div class="divGridFooter">
 		<div style="display: flex">

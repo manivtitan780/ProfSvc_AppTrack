@@ -81,8 +81,22 @@ public partial class AdvancedCompanySearch
         await Dialog.HideAsync();
     }
 
-    private async Task NumbersOnly(object arg)
+    [Parameter]
+    public List<KeyValues> StatusDropDown
     {
-        await JsRuntime.InvokeVoidAsync("onCreate", "textbox"); 
+        get;
+        set;
+    }
+
+    [Parameter]
+    public List<IntValues> StateDropDown
+    {
+        get;
+        set;
+    }
+
+    private async Task NumbersOnly(object args)
+    {
+        await JsRuntime.InvokeVoidAsync("onCreate", "textPhone"); 
     }
 }
