@@ -265,7 +265,7 @@ public partial class Companies
     //                                            };
 
     /*
-        private static CandidateGrid CandidateGridPersistValues
+        private static CompanyGrid CompanyGridPersistValues
         {
             get;
             set;
@@ -827,7 +827,7 @@ public partial class Companies
             await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         }
 
-        AutoCompleteControl.Value = SearchModel?.CompanyName;
+        //AutoCompleteControl.Value = SearchModel?.CompanyName;
 
         await base.OnInitializedAsync();
     }
@@ -872,7 +872,7 @@ public partial class Companies
         _currentPage = 1;
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        ////_ = new StorageCompression(SessionStorage).SetCompanyGrid();
         //await Grid.Refresh();
     }
 
@@ -908,13 +908,13 @@ public partial class Companies
     private async Task ChangeItemCount(ChangeEventArgs<int, IntValues> obj)
     {
         await Task.Delay(1);
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //SearchModel.ItemCount = obj.Value;
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        SearchModel.ItemCount = obj.Value;
 
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        //await Grid.Refresh();
-        //StateHasChanged();
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        await Grid.Refresh();
+        StateHasChanged();
     }
 
     private async Task ClearFilter()
@@ -1367,16 +1367,16 @@ public partial class Companies
     private async Task FirstClick()
     {
         await Task.Delay(1);
-        //if (_currentPage < 1)
-        //{
-        //    _currentPage = 1;
-        //}
+        if (_currentPage < 1)
+        {
+            _currentPage = 1;
+        }
 
-        //_currentPage = 1;
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        //await Grid.Refresh();
+        _currentPage = 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCompanyGrid();
+        await Grid.Refresh();
     }
 
     private void GetMPCDate()
@@ -1454,31 +1454,31 @@ public partial class Companies
     private async Task LastClick()
     {
         await Task.Delay(1);
-        //if (_currentPage < 1)
-        //{
-        //    _currentPage = 1;
-        //}
+        if (_currentPage < 1)
+        {
+            _currentPage = 1;
+        }
 
-        //_currentPage = PageCount.ToInt32();
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        //await Grid.Refresh();
+        _currentPage = PageCount.ToInt32();
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCompanyGrid();
+        await Grid.Refresh();
     }
 
     private async Task NextClick()
     {
         await Task.Delay(1);
-        //if (_currentPage < 1)
-        //{
-        //    _currentPage = 1;
-        //}
+        if (_currentPage < 1)
+        {
+            _currentPage = 1;
+        }
 
-        //_currentPage = SearchModel.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : SearchModel.Page + 1;
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        //await Grid.Refresh();
+        _currentPage = SearchModel.Page >= PageCount.ToInt32() ? PageCount.ToInt32() : SearchModel.Page + 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCompanyGrid();
+        await Grid.Refresh();
     }
 
     private async Task OnActionBegin(ActionEventArgs<Company> args)
@@ -1494,7 +1494,7 @@ public partial class Companies
         //                                _ => 1
         //                            };
         //    SearchModel.SortDirection = args.Direction == SortDirection.Ascending ? (byte)1 : (byte)0;
-        //    await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
+        //    await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
         //    await Grid.Refresh();
         //}
     }
@@ -1554,24 +1554,24 @@ public partial class Companies
         //}
 
         //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        //await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        ////_ = new StorageCompression(SessionStorage).SetCompanyGrid();
         //await Grid.Refresh();
     }
 
     private async Task PreviousClick()
     {
         await Task.Delay(1);
-        //if (_currentPage < 1)
-        //{
-        //    _currentPage = 1;
-        //}
+        if (_currentPage < 1)
+        {
+            _currentPage = 1;
+        }
 
-        //_currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
-        //SearchModel.Page = _currentPage;
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
-        //await Grid.Refresh();
+        _currentPage = SearchModel.Page <= 1 ? 1 : SearchModel.Page - 1;
+        SearchModel.Page = _currentPage;
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        //_ = new StorageCompression(SessionStorage).SetCompanyGrid();
+        await Grid.Refresh();
     }
 
     private static void RefreshGrid() => Grid.Refresh();
@@ -1868,7 +1868,7 @@ public partial class Companies
     private async Task SearchCandidate(EditContext arg)
     {
         await Task.Delay(1);
-        //await LocalStorageBlazored.SetItemAsync("CandidateGrid", arg.Model as CandidateSearch);
+        //await LocalStorageBlazored.SetItemAsync("CompanyGrid", arg.Model as CandidateSearch);
         //await Grid.Refresh();
     }
 
@@ -1880,7 +1880,7 @@ public partial class Companies
         _currentPage = 1;
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCandidateGrid();
+        ////_ = new StorageCompression(SessionStorage).SetCompanyGrid();
         //await Grid.Refresh();
     }
 
@@ -1947,7 +1947,7 @@ public partial class Companies
     private void SetTaxTerm()
     {
         //string _returnValue = "";
-        ///*IMemoryCache _memoryCache = Start.MemCache;
+        //*IMemoryCache _memoryCache = Start.MemCache;
         //_memoryCache.TryGetValue("TaxTerms", out List<KeyValues> _taxTerms);*/
 
         //if (_taxTerms is {Count: > 0})
