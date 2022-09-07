@@ -69,11 +69,11 @@
 		<GridTemplates Context="context">
 			<DetailTemplate>
 				@* Add Buttons Start *@
-				<SfButton Content="Edit Company" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditCompany(0)"
+				<SfButton Content="Edit Company" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditCompany(_target.ID)"
 						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
-				<SfButton Content="Add Contact" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditContact(0)"
+                @*<SfButton Content="Add Contact" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditContact(0)"
 						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
-				@*<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
 				style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
 				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
 				style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
@@ -109,7 +109,7 @@
 								<TabHeader Text="Requisitions" />
 							</ChildContent>
 							<ContentTemplate>
-								<CompanyRequisitions ModelObject="_companyRequisitionsObject" />
+								<CompanyRequisitions ModelObject="_companyRequisitionsObject" Skills="_skills" User="@LoginCookyUser.UserID" />
 							</ContentTemplate>
 						</TabItem>
 					</TabItems>
@@ -119,6 +119,7 @@
 		</GridTemplates>
 	</SfGrid>
 
+	<EditCompanyDialog CancelCompany="CancelCompany" SaveCompany="SaveCompany" States="_states" Title="@Title" ModelObject="_companyDetailsObjectClone" @ref="DialogEditCompany"/>
 	@*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
     JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
 

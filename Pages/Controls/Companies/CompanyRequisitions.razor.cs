@@ -129,7 +129,6 @@ public partial class CompanyRequisitions
 
         await Spinner.HideAsync();
     }
-
     //private List<IntValues> _skills;
 
     private void SetSkills()

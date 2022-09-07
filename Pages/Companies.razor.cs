@@ -308,7 +308,7 @@ public partial class Companies
         set;
     }
 
-    private EditCandidateDialog DialogEditCandidate
+    private EditCompanyDialog DialogEditCompany
     {
         get;
         set;
@@ -771,6 +771,36 @@ public partial class Companies
         //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
     }
 
+    private List<IntValues> _skills;
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _fetched = false;
+            try
+            {
+                string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CompanyGrid");
+                if (!_cookyString.NullOrWhiteSpace())
+                {
+                    SearchModel = JsonConvert.DeserializeObject<CompanySearch>(_cookyString);
+                }
+                else
+                {
+                    SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
+                    await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            _fetched = true;
+        }
+        base.OnAfterRender(firstRender);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
@@ -791,10 +821,10 @@ public partial class Companies
         _statesCopy.Add(new(0, "All"));
         _statesCopy.AddRange(_states);
 
-        //while (_eligibility == null)
-        //{
-        //    _memoryCache.TryGetValue("Eligibility", out _eligibility);
-        //}
+        while (_skills == null)
+        {
+            _memoryCache.TryGetValue("Skills", out _skills);
+        }
 
         //_eligibilityCopy.Clear();
         //_eligibilityCopy.Add(new(0, "All"));
@@ -816,22 +846,12 @@ public partial class Companies
         //_memoryCache.TryGetValue("Communication", out _communication);
         //_memoryCache.TryGetValue("DocumentTypes", out _documentTypes);
 
-        string _cookyString = await LocalStorageBlazored.GetItemAsync<string>("CompanyGrid");
-        if (!_cookyString.NullOrWhiteSpace())
-        {
-            SearchModel = JsonConvert.DeserializeObject<CompanySearch>(_cookyString);
-        }
-        else
-        {
-            SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
-            await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
-        }
-
         //AutoCompleteControl.Value = SearchModel?.CompanyName;
 
         await base.OnInitializedAsync();
     }
 
+    private static bool _fetched = false;
     private async Task AddDocument(MouseEventArgs arg)
     {
         await Task.Delay(1);
@@ -882,9 +902,10 @@ public partial class Companies
         //DialogDocument.DialogFooter.CancelButton.Disabled = true;
     }
 
-    private void CancelCandidate()
+    private async void CancelCompany()
     {
-        VisibleCandidateInfo = false;
+        await Task.Delay(1);
+        //VisibleCandidateInfo = false;
     }
 
     private async Task CancelMPC()
@@ -1263,16 +1284,18 @@ public partial class Companies
     private async Task EditCompany(int id)
     {
         await Task.Delay(1);
-        //if (id == 0)
-        //{
-        //    SelectedSkill.ClearData();
-        //}
-        //else
-        //{
-        //    SelectedSkill = SkillPanel.SelectedRow;
-        //}
+        if (id == 0)
+        {
+            Title = "Add";
+            _companyDetailsObjectClone.ClearData();
+        }
+        else
+        {
+            Title = "Edit";
+            _companyDetailsObjectClone = _companyDetailsObject.Copy();
+        }
 
-        //await DialogSkill.Dialog.ShowAsync();
+        await DialogEditCompany.Dialog.ShowAsync();
     }
 
     private async Task EditContact(int id)
@@ -1607,20 +1630,22 @@ public partial class Companies
         //await Task.Delay(1);
     }
 
-    private async Task SaveCandidate()
+    private async Task SaveCompany(EditContext context)
     {
         //SpinnerVisible = true;
+        DialogEditCompany.Footer.CancelButton.Disabled = true;
+        DialogEditCompany.Footer.SaveButton.Disabled = true;
         await Task.Delay(1);
-        //_companyDetailsObject = _companyDetailsObjectClone.Copy();
 
-        //RestClient _client = new($"{Start.ApiHost}");
-        //RestRequest _request = new("Candidates/SaveCandidate", Method.Post)
-        //                       {
-        //                           RequestFormat = DataFormat.Json
-        //                       };
-        //_request.AddJsonBody(_companyDetailsObject);
+        RestClient _client = new($"{Start.ApiHost}");
+        RestRequest _request = new("Company/SaveCompany", Method.Post)
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
+        _request.AddJsonBody(_companyDetailsObjectClone);
 
-        //await _client.PostAsync<int>(_request);
+        await _client.PostAsync<int>(_request);
+        _companyDetailsObject = _companyDetailsObjectClone.Copy();
 
         ////_target.Name = _companyDetailsObject.FirstName + " " + _companyDetailsObject.LastName;
         ////_target.Phone = _companyDetailsObject.Phone1.FormatPhoneNumber();
@@ -2118,6 +2143,10 @@ public partial class Companies
         /// <summary>Performs data Read operation synchronously.</summary>
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null)
         {
+            while (!_fetched)
+            {
+                //
+            }
             Task<object> _companyReturn = General.GetCompanyReadAdaptor(SearchModel, "JOLLY", dm);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
