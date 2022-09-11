@@ -9,7 +9,7 @@
 			<div style="height: 100%">
 				<div class="divContainerTable">
 					<TextBoxControl @bind-Value="@(ModelObject.CompanyName)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textCompanyName" MaxLength="200" MinLength="1"
-									Placeholder="Company Name" Width="100%" />
+									Placeholder="Company Name" Readonly="@(ModelObject.ID > 0)" Width="100%" />
 					<TextBoxControl @bind-Value="@(ModelObject.Address)" @bind-Value:event="ValueChanged" CreateDivTag="true" CreateTooltip="false" ID="textAddress" MaxLength="500" MinLength="1"
 									Placeholder="Street Address" Width="100%" />
 					<div class="divFlex">
