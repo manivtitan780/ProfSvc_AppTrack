@@ -29,6 +29,7 @@ namespace ProfSvc_AppTrack.Pages;
 public partial class Companies
 {
     private const byte RowHeight = 38;
+    private bool _dontExpand = true;
 
     //private static bool _getStates = true;
 
@@ -37,13 +38,13 @@ public partial class Companies
     //private readonly Candidates _candidateContext = new();
 
     private readonly List<IntValues> _eligibilityCopy = new();
-    private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
-    private readonly Dictionary<string, object> _htmlAttributes1 = new() {{"maxlength", "500"}, {"minlength", "1"}, {"rows", "4"}};
+    private readonly Dictionary<string, object> _htmlAttributes = new() { { "maxlength", "50" }, { "minlength", "1" }, { "rows", "1" } };
+    private readonly Dictionary<string, object> _htmlAttributes1 = new() { { "maxlength", "500" }, { "minlength", "1" }, { "rows", "4" } };
 
     private readonly List<KeyValues> _jobOptionsCopy = new();
 
     private readonly List<IntValues> _showRecords =
-        new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
+        new() { new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows") };
 
     private readonly List<IntValues> _statesCopy = new();
 
@@ -115,6 +116,7 @@ public partial class Companies
 
     private CompanyDetails _companyDetailsObject = new();
     private CompanyDetails _companyDetailsObjectClone = new();
+    private CompanyContact _companyContactsObjectClone = new();
     private List<RequisitionDocuments> _companyDocumentsObject = new();
 
     private List<Requisitions> _companyRequisitionsObject = new();
@@ -309,6 +311,12 @@ public partial class Companies
     }
 
     private EditCompanyDialog DialogEditCompany
+    {
+        get;
+        set;
+    }
+
+    private EditContactDialog DialogEditContact
     {
         get;
         set;
@@ -616,12 +624,6 @@ public partial class Companies
         set;
     } = new();
 
-    private CandidateEducation SelectedEducation
-    {
-        get;
-        set;
-    } = new();
-
     private CandidateExperience SelectedExperience
     {
         get;
@@ -908,6 +910,12 @@ public partial class Companies
         //VisibleCandidateInfo = false;
     }
 
+    private async void CancelContact()
+    {
+        await Task.Delay(1);
+        //VisibleCandidateInfo = false;
+    }
+
     private async Task CancelMPC()
     {
         await Task.Delay(1);
@@ -988,9 +996,9 @@ public partial class Companies
         {
             using RestClient _client = new($"{Start.ApiHost}");
             RestRequest _request = new("Company/DeleteContact", Method.Post)
-                                   {
-                                       RequestFormat = DataFormat.Json
-                                   };
+            {
+                RequestFormat = DataFormat.Json
+            };
             _request.AddQueryParameter("id", id.ToString());
             //_request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
@@ -1169,6 +1177,12 @@ public partial class Companies
             }
         }
 
+        double _index = await Grid.GetRowIndexByPrimaryKeyAsync(company.Data.ID);
+        if (_index != Grid.SelectedRowIndex)
+        {
+            await Grid.SelectRowAsync(_index);
+        }
+
         _target = company.Data;
 
         //_companyDetailsObject.ClearData();
@@ -1188,24 +1202,8 @@ public partial class Companies
             _companyDetailsObject = JsonConvert.DeserializeObject<CompanyDetails>(_restResponse["Company"]?.ToString() ?? string.Empty);
             _companyContactsObject = General.DeserializeObject<List<CompanyContact>>(_restResponse["Contacts"]);
             _companyDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_restResponse["Document"]);
-            //_candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_restResponse["Skills"]);
-            //_candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_restResponse["Education"]);
-            //_candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_restResponse["Experience"]);
             _companyRequisitionsObject = General.DeserializeObject<List<Requisitions>>(_restResponse["Requisitions"]);
-            //_candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_restResponse["Notes"]);
-            //_candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_restResponse["Rating"]);
-            //_candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_restResponse["MPC"]);
-            //RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_restResponse["RatingMPC"]?.ToString() ?? string.Empty);
-            //GetMPCDate();
-            //GetMPCNote();
-            //GetRatingDate();
-            //GetRatingNote();
             SetupAddress();
-            //SetCommunication();
-            //SetEligibility();
-            //SetJobOption();
-            //SetTaxTerm();
-            //SetExperience();
         }
 
         _selectedTab = 0;
@@ -1303,14 +1301,26 @@ public partial class Companies
         await Task.Delay(1);
         if (id == 0)
         {
-            SelectedEducation.ClearData();
+            SelectedContact.ClearData();
+            if (_target != null)
+            {
+                SelectedContact.Address = _companyDetailsObject.Address;
+                SelectedContact.City = _companyDetailsObject.City;
+                SelectedContact.StateID = _companyDetailsObject.StateID;
+                SelectedContact.State = _companyDetailsObject.State;
+                SelectedContact.ZipCode = _companyDetailsObject.ZipCode;
+                SelectedContact.Phone = _companyDetailsObject.Phone;
+                SelectedContact.Extension = _companyDetailsObject.Extension;
+                SelectedContact.Fax = _companyDetailsObject.Fax;
+                SelectedContact.ClientID = _companyDetailsObject.ID;
+            }
         }
         else
         {
-            SelectedEducation = EducationPanel.SelectedRow;
+            SelectedContact = ContactPanel.SelectedRow.Copy();
         }
 
-        await DialogEducation.Dialog.ShowAsync();
+        await DialogEditContact.Dialog.ShowAsync();
     }
 
     private async Task EditExperience(int id)
@@ -1632,37 +1642,64 @@ public partial class Companies
 
     private async Task SaveCompany(EditContext context)
     {
-        //SpinnerVisible = true;
+        await Task.Delay(1);
         DialogEditCompany.Footer.CancelButton.Disabled = true;
         DialogEditCompany.Footer.SaveButton.Disabled = true;
-        await Task.Delay(1);
 
         RestClient _client = new($"{Start.ApiHost}");
         RestRequest _request = new("Company/SaveCompany", Method.Post)
-                               {
-                                   RequestFormat = DataFormat.Json
-                               };
+        {
+            RequestFormat = DataFormat.Json
+        };
         _request.AddJsonBody(_companyDetailsObjectClone);
 
         await _client.PostAsync<int>(_request);
-        _companyDetailsObject = _companyDetailsObjectClone.Copy();
 
-        ////_target.Name = _companyDetailsObject.FirstName + " " + _companyDetailsObject.LastName;
-        ////_target.Phone = _companyDetailsObject.Phone1.FormatPhoneNumber();
-        ////_target.Email = _companyDetailsObject.Email;
-        ////_target.Location = _companyDetailsObject.City + ", " + GetState(_companyDetailsObject.StateID) + ", " + _companyDetailsObject.ZipCode;
-        ////_target.Updated = DateTime.Today.CultureDate() + "[ADMIN]";
-        ////_target.Status = "Available";
-        //SetupAddress();
-        //SetCommunication();
-        //SetEligibility();
-        //SetJobOption();
-        //SetTaxTerm();
-        //SetExperience();
-        ////SpinnerVisible = false;
-        //await Task.Delay(1);
-        ////VisibleCandidateInfo = false;
-        //StateHasChanged();
+        _companyDetailsObject = _companyDetailsObjectClone.Copy();
+        _target.Address = _companyDetailsObject.Address;
+        _target.City = _companyDetailsObject.City;
+        _target.State = _companyDetailsObject.State;
+        _target.ZipCode = _companyDetailsObject.ZipCode;
+        _target.Phone = _companyDetailsObject.Phone;
+        _target.EmailAddress = _companyDetailsObject.EmailAddress;
+
+        SetupAddress();
+
+        DialogEditCompany.Footer.CancelButton.Disabled = false;
+        DialogEditCompany.Footer.SaveButton.Disabled = false;
+        await Task.Delay(1);
+        StateHasChanged();
+    }
+
+    private async Task SaveContact(EditContext context)
+    {
+        await Task.Delay(1);
+        /*DialogEditCompany.Footer.CancelButton.Disabled = true;
+        DialogEditCompany.Footer.SaveButton.Disabled = true;
+
+        RestClient _client = new($"{Start.ApiHost}");
+        RestRequest _request = new("Company/SaveCompany", Method.Post)
+        {
+            RequestFormat = DataFormat.Json
+        };
+        _request.AddJsonBody(_companyDetailsObjectClone);
+
+        await _client.PostAsync<int>(_request);
+
+        _companyDetailsObject = _companyDetailsObjectClone.Copy();
+        _target.Address = _companyDetailsObject.Address;
+        _target.City = _companyDetailsObject.City;
+        _target.State = _companyDetailsObject.State;
+        _target.ZipCode = _companyDetailsObject.ZipCode;
+        _target.Phone = _companyDetailsObject.Phone;
+        _target.EmailAddress = _companyDetailsObject.EmailAddress;
+
+        SetupAddress();
+
+        DialogEditCompany.Footer.CancelButton.Disabled = false;
+        DialogEditCompany.Footer.SaveButton.Disabled = false;*/
+        await Task.Delay(1);
+        StateHasChanged();
     }
 
     private async Task SaveDocument(EditContext document)

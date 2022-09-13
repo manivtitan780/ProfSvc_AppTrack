@@ -7,120 +7,145 @@
 <Header></Header>
 
 <div class="gridHolder">
-	<div class="divGridToolBar">
-		<div style="display: flex">
-			<div style="flex: 1; text-align: left">
-				<div style="display: flex; height: 25px; margin-top: 12px">
-					<div style="display: flex; width: 350px;">
-						<SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
-						<SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
-						<SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount"
-										  Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
-						</SfNumericTextBox>
-						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
-						<div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
-						<SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
-						<SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
-					</div>
-					<div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
-					<SfDropDownList @bind-Value="@SearchModel.ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
-						<DropDownListFieldSettings Text="Value" Value="Key" />
-						<DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
-					</SfDropDownList>
-				</div>
-			</div>
-			<div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
-				<SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
-				<SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditCompany(0)">Add Company</SfButton>
-				<SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
-				<AutoCompleteButton EnablePersistence="true" ID="autoCompany" PlaceholderText="Select a Company" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
-									TypeInstance="@typeof(CompanyDropDownAdaptor)" ValueChange="FilterGrid" />
-			</div>
-		</div>
-	</div>
-	<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Company" Width="99.75%">
-		<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
-		<SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(CompanyAdaptor)" Key="ID" />
-		<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Company" />@* *@
-		<GridColumns>
-			<GridColumn Field="@nameof(Company.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
-			<GridSortSettings AllowUnsort="false">
-				<GridSortColumns>
-					<GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
-				</GridSortColumns>
-			</GridSortSettings>
-			<GridColumn AllowSorting="true" Field="@nameof(Company.CompanyName)" HeaderText="Name" Width="20%" />
-			<GridColumn AllowSorting="false" Field="@nameof(Company.EmailAddress)" HeaderText="Email" Width="18%" />
-			<GridColumn AllowSorting="true" Field="@nameof(Company.Phone)" HeaderText="Phone" Width="15%" />
-			<GridColumn AllowSorting="false" HeaderText="Location" Width="47%">
-				<Template Context="aCon">
-					@{
-						if (aCon is Company _con)
-						{
-							<span>
-								@($"{(_con.Address.IsNullOrEmpty() ? "" : _con.Address)}, {(_con.City.IsNullOrEmpty() ? "" : _con.City)}, {(_con.State.IsNullOrEmpty() ? "" : _con.State)}, " +
-								  $"{(_con.ZipCode.IsNullOrEmpty() ? "" : _con.ZipCode)}")
-							</span>
-						}
-					}
-				</Template>
-			</GridColumn>
-		</GridColumns>
-		<GridTemplates Context="context">
-			<DetailTemplate>
-				@* Add Buttons Start *@
-				<SfButton Content="Edit Company" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditCompany(_target.ID)"
-						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
-                @*<SfButton Content="Add Contact" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditContact(0)"
-						  style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
-				<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
-				style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
-				style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
-				<SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
-				style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
-				@* Add Buttons End *@
-				<SfTab CssClass="e-fill" Height="540" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
-					<TabAnimationSettings>
-						<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
-						<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
-						<TabEvents Selected="TabSelected"></TabEvents>
-					</TabAnimationSettings>
-					<TabItems>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Company Info" />
-							</ChildContent>
-							<ContentTemplate>
-								<BasicInfoCompanyPanel Address="Address" DeleteContact="DeleteContact" EditContact="EditContact" ModelContactObject="_companyContactsObject" ModelObject="_companyDetailsObject"
-													   @ref="ContactPanel" UserName="@LoginCookyUser.UserID" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Documents" />
-							</ChildContent>
-							<ContentTemplate>
-								<DocumentsCompanyPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_companyDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
-							</ContentTemplate>
-						</TabItem>
-						<TabItem>
-							<ChildContent>
-								<TabHeader Text="Requisitions" />
-							</ChildContent>
-							<ContentTemplate>
-								<CompanyRequisitions ModelObject="_companyRequisitionsObject" Skills="_skills" User="@LoginCookyUser.UserID" />
-							</ContentTemplate>
-						</TabItem>
-					</TabItems>
-					<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />@**@
-				</SfTab>
-			</DetailTemplate>
-		</GridTemplates>
-	</SfGrid>
+    <div class="divGridToolBar">
+        <div style="display: flex">
+            <div style="flex: 1; text-align: left">
+                <div style="display: flex; height: 25px; margin-top: 12px">
+                    <div style="display: flex; width: 350px;">
+                        <SfButton CssClass="buttonFirst" @onclick="FirstClick"></SfButton>
+                        <SfButton CssClass="buttonPrevious" @onclick="PreviousClick"></SfButton>
+                        <SfNumericTextBox @bind-Value="_currentPage" CssClass="pageNumeric" Decimals="0" EnablePersistence="false" Format="n0" Height="22px" ID="numericPage" Max="@PageCount"
+                                          Min="1" @onchange="PageNumberChanged" ShowSpinButton="false" TValue="int" Width="40px">
+                        </SfNumericTextBox>
+                        <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 0; width: 10px;">of</div>
+                        <div style="font-weight: bold; margin-left: 10px; margin-top: 3px; padding-right: 10px; text-align: center; width: auto;">@PageCount</div>
+                        <SfButton CssClass="buttonNext" @onclick="NextClick"></SfButton>
+                        <SfButton CssClass="buttonLast" @onclick="LastClick"></SfButton>
+                    </div>
+                    <div style="font-weight: bold; margin-left: 120px; margin-top: 4px; padding-right: 0; width: 50px;">Show: </div>
+                    <SfDropDownList @bind-Value="@SearchModel.ItemCount" CssClass="dropItem" DataSource="_showRecords" ID="dropItemCount" TItem="IntValues" TValue="int" Width="100px">
+                        <DropDownListFieldSettings Text="Value" Value="Key" />
+                        <DropDownListEvents TItem="IntValues" TValue="int" ValueChange="ChangeItemCount" />
+                    </SfDropDownList>
+                </div>
+            </div>
+            <div class="divRightControls" style="@($"width:{(RequisitionID > 0 ? "920px" : "720px")}")">
+                <SfButton Content="Refresh" CssClass="topToolButton" IconCss="refreshButton" @onclick="RefreshGrid"></SfButton>
+                <SfButton CssClass="topToolButton" IconCss="newButton" @onclick="() => EditCompany(0)">Add Company</SfButton>
+                <SfButton CssClass="topToolButton" IconCss="searchButton" @onclick="AdvancedSearch">Advanced Search</SfButton>
+                <AutoCompleteButton EnablePersistence="true" ID="autoCompany" PlaceholderText="Select a Company" @ref="AutoCompleteControl" Ref="AutoCompleteControl"
+                                    TypeInstance="@typeof(CompanyDropDownAdaptor)" ValueChange="FilterGrid" />
+            </div>
+        </div>
+    </div>
+    <SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="true" EnableHover="true" EnableStickyHeader="true" Height="100%" @ref="Grid" TValue="Company" Width="99.75%">
+        <GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
+        <SfDataManager Adaptor="Adaptors.CustomAdaptor" AdaptorInstance="@typeof(CompanyAdaptor)" Key="ID" />
+        <GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Company" />@* *@
+        <GridColumns>
+            <GridColumn Field="@nameof(Company.ID)" HeaderText="ID" IsPrimaryKey="true" Visible="false" Width="0" />
+            <GridSortSettings AllowUnsort="false">
+                <GridSortColumns>
+                    <GridSortColumn Direction="@SortDirectionProperty" Field="@SortField"></GridSortColumn>
+                </GridSortColumns>
+            </GridSortSettings>
+            <GridColumn AllowSorting="true" Field="@nameof(Company.CompanyName)" HeaderText="Name" Width="20%" />
+            <GridColumn AllowSorting="false" HeaderText="Email" Width="18%">
+                <Template Context="aCon">
+                    @{
+                        if (aCon is Company _con)
+                        {
+                            <span>
+                                @(_con.EmailAddress)
+                            </span>
+                        }
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn AllowSorting="true" HeaderText="Phone" Width="15%">
+                <Template Context="aCon">
+                    @{
+                        if (aCon is Company _con)
+                        {
+                            <span>
+                                @(_con.Phone.StripPhoneNumber().FormatPhoneNumber())
+                            </span>
+                        }
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn AllowSorting="false" HeaderText="Location" Width="47%">
+                <Template Context="aCon">
+                    @{
+                        if (aCon is Company _con)
+                        {
+                            <span>
+                                @($"{(_con.Address.IsNullOrEmpty() ? "" : _con.Address)}, {(_con.City.IsNullOrEmpty() ? "" : _con.City)}, {(_con.State.IsNullOrEmpty() ? "" : _con.State)}, " +
+                                $"{(_con.ZipCode.IsNullOrEmpty() ? "" : _con.ZipCode)}")
+                            </span>
+                        }
+                    }
+                </Template>
+            </GridColumn>
+        </GridColumns>
+        <GridTemplates Context="context">
+            <DetailTemplate>
+                @* Add Buttons Start *@
+                <SfButton Content="Edit Company" CssClass="topToolButton tabButtonAdd" IconCss="editSectionButton" @onclick="() => EditCompany(_target.ID)"
+                          style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}; margin-right: 150px;")" />
+                <SfButton Content="Add Contact" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditContact(0)"
+                          style="@($"display:{(_selectedTab == 0 ? "unset" : "none")}")" />
+                @*<SfButton Content="Add Experience" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditExperience(0)"
+                style="@($"display:{(_selectedTab == 3 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
+                style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
+                <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
+                style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
+                @* Add Buttons End *@
+                <SfTab CssClass="e-fill" Height="540" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
+                    <TabAnimationSettings>
+                        <TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+                        <TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+                        <TabEvents Selected="TabSelected"></TabEvents>
+                    </TabAnimationSettings>
+                    <TabItems>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Company Info" />
+                            </ChildContent>
+                            <ContentTemplate>
+                                <BasicInfoCompanyPanel Address="Address" DeleteContact="DeleteContact" EditContact="EditContact" ModelContactObject="_companyContactsObject" ModelObject="_companyDetailsObject"
+                                                       @ref="ContactPanel" UserName="@LoginCookyUser.UserID" />
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Documents" />
+                            </ChildContent>
+                            <ContentTemplate>
+                                <DocumentsCompanyPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_companyDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
+                            </ContentTemplate>
+                        </TabItem>
+                        <TabItem>
+                            <ChildContent>
+                                <TabHeader Text="Requisitions" />
+                            </ChildContent>
+                            <ContentTemplate>
+                                <CompanyRequisitions ModelObject="_companyRequisitionsObject" Skills="_skills" User="@LoginCookyUser.UserID" />
+                            </ContentTemplate>
+                        </TabItem>
+                    </TabItems>
+                    <SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />@**@
+                </SfTab>
+            </DetailTemplate>
+        </GridTemplates>
+    </SfGrid>
 
-	<EditCompanyDialog CancelCompany="CancelCompany" SaveCompany="SaveCompany" States="_states" Title="@Title" ModelObject="_companyDetailsObjectClone" @ref="DialogEditCompany"/>
-	@*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
+    <EditCompanyDialog CancelCompany="CancelCompany" SaveCompany="SaveCompany" States="_states" Title="@Title" ModelObject="_companyDetailsObjectClone" @ref="DialogEditCompany" />
+
+    <EditContactDialog CancelCompanyContact="CancelContact" SaveCompanyContact="SaveContact" States="_states" Title="@Title" @ref="DialogEditContact" ModelObject="SelectedContact" />
+
+    @*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
     JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
 
     <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
@@ -146,44 +171,44 @@
 
     @*<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
 
-	<div class="divGridFooter">
-		<div style="display: flex">
-			<div style="flex: 1; padding-left: 15px; text-align: left;">
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
-				<SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
-				<SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
-				<SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
-			</div>
-			<div style="width: 520px">
-				Items
-				<b>@StartRecord</b> to
-				<b>@EndRecord</b> of
-				<b>@Count</b> rows
-			</div>
-		</div>
-	</div>
+    <div class="divGridFooter">
+        <div style="display: flex">
+            <div style="flex: 1; padding-left: 15px; text-align: left;">
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("A")'>A</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("B")'>B</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("C")'>C</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("D")'>D</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("E")'>E</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("F")'>F</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("G")'>G</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("H")'>H</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("I")'>I</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("J")'>J</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("K")'>K</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("L")'>L</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("M")'>M</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("N")'>N</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("O")'>O</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("P")'>P</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Q")'>Q</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("R")'>R</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("S")'>S</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("T")'>T</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("U")'>U</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("V")'>V</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("W")'>W</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("X")'>X</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Y")'>Y</SfButton>
+                <SfButton CssClass="buttonAlphabet" @onclick='() => SetAlphabet("Z")'>Z</SfButton>
+                <SfButton CssClass="buttonAlphabetClear" @onclick="AllAlphabet" style="width: 30px">All</SfButton>
+                <SfButton CssClass="buttonAlphabetClear" @onclick="ClearFilter">Clear</SfButton>
+            </div>
+            <div style="width: 520px">
+                Items
+                <b>@StartRecord</b> to
+                <b>@EndRecord</b> of
+                <b>@Count</b> rows
+            </div>
+        </div>
+    </div>
 </div>

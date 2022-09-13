@@ -113,20 +113,21 @@ public partial class EditCompanyDialog
         set;
     }
 
-    private async Task SaveCompanyDialog(EditContext args)
-    {
-        await Task.Delay(1);
-        await Spinner.ShowAsync();
-        await SaveCompany.InvokeAsync(args);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
-    }
-
     private async Task CancelDialog(MouseEventArgs args)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();
         await CancelCompany.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+    }
+
+    private async Task SaveCompanyDialog(EditContext args)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveCompany.InvokeAsync(args);
+        await Task.Delay(1);
         await Spinner.HideAsync();
         await Dialog.HideAsync();
     }

@@ -1532,7 +1532,8 @@ public partial class Candidate
     {
         //SpinnerVisible = true;
         await Task.Delay(1);
-        _candidateDetailsObject = _candidateDetailsObjectClone.Copy();
+        DialogEditCandidate.Footer.CancelButton.Disabled = true;
+        DialogEditCandidate.Footer.SaveButton.Disabled = true;
 
         RestClient _client = new($"{Start.ApiHost}");
         RestRequest _request = new("Candidates/SaveCandidate", Method.Post)
@@ -1543,6 +1544,7 @@ public partial class Candidate
 
         await _client.PostAsync<int>(_request);
 
+        _candidateDetailsObject = _candidateDetailsObjectClone.Copy();
         _target.Name = _candidateDetailsObject.FirstName + " " + _candidateDetailsObject.LastName;
         _target.Phone = _candidateDetailsObject.Phone1.FormatPhoneNumber();
         _target.Email = _candidateDetailsObject.Email;
@@ -1556,6 +1558,8 @@ public partial class Candidate
         SetTaxTerm();
         SetExperience();
         //SpinnerVisible = false;
+        DialogEditCandidate.Footer.CancelButton.Disabled = false;
+        DialogEditCandidate.Footer.SaveButton.Disabled = false;
         await Task.Delay(1);
         //VisibleCandidateInfo = false;
         StateHasChanged();

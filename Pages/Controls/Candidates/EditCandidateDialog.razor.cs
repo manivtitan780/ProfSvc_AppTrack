@@ -51,6 +51,12 @@ public partial class EditCandidateDialog
         set;
     }
 
+    public DialogFooter Footer
+    {
+        get;
+        set;
+    }
+
     [Parameter]
     public Dictionary<string, object> HtmlAttributes
     {
