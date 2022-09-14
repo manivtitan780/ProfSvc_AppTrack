@@ -8,7 +8,7 @@
 // File Name:           Companies.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          08-19-2022 21:14
-// Last Updated On:     09-13-2022 19:33
+// Last Updated On:     09-14-2022 20:59
 // *****************************************/
 
 #endregion
@@ -138,8 +138,6 @@ public partial class Companies
 
     private List<IntValues> _skills;
 
-    private List<IntValues> _titles;
-
     private List<IntValues> _states;
 
     private List<StatusCode> _statusCodes;
@@ -166,6 +164,8 @@ public partial class Companies
     private Company _target;
 
     private List<KeyValues> _taxTerms;
+
+    private List<IntValues> _titles;
 
     private List<Workflow> _workflows;
 
@@ -309,7 +309,7 @@ public partial class Companies
         set;
     }
 
-    private AddDocumentDialog DialogDocument
+    private AddCompanyDocument DialogDocument
     {
         get;
         set;
@@ -559,7 +559,7 @@ public partial class Companies
         set;
     }
 
-    private CandidateDocument NewDocument
+    private RequisitionDocuments NewDocument
     {
         get;
     } = new();
@@ -623,7 +623,7 @@ public partial class Companies
         set;
     } = new();
 
-    private CandidateDocument SelectedDownload
+    private RequisitionDocuments SelectedDownload
     {
         get;
         set;
@@ -865,9 +865,9 @@ public partial class Companies
     {
         await Task.Delay(1);
 
-        //NewDocument.ClearData();
+        NewDocument.ClearData();
 
-        //await DialogDocument.Dialog.ShowAsync();
+        await DialogDocument.Dialog.ShowAsync();
     }
 
     /*private static void RowDataBound(RowDataBoundEventArgs<Candidates> candidate)
@@ -887,10 +887,10 @@ public partial class Companies
         await DialogSearch.Dialog.ShowAsync();
     }
 
-    private void AfterDocument(ActionCompleteEventArgs arg)
+    private async Task AfterDocument(ActionCompleteEventArgs arg)
     {
-        //DialogDocument.DialogFooter.SaveButton.Disabled = false;
-        //DialogDocument.DialogFooter.CancelButton.Disabled = false;
+        DialogDocument.DialogFooter.EnableButtons();
+        await DialogDocument.Spinner.HideAsync();
     }
 
     private async Task AllAlphabet()
@@ -905,10 +905,16 @@ public partial class Companies
         //await Grid.Refresh();
     }
 
-    private void BeforeDocument(BeforeUploadEventArgs arg)
+    /*private async Task BeforeDocument(BeforeUploadEventArgs arg)
     {
-        //DialogDocument.DialogFooter.SaveButton.Disabled = true;
-        //DialogDocument.DialogFooter.CancelButton.Disabled = true;
+        await DialogDocument.Spinner.ShowAsync();
+        DialogDocument.DialogFooter.DisableButtons();
+    }*/
+
+    private async Task BeforeUpload(UploadingEventArgs arg)
+    {
+        await DialogDocument.Spinner.ShowAsync();
+        DialogDocument.DialogFooter.DisableButtons();
     }
 
     private async void CancelCompany()
@@ -1222,10 +1228,10 @@ public partial class Companies
     private async Task DownloadDocument(int arg)
     {
         await Task.Delay(1);
-        //SelectedDownload = DownloadsPanel.SelectedRow;
-        //string _queryString = (SelectedDownload.InternalFileName + "^" + _target.ID + "^" + SelectedDownload.Location + "^0").ToBase64String();
+        SelectedDownload = DocumentsPanel.SelectedRow;
+        string _queryString = (SelectedDownload.DocumentFileName + "^" + _target.ID + "^" + SelectedDownload.OriginalFileName + "^2").ToBase64String();
         ////NavManager.NavigateTo(NavManager.BaseUri + "Download/" + _queryString);
-        //await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
+        await JsRuntime.InvokeVoidAsync("open", $"{NavManager.BaseUri}Download/{_queryString}", "_blank");
         // /*string _filePath = Path.Combine(Environment.WebRootPath, "Uploads", "Candidate", _target.ID.ToString(), SelectedDownload.InternalFileName).ToBase64String();
         //byte[] _fileBytes = await File.ReadAllBytesAsync(_filePath);
         //return File(_fileBytes, "application/force-download", _decodedStringArray[2]);*/
@@ -1374,6 +1380,12 @@ public partial class Companies
     {
         await Task.Delay(1);
         //await DialogRating.Dialog.ShowAsync();
+    }
+
+    private async Task FileSelect(SelectedEventArgs arg)
+    {
+        await DialogDocument.Spinner.ShowAsync();
+        DialogDocument.DialogFooter.DisableButtons();
     }
 
     private async Task FilterGrid(ChangeEventArgs<string, KeyValues> company)
@@ -1656,6 +1668,7 @@ public partial class Companies
         {
             return;
         }
+
         DialogEditCompany.Footer.DisableButtons();
 
         RestClient _client = new($"{Start.ApiHost}");
@@ -1689,6 +1702,7 @@ public partial class Companies
         {
             return;
         }
+
         DialogEditContact.Footer.DisableButtons();
 
         RestClient _client = new($"{Start.ApiHost}");
@@ -1717,233 +1731,37 @@ public partial class Companies
     private async Task SaveDocument(EditContext document)
     {
         await Task.Delay(1);
-        //try
-        //{
-        //    if (document.Model is CandidateDocument _document)
-        //    {
-        //        RestClient _client = new($"{Start.ApiHost}");
-        //        RestRequest _request = new("Candidates/UploadDocument", Method.Post)
-        //                               {
-        //                                   AlwaysMultipartFormData = true
-        //                               };
-        //        _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
-        //        //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
-        //        _request.AddParameter("name", _document.Name, ParameterType.GetOrPost);
-        //        _request.AddParameter("notes", _document.Notes, ParameterType.GetOrPost);
-        //        _request.AddParameter("candidateID", _target.ID.ToString(), ParameterType.GetOrPost);
-        //        _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
-        //        _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
-        //        _request.AddParameter("type", _document.DocumentTypeID.ToString(), ParameterType.GetOrPost);
-        //        Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //        if (_response == null)
-        //        {
-        //            return;
-        //        }
+        try
+        {
+            if (document.Model is RequisitionDocuments _document)
+            {
+                RestClient _client = new($"{Start.ApiHost}");
+                RestRequest _request = new("Company/UploadDocument", Method.Post)
+                                       {
+                                           AlwaysMultipartFormData = true
+                                       };
+                _request.AddFile("file", AddedDocument.Stream.ToArray(), AddedDocument.FileInfo.Name, AddedDocument.FileInfo.MimeContentType);
+                //request.AddParameter("file", new ByteArrayContent(FileData.ToArray()));
+                _request.AddParameter("name", _document.DocumentName, ParameterType.GetOrPost);
+                _request.AddParameter("notes", _document.DocumentNotes, ParameterType.GetOrPost);
+                _request.AddParameter("companyID", _target.ID.ToString(), ParameterType.GetOrPost);
+                _request.AddParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant(), ParameterType.GetOrPost);
+                _request.AddParameter("path", Start.UploadsPath, ParameterType.GetOrPost);
+                Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+                if (_response == null)
+                {
+                    return;
+                }
 
-        //        _candidateDocumentsObject = General.DeserializeObject<List<CandidateDocument>>(_response["Document"]);
-        //    }
-        //}
-        //catch
-        //{
-        //    //
-        //}
+                _companyDocumentsObject = General.DeserializeObject<List<RequisitionDocuments>>(_response["Document"]);
+            }
+        }
+        catch
+        {
+            //
+        }
 
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveEducation(EditContext education)
-    {
         await Task.Delay(1);
-
-        //try
-        //{
-        //    if (education.Model is CandidateEducation _education)
-        //    {
-        //        RestClient _client = new($"{Start.ApiHost}");
-        //        RestRequest _request = new("Candidates/SaveEducation", Method.Post)
-        //                               {
-        //                                   RequestFormat = DataFormat.Json
-        //                               };
-        //        _request.AddJsonBody(_education);
-        //        _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-        //        _request.AddQueryParameter("candidateID", _target.ID);
-
-        //        Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //        if (_response == null)
-        //        {
-        //            return;
-        //        }
-
-        //        _candidateEducationObject = General.DeserializeObject<List<CandidateEducation>>(_response["Education"]);
-        //    }
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveExperience(EditContext experience)
-    {
-        await Task.Delay(1);
-
-        //try
-        //{
-        //    RestClient _client = new($"{Start.ApiHost}");
-        //    RestRequest _request = new("Candidates/SaveExperience", Method.Post)
-        //                           {
-        //                               RequestFormat = DataFormat.Json
-        //                           };
-        //    _request.AddJsonBody(experience.Model);
-        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-        //    _request.AddQueryParameter("candidateID", _target.ID);
-
-        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //    if (_response == null)
-        //    {
-        //        return;
-        //    }
-
-        //    _candidateExperienceObject = General.DeserializeObject<List<CandidateExperience>>(_response["Experience"]);
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveMPC(EditContext editContext)
-    {
-        await Task.Delay(1);
-        //try
-        //{
-        //    RestClient _client = new($"{Start.ApiHost}");
-        //    RestRequest _request = new("Candidates/SaveMPC", Method.Post)
-        //                           {
-        //                               RequestFormat = DataFormat.Json
-        //                           };
-        //    _request.AddJsonBody(editContext.Model);
-        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-
-        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //    if (_response != null)
-        //    {
-        //        _candidateMPCObject = General.DeserializeObject<List<CandidateMPC>>(_response["MPCList"]);
-        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstMPC"]?.ToString() ?? string.Empty);
-        //        GetMPCDate();
-        //        GetMPCNote();
-        //    }
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveNotes(EditContext notes)
-    {
-        await Task.Delay(1);
-
-        //try
-        //{
-        //    RestClient _client = new($"{Start.ApiHost}");
-        //    RestRequest _request = new("Candidates/SaveNotes", Method.Post)
-        //                           {
-        //                               RequestFormat = DataFormat.Json
-        //                           };
-        //    _request.AddJsonBody(notes.Model);
-        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-        //    _request.AddQueryParameter("candidateID", _target.ID);
-
-        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //    if (_response == null)
-        //    {
-        //        return;
-        //    }
-
-        //    _candidateNotesObject = General.DeserializeObject<List<CandidateNotes>>(_response["Notes"]);
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveRating(EditContext editContext)
-    {
-        await Task.Delay(1);
-        //try
-        //{
-        //    RestClient _client = new($"{Start.ApiHost}");
-        //    RestRequest _request = new("Candidates/SaveRating", Method.Post)
-        //                           {
-        //                               RequestFormat = DataFormat.Json
-        //                           };
-        //    _request.AddJsonBody(editContext.Model);
-        //    _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
-
-        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //    if (_response != null)
-        //    {
-        //        _candidateRatingObject = General.DeserializeObject<List<CandidateRating>>(_response["RatingList"]);
-        //        RatingMPC = JsonConvert.DeserializeObject<CandidateRatingMPC>(_response["FirstRating"]?.ToString() ?? string.Empty);
-        //        //_companyDetailsObject.RateCandidate = RatingMPC.Rating;
-        //        GetRatingDate();
-        //        GetRatingNote();
-        //    }
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SaveSkill(EditContext skill)
-    {
-        await Task.Delay(1);
-
-        //try
-        //{
-        //    RestClient _client = new($"{Start.ApiHost}");
-        //    RestRequest _request = new("Candidates/SaveSkill", Method.Post)
-        //                           {
-        //                               RequestFormat = DataFormat.Json
-        //                           };
-        //    _request.AddJsonBody(skill.Model);
-        //    _request.AddQueryParameter("user", LoginCookyUser.UserID.ToUpperInvariant());
-        //    _request.AddQueryParameter("candidateID", _target.ID);
-
-        //    Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
-        //    if (_response == null)
-        //    {
-        //        return;
-        //    }
-
-        //    _candidateSkillsObject = General.DeserializeObject<List<CandidateSkills>>(_response["Skills"]);
-        //}
-        //catch
-        //{
-        //    //
-        //}
-
-        //await Task.Delay(1);
-    }
-
-    private async Task SearchCandidate(EditContext arg)
-    {
-        await Task.Delay(1);
-        //await LocalStorageBlazored.SetItemAsync("CompanyGrid", arg.Model as CandidateSearch);
-        //await Grid.Refresh();
     }
 
     private async Task SearchCompany(EditContext args)
@@ -1957,102 +1775,10 @@ public partial class Companies
     {
         await Task.Delay(1);
         SearchModel.CompanyName = alphabet;
-        AutoCompleteControl.Value = alphabet;
         _currentPage = 1;
         SearchModel.Page = _currentPage;
         await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
-        ////_ = new StorageCompression(SessionStorage).SetCompanyGrid();
-        //await Grid.Refresh();
-    }
-
-    private void SetCommunication()
-    {
-        //string _returnValue = _companyDetailsObject.Communication switch
-        //                      {
-        //                          "G" => "Good",
-        //                          "A" => "Average",
-        //                          "X" => "Excellent",
-        //                          _ => "Fair"
-        //                      };
-
-        //CandidateCommunication = _returnValue.ToMarkupString();
-    }
-
-    private void SetEligibility()
-    {
-        //if (_eligibility is {Count: > 0})
-        //{
-        //    CandidateEligibility = _companyDetailsObject.EligibilityID > 0
-        //                               ? _eligibility.FirstOrDefault(eligibility => eligibility.Key == _companyDetailsObject.EligibilityID)!.Value.ToMarkupString()
-        //                               : "".ToMarkupString();
-        //}
-    }
-
-    private void SetExperience()
-    {
-        //if (_experience is {Count: > 0})
-        //{
-        //    CandidateExperience = _companyDetailsObject.ExperienceID > 0
-        //                              ? _experience.FirstOrDefault(experience => experience.Key == _companyDetailsObject.ExperienceID).Value.ToMarkupString()
-        //                              : "".ToMarkupString();
-        //}
-    }
-
-    private void SetJobOption()
-    {
-        //string _returnValue = "";
-        //if (_jobOptions is {Count: > 0})
-        //{
-        //    string[] _splitJobOptions = _companyDetailsObject.JobOptions.Split(',');
-        //    foreach (string _str in _splitJobOptions)
-        //    {
-        //        if (_str == "")
-        //        {
-        //            continue;
-        //        }
-
-        //        if (_returnValue != "")
-        //        {
-        //            _returnValue += ", " + _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
-        //        }
-        //        else
-        //        {
-        //            _returnValue = _jobOptions.FirstOrDefault(jobOption => jobOption.Key == _str)?.Value;
-        //        }
-        //    }
-        //}
-
-        //CandidateJobOptions = _returnValue.ToMarkupString();
-    }
-
-    private void SetTaxTerm()
-    {
-        //string _returnValue = "";
-        //*IMemoryCache _memoryCache = Start.MemCache;
-        //_memoryCache.TryGetValue("TaxTerms", out List<KeyValues> _taxTerms);*/
-
-        //if (_taxTerms is {Count: > 0})
-        //{
-        //    string[] _splitTaxTerm = _companyDetailsObject.TaxTerm.Split(',');
-        //    foreach (string _str in _splitTaxTerm)
-        //    {
-        //        if (_str == "")
-        //        {
-        //            continue;
-        //        }
-
-        //        if (_returnValue != "")
-        //        {
-        //            _returnValue += ", " + _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
-        //        }
-        //        else
-        //        {
-        //            _returnValue = _taxTerms.FirstOrDefault(taxTerm => taxTerm.Key == _str)?.Value;
-        //        }
-        //    }
-        //}
-
-        //CandidateTaxTerms = _returnValue.ToMarkupString();
+        AutoCompleteControl.Value = alphabet;
     }
 
     private void SetupAddress()
@@ -2186,10 +1912,10 @@ public partial class Companies
     private async Task UploadDocument(UploadChangeEventArgs file)
     {
         await Task.Delay(1);
-        //foreach (UploadFiles _file in file.Files)
-        //{
-        //    AddedDocument = _file;
-        //}
+        foreach (UploadFiles _file in file.Files)
+        {
+            AddedDocument = _file;
+        }
     }
 
     public class CompanyAdaptor : DataAdaptor

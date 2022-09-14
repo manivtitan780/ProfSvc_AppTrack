@@ -70,13 +70,6 @@ namespace ProfSvc_AppTrack.Pages.Controls.Requisitions
             set;
         }
 
-        [Parameter]
-        public List<IntValues> DocumentTypes
-        {
-            get;
-            set;
-        }
-
         private async Task CancelDocumentDialog(MouseEventArgs args)
         {
             await Task.Delay(1);

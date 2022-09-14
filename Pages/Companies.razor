@@ -100,7 +100,8 @@
                 <SfButton Content="Add Note" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="() => EditNotes(0)"
                 style="@($"display:{(_selectedTab == 4 && RequisitionID < 1 ? "unset" : "none")}")" />
                 <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument"
-                style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />
+                style="@($"display:{(_selectedTab == 6 && RequisitionID < 1 ? "unset" : "none")}")" />*@
+                <SfButton Content="Add Document" CssClass="topToolButton tabButtonAdd" IconCss="addButton" @onclick="AddDocument" style="@("display:" + (_selectedTab == 1 ? "unset" : "none"))"/>
                 @* Add Buttons End *@
                 <SfTab CssClass="e-fill" Height="540" ID="tabCompany" LoadOn="ContentLoad.Init" SelectedItem="_selectedTab" ShowCloseButton="false" Width="95%">
                     <TabAnimationSettings>
@@ -145,31 +146,9 @@
 
     <EditContactDialog CancelCompanyContact="CancelContact" SaveCompanyContact="SaveCompanyContact" States="_states" Title="@Title" @ref="DialogEditContact" ModelObject="SelectedContact" TitleTypes="_titles" />
 
-    @*<EditCandidateDialog CancelCandidate="CancelCandidate" Communication="_communication" Eligibility="_eligibility" Experience="_experience" HtmlAttributes="_htmlAttributes" HtmlAttributes1="_htmlAttributes1"
-    JobOptions="_jobOptions" ModelObject="_candidateDetailsObjectClone" @ref="DialogEditCandidate" Save="SaveCandidate" States="_states" TaxTerms="_taxTerms" Tools="_tools1" />
-
-    <ParseCandidateDialog @bind-VisibleCandidate="VisibleNewCandidate" @bind-VisibleCandidate:event="VisibleCandidateChanged" CancelCandidate="CancelCandidate" OnFileUpload="OnFileUpload" />
-
-    <RatingCandidateDialog GridObject="_candidateRatingObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogRating" RowHeight="RowHeight" Save="SaveRating" />
-
-    <MPCCandidateDialog GridObject="_candidateMPCObject" HtmlAttributes1="_htmlAttributes1" ModelObject="RatingMPC" @ref="DialogMPC" RowHeight="RowHeight" Save="SaveMPC" />
-
-    <EditSkillDialog ModelObject="SelectedSkill" @ref="DialogSkill" Save="SaveSkill" />
-
-    <EditEducationDialog ModelObject="SelectedEducation" @ref="DialogEducation" Save="SaveEducation" />
-
-    <EditExperienceDialog ModelObject="SelectedExperience" @ref="DialogExperience" Save="SaveExperience" />
-
-    <EditNotesDialog ModelObject="SelectedNotes" @ref="DialogNotes" Save="SaveNotes" />
-
-    <EditActivityDialog IsCandidate="true" ModelObject="SelectedActivity" ModelSteps="NextSteps" @ref="DialogActivity" Save="SaveActivity" Status="_workflows" />
-
-    <AddDocumentDialog AfterUpload="AfterDocument" BeforeUpload="BeforeDocument" DocumentTypes="_documentTypes" ModelDocumentObject="SelectedDownload" OnFileUpload="UploadDocument"
-    @ref="DialogDocument" Save="SaveDocument" />*@
+	<AddCompanyDocument AfterUpload="AfterDocument" FileSelect="FileSelect" ModelObject="SelectedDownload" OnFileUpload="UploadDocument" @ref="DialogDocument" Save="SaveDocument" />
 
     <AdvancedCompanySearch ModelSearchObject="SearchModelClone" @ref="DialogSearch" Search="SearchCompany" StateDropDown="_statesCopy" />
-
-    @*<SubmitCandidate ModelObject="SubmitCandidateModel" @ref="DialogSubmitCandidate" SubmitCandidateToRequisition="SubmitCandidateToRequisition"/>*@
 
     <div class="divGridFooter">
         <div style="display: flex">

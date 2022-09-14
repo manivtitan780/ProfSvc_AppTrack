@@ -2,11 +2,12 @@
 @inject IJSRuntime Runtime;
 
 <div class="experienceContainerBox contactBox">
-    @*"*@
+	@*"*@
 	<div>
 		<div>
-			<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" EnableStickyHeader="true" Height="255px" @ref="GridInnerRequisition" 
-					TValue="Requisitions" Width="99.75%" ID="divInnerReq">
+			<SfButton Content="Edit Requisition" CssClass="topToolButton tabButtonAdd" IconCss="addButton" />
+			<SfGrid AllowMultiSorting="false" AllowPaging="false" AllowSorting="false" DataSource="@ModelObject" EnableHeaderFocus="true" EnableHover="true" EnableStickyHeader="true" Height="255px" ID="divInnerReq"
+					@ref="GridInnerRequisition" TValue="Requisitions" Width="99.75%">
 				<GridSelectionSettings EnableToggle="false" Mode="SelectionMode.Row" Type="SelectionType.Single" />
 				<GridEvents DataBound="DataHandler" DetailDataBound="DetailDataBind" OnActionBegin="OnActionBegin" OnActionComplete="OnActionComplete" TValue="Requisitions" />@* *@
 				<GridColumns>
@@ -63,43 +64,43 @@
 					</GridColumn>
 				</GridColumns>
 				<GridTemplates Context="context">
-                <DetailTemplate>
-                        <SfTab CssClass="e-fill" Height="520" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedReqTab" ShowCloseButton="false" Width="95%">
-                        <TabAnimationSettings>
-                            <TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
-                            <TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
-                            <TabEvents Selected="TabSelected"></TabEvents>
-                        </TabAnimationSettings>
-                        <TabItems>
-                            <TabItem>
-                                <ChildContent>
-                                    <TabHeader Text="Requisition Info" />
-                                </ChildContent>
-                                <ContentTemplate>
-                                    <BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" States="_states" SkillsText="_requisitionDetailSkills" />
-                                </ContentTemplate>
-                            </TabItem>
-                            <TabItem>
-                                <ChildContent>
-                                    <TabHeader Text="Documents" />
-                                </ChildContent>
-                                <ContentTemplate>
-                                    <DocumentsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_requisitionDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
-                                </ContentTemplate>
-                            </TabItem>
-                            <TabItem>
-                                <ChildContent>
-                                    <TabHeader Text="Candidate Activity" />
-                                </ChildContent>
-                                <ContentTemplate>
-                                    <ActivityPanelRequisition EditActivity="EditActivity" ModelActivityObject="_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeightActivity" UndoCandidateActivity="UndoActivity" />
-                                </ContentTemplate>
-                            </TabItem>
-                        </TabItems>
-                        <SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="13000" />
-                    </SfTab>
-                </DetailTemplate>
-            </GridTemplates>
+					<DetailTemplate>
+						<SfTab CssClass="e-fill" Height="520" ID="tabCandidates" LoadOn="ContentLoad.Init" SelectedItem="_selectedReqTab" ShowCloseButton="false" Width="95%">
+							<TabAnimationSettings>
+								<TabAnimationPrevious Effect="AnimationEffect.None"></TabAnimationPrevious>
+								<TabAnimationNext Effect="AnimationEffect.None"></TabAnimationNext>
+								<TabEvents Selected="TabSelected"></TabEvents>
+							</TabAnimationSettings>
+							<TabItems>
+								<TabItem>
+									<ChildContent>
+										<TabHeader Text="Requisition Info" />
+									</ChildContent>
+									<ContentTemplate>
+										<BasicInfoRequisitionPanel ModelObject="_requisitionDetailsObject" SkillsText="_requisitionDetailSkills" States="_states" />
+									</ContentTemplate>
+								</TabItem>
+								<TabItem>
+									<ChildContent>
+										<TabHeader Text="Documents" />
+									</ChildContent>
+									<ContentTemplate>
+										<DocumentsPanel DeleteDocument="DeleteDocument" DownloadDocument="DownloadDocument" ModelObject="@_requisitionDocumentsObject" @ref="DocumentsPanel" RowHeight="@RowHeight" />
+									</ContentTemplate>
+								</TabItem>
+								<TabItem>
+									<ChildContent>
+										<TabHeader Text="Candidate Activity" />
+									</ChildContent>
+									<ContentTemplate>
+										<ActivityPanelRequisition EditActivity="EditActivity" ModelActivityObject="_candidateActivityObject" @ref="ActivityPanel" RowHeight="@RowHeightActivity" UndoCandidateActivity="UndoActivity" />
+									</ContentTemplate>
+								</TabItem>
+							</TabItems>
+							<SfSpinner CssClass="spinnerHeight" @ref="@Spinner" Type="SpinnerType.Fabric" ZIndex="13000" />
+						</SfTab>
+					</DetailTemplate>
+				</GridTemplates>
 			</SfGrid>
 
 		</div>

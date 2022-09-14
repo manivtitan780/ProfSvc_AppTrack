@@ -479,8 +479,7 @@ public partial class Requisition
 
     private void AfterDocument(ActionCompleteEventArgs arg)
     {
-        DialogDocument.DialogFooter.SaveButton.Disabled = false;
-        DialogDocument.DialogFooter.CancelButton.Disabled = false;
+        DialogDocument.DialogFooter.EnableButtons();
     }
 
     private async Task AllAlphabet(MouseEventArgs arg)
@@ -495,8 +494,7 @@ public partial class Requisition
 
     private void BeforeDocument(BeforeUploadEventArgs arg)
     {
-        DialogDocument.DialogFooter.SaveButton.Disabled = true;
-        DialogDocument.DialogFooter.CancelButton.Disabled = true;
+        DialogDocument.DialogFooter.DisableButtons();
     }
 
     private async Task ChangeItemCount(ChangeEventArgs<int, IntValues> obj)

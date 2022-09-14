@@ -8,7 +8,7 @@
 // File Name:           DownloadsPanel.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          02-22-2022 20:32
-// Last Updated On:     02-24-2022 20:58
+// Last Updated On:     09-14-2022 15:49
 // *****************************************/
 
 #endregion
@@ -68,7 +68,7 @@ public partial class DownloadsPanel
     {
         double _index = await GridDownload.GetRowIndexByPrimaryKeyAsync(id);
         await GridDownload.SelectRowAsync(_index);
-        if (await JsRuntime.Confirm("Are you sure you want to delete this Document?" + Environment.NewLine +  "Note: This action cannot be reversed."))
+        if (await JsRuntime.Confirm("Are you sure you want to delete this Document?" + Environment.NewLine + "Note: This action cannot be reversed."))
         {
             await DeleteDocument.InvokeAsync(id);
         }
@@ -81,11 +81,11 @@ public partial class DownloadsPanel
         await DownloadDocument.InvokeAsync(id);
     }
 
-    private void RowSelected(RowSelectEventArgs<CandidateDocument> education)
+    private void RowSelected(RowSelectEventArgs<CandidateDocument> companyDocument)
     {
-        if (education != null)
+        if (companyDocument != null)
         {
-            SelectedRow = education.Data;
+            SelectedRow = companyDocument.Data;
         }
     }
 }
