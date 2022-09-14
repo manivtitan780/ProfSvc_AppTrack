@@ -8,12 +8,16 @@
 // File Name:           DialogFooter.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          01-31-2022 21:25
-// Last Updated On:     02-12-2022 19:44
+// Last Updated On:     09-14-2022 15:41
 // *****************************************/
 
 #endregion
 
+#region Using
+
 using Syncfusion.Blazor.Buttons;
+
+#endregion
 
 namespace ProfSvc_AppTrack.Pages.Admin.Controls;
 
@@ -29,6 +33,12 @@ public partial class DialogFooter
         get;
         set;
     } = "Cancel";
+
+    public SfButton CancelButton
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// </summary>
@@ -48,15 +58,26 @@ public partial class DialogFooter
         set;
     } = "Save";
 
-    public SfButton CancelButton
+    public SfButton SaveButton
     {
         get;
         set;
     }
 
-    public SfButton SaveButton
+    public bool ButtonsDisabled()
     {
-        get;
-        set;
+        return CancelButton.Disabled;
+    }
+
+    public void DisableButtons()
+    {
+        CancelButton.Disabled = true;
+        SaveButton.Disabled = true;
+    }
+
+    public void EnableButtons()
+    {
+        CancelButton.Disabled = false;
+        SaveButton.Disabled = false;
     }
 }

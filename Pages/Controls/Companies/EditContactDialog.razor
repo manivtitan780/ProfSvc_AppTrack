@@ -1,10 +1,9 @@
-﻿<SfDialog Header="@(Title + " Company")" Height="98vh" IsModal="true" MinHeight="98vh" @ref="Dialog" Target="#divTarget" Visible="false" Width="832px">
+﻿<SfDialog Header="@(Title + " Contact")" Height="98vh" IsModal="true" MinHeight="98vh" @ref="Dialog" Target="#divTarget" Visible="false" Width="832px">
     <ChildContent>
         <SfSpinner CssClass="spinnerHeight" @ref="Spinner" Type="SpinnerType.Fabric" ZIndex="12000" />
         <DialogPositionData X="right" Y="center" />
         <DialogAnimationSettings Duration="500" Effect="DialogEffect.SlideRight" />
-        @*<DialogEvents OnOpen="RequisitionOpen" />*@
-        <EditForm Model="ModelObject" OnValidSubmit="SaveCompanyDialog">
+        <EditForm Model="ModelObject" OnValidSubmit="SaveContactDialog">
             <DataAnnotationsValidator />
             <div style="height: 100%">
                 <div class="divContainerTable">
@@ -37,10 +36,10 @@
                                 <label class="labelStatus" for="textPhone">Phone:</label>
                             </div>
                             <div class="divFlexLabel" style="margin-left: 4%; width: 20%;">
-                                <label class="labelStatus" for="textFax">Ext:</label>
+                                <label class="labelStatus" for="textExtension">Ext:</label>
                             </div>
                             <div class="divFlexLabel" style="margin-left: 4%; width: 36%;">
-                                <label class="labelStatus" for="textFax">Cell Phone:</label>
+                                <label class="labelStatus" for="textCell">Cell Phone:</label>
                             </div>
                         </div>
                         <div style="display: flex; width: 100%">
@@ -60,10 +59,10 @@
                     <div class="divFlex">
                         <div style="display: flex; width: 100%">
                             <div class="divFlexLabel" style="width: 48%">
-                                <label class="labelStatus" for="textPhone">Title:</label>
+                                <label class="labelStatus" for="comboTitle">Title:</label>
                             </div>
                             <div class="divFlexLabel" style="margin-left: 4%; width: 48%;">
-                                <label class="labelStatus" for="textFax">Department:</label>
+                                <label class="labelStatus" for="textDepartment">Department:</label>
                             </div>
                         </div>
                         <div style="display: flex; width: 100%">
@@ -105,7 +104,8 @@
                                                  TItem="IntValues" TValue="int" ValueField="Key" />
                             </div>
                         </div>
-                    </div>
+                    </div>@**@
+                    <SwitchControl @bind-BindValue="@(ModelObject.IsPrimary)" ID="checkedHot" OffLabel="NO" OnLabel="YES" Placeholder="Primary Contact?" />
                 </div>
             </div>
             <DialogFooter CancelMethod="CancelDialog" @ref="Footer" />

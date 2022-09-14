@@ -8,7 +8,7 @@
 // File Name:           Companies.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          08-19-2022 21:14
-// Last Updated On:     09-02-2022 20:13
+// Last Updated On:     09-13-2022 19:33
 // *****************************************/
 
 #endregion
@@ -19,7 +19,6 @@ using ProfSvc_AppTrack.Pages.Controls.Companies;
 
 using ActionCompleteEventArgs = Syncfusion.Blazor.Inputs.ActionCompleteEventArgs;
 using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs;
-using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
 using SelectEventArgs = Syncfusion.Blazor.Navigations.SelectEventArgs;
 
 #endregion
@@ -29,7 +28,8 @@ namespace ProfSvc_AppTrack.Pages;
 public partial class Companies
 {
     private const byte RowHeight = 38;
-    private bool _dontExpand = true;
+
+    private static bool _fetched;
 
     //private static bool _getStates = true;
 
@@ -38,13 +38,13 @@ public partial class Companies
     //private readonly Candidates _candidateContext = new();
 
     private readonly List<IntValues> _eligibilityCopy = new();
-    private readonly Dictionary<string, object> _htmlAttributes = new() { { "maxlength", "50" }, { "minlength", "1" }, { "rows", "1" } };
-    private readonly Dictionary<string, object> _htmlAttributes1 = new() { { "maxlength", "500" }, { "minlength", "1" }, { "rows", "4" } };
+    private readonly Dictionary<string, object> _htmlAttributes = new() {{"maxlength", "50"}, {"minlength", "1"}, {"rows", "1"}};
+    private readonly Dictionary<string, object> _htmlAttributes1 = new() {{"maxlength", "500"}, {"minlength", "1"}, {"rows", "4"}};
 
     private readonly List<KeyValues> _jobOptionsCopy = new();
 
     private readonly List<IntValues> _showRecords =
-        new() { new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows") };
+        new() {new(10, "10 rows"), new(25, "25 rows"), new(50, "50 rows"), new(75, "75 rows"), new(100, "100 rows")};
 
     private readonly List<IntValues> _statesCopy = new();
 
@@ -113,10 +113,10 @@ public partial class Companies
 
     private List<KeyValues> _communication;
     private List<CompanyContact> _companyContactsObject = new();
+    private CompanyContact _companyContactsObjectClone = new();
 
     private CompanyDetails _companyDetailsObject = new();
     private CompanyDetails _companyDetailsObjectClone = new();
-    private CompanyContact _companyContactsObjectClone = new();
     private List<RequisitionDocuments> _companyDocumentsObject = new();
 
     private List<Requisitions> _companyRequisitionsObject = new();
@@ -124,6 +124,7 @@ public partial class Companies
     private int _currentPage = 1;
 
     private List<IntValues> _documentTypes = new();
+    private bool _dontExpand = true;
 
     //private bool _dontChangePageDetails = true;
 
@@ -134,6 +135,10 @@ public partial class Companies
     private List<KeyValues> _jobOptions;
     private List<RequisitionDocuments> _requisitionDocumentsObject = new();
     private int _selectedTab;
+
+    private List<IntValues> _skills;
+
+    private List<IntValues> _titles;
 
     private List<IntValues> _states;
 
@@ -753,28 +758,6 @@ public partial class Companies
     [JSInvokable("DetailCollapse")]
     public void DetailRowCollapse() => _target = null;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await Task.Delay(1);
-        //if (!firstRender)
-        //{
-        //    //_valueChanged = true;
-
-        //    return;
-        //}
-
-        ////if (_candidateContext != null)
-        ////{
-        ////_statusEditContext = new(_candidateContext);
-        ////}
-
-        //_currentPage = SearchModel.Page;
-        //PageCount = _currentPage + 1;
-        //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
-    }
-
-    private List<IntValues> _skills;
-
     protected override async void OnAfterRender(bool firstRender)
     {
         if (firstRender)
@@ -795,12 +778,32 @@ public partial class Companies
             }
             catch (Exception ex)
             {
-
             }
 
             _fetched = true;
         }
+
         base.OnAfterRender(firstRender);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Task.Delay(1);
+        //if (!firstRender)
+        //{
+        //    //_valueChanged = true;
+
+        //    return;
+        //}
+
+        ////if (_candidateContext != null)
+        ////{
+        ////_statusEditContext = new(_candidateContext);
+        ////}
+
+        //_currentPage = SearchModel.Page;
+        //PageCount = _currentPage + 1;
+        //SearchModel.User = LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant();
     }
 
     protected override async Task OnInitializedAsync()
@@ -828,6 +831,11 @@ public partial class Companies
             _memoryCache.TryGetValue("Skills", out _skills);
         }
 
+        while (_titles == null)
+        {
+            _memoryCache.TryGetValue("Titles", out _titles);
+        }
+
         //_eligibilityCopy.Clear();
         //_eligibilityCopy.Add(new(0, "All"));
         //_eligibilityCopy.AddRange(_eligibility);
@@ -853,7 +861,6 @@ public partial class Companies
         await base.OnInitializedAsync();
     }
 
-    private static bool _fetched = false;
     private async Task AddDocument(MouseEventArgs arg)
     {
         await Task.Delay(1);
@@ -996,9 +1003,9 @@ public partial class Companies
         {
             using RestClient _client = new($"{Start.ApiHost}");
             RestRequest _request = new("Company/DeleteContact", Method.Post)
-            {
-                RequestFormat = DataFormat.Json
-            };
+                                   {
+                                       RequestFormat = DataFormat.Json
+                                   };
             _request.AddQueryParameter("id", id.ToString());
             //_request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
 
@@ -1313,6 +1320,8 @@ public partial class Companies
                 SelectedContact.Extension = _companyDetailsObject.Extension;
                 SelectedContact.Fax = _companyDetailsObject.Fax;
                 SelectedContact.ClientID = _companyDetailsObject.ID;
+                SelectedContact.IsPrimary = false;
+                SelectedContact.StatusCode = "ACT";
             }
         }
         else
@@ -1643,14 +1652,17 @@ public partial class Companies
     private async Task SaveCompany(EditContext context)
     {
         await Task.Delay(1);
-        DialogEditCompany.Footer.CancelButton.Disabled = true;
-        DialogEditCompany.Footer.SaveButton.Disabled = true;
+        if (DialogEditCompany.Footer.ButtonsDisabled())
+        {
+            return;
+        }
+        DialogEditCompany.Footer.DisableButtons();
 
         RestClient _client = new($"{Start.ApiHost}");
         RestRequest _request = new("Company/SaveCompany", Method.Post)
-        {
-            RequestFormat = DataFormat.Json
-        };
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
         _request.AddJsonBody(_companyDetailsObjectClone);
 
         await _client.PostAsync<int>(_request);
@@ -1665,40 +1677,40 @@ public partial class Companies
 
         SetupAddress();
 
-        DialogEditCompany.Footer.CancelButton.Disabled = false;
-        DialogEditCompany.Footer.SaveButton.Disabled = false;
+        DialogEditCompany.Footer.EnableButtons();
         await Task.Delay(1);
         StateHasChanged();
     }
 
-    private async Task SaveContact(EditContext context)
+    private async Task SaveCompanyContact(EditContext context)
     {
-        await Task.Delay(1);
-        /*DialogEditCompany.Footer.CancelButton.Disabled = true;
-        DialogEditCompany.Footer.SaveButton.Disabled = true;
+        await DialogEditContact.Spinner.ShowAsync();
+        if (DialogEditContact.Footer.ButtonsDisabled())
+        {
+            return;
+        }
+        DialogEditContact.Footer.DisableButtons();
 
         RestClient _client = new($"{Start.ApiHost}");
-        RestRequest _request = new("Company/SaveCompany", Method.Post)
+        RestRequest _request = new("Company/SaveContact", Method.Post)
+                               {
+                                   RequestFormat = DataFormat.Json
+                               };
+        _request.AddJsonBody(SelectedContact);
+        _request.AddQueryParameter("user", LoginCookyUser == null || LoginCookyUser.UserID.NullOrWhiteSpace() ? "JOLLY" : LoginCookyUser.UserID.ToUpperInvariant());
+
+        Dictionary<string, object> _response = await _client.PostAsync<Dictionary<string, object>>(_request);
+
+        if (_response == null)
         {
-            RequestFormat = DataFormat.Json
-        };
-        _request.AddJsonBody(_companyDetailsObjectClone);
+            return;
+        }
 
-        await _client.PostAsync<int>(_request);
+        _companyContactsObject = General.DeserializeObject<List<CompanyContact>>(_response["Contacts"]);
 
-        _companyDetailsObject = _companyDetailsObjectClone.Copy();
-        _target.Address = _companyDetailsObject.Address;
-        _target.City = _companyDetailsObject.City;
-        _target.State = _companyDetailsObject.State;
-        _target.ZipCode = _companyDetailsObject.ZipCode;
-        _target.Phone = _companyDetailsObject.Phone;
-        _target.EmailAddress = _companyDetailsObject.EmailAddress;
-
-        SetupAddress();
-
-        DialogEditCompany.Footer.CancelButton.Disabled = false;
-        DialogEditCompany.Footer.SaveButton.Disabled = false;*/
-        await Task.Delay(1);
+        DialogEditContact.Footer.EnableButtons();
+        await DialogEditContact.Spinner.HideAsync();
+        await DialogEditContact.Dialog.HideAsync();
         StateHasChanged();
     }
 
@@ -1932,6 +1944,13 @@ public partial class Companies
         await Task.Delay(1);
         //await LocalStorageBlazored.SetItemAsync("CompanyGrid", arg.Model as CandidateSearch);
         //await Grid.Refresh();
+    }
+
+    private async Task SearchCompany(EditContext args)
+    {
+        SearchModel = (args.Model as CompanySearch)?.Copy();
+        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
+        await Grid.Refresh();
     }
 
     private async Task SetAlphabet(string alphabet)
@@ -2184,6 +2203,7 @@ public partial class Companies
             {
                 //
             }
+
             Task<object> _companyReturn = General.GetCompanyReadAdaptor(SearchModel, "JOLLY", dm);
             //Count = ((DataResult)_candidateReturn.Result).Count;
             Grid.SelectRowAsync(0);
@@ -2200,12 +2220,5 @@ public partial class Companies
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteAsync("SearchCompany", "@Company", dm);
 
         #endregion
-    }
-
-    private async Task SearchCompany(EditContext args)
-    {
-        SearchModel = (args.Model as CompanySearch)?.Copy();
-        await LocalStorageBlazored.SetItemAsync("CompanyGrid", SearchModel);
-        await Grid.Refresh();
     }
 }

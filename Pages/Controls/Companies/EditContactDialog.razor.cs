@@ -108,7 +108,7 @@ public partial class EditContactDialog
         await Dialog.HideAsync();
     }
 
-    private async Task SaveCompanyDialog(EditContext args)
+    private async Task SaveContactDialog(EditContext args)
     {
         await Task.Delay(1);
         await Spinner.ShowAsync();

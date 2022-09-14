@@ -8,7 +8,7 @@
 // File Name:           EditCompanyDialog.razor.cs
 // Created By:          Narendra Kumaran Kadhirvelu, Jolly Joseph Paily, DonBosco Paily
 // Created On:          09-05-2022 16:27
-// Last Updated On:     09-05-2022 16:27
+// Last Updated On:     09-13-2022 20:55
 // *****************************************/
 
 #endregion
@@ -17,13 +17,47 @@ namespace ProfSvc_AppTrack.Pages.Controls.Companies;
 
 public partial class EditCompanyDialog
 {
+    [Parameter]
+    public EventCallback CancelCompany
+    {
+        get;
+        set;
+    }
+
     public SfDialog Dialog
     {
         get;
         set;
     }
 
+    public DialogFooter Footer
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public CompanyDetails ModelObject
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<EditContext> SaveCompany
+    {
+        get;
+        set;
+    }
+
     public SfSpinner Spinner
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
     {
         get;
         set;
@@ -37,7 +71,7 @@ public partial class EditCompanyDialog
     }
 
     [Parameter]
-    public EventCallback<ChangeEventArgs<int, IntValues>> StateIDChanged
+    public string Title
     {
         get;
         set;
@@ -47,6 +81,25 @@ public partial class EditCompanyDialog
     {
         get;
         set;
+    }
+
+    private async Task CancelDialog(MouseEventArgs args)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await CancelCompany.InvokeAsync(args);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
+    }
+
+    private async Task SaveCompanyDialog(EditContext args)
+    {
+        await Task.Delay(1);
+        await Spinner.ShowAsync();
+        await SaveCompany.InvokeAsync(args);
+        await Task.Delay(1);
+        await Spinner.HideAsync();
+        await Dialog.HideAsync();
     }
 
     private async Task ZipChange(ChangeEventArgs<string, KeyValues> arg)
@@ -77,58 +130,5 @@ public partial class EditCompanyDialog
         public override Task<object> ReadAsync(DataManagerRequest dm, string key = null) => General.GetAutocompleteZipAsync(dm);
 
         #endregion
-    }
-
-    [Parameter]
-    public string Title
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public EventCallback<EditContext> SaveCompany
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public CompanyDetails ModelObject
-    {
-        get;
-        set;
-    }
-
-    public DialogFooter Footer
-    {
-        get;
-        set;
-    }
-
-    [Parameter]
-    public EventCallback CancelCompany
-    {
-        get;
-        set;
-    }
-
-    private async Task CancelDialog(MouseEventArgs args)
-    {
-        await Task.Delay(1);
-        await Spinner.ShowAsync();
-        await CancelCompany.InvokeAsync(args);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
-    }
-
-    private async Task SaveCompanyDialog(EditContext args)
-    {
-        await Task.Delay(1);
-        await Spinner.ShowAsync();
-        await SaveCompany.InvokeAsync(args);
-        await Task.Delay(1);
-        await Spinner.HideAsync();
-        await Dialog.HideAsync();
     }
 }
